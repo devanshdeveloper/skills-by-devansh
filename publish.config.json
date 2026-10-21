@@ -4,7 +4,9 @@
   "expectedRepo": "skills-by-devansh",
   "allowedRemotes": [
     "https://github.com/devanshdeveloper/skills-by-devansh.git",
-    "git@github.com:devanshdeveloper/skills-by-devansh.git"
+    "https://github.com/devanshdeveloper/skills-by-devansh",
+    "git@github.com:devanshdeveloper/skills-by-devansh.git",
+    "git@github.com:devanshdeveloper/skills-by-devansh"
   ],
   "defaultBranch": "main",
   "allowUnattended": false,

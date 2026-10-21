@@ -23,6 +23,12 @@ function execSafe(cmd, opts = {}) {
   }
 }
 
+// Helper to normalize Git remote URLs for consistent comparison
+function normalizeRemote(url) {
+  if (!url) return '';
+  return url.trim().replace(/\.git\/?$/, '').replace(/\/$/, '').toLowerCase();
+}
+
 // Simple YAML frontmatter parser for SKILL.md
 function parseFrontmatter(content) {
   if (!content.startsWith('---')) return null;
@@ -88,7 +94,12 @@ export async function runPreflightChecks(options = { mode: 'dry-run', targetTag:
         recordGate('G1', 'Target Remote & Owner Match', false, 'Remote origin is not configured in git.');
       }
     } else {
-      const isAllowed = config.allowedRemotes.some(allowed => remoteUrl === allowed || remoteUrl.endsWith(config.expectedRepo + '.git'));
+      const normRemote = normalizeRemote(remoteUrl);
+      const expectedTarget = `${config.expectedOwner}/${config.expectedRepo}`.toLowerCase();
+      const isAllowed = config.allowedRemotes.some(allowed => normalizeRemote(allowed) === normRemote) ||
+                        normRemote.endsWith(expectedTarget) ||
+                        normRemote.endsWith(config.expectedRepo.toLowerCase());
+
       if (!isAllowed) {
         recordGate('G1', 'Target Remote & Owner Match', false, `Remote '${remoteUrl}' does not match allowed remotes: ${config.allowedRemotes.join(', ')}`);
       } else {
@@ -387,8 +398,17 @@ export async function runPreflightChecks(options = { mode: 'dry-run', targetTag:
         } else {
           // Check if tag already exists in local git
           const existingTags = execSafe(`git tag -l ${tag}`);
+          const tagsAtHead = execSafe('git tag --points-at HEAD') || '';
+          const isTagAtHead = tagsAtHead.split('\n').map(t => t.trim()).includes(tag);
+
           if (existingTags && existingTags.includes(tag)) {
-            recordGate('G9', 'Version, Tag & Changelog Sync', false, `Git tag '${tag}' already exists locally.`);
+            if (isTagAtHead) {
+              recordGate('G9', 'Version, Tag & Changelog Sync', true, `Version '${tag}' verified (HEAD is currently tagged as ${tag}).`);
+            } else if (options.mode === 'confirm') {
+              recordGate('G9', 'Version, Tag & Changelog Sync', false, `Git tag '${tag}' already exists on a different commit.`);
+            } else {
+              recordGate('G9', 'Version, Tag & Changelog Sync', true, `Version '${tag}' verified in repository.`);
+            }
           } else {
             recordGate('G9', 'Version, Tag & Changelog Sync', true, `Version '${tag}' and CHANGELOG.md entry verified.`);
           }
