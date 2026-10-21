@@ -127,7 +127,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 
 ### Stage 11: Final Verification & Handover
 - **Goal:** Execute full production audit and prepare handover:
-  - Run `ai-edit-audit` in `report-only` mode producing `project-docs/structure-audit.md`.
+  - Run `node scripts/structure-audit/index.js` to audit all 12 stages, verify documentation completeness, check strict line limits, and generate `project-docs/structure-audit.md`.
   - Conduct Pre-Launch SEO Audit on production build (`pnpm build && pnpm start`): metadata, JSON-LD, 301 redirects, robots.txt, sitemap.
   - Verify CMS checks: unpublished posts excluded, sanitizer strips malicious HTML, webhook responds within 5s, `REVALIDATE_SECRET` and `CMS_SITE_KEY` not leaked.
   - Verify stock audit: no provider API keys in site build or bundles; `/credits` page renders cleanly; Unsplash images include proper UTM attribution; `stock-provenance.json` backed up with assets.
@@ -143,3 +143,5 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 1. **Never auto-advance:** When a stage's artifacts are generated, display a concise summary to the user, present key decisions, and halt until human sign-off is granted.
 2. **Approval standard:** Only an affirmative reply ("approved", "proceed") clears a gate. Silence or clarifying questions do not constitute approval.
 3. **Atomic checkpoints:** Update `project-docs/router-state.md` immediately upon passing each gate.
+4. **Client Notification Prompt:** At every gate sign-off, ask the user: *"Would you like to notify the client for this milestone? Run `node scripts/client-notify/index.js` to preview and send upon approval."*
+

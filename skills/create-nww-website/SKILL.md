@@ -75,6 +75,7 @@ The workflow proceeds strictly one stage at a time. Every stage requires explici
 2. **Never Auto-Advance:** When completing a stage, present the deliverable summary to the user and halt execution until the user grants explicit approval.
 3. **Handling Rejections:** If the user requests modifications, update the stage outputs and re-present for approval.
 4. **Master Checklist:** Track page completion solely in `project-docs/page-list.md` checkboxes (`- [x] Page Name`).
+5. **Client Milestone Notifications:** At every stage completion and gate sign-off, ask the user if they wish to dispatch an email notification to the client. Run `node scripts/client-notify/index.js` to preview the draft. The script enforces explicit user approval before sending and logs the event to `project-docs/router-state.md`.
 
 ---
 

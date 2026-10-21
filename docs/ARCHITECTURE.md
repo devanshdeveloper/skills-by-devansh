@@ -28,7 +28,9 @@ skills-by-devansh/
 │   │       ├── assets-optimizer/       # Sharp/ffmpeg image/video pipeline
 │   │       ├── stock-fetch/            # Stock image provenance & fetch
 │   │       ├── client-review/          # Gate 2 visual review hub and portal generator
-│   │       └── reference-capture/      # Automated reference landing page DOM & screenshot capture
+│   │       ├── reference-capture/      # Automated reference landing page DOM & screenshot capture
+│   │       ├── client-notify/          # Multi-stage client email review & approval notification engine
+│   │       └── structure-audit/        # Stage 11 deliverables and coding conventions validator
 │   ├── nww/                            # Shortcut alias skill for create-nww-website
 │   │   └── SKILL.md                    # Fast shortcut delegation runbook
 │   └── publish/                        # Maintainer-only release skill (metadata.internal)
@@ -66,6 +68,8 @@ Skills may contain companion CLI utilities inside `scripts/`:
 - **`stock-fetch`**: A Node.js utility connecting to Pixabay, Pexels, and Unsplash APIs to search, download, and log provenance for images.
 - **`client-review`**: A Node.js utility that automatically scans modular concept review directories and generates/updates client review hubs and portals.
 - **`reference-capture`**: A Node.js utility capturing full rendered DOM (`page.html`), stripped Markdown (`content.md`), full-page screenshots (`screenshot-full-1440.png`), and audit metadata (`capture.json`) into `project-docs/design-references/<domain>/`.
+- **`client-notify`**: A Node.js utility providing stage-by-stage client email drafting, Resend/SendGrid/SMTP dispatch upon explicit user approval, clickable `mailto:` links, and automated logging in `router-state.md`.
+- **`structure-audit`**: A Node.js utility auditing project documentation across all 12 stages, enforcing strict line limits and section comments, and compiling `project-docs/structure-audit.md`.
 
 These utilities are self-contained and invoked via Node directly (`node index.js`).
 

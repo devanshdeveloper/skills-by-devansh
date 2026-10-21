@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-10-21
+
+### Added
+- **Client Milestone Notification Engine (`scripts/client-notify/index.js`)**: Multi-stage companion utility allowing agents to draft and dispatch milestone review emails to clients across all 12 pipeline gates, with strict human approval required before sending, Resend/SendGrid/SMTP integration, clickable `mailto:` links, and automated logging in `router-state.md`.
+- **Mandatory Notification Prompt Rule**: Enforced state machine protocol rule in `SKILL.md` and `pipeline-stages.md` requiring agents to ask whether to notify the client at every stage and gate sign-off.
+- **Stage 11 Structure Auditor (`scripts/structure-audit/index.js`)**: Companion utility to automatically audit all 12 stage deliverables, verify strict component line limits, and generate `project-docs/structure-audit.md`.
+
 ## [1.2.1] - 2026-10-21
 
 ### Fixed
