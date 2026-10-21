@@ -10,7 +10,7 @@ The deliverable is saved to `project-docs/design-theory.md`.
 
 When entering Stage 2:
 1. **Live-Fetch & Capture Reference Sites (Landing Pages Only):**
-   - For every liked reference URL in `project-docs/client-answers.md`, capture only the landing page by default into `project-docs/design-references/<domain>/<slug>/` (where `<domain>` is lowercase hostname without `www.` and `<slug>` is `home`, query strings stripped).
+   - For every liked reference URL in `project-docs/client-answers.md`, capture the landing page directly into `project-docs/design-references/<domain>/` (where `<domain>` is lowercase hostname without `www.`, landing page only, query strings stripped) using `node skills/create-nww-website/scripts/reference-capture/index.js`.
    - Produce four standard artifacts per landing page:
      - `page.html`: Rendered DOM post-hydration saved verbatim (external assets not mirrored).
      - `content.md`: Verbatim stripped text preserving headings, paragraphs, and links (zero paraphrasing or summarizing).
@@ -90,10 +90,10 @@ A compact audit table:
 ## Gate 2 Review Checklist & Client Delivery
 
 Before presenting to the user for Gate 2 sign-off:
-- [ ] Reference landing pages captured into `project-docs/design-references/<domain>/<slug>/` (`page.html`, `content.md`, `screenshot-full-1440.png`, `capture.json`).
+- [ ] Reference landing pages captured into `project-docs/design-references/<domain>/` (`page.html`, `content.md`, `screenshot-full-1440.png`, `capture.json`).
 - [ ] Reference capture ledger compiled in `project-docs/design-references/sources.md` starting with mandatory third-party usage notice (zero fabricated images).
 - [ ] Technical design theory authored to `project-docs/design-theory.md` (tokens, typography, motion, avoid list).
-- [ ] Modular client review pages compiled to `project-docs/client-review/gate-2-design-theory/<concept-name>/<slug>/index.html`.
+- [ ] Full-page client review concept websites compiled to `project-docs/client-review/gate-2-design-theory/<concept-name>/index.html` featuring full realistic layouts and production-grade content.
 - [ ] Static review generator script executed (`node skills/create-nww-website/scripts/client-review/index.js`) to generate Gate 2 review hub (`gate-2-design-theory/index.html`) and root portal (`client-review/index.html`).
 - [ ] Package is 100% self-contained: opens by double-click offline, zero external requests, and all technical jargon explained or collapsed into developer details.
 - [ ] `project-docs/router-state.md` updated to `Gate 2: Awaiting Client Decision (via project-docs/client-review/gate-2-design-theory/index.html)`.

@@ -68,7 +68,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 - **Goal:** Define the visual language, typography scales, color palettes, spacing systems, motion tokens, and voice & tone.
 - **Inputs:** Brand guidelines, reference URLs from discovery.
 - **Prerequisite:** Web-fetch and capture full-page reference screenshots (landing pages only). Verify if `frontend-design` skill is available per [design-theory.md](design-theory.md) or apply documented built-in taste rules.
-- **Outputs:** `project-docs/design-theory.md`, `project-docs/design-references/<domain>/<slug>/` (`page.html`, `content.md`, `screenshot-full-1440.png`, `capture.json`), `project-docs/client-review/gate-2-design-theory/`.
+- **Outputs:** `project-docs/design-theory.md`, `project-docs/design-references/<domain>/` (`page.html`, `content.md`, `screenshot-full-1440.png`, `capture.json`), `project-docs/client-review/gate-2-design-theory/`.
 - **Gate 2:** Client reviews the visual package (`project-docs/client-review/gate-2-design-theory/index.html`) and selects palette direction, typography, and brand mark. The agent never asks the client to review the raw technical spec; progress halts until the client decision is recorded.
 
 ### Stage 3: Page List & Information Architecture

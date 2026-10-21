@@ -5,13 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-10-21
+
+### Added
+- **Full-Page Client Review Experience**: Replaced card-based review mockups with full-page final HTML websites at `project-docs/client-review/gate-2-design-theory/<concept-name>/index.html` featuring complete realistic portfolio content, real project showcases, timeline, stack, and floating review switcher navigation.
+- **Companion Reference Capture Utility (`scripts/reference-capture/index.js`)**: Provided automated Node.js utility to fetch rendered HTML (`page.html`), stripped markdown (`content.md`), full-page screenshots (`screenshot-full-1440.png`), and structured audit records (`capture.json`) into `project-docs/design-references/<domain>/`.
+- **Eliminated Artificial Slug Layers**: Removed artificial `/home` subdirectories from both reference captures (`project-docs/design-references/<domain>/`) and client reviews (`gate-2-design-theory/<concept-name>/index.html`) for cleaner, direct paths.
+- **Optimized Gate 2 Review Generator (`scripts/client-review/index.js`)**: Updated companion script to scan direct concept directories and generate/update the Gate 2 comparison hub (`gate-2-design-theory/index.html`) and root portal (`client-review/index.html`).
+
 ## [1.1.0] - 2026-10-21
 
 ### Added
-- **Reference Capture Engine (Landing Pages Only)**: Standardized reference captures into `project-docs/design-references/<domain>/<slug>/` capturing 4 distinct artifacts per page: `page.html` (rendered DOM verbatim), `content.md` (verbatim stripped Markdown in reading order), `screenshot-full-1440.png` (1440px full-page desktop screenshot), and `capture.json` (audit metadata record).
+- **Reference Capture Engine (Landing Pages Only)**: Standardized reference captures into `project-docs/design-references/` capturing 4 distinct artifacts per page: `page.html`, `content.md`, `screenshot-full-1440.png`, and `capture.json`.
 - **Mandatory Usage Notice**: Enforced legal/security disclaimer in `sources.md` prohibiting third-party markup, text, or image reuse in client deliverables.
-- **Modular Client Review Architecture**: Restructured Gate 2 deliverables from a single file into modular, per-concept deep-dive pages at `project-docs/client-review/gate-2-design-theory/<concept-name>/<slug>/index.html`.
-- **Companion Review Generator Utility (`scripts/client-review/index.js`)**: Provided zero-dependency Node.js companion script to scan concept directories and automatically generate/update the Gate 2 comparison hub (`gate-2-design-theory/index.html`) and root portal (`client-review/index.html`).
+- **Modular Client Review Architecture**: Restructured Gate 2 deliverables from a single file into modular per-concept pages.
+- **Companion Review Generator Utility (`scripts/client-review/index.js`)**: Provided zero-dependency Node.js companion script to scan concept directories and generate the Gate 2 comparison hub.
 - **Client Decision Protocol**: Formalized Gate 2 halt condition in `project-docs/router-state.md` preventing raw technical spec review and providing copy-ready decision snippets.
 
 ## [1.0.0] - 2026-10-21

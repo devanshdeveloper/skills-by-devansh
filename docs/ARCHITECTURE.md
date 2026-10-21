@@ -26,7 +26,9 @@ skills-by-devansh/
 │   │   │   └── ... (10 more docs)      # Specific stage guidance
 │   │   └── scripts/                    # Embedded CLI helper tools
 │   │       ├── assets-optimizer/       # Sharp/ffmpeg image/video pipeline
-│   │       └── stock-fetch/            # Stock image provenance & fetch
+│   │       ├── stock-fetch/            # Stock image provenance & fetch
+│   │       ├── client-review/          # Gate 2 visual review hub and portal generator
+│   │       └── reference-capture/      # Automated reference landing page DOM & screenshot capture
 │   ├── nww/                            # Shortcut alias skill for create-nww-website
 │   │   └── SKILL.md                    # Fast shortcut delegation runbook
 │   └── publish/                        # Maintainer-only release skill (metadata.internal)
@@ -63,6 +65,7 @@ Skills may contain companion CLI utilities inside `scripts/`:
 - **`assets-optimizer`**: A Node.js utility utilizing `sharp` and `ffmpeg` to process, optimize, resize, and produce WebP assets and manifests.
 - **`stock-fetch`**: A Node.js utility connecting to Pixabay, Pexels, and Unsplash APIs to search, download, and log provenance for images.
 - **`client-review`**: A Node.js utility that automatically scans modular concept review directories and generates/updates client review hubs and portals.
+- **`reference-capture`**: A Node.js utility capturing full rendered DOM (`page.html`), stripped Markdown (`content.md`), full-page screenshots (`screenshot-full-1440.png`), and audit metadata (`capture.json`) into `project-docs/design-references/<domain>/`.
 
 These utilities are self-contained and invoked via Node directly (`node index.js`).
 

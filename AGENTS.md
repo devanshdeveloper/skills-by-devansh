@@ -13,7 +13,7 @@ Authoring and distribution repository for `skills-by-devansh`, a collection of A
 - `skills/`: Published skills catalog (`create-nextjs-website`, `create-nww-website`, `nww`, `publish`)
 - `skills/<name>/SKILL.md`: Core runbook with YAML frontmatter (`name`, `description`)
 - `skills/<name>/references/`: Modular stage guides and technical documentation
-- `skills/<name>/scripts/`: Companion CLI helper utilities (`assets-optimizer`, `stock-fetch`)
+- `skills/<name>/scripts/`: Companion CLI helper utilities (`assets-optimizer`, `stock-fetch`, `client-review`, `reference-capture`)
 - `scripts/publish/`: Repository preflight validation, security scan, and release automation
 - `docs/`: Repository architecture and documentation
 - `.agents/`: Antigravity configuration layer (rules, skills, hooks)
@@ -27,6 +27,8 @@ Execute only verbatim commands matching what exists in this repository:
 - **Syntax Check Node Scripts**: `node --check <path-to-script.js>`
 - **Run Asset Optimizer**: `node skills/create-nww-website/scripts/assets-optimizer/index.js`
 - **Run Stock Fetch**: `node skills/create-nww-website/scripts/stock-fetch/index.js`
+- **Run Client Review Generator**: `node skills/create-nww-website/scripts/client-review/index.js`
+- **Run Reference Capture**: `node skills/create-nww-website/scripts/reference-capture/index.js`
 - **Run Security Scan**: `node scripts/publish/security-scan.mjs`
 - **Run Preflight Checks**: `node scripts/publish/preflight.mjs --dry-run`
 - **Run Release (Dry Run)**: `node scripts/publish/release.mjs --dry-run`

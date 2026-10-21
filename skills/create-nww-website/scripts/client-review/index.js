@@ -48,11 +48,6 @@ function extractMetadata(htmlPath, conceptName, slug) {
 
 function generateGate2Hub(concepts) {
   const conceptCards = concepts.map(c => {
-    const slugLinks = c.slugs.map(s => {
-      const targetRel = `${c.name}/${s}/index.html`;
-      return `<a href="${targetRel}" class="slug-btn">View Route: /${s} →</a>`;
-    }).join(' ');
-
     return `
       <div class="concept-card">
         <div class="card-header">
@@ -62,7 +57,7 @@ function generateGate2Hub(concepts) {
         </div>
         <div class="card-footer">
           <div class="slug-actions">
-            ${slugLinks}
+            <a href="${c.name}/index.html" class="slug-btn">Experience Full Page Design →</a>
           </div>
         </div>
       </div>
@@ -222,14 +217,17 @@ function run() {
 
   const concepts = conceptNames.map(name => {
     const conceptDir = path.join(gate2Dir, name);
-    const slugs = getDirectories(conceptDir);
-    const firstSlug = slugs[0] || 'home';
-    const htmlPath = path.join(conceptDir, firstSlug, 'index.html');
-    const meta = extractMetadata(htmlPath, name, firstSlug);
+    let htmlPath = path.join(conceptDir, 'index.html');
+    if (!fs.existsSync(htmlPath)) {
+      const slugs = getDirectories(conceptDir);
+      if (slugs.length > 0) {
+        htmlPath = path.join(conceptDir, slugs[0], 'index.html');
+      }
+    }
+    const meta = extractMetadata(htmlPath, name);
 
     return {
       name,
-      slugs,
       meta
     };
   });
