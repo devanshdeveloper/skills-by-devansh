@@ -75,6 +75,17 @@ These utilities are self-contained and invoked via Node directly (`node index.js
 
 ---
 
+## Release & Publishing Orchestration
+
+The maintainer release workflow (`scripts/publish/`) enforces a 10-gate validation pipeline ensuring zero accidental secret leaks, accurate catalog manifests, consistent documentation, and fast-forward-only git releases:
+- **Fast Mode Orchestrator (`release.mjs`)**: Evaluates all 10 preflight gates (G1 through G10) plus the full security scan concurrently in a single process via `Promise.all`. Automatically infers the latest semver tag from `CHANGELOG.md` and outputs a consolidated machine-readable summary table in < 1 second.
+- **Thorough Mode (`--thorough`)**: Sequential execution mode for deep manual debugging with verbose diagnostics.
+- **Preflight Core (`preflight.mjs`)**: Modular async gate implementations (`checkG1Remote` ... `checkG10RemoteProbe`) reusable across CLI and CI runners.
+- **Security Scanner (`security-scan.mjs`)**: High-entropy and pattern-based token detector scanning active tree files and `git log -p --all` history.
+- **Human Confirmation Gate**: Git commit, tag creation, and fast-forward push remain strictly gated behind interactive human approval (`Type "yes"`), preventing automated or unattended push mutations.
+
+---
+
 ## Antigravity Customization Architecture
 
 To ensure AI agents operate with maximum precision and zero unwanted side-effects:
@@ -82,3 +93,12 @@ To ensure AI agents operate with maximum precision and zero unwanted side-effect
 - **Rules (`.agents/rules/`)**: Scoped rules applied conditionally via globs (`skills/**`, `skills/**/scripts/**`) or manual triggers.
 - **Skills (`.agents/skills/`)**: Multi-step workflows (`plan-first`, `verify`, `add-feature-in-repo-style`) progressively disclosed when triggered.
 - **Hooks (`.agents/hooks.json`)**: PreToolUse and Stop safety guards blocking unauthorized file mutations and enforcing verification gates.
+
+---
+
+## Security & Guardrail Heuristic Limits
+
+Automated scanners (`security-scan.mjs`) and lifecycle hooks (`edit-guard.mjs`, `secret-guard.mjs`) provide layer-of-defense heuristic guardrails, not absolute mathematical guarantees:
+- **Regex Heuristics**: Pattern matching intercepts known token syntax (GitHub tokens, AWS keys, stock API keys) and standard shell redirection syntax (`>`, `tee`, `sed -i`).
+- **Non-Exhaustive Scope**: Obfuscated scripts, base64 payloads, dynamic command evaluation, or unknown third-party token structures can evade regex heuristics.
+- **Maintainer Responsibility**: Automated checks augment but never supersede manual code review, secret hygiene, and prompt credential rotation if an exposure occurs.

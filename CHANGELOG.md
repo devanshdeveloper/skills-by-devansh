@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2026-10-21
+
+### Added
+- **Fast Mode Release Orchestrator (`scripts/publish/release.mjs`)**: Engineered concurrent evaluation of all 10 preflight gates and secret scanning via `Promise.all` in a single Node process, reducing preflight verification time to ~0.5s and overall release time to ~1 minute.
+- **Automatic Tag Inference (`scripts/publish/preflight.mjs`)**: Integrated automated semver tag detection from `CHANGELOG.md` when `--tag` is omitted, eliminating version-guessing overhead.
+- **Consolidated Summary Contract**: Standardized tabular single-output machine-readable reports displaying pass/fail status and actionable diagnostic messages.
+- **Thorough Mode Opt-In (`--thorough`)**: Preserved sequential verbose gate execution for deep manual debugging.
+- **Publish Skill Runbook Streamlining (`skills/publish/SKILL.md`)**: Rewrote the maintainer publish runbook to enforce summary-only consumption and strictly prohibit unnecessary script source reads.
+
 ## [1.6.0] - 2026-10-21
+
 
 ### Added
 - **Next.js Layout Generation Mode (`references/layout-theory.md`)**: Engineered a production Next.js generation mode (`nextjs`) running in Stage 5 after Gate 2 variation approval, scaffolding the real site once in `site/` at project root with modular routes, section components (`data-section="<id>"` markers), decoupled content modules (`site/content/<slug>.js`), and design tokens.

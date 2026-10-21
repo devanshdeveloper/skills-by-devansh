@@ -120,6 +120,17 @@ For local fonts, add project-specific entries `{ family, stem, folder, weights }
 
 Keep reusable scripts and dependencies in the skill. Keep only site-specific review deliverables under `project-docs/client-review/`, and place supplementary Gate 2 reports and working notes in `gate-2-design-theory/_checks/`. The canonical design theory and router state remain at the paths required by the pipeline.
 
+### Tooling, Playwright Binaries & Review Confidentiality
+
+- **Playwright Browser Binaries**: Automated reference capture (`scripts/reference-capture/index.js`) and accessibility verification (`scripts/client-review/verify.mjs`) require Chromium binaries. If not pre-installed in the environment, run:
+  ```bash
+  npx playwright install chromium
+  ```
+- **Review Confidentiality on GitHub Pages**: Deploying client review hubs via GitHub Pages (`assets/client-review-pages.yml`) creates an unauthenticated, publicly reachable website on public repositories. If client assets, brand strategy, or copy are confidential, do NOT deploy to public GitHub Pages; use the built-in local preview server instead:
+  ```bash
+  node skills/create-nww-website/scripts/client-review/preview.mjs [projectRoot]
+  ```
+
 Before presenting to the user for Gate 2 sign-off:
 - [ ] Reference landing pages captured into `project-docs/design-references/<domain>/` (`page.html`, `content.md`, `screenshot-full-1440.png`, `capture.json`) as analysis inputs only.
 - [ ] Reference capture ledger compiled in `project-docs/design-references/sources.md` starting with mandatory third-party usage notice (zero fabricated images, zero copied assets).

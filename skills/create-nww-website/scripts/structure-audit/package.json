@@ -1,0 +1,12 @@
+{
+  "name": "structure-audit",
+  "version": "1.0.0",
+  "description": "Project deliverables and coding conventions auditor across all 12 stages",
+  "main": "index.js",
+  "bin": {
+    "structure-audit": "./index.js"
+  },
+  "scripts": {
+    "audit": "node index.js"
+  }
+}

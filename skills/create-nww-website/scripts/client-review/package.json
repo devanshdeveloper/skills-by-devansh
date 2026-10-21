@@ -1,6 +1,14 @@
 {
   "name": "nww-client-review-tools",
   "private": true,
+  "scripts": {
+    "portal": "node index.js",
+    "preview": "node preview.mjs",
+    "verify": "node verify.mjs",
+    "verify:layout": "node verify-layout.mjs",
+    "verify:nextjs": "node verify-nextjs.mjs",
+    "fetch-fonts": "node fetch-fonts.mjs"
+  },
   "dependencies": {
     "@axe-core/playwright": "4.11.1",
     "playwright": "1.56.1"

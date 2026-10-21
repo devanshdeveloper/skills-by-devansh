@@ -1,0 +1,12 @@
+{
+  "name": "client-intake",
+  "version": "1.0.0",
+  "description": "Client intake brief and answers validator for create-nww-website",
+  "main": "index.js",
+  "bin": {
+    "client-intake": "./index.js"
+  },
+  "scripts": {
+    "validate": "node index.js"
+  }
+}

@@ -17,7 +17,7 @@ Guide for AI agents to scaffold, configure, and develop modern Next.js web appli
 
 1. **Pre-flight & Environment Check**:
    - Inspect the target directory to confirm it is empty or safe for project initialization.
-   - Verify Node.js (`>=18.18.0`) and npm availability.
+   - Verify Node.js (`>=20.9.0`) and npm availability.
 
 2. **Scaffold Next.js Application**:
    - Initialize the project non-interactively using `create-next-app`:

@@ -1,0 +1,15 @@
+{
+  "name": "reference-capture",
+  "version": "1.0.0",
+  "description": "Reference landing page DOM, screenshot, and markdown capture tool for create-nww-website",
+  "main": "index.js",
+  "bin": {
+    "reference-capture": "./index.js"
+  },
+  "scripts": {
+    "capture": "node index.js"
+  },
+  "dependencies": {
+    "playwright": "1.56.1"
+  }
+}

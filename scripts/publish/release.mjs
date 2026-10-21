@@ -4,7 +4,7 @@ import path from 'node:path';
 import readline from 'node:readline';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { runPreflightChecks } from './preflight.mjs';
+import { runPreflightChecks, inferLatestTag } from './preflight.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,49 +33,72 @@ async function promptConfirm(question) {
   });
 }
 
+function printSummaryTable(results, isFast) {
+  const modeHeader = isFast ? 'FAST MODE (Parallel Gates)' : 'THOROUGH MODE (Sequential)';
+  console.log(`================================================================================`);
+  console.log(`  SKILLS-BY-DEVANSH RELEASE ORCHESTRATOR [${modeHeader}]`);
+  console.log(`  Mode: ${results.mode.toUpperCase()} | Target Tag: ${results.targetTag}`);
+  console.log(`================================================================================`);
+  console.log(`${'GATE'.padEnd(6)} ${'STATUS'.padEnd(8)} ${'CHECK NAME'.padEnd(30)} DETAILS`);
+  console.log(`--------------------------------------------------------------------------------`);
+
+  let failureCount = 0;
+  for (const [id, gate] of Object.entries(results.gates)) {
+    const status = gate.passed ? 'PASS' : 'FAIL';
+    if (!gate.passed) failureCount++;
+    const nameCol = (gate.name || id).padEnd(30).slice(0, 30);
+    console.log(`${id.padEnd(6)} ${status.padEnd(8)} ${nameCol} ${gate.details}`);
+  }
+
+  console.log(`--------------------------------------------------------------------------------`);
+  const elapsedSec = (results.elapsedMs / 1000).toFixed(2);
+  if (results.passed) {
+    console.log(`✓ RESULT: ALL ${Object.keys(results.gates).length} GATES PASSED (Wall-clock: ${elapsedSec}s)`);
+  } else {
+    console.error(`✗ RESULT: ${failureCount} GATE(S) FAILED (Wall-clock: ${elapsedSec}s)`);
+  }
+}
+
 export async function runRelease(args = process.argv.slice(2)) {
   const isConfirm = args.includes('--confirm') || args.includes('--mode=confirm') || (args.includes('--mode') && args[args.indexOf('--mode') + 1] === 'confirm');
   const isUnattended = args.includes('--unattended') || args.includes('--mode=unattended');
+  const isThorough = args.includes('--thorough');
   const tagArg = args.find(a => a.startsWith('--tag='));
-  const targetTag = tagArg ? tagArg.split('=')[1] : 'v1.0.0';
+  const targetTag = tagArg ? tagArg.split('=')[1] : inferLatestTag(REPO_ROOT);
 
   const mode = isUnattended ? 'unattended' : isConfirm ? 'confirm' : 'dry-run';
+  const isFast = !isThorough;
 
-  console.log(`=================================================================`);
-  console.log(`  SKILLS REPOSITORY RELEASE ORCHESTRATOR`);
-  console.log(`  Mode: ${mode.toUpperCase()} | Target Tag: ${targetTag}`);
-  console.log(`=================================================================`);
+  // Step 1: Preflight Verification (Fast parallel by default, sequential with --thorough)
+  const preflightResults = await runPreflightChecks({
+    mode,
+    targetTag,
+    parallel: isFast,
+    repoRoot: REPO_ROOT
+  });
 
-  // Step 1: Preflight Verification
-  console.log('\n[Stage 1/4] Running 10-Gate Preflight Checks...');
-  const preflightResults = await runPreflightChecks({ mode, targetTag });
-
-  for (const [id, gate] of Object.entries(preflightResults.gates)) {
-    const icon = gate.passed ? '✓' : '✗';
-    console.log(`  ${icon} [${id}] ${gate.name}: ${gate.details}`);
-  }
+  printSummaryTable(preflightResults, isFast);
 
   if (!preflightResults.passed) {
     console.error(`\n✗ RELEASE BLOCKED: One or more preflight gates failed.`);
-    console.error(`  Fix the issues listed above and re-run preflight.`);
+    console.error(`  Action required: Fix the failing item(s) listed in the table above and re-run.`);
     process.exit(1);
   }
 
-  console.log(`\n✓ Preflight validation passed cleanly.`);
-
   // Step 2: Dry Run Mode
   if (mode === 'dry-run') {
-    console.log('\n[Stage 2/4] Dry-Run Mode Active: Zero Changes Applied.');
-    console.log('  Planned Release Operations:');
+    console.log(`\n[Stage 2/4] Dry-Run Mode Active: Zero Changes Applied.`);
+    console.log(`  Planned Release Operations:`);
     console.log(`  - Create or confirm git commit on branch 'main'`);
     console.log(`  - Tag release with annotated tag: '${targetTag}'`);
     console.log(`  - Push commit & tag to approved remote origin (fast-forward only)`);
     console.log(`  - Verify remote publication status`);
-    console.log('\n✓ Dry run complete. To execute real release, run with --mode confirm.');
+    console.log(`\n✓ Dry run complete. To execute real release, run:`);
+    console.log(`  node scripts/publish/release.mjs --mode confirm --tag=${targetTag}\n`);
     process.exit(0);
   }
 
-  // Read config
+  // Read config for confirm/unattended modes
   const config = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'publish.config.json'), 'utf-8'));
 
   // Step 3: Unattended Mode Guard
@@ -89,7 +112,7 @@ export async function runRelease(args = process.argv.slice(2)) {
 
   // Step 4: Interactive Confirmation (Confirm Mode)
   if (mode === 'confirm') {
-    console.log('\n[Stage 2/4] Release Plan & Pre-Push Confirmation');
+    console.log(`\n[Stage 2/4] Release Plan & Pre-Push Confirmation`);
     console.log(`  Repository: ${config.expectedOwner}/${config.expectedRepo}`);
     console.log(`  Target Tag: ${targetTag}`);
     console.log(`  Remote URL: ${execCmd('git remote get-url origin') || 'not set'}`);
@@ -103,7 +126,7 @@ export async function runRelease(args = process.argv.slice(2)) {
   }
 
   // Step 5: Execution (Commit, Tag, Push)
-  console.log('\n[Stage 3/4] Executing Release Operations...');
+  console.log(`\n[Stage 3/4] Executing Release Operations...`);
   try {
     // 1. Stage tracked files
     execCmd('git add .');
@@ -132,7 +155,7 @@ export async function runRelease(args = process.argv.slice(2)) {
   }
 
   // Step 6: Post-Publish Verification
-  console.log('\n[Stage 4/4] Post-Publish Remote Verification...');
+  console.log(`\n[Stage 4/4] Post-Publish Remote Verification...`);
   try {
     const remoteTags = execCmd('git ls-remote --tags origin');
     if (remoteTags.includes(targetTag)) {

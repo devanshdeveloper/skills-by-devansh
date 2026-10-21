@@ -4,7 +4,7 @@
 Authoring and distribution repository for `skills-by-devansh`, a collection of AI agent skills compatible with the [skills.sh](https://skills.sh/) ecosystem and `npx skills` CLI. Provides structured workflows and runbooks for agentic software development. See @docs/ARCHITECTURE.md for architecture details.
 
 ## Stack & Environment
-- **Runtime**: Node.js (>=18.18.0, active: v24.16.0)
+- **Runtime**: Node.js (>=20.9.0, active: v24.16.0)
 - **Package Managers**: npm, pnpm, npx
 - **Skill Engine**: skills.sh / `npx skills` CLI
 - **Formats**: Markdown runbooks with YAML frontmatter, Node.js CLI scripts (CommonJS/ESM)

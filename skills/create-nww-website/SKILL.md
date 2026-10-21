@@ -118,7 +118,7 @@ Aesthetic polish is mandatory for Stages 2 and 8:
 
 For complete design guidelines, consult [references/design-theory.md](references/design-theory.md) and [references/design-variations.md](references/design-variations.md).
 
-Keep reusable Gate 2 tooling in this skill's `scripts/client-review/`, not in a project-level tools folder. The bundled `preview.mjs`, `verify.mjs`, and `fetch-fonts.mjs` accept a project root. Keep project-specific HTML, CSS, font choices, and assets in `project-docs/client-review/`; put generated Gate 2 QA reports, similarity audits, and working notes in `gate-2-design-theory/_checks/`. See the design reference guide for commands and compatibility details.
+Keep reusable Gate 2 tooling in this skill's `scripts/client-review/`, not in a project-level tools folder. The bundled `preview.mjs`, `verify.mjs`, and `fetch-fonts.mjs` accept a project root. Note: Playwright-powered companion tools (`reference-capture`, `verify.mjs`) require Chromium installed via `npx playwright install chromium`. Keep project-specific HTML, CSS, font choices, and assets in `project-docs/client-review/`; put generated Gate 2 QA reports, similarity audits, and working notes in `gate-2-design-theory/_checks/`. See the design reference guide for commands and compatibility details.
 
 ---
 

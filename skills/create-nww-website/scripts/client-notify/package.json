@@ -1,0 +1,12 @@
+{
+  "name": "client-notify",
+  "version": "1.0.0",
+  "description": "Client milestone email drafting and notification engine for create-nww-website",
+  "main": "index.js",
+  "bin": {
+    "client-notify": "./index.js"
+  },
+  "scripts": {
+    "notify": "node index.js"
+  }
+}

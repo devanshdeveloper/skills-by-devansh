@@ -1,3 +1,16 @@
+# ==============================================================================
+# SECURITY NOTICE: GITHUB PAGES CONFIDENTIALITY & REACHABILITY
+# ==============================================================================
+# When enabled on a public GitHub repository, GitHub Pages sites are publicly
+# accessible over the internet to anyone with the URL.
+# If your client review materials contain confidential branding, pre-release
+# product information, or sensitive business notes:
+#   1. DO NOT deploy this workflow on a public repository.
+#   2. Use the local offline preview server instead:
+#      `node skills/create-nww-website/scripts/client-review/preview.mjs`
+#   3. If online client sharing is required for private assets, ensure the
+#      repository is private and GitHub Enterprise "Private Pages" is enabled.
+# ==============================================================================
 name: Deploy Client Review to GitHub Pages
 
 on:
