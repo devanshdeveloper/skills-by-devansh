@@ -42,13 +42,13 @@ function parseRouterState() {
   if (!fs.existsSync(routerPath)) return { stage: 2, gate: 'Gate 2', status: 'In Review' };
   const content = fs.readFileSync(routerPath, 'utf-8');
 
-  const stageMatch = content.match(/Current Stage:\s*Stage\s*(\d+)/i);
-  const gateMatch = content.match(/Gate Status:\s*([^(\n]+)/i);
-  const projectMatch = content.match(/Project:\s*([^\n]+)/i);
+  const stageMatch = content.match(/Current Stage:[\s*_]*Stage\s*(\d+)/i);
+  const gateMatch = content.match(/Gate Status:[\s*_]*([^(\n]+)/i);
+  const projectMatch = content.match(/Project:[\s*_]*([^\n]+)/i);
 
   // Check for live URL (prioritize GitHub Pages review URL over CMS backend)
-  const ghPagesMatch = content.match(/https?:\/\/[a-zA-Z0-9.-]+\.github\.io[^\s)\],]*/i);
-  const fallbackUrlMatch = content.match(/https?:\/\/[^\s)\],]+/i);
+  const ghPagesMatch = content.match(/https?:\/\/[a-zA-Z0-9.-]+\.github\.io[^\s)\],`"*<>]*/i);
+  const fallbackUrlMatch = content.match(/https?:\/\/[^\s)\],`"*<>]+/i);
   const urlMatch = ghPagesMatch || fallbackUrlMatch;
 
   return {
@@ -116,9 +116,9 @@ function getGate2OptionsSummary(projRoot) {
     }
   } catch (_) {}
 
-  return `  • Option 1: Minimal Slate & Signal Amber (Grounded engineering canvas)\n` +
-         `  • Option 2: Technical Obsidian & Laser Cyan (High-contrast developer theme)\n` +
-         `  • Option 3: Editorial Sand & Deep Burgundy (Warm editorial and refined typography)`;
+  return `  • Variation 1: The Modernist Architect (Grounded asymmetric grid and bold editorial headlines)\n` +
+         `  • Variation 2: The Technical Minimalist (High-density clean structure and focused conversion cues)\n` +
+         `  • Variation 3: The Editorial Storyteller (Warm tactile palette, serif display, and progressive narrative arc)`;
 }
 
 function getStageTemplate(stage, context) {
@@ -130,7 +130,7 @@ function getStageTemplate(stage, context) {
       name: 'Intake Check & Scope Confirmation',
       subject: `[${projectName}] Milestone Review: Intake Brief & CMS Scope Ready`,
       action: 'Confirm the intake answers and CMS mode so technical architecture can begin.',
-      deliverable: 'project-docs/client-answers.md',
+      deliverable: 'Project Discovery Brief & Scope Summary',
       summary: `We have codified your discovery answers, branding preferences, reference sites, and CMS scope into the initial Project Brief. Please review the scope details to ensure full alignment before we generate the technical architecture.`
     },
     1: {
@@ -143,20 +143,20 @@ function getStageTemplate(stage, context) {
     },
     2: {
       gate: 'Gate 2',
-      name: 'Design Theory & Visual Concepts',
-      subject: `[${projectName}] Action Required: Review 3 Full-Page Visual Design Concepts`,
-      action: 'Experience the 3 full-page design concepts and choose your preferred visual identity (Option 1, 2, or 3).',
+      name: 'Design Theory & Landing Page Variations',
+      subject: `[${projectName}] Action Required: Review 3 Original Landing Page Design Variations`,
+      action: 'Experience the 3 full-page design variations and choose your preferred direction (Variation 1, 2, or 3).',
       deliverable: reviewUrl || 'project-docs/client-review/gate-2-design-theory/index.html',
-      summary: `We have developed 3 distinct full-page website design directions for your review:\n` +
+      summary: `We have developed 3 distinct full-page website design variations for your review:\n` +
                `${getGate2OptionsSummary(projectRoot)}\n\n` +
-               `Each option features complete, realistic portfolio content, real project showcases, timeline, and an interactive review bar.`
+               `Each variation explores a distinct spatial layout, typography hierarchy, and visual personality, crafted from your authentic content and pre-audited for originality.`
     },
     3: {
       gate: 'Gate 3',
       name: 'Page List & Sitemap',
       subject: `[${projectName}] Milestone Review: Route Hierarchy & Sitemap Scope`,
       action: 'Review and approve the complete sitemap, route list, and page types.',
-      deliverable: 'project-docs/page-list.md',
+      deliverable: reviewUrl ? `${reviewUrl} (Sitemap Section)` : 'project-docs/client-review/index.html',
       summary: `We have finalized the complete route hierarchy and master page inventory. Please confirm the pages and URLs before we lock the SEO strategy.`
     },
     4: {
@@ -171,16 +171,16 @@ function getStageTemplate(stage, context) {
       gate: 'Gate 5',
       name: 'Layout Theory & Section Blueprints',
       subject: `[${projectName}] Milestone Review: Section Layouts & Responsive Blueprints`,
-      action: 'Approve the section rhythm, grid blueprints, and container layout rules.',
-      deliverable: 'project-docs/layout-system.md',
-      summary: `Every page has been decomposed into semantic, responsive sections with defined content capacity and visual hierarchies.`
+      action: 'Approve the section flow, responsive phone behavior, and content placements in your layout preview hub.',
+      deliverable: reviewUrl ? `${reviewUrl}/pages/index.html` : 'project-docs/client-review/pages/index.html',
+      summary: `Every page has been deconstructed into visual, responsive section blueprints with defined content capacity and visual hierarchies. Please review the visual layouts in the portal.`
     },
     6: {
       gate: 'Gate 6',
       name: 'Content & Asset Sourcing',
       subject: `[${projectName}] Milestone Review: Production Copy & Imagery Inventory`,
       action: 'Review and approve page copy, technical case studies, and sourced media assets.',
-      deliverable: 'page-specs/ and project-docs/stock-provenance.json',
+      deliverable: reviewUrl ? `${reviewUrl} (or Client Review Portal)` : 'project-docs/client-review/index.html',
       summary: `All page copy, case studies, technical summaries, and licensed image assets have been assembled and verified against your voice & tone guidelines.`
     },
     7: {
@@ -253,8 +253,7 @@ ${template.action}
 To provide your approval or feedback, simply reply to this email.
 
 Best regards,
-The Development & Design Team
-${projectName}
+Next Web Works
 `;
 
   return {
@@ -342,7 +341,7 @@ async function run() {
   const stage = flags.stage !== undefined ? parseInt(flags.stage, 10) : routerInfo.stage;
   const clientName = flags.client || clientInfo.name;
   let recipient = flags.to || clientInfo.email;
-  const reviewUrl = flags.link || routerInfo.liveUrl || 'https://devanshdeveloper.github.io/devanshkhetwani.dev/gate-2-design-theory/';
+  const reviewUrl = flags.link || routerInfo.liveUrl || null;
 
   const context = {
     projectName: routerInfo.projectName,

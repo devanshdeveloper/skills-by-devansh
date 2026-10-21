@@ -468,40 +468,40 @@
     <!-- Top Briefing Header -->
     <header class="header">
       <div class="badge">Stage 2 Visual Review</div>
-      <h1>{{PROJECT_NAME}} — Visual Identity & Palette Review</h1>
+      <h1>{{PROJECT_NAME}} — Landing Page Design Variations</h1>
       <p class="lead">{{REVIEW_SUMMARY}}</p>
       <div class="callout-box">
-        <strong>What we need from you:</strong> Review the visual directions below, choose your favorite palette option, and return the reply template at the bottom.
+        <strong>What we need from you:</strong> Review the distinct landing page variations below (each synthesized from abstract principles extracted from your references using your authentic content), select your preferred variation, and return the reply template at the bottom.
       </div>
     </header>
 
-    <!-- Section 1: Live Reference Findings -->
+    <!-- Section 1: Live Reference Findings & Principles -->
     <section>
-      <h2 class="section-title">Sites You Shared & What We Noticed</h2>
+      <h2 class="section-title">Design Principles Extracted from References</h2>
       <p class="section-desc">
-        We retrieved and captured full-screen views of each reference site. Here are the specific engineering and aesthetic principles we drew from each:
+        We analyzed your reference websites to isolate core structural, typographic, and tonal principles without borrowing markup, code, or assets. Here are the abstract principles we derived:
       </p>
       <div class="reference-grid">
         {{REFERENCE_CARDS}}
       </div>
     </section>
 
-    <!-- Section 2: Three Looks to Choose From -->
+    <!-- Section 2: Distinct Variations to Choose From -->
     <section>
-      <h2 class="section-title">Visual Looks to Choose From</h2>
+      <h2 class="section-title">Original Landing Page Variations</h2>
       <p class="section-desc">
-        Each look below has been rendered as a live preview of a sample page in day and night views with contrast-checked colors:
+        Each variation below explores a distinct structural personality, spatial rhythm, typography pairing, and visual tone, pre-audited for originality and accessibility:
       </p>
       <div class="palettes-container">
-        {{PALETTE_OPTIONS}}
+        {{VARIATION_CARDS}}
       </div>
     </section>
 
-    <!-- Section 3: Typography & Personal Mark -->
+    <!-- Section 3: Typography & Brand System -->
     <section class="type-section">
       <h2 class="section-title">Typography & Brand System</h2>
       <p class="section-desc">
-        How headings, reading body copy, and technical details pair across the site:
+        How display headlines, reading body copy, and UI elements pair across the variations:
       </p>
       {{TYPOGRAPHY_SAMPLES}}
     </section>
@@ -510,7 +510,7 @@
     <section class="decision-section">
       <h2 class="decision-title">Your Decision</h2>
       <p class="decision-lead">
-        Copy the template below, choose your preferred palette option, and send your reply to approve Gate 2:
+        Copy the template below, choose your preferred variation, note any requested adjustments or elements to avoid, and send your reply to approve Gate 2:
       </p>
       <div class="copy-box" id="reply-template">{{DECISION_TEMPLATE}}</div>
       <button class="btn-copy" onclick="copyTemplate()">Copy Reply Template</button>

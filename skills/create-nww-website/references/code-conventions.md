@@ -4,24 +4,71 @@ This document establishes the architecture, directory structure, coding standard
 
 ---
 
-## Core Technology Stack
+## Core Technology Stack & Convention Discovery
 
-- **Framework:** Next.js (App Router, latest stable release).
-- **Package Manager:** `pnpm` exclusively (`pnpm dev`, `pnpm build`, `pnpm check:all`).
-- **Language:** JavaScript only (`.js`, `.jsx`). Zero TypeScript (`.ts`, `.tsx`) or `tsconfig.json`.
-- **Styling:** Tailwind CSS with semantic tokens defined in `design-theory.md` and `globals.css`.
-- **Animation:** GSAP (GreenSock) with `@gsap/react` (`useGSAP`) and ScrollTrigger, importing tokens from `site/lib/motion.js`.
-- **Icons:** Lucide React (`lucide-react`).
-- **Pre-Optimized Media:** `site/components/ResponsiveImage.js` (native Server Component reading `site/public/assets/manifest.json`).
+The website stack is centered on Next.js App Router and Tailwind CSS. The programming language (JavaScript or TypeScript), package manager, folder structure, and naming conventions must be **discovered from project files and documentation at run time**, never hard-coded.
+
+### Runtime Convention Discovery Procedure
+Before scaffolding or writing code in `site/`:
+1. **Document Inspection:** Read `project-docs/tech-stack.md` and `project-docs/code-conventions.md` if present.
+2. **Lockfile Detection:** Check project root for:
+   - `pnpm-lock.yaml` -> `pnpm`
+   - `package-lock.json` -> `npm`
+   - `yarn.lock` -> `yarn`
+   - `bun.lockb` / `bun.lock` -> `bun`
+   - *Conflict Guard:* If multiple conflicting lockfiles exist in the root, **HALT and ask the human** to resolve the ambiguity.
+3. **Language Detection:** Check for `tsconfig.json`. If present -> TypeScript (`.ts`, `.tsx`); otherwise -> JavaScript (`.js`, `.jsx`).
+4. **Intake Fallback:** If no existing project files or lockfiles exist, consult intake questionnaire Batch 7 (Q43e) and apply the user's default stack: Next.js App Router, Tailwind CSS, JavaScript, `pnpm`, root `app/`, `@/*`.
+5. **Report Output:** Print a concise Convention Discovery Report before scaffolding:
+   ```
+   --- NWW Convention Discovery Report ---
+   Package Manager: pnpm (detected from pnpm-lock.yaml)
+   Language: JavaScript (no tsconfig.json found; project default applied)
+   App Directory: site/app/ (root app mode)
+   Import Alias: @/*
+   Styling: Tailwind CSS
+   Pre-Launch Guard: Active (noindex + banner enabled)
+   ---------------------------------------
+   ```
 
 ---
 
-## Project Scaffolding Command
+## Scaffolding & Dependency Governance
 
-During Stage 9 Foundation Build, scaffold the Next.js application inside `site/` using this exact command:
+Scaffold the Next.js application inside `site/` only after the Gate 2 variation decision is approved, using verified flags:
+
+### 1. Environment Check
+- Verify Node.js availability (`node -v` >= 18.18.0). If Node is missing or package installation fails, stop and report, keeping `html` mode as the fallback.
+
+### 2. Verified Generator Command
+Execute the official generator with flags matching discovered conventions:
 ```bash
-pnpm create next-app@latest site --js --tailwind --app --eslint --no-src-dir --import-alias "@/*" --use-pnpm
+# Example for discovered JavaScript + pnpm stack:
+pnpm create next-app@latest site --js --tailwind --app --eslint --import-alias "@/*" --disable-git --use-pnpm
 ```
+- **Mandatory Flag `--disable-git`:** Skips git initialization inside `site/` to prevent creating a nested git repository within the parent workspace.
+- **Dependency Boundary:** No packages may be installed beyond the official generator output and the approved brief. Never silently add packages.
+
+---
+
+## Fonts, Media & Pre-Launch Guard
+
+### 1. Fonts & Build-Time Privacy
+- Uses `next/font/google`, `next/font/local`, or system font stacks.
+- *Verified Next.js Fact:* `next/font/google` automatically downloads CSS and font files at **build time** and hosts them locally alongside static assets. Zero runtime requests are made to Google by client browsers, ensuring complete privacy, GDPR compliance, and offline operation.
+- If build-time internet access is unavailable, fall back cleanly to system font stacks (`system-ui`, `-apple-system`, `sans-serif`, `serif`).
+
+### 2. Neutral Placeholders & Image Hygiene
+- All image slots render neutral SVG/geometric containers matching blueprint aspect ratios.
+- All draft text and placeholders carry `data-placeholder="true"`.
+- Zero images, SVGs, or assets may be copied or hotlinked from reference websites.
+
+### 3. Pre-Launch Guard (`noindex` + Preview Banner)
+- Controlled by `NEXT_PUBLIC_PREVIEW_GUARD="true"` in `site/.env.local` (active by default).
+- Generates `robots: { index: false, follow: false }` metadata in root `app/layout.js` and dynamic `/robots.txt` disallowing all crawlers.
+- Renders `<PreviewBanner />` at the top of the viewport.
+- Writes deactivation reminder to `project-docs/launch-checklist.md`.
+- *Boundary:* Instructs compliant search engines not to index; does not provide user authentication or prevent unauthorized network access.
 
 ---
 

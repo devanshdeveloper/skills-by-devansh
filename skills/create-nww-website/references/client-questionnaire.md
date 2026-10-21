@@ -47,7 +47,7 @@ Upon skill activation, the agent must immediately execute this sequence:
 - **Q7 [Timeline & Launch Date]:** What is your target launch date, and are there any hard deadlines (e.g., product launch, campaign, event)?  
   *(Answer: Free text | Default: `Flexible / 4 weeks` | Required: Yes | Consumer: Stage 0, Stage 11)*
 
-### Batch 2: Branding, Design Direction & Inspiration (7 Questions)
+### Batch 2: Branding, Design Direction & Inspiration (8 Questions)
 - **Q8 [Brand Assets Available]:** Do you have vector logo files (SVG, AI, EPS) in full-color, monochrome, and reversed light-on-dark variants?  
   *(Answer: Choice / Free text | Allowed: `yes-all`, `partial`, `none-create` | Default: `yes-all` | Required: Yes | Consumer: Stage 2, Stage 6)*
 - **Q9 [Brand Palette & Tokens]:** Do you have established brand colors (provide hex codes), or should the agency curate a cohesive modern palette?  
@@ -57,9 +57,15 @@ Upon skill activation, the agent must immediately execute this sequence:
 - **Q11 [Brand Personality Scale]:** Where does your brand sit across these 4 spectrums:  
   1. Minimal ↔ Maximal | 2. Corporate ↔ Playful | 3. Luxury ↔ Accessible | 4. Modern ↔ Classic  
   *(Answer: List of ratings | Default: `Balanced / Modern-Accessible` | Required: Yes | Consumer: Stage 2)*
-- **Q12 [Liked Design References]:** Share 2–3 live website URLs you admire. For each, what specifically do you like (Layout, Color, Typography, Imagery, or Animations)?  
-  *(Answer: List of URLs + commentary | Required: Yes | Consumer: Stage 2 live-fetch & visual screenshot capture)*
-- **Q13 [Disliked Websites]:** Share 1–2 website URLs whose design or vibe you dislike, and why?  
+- **Q12a [Liked Design References & Principles]:** Share 2–3 live website URLs you admire. For each, what specific design principles do you like (e.g. spatial grid, typography scale, color mood, visual density, or navigation pattern)?  
+  *(Answer: List of URLs + principles | Required: Yes | Consumer: Stage 2 reference capture & principles extraction)*
+- **Q12b [Reference Anti-Patterns & What to Avoid]:** Looking at your reference websites, is there anything specific you dislike, find confusing, or want to avoid on your website?  
+  *(Answer: Free text | Default: `None specified` | Required: Optional | Consumer: Stage 2 avoid list)*
+- **Q12c [Gate 2 Variation Count]:** How many distinct landing page variations would you like to review at Gate 2?  
+  *(Answer: Choice | Allowed: `2`, `3`, `4` | Default: `3` | Required: Yes | Consumer: Stage 2 Gate 2 variation framework)*
+- **Q12d [Reference Adherence Mode]:** How closely should variations follow your reference websites?  
+  *(Answer: Choice | Allowed: `principles-only` (default: extract abstract principles, 100% original layout/markup/copy), `loose-inspiration` (broad creative departure) | Default: `principles-only` | Required: Yes | Consumer: Stage 2 Gate 2 distance rules)*
+- **Q13 [Disliked Websites]:** Share 1–2 website URLs whose overall design or vibe you dislike, and why?  
   *(Answer: List of URLs + commentary | Default: `None` | Required: Optional | Consumer: Stage 2)*
 - **Q14 [Motion & Animation]:** What is your animation preference: subtle & static by design (micro-interactions on hover, max 1 bold section), or completely static?  
   *(Answer: Choice | Allowed: `subtle-gsap` (default), `static-only` | Default: `subtle-gsap` | Required: Yes | Consumer: Stage 2, Stage 9)*
@@ -136,6 +142,14 @@ Upon skill activation, the agent must immediately execute this sequence:
   *(Answer: Yes/No + List | Default: `None` | Required: Conditional on Migration | Consumer: Stage 4)*
 - **Q43 [Approval Stakeholder]:** Confirm the sole point of contact for gate sign-offs (Default: Devansh).  
   *(Answer: Free text | Default: `Devansh` | Required: Yes | Consumer: State Machine)*
+- **Q43b [Client Review Format Preference]:** What format do you prefer for reviewing visual design variations, layout blueprints, and page build milestones?  
+  *(Answer: Choice | Allowed: `local-folder` (default: HTML review portal opened locally in your browser), `github-pages` (deployed live static review website) | Default: `local-folder` | Required: Yes | Consumer: Gate 2, Gate 5, Gate 10 review delivery)*
+- **Q43c [Start Real Site in Next.js After Approval]:** Should the workflow start the real site in `site/` in Next.js mode once your Gate 2 design variation is approved?  
+  *(Answer: Choice | Allowed: `yes` (default: builds real Next.js site once in `site/` with manifest for token-efficient downstream stages), `no` (generates HTML layout previews only) | Default: `yes` | Required: Yes | Consumer: Stage 5 Layout Generation)*
+- **Q43d [Codebase Destination Folder]:** Confirm the directory at the project root for the real Next.js application codebase.  
+  *(Answer: Path | Default: `site/` | Required: Yes | Consumer: Stage 5 Scaffolding, Stage 9, Stage 10)*
+- **Q43e [Project Defaults if Unset]:** If no existing project files, lockfiles, or configs are discovered in the repository, confirm the default language and package manager.  
+  *(Answer: Free text / Choice | Allowed: Language: `javascript` [default] or `typescript`; Package Manager: `pnpm` [default], `npm`, `yarn`, `bun` | Default: `javascript` + `pnpm` | Required: Yes | Consumer: Stage 1 Tech Stack, Stage 5 Scaffolding)*
 - **Q44 [Post-Launch Maintenance]:** Who will maintain the codebase and content post-launch (client team vs agency)?  
   *(Answer: Choice | Allowed: `client-team`, `agency`, `hybrid` | Default: `agency` | Required: Yes | Consumer: Stage 11 Handover)*
 - **Q45 [Out-of-Scope Confirmation]:** Confirm out-of-scope items (e.g. custom PHP/WordPress platforms, backend custom microservices, direct database access).  
@@ -168,9 +182,12 @@ After all questionnaire batches are completed, write the compiled answers to `pr
 - **Color Palette:** [Hex codes or "Agency Curated"]
 - **Typography:** [Google Fonts: e.g. Outfit + Inter, or Licensed]
 - **Brand Scale:** [Minimal/Maximal, Corporate/Playful, Luxury/Accessible, Modern/Classic]
-- **Liked References:**
-  1. [URL 1] - [Notes on layout, color, typography]
-  2. [URL 2] - [Notes]
+- **Liked References & Principles:**
+  1. [URL 1] - [Liked principles: layout grid, typography, mood]
+  2. [URL 2] - [Liked principles]
+- **Reference Elements to Avoid:** [Specific patterns to avoid from references]
+- **Gate 2 Variation Count:** [3]
+- **Reference Adherence Mode:** [principles-only | loose-inspiration]
 - **Disliked References:** [URLs and anti-patterns to avoid]
 - **Motion Preference:** [subtle-gsap | static-only]
 
@@ -209,18 +226,41 @@ After all questionnaire batches are completed, write the compiled answers to `pr
 
 ## 7. Governance & Launch Constraints
 - **Sole Approver:** [Devansh]
+- **Client Review Format:** [local-folder | github-pages]
+- **Start Real Site in Next.js:** [yes | no]
+- **Codebase Folder:** [site/]
+- **Default Language & PM:** [javascript / pnpm]
 - **Post-Launch Maintenance:** [Agency / Client]
 - **Out-of-Scope:** [Recorded boundaries]
 ```
 
 ---
 
-## 4. Gate 0 Discovery Sign-Off Checklist
+## 4. Question-to-Consumer Coverage Matrix
+
+Every question collected during the intake interview maps to explicit downstream pipeline consumers:
+
+| Batch | Question IDs | Domain / Focus | Consuming Pipeline Stage(s) | Primary Deliverable Impact |
+|---|---|---|---|---|
+| **Batch 1** | Q1–Q7 | Business Identity, Audience, Primary Action, CMS Mode | Stage 0 (Gate 0), Stage 1, Stage 2, Stage 3, Stage 5, Stage 7 | `client-answers.md`, `tech-stack.md`, CMS routing, page list |
+| **Batch 2** | Q8–Q11 | Brand Assets, Palette Tokens, Typography, Brand Scale | Stage 2, Stage 6, Stage 9 | `design-theory.md` design tokens, `site/AGENTS.md` |
+| **Batch 2** | Q12a–Q12d | References, Liked Principles, Avoids, Variations, Adherence | Stage 2 (Gate 2) | Reference capture, `design-variations.md` matrix, distance audit |
+| **Batch 2** | Q13–Q14 | Disliked Sites, Motion Preference | Stage 2, Stage 9 | `design-theory.md` Avoid list, `lib/motion.js` dual tokens |
+| **Batch 3** | Q15–Q20 | Sitemap, Section Needs, Copywriting, Voice & Tone, Forms | Stage 3, Stage 5, Stage 6, Stage 7 | `page-list.md`, `layout.md`, verbatim `content.md`, form API |
+| **Batch 4** | Q21–Q27 | Primary Photos, Rights, Stock Authorization & Providers | Stage 0 (Gate 0), Stage 6, Stage 9 | `assets.md`, `stock-provenance.json`, `/credits` page |
+| **Batch 5** | Q28–Q34 | SEO Keywords, Geo Focus, Domain, Analytics, Legal | Stage 1, Stage 4, Stage 6, Stage 9 | `seo-strategy.md`, JSON-LD schemas, GA4 integration |
+| **Batch 6** | Q35–Q40 | CMS Target, Site Key, Revalidate Secret, Post Seeding | Stage 1, Stage 7 | `cms-schema.md`, `cms-seed/`, ISR webhook configuration |
+| **Batch 7** | Q41–Q45, Q43b–Q43e | Type Scoping, Migration Redirects, Approver, Review Format, Next.js Mode, Codebase Path, Stack Defaults, Maintenance | Stage 1, Stage 2, Stage 3, Stage 4, Stage 5, Stage 9, Stage 11 | Redirects map, handover docs, review portal delivery, `site/` scaffolding, `site.manifest.json` |
+
+---
+
+## 5. Gate 0 Discovery Sign-Off Checklist
 
 Before clearing Gate 0 and advancing to Stage 1 Tech Stack:
 - [ ] Questionnaire answers captured in `project-docs/client-answers.md`.
 - [ ] Primary conversion action and target audience confirmed.
 - [ ] Reference URLs fetched and inspected.
+- [ ] Gate 2 variation count (default 3) and adherence mode (`principles-only`) confirmed.
 - [ ] CMS mode confirmed (`none` vs `cms`).
 - [ ] Asset inventory compiled (assets supplied, rights confirmed, missing items).
 - [ ] Stock photography decision recorded (approved / not approved / placeholder-only); if approved, provider priority and count ceiling confirmed.

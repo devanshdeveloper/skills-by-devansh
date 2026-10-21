@@ -41,7 +41,7 @@ function extractMetadata(htmlPath, conceptName, slug) {
   const badgeMatch = content.match(/<span class="badge">([^<]+)<\/span>/i);
 
   return {
-    title: titleMatch && /^(Concept|Option)\s+\d/i.test(titleMatch[1]) ? titleMatch[1].trim() : (h1Match ? h1Match[1].trim() : (titleMatch ? titleMatch[1].trim() : conceptName)),
+    title: titleMatch && /^(Variation|Concept|Option)\s+\d/i.test(titleMatch[1]) ? titleMatch[1].trim() : (h1Match ? h1Match[1].trim() : (titleMatch ? titleMatch[1].trim() : conceptName)),
     lead: leadMatch ? leadMatch[1].trim() : 'Visual direction and design review page.',
     badge: badgeMatch ? badgeMatch[1].trim() : conceptName
   };
@@ -58,7 +58,7 @@ function generateGate2Hub(concepts) {
         </div>
         <div class="card-footer">
           <div class="slug-actions">
-            <a href="${c.name}/index.html" class="slug-btn">Experience Full Page Design →</a>
+            <a href="${c.name}/index.html" class="slug-btn">Experience Full Page Preview →</a>
           </div>
         </div>
       </div>
@@ -123,11 +123,11 @@ function generateGate2Hub(concepts) {
 
     <div class="header">
       <span class="badge">Pipeline Gate 2</span>
-      <h1>Gate 2: Design Theory & Concept Review</h1>
-      <p class="lead">Compare the distinct visual identities developed for this project. Each concept features dedicated day and night browser mockups, friendly token swatches, typography samples, and reference influences.</p>
+      <h1>Gate 2: Landing Page Variations & Design Review</h1>
+      <p class="lead">Compare the distinct landing page variations developed for this project. Each variation explores a different spatial layout, typography hierarchy, and visual personality, crafted from your authentic content and audited for originality.</p>
       <div class="status-bar">
         <span class="status-dot"></span>
-        <span>Gate Status: Awaiting Client Selection before proceeding to Stage 3 (Page List & Sitemap)</span>
+        <span>Gate Status: Awaiting Client Decision Among Variations before proceeding to Stage 3 (Page List & Sitemap)</span>
       </div>
     </div>
 
@@ -137,8 +137,8 @@ function generateGate2Hub(concepts) {
 
     <div class="decision-banner">
       <h3>How to Make Your Decision</h3>
-      <p>1. Open each concept review page above to evaluate the typography, color system, and live day/night preview.<br>
-         2. When you find the direction that best fits your goals, use the "Copy My Decision" button at the bottom of that page.<br>
+      <p>1. Open each variation preview page above to evaluate the layout, typography, and responsive design.<br>
+         2. When you select the direction that best fits your goals, use the "Copy My Decision" button at the bottom of that page.<br>
          3. Paste your confirmation into our chat to approve Gate 2 and begin Stage 3.</p>
     </div>
   </div>
@@ -147,7 +147,7 @@ function generateGate2Hub(concepts) {
 `;
 }
 
-function generateRootPortal(gate2Exists) {
+function generateRootPortal(gate2Exists, gate5Exists) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -175,10 +175,11 @@ function generateRootPortal(gate2Exists) {
     h1 { font-size: 32px; font-weight: 800; line-height: 1.25; margin-bottom: 8px; }
     .lead { font-size: 16px; color: var(--text-muted); }
     .gates-list { display: flex; flex-direction: column; gap: 16px; }
-    .gate-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; }
+    .gate-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     .gate-info h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
     .gate-info p { font-size: 14px; color: var(--text-muted); }
-    .gate-link { background: var(--accent); color: #FFFFFF; font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 6px; text-decoration: none; }
+    .gate-link { background: var(--accent); color: #FFFFFF; font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 6px; text-decoration: none; white-space: nowrap; }
+    .gate-link:hover { opacity: 0.9; }
   </style>
 </head>
 <body>
@@ -192,11 +193,21 @@ function generateRootPortal(gate2Exists) {
     <div class="gates-list">
       <div class="gate-item">
         <div class="gate-info">
-          <h3>Gate 2: Design Theory & Concept Review</h3>
-          <p>Explore full visual identity concepts, live day & night previews, and submit your palette selection.</p>
+          <h3>Gate 2: Landing Page Variations & Design Review</h3>
+          <p>Explore full landing page variations, responsive previews, and submit your variation selection.</p>
         </div>
         <div>
           ${gate2Exists ? '<a href="gate-2-design-theory/index.html" class="gate-link">Enter Gate 2 Hub →</a>' : '<span style="color:var(--text-muted);font-size:13px;">Pending</span>'}
+        </div>
+      </div>
+
+      <div class="gate-item">
+        <div class="gate-info">
+          <h3>Gate 5: Website Layout Blueprints & Page Architecture</h3>
+          <p>Inspect structural section-by-section layout blueprints, responsive phone views, and approve page flow.</p>
+        </div>
+        <div>
+          ${gate5Exists ? '<a href="pages/index.html" class="gate-link">Enter Layout Hub →</a>' : '<span style="color:var(--text-muted);font-size:13px;">Pending</span>'}
         </div>
       </div>
     </div>
@@ -233,11 +244,11 @@ function run() {
     };
   });
 
-  // Sort concepts numerically by concept or option number (Concept 1, Option 1, etc.)
+  // Sort concepts numerically by variation, concept, or option number (Variation 1, Concept 1, Option 1, etc.)
   concepts.sort((a, b) => {
     function getOrder(c) {
       const text = `${c.meta.badge} ${c.meta.title} ${c.name}`;
-      const match = text.match(/(?:concept|option)\s*(\d+)/i);
+      const match = text.match(/(?:variation|concept|option)\s*(\d+)/i);
       return match ? parseInt(match[1], 10) : 999;
     }
     const orderA = getOrder(a);
@@ -245,6 +256,10 @@ function run() {
     if (orderA !== orderB) return orderA - orderB;
     return a.name.localeCompare(b.name);
   });
+
+  // Check if Gate 5 layout pages exist
+  const pagesDir = path.join(reviewBase, 'pages');
+  const gate5Exists = fs.existsSync(path.join(pagesDir, 'index.html'));
 
   // Generate Gate 2 Hub
   const gate2HubHtml = generateGate2Hub(concepts);
@@ -255,7 +270,7 @@ function run() {
   } else console.log('Preserved authored Gate 2 hub.');
 
   // Generate Root Review Portal
-  const rootPortalHtml = generateRootPortal(true);
+  const rootPortalHtml = generateRootPortal(true, gate5Exists);
   const rootPortalPath = path.join(reviewBase, 'index.html');
   if (!preserveHubs || !fs.existsSync(rootPortalPath)) {
     fs.writeFileSync(rootPortalPath, rootPortalHtml, 'utf-8');

@@ -81,19 +81,25 @@ Document any ambiguities, unverified reference fetches, or design tensions requi
 
 ### 7. Reference Summary Table
 A compact audit table:
-| Website URL | What Client Liked | Key Observed Elements | Carried Into Direction? |
+| Website URL | What Client Liked | Key Observed Principles | Derived Principle Adopted |
 |---|---|---|---|
-| `https://example.com` | "Clean typography" | Editorial serif, 80ch reading column | Yes (Adopted serif heading scale) |
+| `https://example.com` | "Clean typography" | Editorial serif, 80ch reading column | Adopted abstract principle: serif display scale with generous column width; zero copied markup or assets |
 
 ---
 
 ## Gate 2 Review Checklist & Client Delivery
 
-### Reference fidelity and visual verification
+### Principles extraction and anti-copy guardrail
 
-Before building concepts, identify each reference's actual content width, type scale, information density, navigation placement, and project presentation. Tie each proposed concept to concrete observed choices. A palette change alone does not establish reference fidelity. Preserve the client's requested aesthetic even when it differs from generic portfolio conventions. Use original content and visual assets.
+Captured reference files (`page.html`, `content.md`, `screenshot-full-1440.png`) are **strictly analysis inputs**. Never reproduce, clone, or mimic a reference website. Instead, extract abstract design principles (e.g., spatial rhythm, typographic contrast, tonal mood) and use them to synthesize original landing page variations from the client's authentic content.
 
-The reference-capture helper now scrolls slowly and retains mid-page and bottom viewport screenshots. Capture success means files were saved; inspect them before claiming visual completeness. Animated or virtualized pages may still produce incomplete full-page images. Use the viewport evidence and disclose remaining limitations.
+Before building variations, consult [references/design-variations.md](design-variations.md) for mandatory rules governing:
+- **The 9-Dimension Variation Framework:** Layout & grid, section order & composition, type pairing & hierarchy, palette & contrast, shape & component language, motion character, imagery treatment, density & spacing, and navigation pattern.
+- **Quantitative Distance Rules:** Each variation must differ on at least 4 of 9 dimensions from nearest references; no two variations share > 3 dimensions; zero shared classes, IDs, inline styles, or assets; max 5-word consecutive text overlap.
+- **Mandatory Similarity Audit:** Pre-presentation automated audit compiling `_checks/similarity-audit.md`.
+- **Failure Recovery:** Revise variations upon audit failure; never loosen thresholds; 2-strike human escalation.
+
+The reference-capture helper scrolls slowly and retains mid-page and bottom viewport screenshots. Capture success means files were saved; inspect them before claiming visual completeness. Animated or virtualized pages may still produce incomplete full-page images. Disclose remaining limitations in capture records.
 
 ### Bundled review helpers
 
@@ -106,7 +112,7 @@ node .agents/skills/create-nww-website/scripts/client-review/preview.mjs . 4173
 node .agents/skills/create-nww-website/scripts/client-review/verify.mjs .
 ```
 
-The compiler's `--preserve-hubs` flag retains an authored comparison hub and root portal while scanning the concepts; omit it only when intentionally regenerating the default hubs. The preview server binds only to `127.0.0.1`. The verifier discovers concept directories containing `index.html`, excluding working directories such as `_checks`. It checks horizontal overflow, themes, disclosures, local navigation, offline loading, and automated accessibility; it saves screenshots with each concept and a report in `_checks/qa.json`. It currently uses the Google Chrome Playwright channel.
+The compiler's `--preserve-hubs` flag retains an authored comparison hub and root portal while scanning variations; omit it only when intentionally regenerating the default hubs. The preview server binds only to `127.0.0.1`. The verifier discovers variation directories containing `index.html`, excluding working directories such as `_checks`. It checks horizontal overflow, themes, disclosures, local navigation, offline loading, and automated accessibility; it saves screenshots with each variation and a report in `_checks/qa.json`.
 
 Verifier-compatible review pages use `.theme-toggle` with labels “Use dark theme” / “Use light theme”, `html[data-theme]`, `#main`, `.copy-decision`, `#decision-text`, and `.copy-status`. Core content uses native HTML, and optional project disclosures use `details`/`summary`. These hooks are review UI conventions, not production architecture requirements.
 
@@ -115,11 +121,13 @@ For local fonts, add project-specific entries `{ family, stem, folder, weights }
 Keep reusable scripts and dependencies in the skill. Keep only site-specific review deliverables under `project-docs/client-review/`, and place supplementary Gate 2 reports and working notes in `gate-2-design-theory/_checks/`. The canonical design theory and router state remain at the paths required by the pipeline.
 
 Before presenting to the user for Gate 2 sign-off:
-- [ ] Reference landing pages captured into `project-docs/design-references/<domain>/` (`page.html`, `content.md`, `screenshot-full-1440.png`, `capture.json`).
-- [ ] Reference capture ledger compiled in `project-docs/design-references/sources.md` starting with mandatory third-party usage notice (zero fabricated images).
-- [ ] Technical design theory authored to `project-docs/design-theory.md` (tokens, typography, motion, avoid list).
-- [ ] Full-page client review concept websites compiled to `project-docs/client-review/gate-2-design-theory/<concept-name>/index.html` featuring full realistic layouts and production-grade content.
-- [ ] Static review generator script executed (`node skills/create-nww-website/scripts/client-review/index.js`) to generate Gate 2 review hub (`gate-2-design-theory/index.html`) and root portal (`client-review/index.html`).
+- [ ] Reference landing pages captured into `project-docs/design-references/<domain>/` (`page.html`, `content.md`, `screenshot-full-1440.png`, `capture.json`) as analysis inputs only.
+- [ ] Reference capture ledger compiled in `project-docs/design-references/sources.md` starting with mandatory third-party usage notice (zero fabricated images, zero copied assets).
+- [ ] Technical design theory authored to `project-docs/design-theory.md` (abstract principles, tokens, typography, motion, avoid list).
+- [ ] $N$ full-page landing page variation previews (default 3) compiled to `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` featuring distinct architectural personalities and real client content per [references/design-variations.md](design-variations.md).
+- [ ] Pre-presentation similarity audit executed and report compiled to `project-docs/client-review/gate-2-design-theory/_checks/similarity-audit.md` confirming compliance with distance rules (zero shared classes/IDs, zero hotlinks, word overlap <= 5 words).
+- [ ] Static review generator script executed (`node skills/create-nww-website/scripts/client-review/index.js`) to generate Gate 2 comparison hub (`gate-2-design-theory/index.html`) and root portal (`client-review/index.html`).
 - [ ] Package is 100% self-contained: opens by double-click offline, zero external requests, and all technical jargon explained or collapsed into developer details. Optionally deployed to GitHub Pages via `.github/workflows/deploy-pages.yml` (from `assets/client-review-pages.yml`) for instant live client links.
-- [ ] `project-docs/router-state.md` updated to `Gate 2: Awaiting Client Decision (via project-docs/client-review/gate-2-design-theory/index.html)`.
-- [ ] Client decision (palette choice, typography, brand mark) confirmed before Gate 2 approval and Stage 3 initiation. Never ask the client to review the raw technical markdown spec.
+- [ ] `project-docs/router-state.md` updated to `Gate 2: Awaiting Client Decision Among Variations (via project-docs/client-review/gate-2-design-theory/index.html)`.
+- [ ] Client decision (selection among variations, requested adjustments, elements to avoid) confirmed before Gate 2 approval and Stage 3 initiation. Never ask the client to review the raw technical markdown spec.
+
