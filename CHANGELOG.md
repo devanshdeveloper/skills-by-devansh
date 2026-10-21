@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2026-10-21
+
+### Fixed
+- **Concept Sorting in Review Hub**: Explicitly sorted Gate 2 concept cards by numerical concept/option number (`Concept 1`, `Option 1`, etc.) ascending rather than relying on filesystem directory order.
+
+### Added
+- **GitHub Pages Review Deployment**: Added `client-review-pages.yml` reusable GitHub Actions workflow asset to instantly publish Gate 2 client review websites to GitHub Pages.
+
 ## [1.2.0] - 2026-10-21
 
 ### Added

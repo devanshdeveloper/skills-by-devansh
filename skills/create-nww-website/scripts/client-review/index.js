@@ -232,6 +232,19 @@ function run() {
     };
   });
 
+  // Sort concepts numerically by concept or option number (Concept 1, Option 1, etc.)
+  concepts.sort((a, b) => {
+    function getOrder(c) {
+      const text = `${c.meta.badge} ${c.meta.title} ${c.name}`;
+      const match = text.match(/(?:concept|option)\s*(\d+)/i);
+      return match ? parseInt(match[1], 10) : 999;
+    }
+    const orderA = getOrder(a);
+    const orderB = getOrder(b);
+    if (orderA !== orderB) return orderA - orderB;
+    return a.name.localeCompare(b.name);
+  });
+
   // Generate Gate 2 Hub
   const gate2HubHtml = generateGate2Hub(concepts);
   const gate2HubPath = path.join(gate2Dir, 'index.html');

@@ -108,7 +108,7 @@ Aesthetic polish is mandatory for Stages 2 and 8:
   DISABLE_TELEMETRY=1 npx skills add anthropics/skills --skill frontend-design
   ```
   If unavailable, apply the documented built-in taste rules.
-- **Client Visual Review at Gate 2:** Capture full-page reference landing pages into `project-docs/design-references/<domain>/` using `scripts/reference-capture/index.js` and build full-page concept websites in `project-docs/client-review/gate-2-design-theory/<concept-name>/index.html` using `scripts/client-review/index.js` to compile the review hub and portal. Never ask the client to read raw technical design specs. Halt at Gate 2 with `router-state.md` set to `awaiting client decision` and await their palette choice before advancing.
+- **Client Visual Review at Gate 2:** Capture full-page reference landing pages into `project-docs/design-references/<domain>/` using `scripts/reference-capture/index.js` and build full-page concept websites in `project-docs/client-review/gate-2-design-theory/<concept-name>/index.html` using `scripts/client-review/index.js` to compile the review hub and portal (optionally deployed live to GitHub Pages via `assets/client-review-pages.yml`). Never ask the client to read raw technical design specs. Halt at Gate 2 with `router-state.md` set to `awaiting client decision` and await their palette choice before advancing.
 - **Aesthetic Principles:**
   - Curated semantic tokens with refined contrast; avoid flat or generic palettes.
   - Generous whitespace and modular typography hierarchy using `next/font`.

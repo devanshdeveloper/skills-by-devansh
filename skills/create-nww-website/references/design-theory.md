@@ -95,6 +95,6 @@ Before presenting to the user for Gate 2 sign-off:
 - [ ] Technical design theory authored to `project-docs/design-theory.md` (tokens, typography, motion, avoid list).
 - [ ] Full-page client review concept websites compiled to `project-docs/client-review/gate-2-design-theory/<concept-name>/index.html` featuring full realistic layouts and production-grade content.
 - [ ] Static review generator script executed (`node skills/create-nww-website/scripts/client-review/index.js`) to generate Gate 2 review hub (`gate-2-design-theory/index.html`) and root portal (`client-review/index.html`).
-- [ ] Package is 100% self-contained: opens by double-click offline, zero external requests, and all technical jargon explained or collapsed into developer details.
+- [ ] Package is 100% self-contained: opens by double-click offline, zero external requests, and all technical jargon explained or collapsed into developer details. Optionally deployed to GitHub Pages via `.github/workflows/deploy-pages.yml` (from `assets/client-review-pages.yml`) for instant live client links.
 - [ ] `project-docs/router-state.md` updated to `Gate 2: Awaiting Client Decision (via project-docs/client-review/gate-2-design-theory/index.html)`.
 - [ ] Client decision (palette choice, typography, brand mark) confirmed before Gate 2 approval and Stage 3 initiation. Never ask the client to review the raw technical markdown spec.
