@@ -1,0 +1,12 @@
+{
+  "name": "stock-fetch",
+  "version": "1.0.0",
+  "description": "Stock image fetch and provenance helper for create-nww-website",
+  "main": "index.js",
+  "bin": {
+    "stock-fetch": "./index.js"
+  },
+  "scripts": {
+    "fetch": "node index.js"
+  }
+}

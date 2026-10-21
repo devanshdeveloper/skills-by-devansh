@@ -1,0 +1,32 @@
+name: Skill Validation & Security Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Security & Secret Scan
+        run: node scripts/publish/security-scan.mjs
+
+      - name: Run 10-Gate Preflight Audit (Dry Run)
+        run: node scripts/publish/preflight.mjs --dry-run
+
+      - name: Verify Skill Catalog Discovery
+        env:
+          DISABLE_TELEMETRY: '1'
+        run: npx skills add . --list

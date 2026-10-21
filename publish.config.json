@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "expectedOwner": "devanshdeveloper",
+  "expectedRepo": "skills-by-devansh",
+  "allowedRemotes": [
+    "https://github.com/devanshdeveloper/skills-by-devansh.git",
+    "git@github.com:devanshdeveloper/skills-by-devansh.git"
+  ],
+  "defaultBranch": "main",
+  "allowUnattended": false,
+  "enforceGhAccount": true,
+  "telemetry": {
+    "disableOnTest": true,
+    "skillsShUrl": "https://www.skills.sh/devanshdeveloper/skills-by-devansh"
+  }
+}
