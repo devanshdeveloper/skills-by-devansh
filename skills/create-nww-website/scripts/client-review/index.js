@@ -15,13 +15,14 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const projectRoot = process.argv[2] ? path.resolve(process.argv[2]) : process.cwd();
+const preserveHubs = process.argv.includes('--preserve-hubs');
 const reviewBase = path.join(projectRoot, 'project-docs', 'client-review');
 const gate2Dir = path.join(reviewBase, 'gate-2-design-theory');
 
 function getDirectories(srcPath) {
   if (!fs.existsSync(srcPath)) return [];
   return fs.readdirSync(srcPath, { withFileTypes: true })
-    .filter(dirent => dirent.isDirectory() && !dirent.name.startsWith('.'))
+    .filter(dirent => dirent.isDirectory() && !dirent.name.startsWith('.') && !dirent.name.startsWith('_'))
     .map(dirent => dirent.name);
 }
 
@@ -40,7 +41,7 @@ function extractMetadata(htmlPath, conceptName, slug) {
   const badgeMatch = content.match(/<span class="badge">([^<]+)<\/span>/i);
 
   return {
-    title: h1Match ? h1Match[1].trim() : (titleMatch ? titleMatch[1].trim() : conceptName),
+    title: titleMatch && /^(Concept|Option)\s+\d/i.test(titleMatch[1]) ? titleMatch[1].trim() : (h1Match ? h1Match[1].trim() : (titleMatch ? titleMatch[1].trim() : conceptName)),
     lead: leadMatch ? leadMatch[1].trim() : 'Visual direction and design review page.',
     badge: badgeMatch ? badgeMatch[1].trim() : conceptName
   };
@@ -248,14 +249,18 @@ function run() {
   // Generate Gate 2 Hub
   const gate2HubHtml = generateGate2Hub(concepts);
   const gate2HubPath = path.join(gate2Dir, 'index.html');
-  fs.writeFileSync(gate2HubPath, gate2HubHtml, 'utf-8');
-  console.log(`✓ Generated: ${path.relative(projectRoot, gate2HubPath)} (${gate2HubHtml.length} bytes)`);
+  if (!preserveHubs || !fs.existsSync(gate2HubPath)) {
+    fs.writeFileSync(gate2HubPath, gate2HubHtml, 'utf-8');
+    console.log(`✓ Generated: ${path.relative(projectRoot, gate2HubPath)} (${gate2HubHtml.length} bytes)`);
+  } else console.log('Preserved authored Gate 2 hub.');
 
   // Generate Root Review Portal
   const rootPortalHtml = generateRootPortal(true);
   const rootPortalPath = path.join(reviewBase, 'index.html');
-  fs.writeFileSync(rootPortalPath, rootPortalHtml, 'utf-8');
-  console.log(`✓ Generated: ${path.relative(projectRoot, rootPortalPath)} (${rootPortalHtml.length} bytes)`);
+  if (!preserveHubs || !fs.existsSync(rootPortalPath)) {
+    fs.writeFileSync(rootPortalPath, rootPortalHtml, 'utf-8');
+    console.log(`✓ Generated: ${path.relative(projectRoot, rootPortalPath)} (${rootPortalHtml.length} bytes)`);
+  } else console.log('Preserved authored review portal.');
 
   console.log('[Client Review Generator] Complete.');
 }

@@ -89,6 +89,31 @@ A compact audit table:
 
 ## Gate 2 Review Checklist & Client Delivery
 
+### Reference fidelity and visual verification
+
+Before building concepts, identify each reference's actual content width, type scale, information density, navigation placement, and project presentation. Tie each proposed concept to concrete observed choices. A palette change alone does not establish reference fidelity. Preserve the client's requested aesthetic even when it differs from generic portfolio conventions. Use original content and visual assets.
+
+The reference-capture helper now scrolls slowly and retains mid-page and bottom viewport screenshots. Capture success means files were saved; inspect them before claiming visual completeness. Animated or virtualized pages may still produce incomplete full-page images. Use the viewport evidence and disclose remaining limitations.
+
+### Bundled review helpers
+
+Run from the project root (replace the skill path if installed elsewhere):
+
+```powershell
+pnpm.cmd install --dir .agents/skills/create-nww-website/scripts/client-review
+node .agents/skills/create-nww-website/scripts/client-review/index.js . --preserve-hubs
+node .agents/skills/create-nww-website/scripts/client-review/preview.mjs . 4173
+node .agents/skills/create-nww-website/scripts/client-review/verify.mjs .
+```
+
+The compiler's `--preserve-hubs` flag retains an authored comparison hub and root portal while scanning the concepts; omit it only when intentionally regenerating the default hubs. The preview server binds only to `127.0.0.1`. The verifier discovers concept directories containing `index.html`, excluding working directories such as `_checks`. It checks horizontal overflow, themes, disclosures, local navigation, offline loading, and automated accessibility; it saves screenshots with each concept and a report in `_checks/qa.json`. It currently uses the Google Chrome Playwright channel.
+
+Verifier-compatible review pages use `.theme-toggle` with labels “Use dark theme” / “Use light theme”, `html[data-theme]`, `#main`, `.copy-decision`, `#decision-text`, and `.copy-status`. Core content uses native HTML, and optional project disclosures use `details`/`summary`. These hooks are review UI conventions, not production architecture requirements.
+
+For local fonts, add project-specific entries `{ family, stem, folder, weights }` to `project-docs/client-review/font-sources.json`, where `folder` is the Google Fonts OFL directory and `weights` is a CSS API axis specification. Run `node .agents/skills/create-nww-website/scripts/client-review/fetch-fonts.mjs .`. The helper downloads Latin WOFF2 files, OFL notices, and provenance into the review package. Normal preview and verification need no network. Reference these stylesheets through explicit `link` elements rather than nested relative `@import` rules, which can resolve incorrectly when accessibility tooling clones styles.
+
+Keep reusable scripts and dependencies in the skill. Keep only site-specific review deliverables under `project-docs/client-review/`, and place supplementary Gate 2 reports and working notes in `gate-2-design-theory/_checks/`. The canonical design theory and router state remain at the paths required by the pipeline.
+
 Before presenting to the user for Gate 2 sign-off:
 - [ ] Reference landing pages captured into `project-docs/design-references/<domain>/` (`page.html`, `content.md`, `screenshot-full-1440.png`, `capture.json`).
 - [ ] Reference capture ledger compiled in `project-docs/design-references/sources.md` starting with mandatory third-party usage notice (zero fabricated images).

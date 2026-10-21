@@ -25,7 +25,9 @@ const refBase = path.join(projDocs, 'design-references');
 // Resolve Playwright from local node_modules, global, or npx cache
 let chromium;
 try {
-  const pw = require('playwright');
+  let pw;
+  try { pw = require('playwright'); }
+  catch { pw = require('../client-review/node_modules/playwright'); }
   chromium = pw.chromium;
 } catch {
   try {
@@ -98,23 +100,21 @@ async function captureReference(browser, ref, targetDir) {
       await page.goto(ref.cleanUrl, { waitUntil: 'domcontentloaded', timeout: 20000 });
     }
     await page.waitForTimeout(2500);
+    await page.evaluate(() => document.fonts.ready);
 
-    // Scroll through page to trigger lazy loading
-    await page.evaluate(async () => {
-      await new Promise(resolve => {
-        let total = 0;
-        const step = 400;
-        const timer = setInterval(() => {
-          window.scrollBy(0, step);
-          total += step;
-          if (total >= document.body.scrollHeight) {
-            clearInterval(timer);
-            window.scrollTo(0, 0);
-            resolve();
-          }
-        }, 80);
-      });
-    });
+    // Let scroll-triggered content settle, retaining viewport evidence where
+    // a full-page screenshot cannot represent pinned or virtualized sections.
+    const initialHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+    const steps = Math.min(24, Math.ceil(initialHeight / 650));
+    for (let i = 0; i < steps; i++) {
+      await page.mouse.wheel(0, 650);
+      await page.waitForTimeout(650);
+      if (i === Math.floor(steps / 2)) {
+        await page.screenshot({ path: path.join(targetDir, 'screenshot-mid-1440.png') });
+      }
+    }
+    await page.screenshot({ path: path.join(targetDir, 'screenshot-bottom-1440.png') });
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(1500);
 
     const finalUrl = page.url();
@@ -212,7 +212,8 @@ async function captureReference(browser, ref, targetDir) {
         screenshot: 'screenshot-full-1440.png',
         screenshotSizeBytes: ssSize
       },
-      status: 'success'
+      status: 'success',
+      visualVerification: 'pending manual screenshot inspection; capture success does not guarantee all animated or virtualized content is visible'
     };
     fs.writeFileSync(path.join(targetDir, 'capture.json'), JSON.stringify(record, null, 2) + '\n', 'utf-8');
 
@@ -276,7 +277,7 @@ async function run() {
       ? `page.html (${Math.round(rec.files.htmlSizeBytes / 1024 * 10) / 10} KB)<br>content.md (${Math.round(rec.files.markdownSizeBytes / 1024 * 10) / 10} KB)<br>screenshot-full-1440.png (${Math.round(rec.files.screenshotSizeBytes / 1024 * 10) / 10} KB)<br>capture.json`
       : 'Error during capture';
     const vpStr = isSuccess ? `1440 × ${rec.viewport.actualRenderedHeight} px` : 'N/A';
-    const statusStr = isSuccess ? '**Complete & Verified**' : `**Failed**: ${rec.error}`;
+    const statusStr = isSuccess ? '**Captured; visual inspection pending**' : `**Failed**: ${rec.error}`;
 
     return `| \`${ref.domain}\` | ${ref.name} | \`${ref.requestedUrl}\` | ${filesStr} | ${vpStr} | ${statusStr} |`;
   }).join('\n');
