@@ -58,7 +58,7 @@ Upon skill activation, the agent must immediately execute this sequence:
   1. Minimal ↔ Maximal | 2. Corporate ↔ Playful | 3. Luxury ↔ Accessible | 4. Modern ↔ Classic  
   *(Answer: List of ratings | Default: `Balanced / Modern-Accessible` | Required: Yes | Consumer: Stage 2)*
 - **Q12 [Liked Design References]:** Share 2–3 live website URLs you admire. For each, what specifically do you like (Layout, Color, Typography, Imagery, or Animations)?  
-  *(Answer: List of URLs + commentary | Required: Yes | Consumer: Stage 2 live-fetch)*
+  *(Answer: List of URLs + commentary | Required: Yes | Consumer: Stage 2 live-fetch & visual screenshot capture)*
 - **Q13 [Disliked Websites]:** Share 1–2 website URLs whose design or vibe you dislike, and why?  
   *(Answer: List of URLs + commentary | Default: `None` | Required: Optional | Consumer: Stage 2)*
 - **Q14 [Motion & Animation]:** What is your animation preference: subtle & static by design (micro-interactions on hover, max 1 bold section), or completely static?  

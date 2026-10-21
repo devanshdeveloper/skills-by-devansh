@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{PROJECT_NAME}} — Visual Design & Direction Review</title>
+  <style>
+    /* Reset & Base System Typography (100% offline, zero external font requests) */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    :root {
+      --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      --bg: #F8F9FA;
+      --surface: #FFFFFF;
+      --surface-subtle: #F1F3F5;
+      --border: #E2E8F0;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --text-faint: #64748B;
+      --accent: #D97706; /* High-contrast amber for light mode */
+      --accent-soft: #FEF3C7;
+      --accent-fg: #FFFFFF;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 2px 8px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.03);
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 0;
+    }
+
+    .wrapper {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* Header Banner */
+    .header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      box-shadow: var(--shadow);
+      margin-bottom: 40px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .lead {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 760px;
+      line-height: 1.6;
+    }
+
+    .callout-box {
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: var(--surface-subtle);
+      border-left: 4px solid var(--accent);
+      border-radius: 4px;
+      font-size: 15px;
+      color: var(--text);
+    }
+
+    /* Section Headings */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .section-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      max-width: 780px;
+    }
+
+    /* Grid of Reference Cards */
+    .reference-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 24px;
+      margin-bottom: 56px;
+    }
+
+    .ref-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .ref-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    .ref-img-container {
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+      background: #E2E8F0;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    .ref-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+    .ref-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15, 23, 42, 0.75);
+      color: #FFFFFF;
+      font-size: 10px;
+      padding: 4px 8px;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+    .ref-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .ref-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+    .ref-name {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .ref-link {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .ref-bullets {
+      list-style: none;
+      padding: 0;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .ref-bullets li {
+      position: relative;
+      padding-left: 18px;
+      margin-bottom: 8px;
+    }
+    .ref-bullets li::before {
+      content: "•";
+      position: absolute;
+      left: 4px;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    /* Palettes Container */
+    .palettes-container {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      margin-bottom: 56px;
+    }
+
+    .palette-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .palette-card.recommended {
+      border: 2px solid var(--accent);
+      position: relative;
+    }
+    .recommended-ribbon {
+      position: absolute;
+      top: -12px;
+      right: 24px;
+      background: var(--accent);
+      color: #000000;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .palette-header {
+      margin-bottom: 20px;
+    }
+    .palette-title {
+      font-family: var(--font-display);
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .palette-tagline {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Dual Mode Preview */
+    .preview-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    @media (max-width: 640px) {
+      .preview-split {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mock-browser {
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+    }
+    .mock-topbar {
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .mock-content {
+      padding: 20px 16px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Swatches Strip */
+    .swatches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .swatch-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .swatch-circle {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.15);
+      flex-shrink: 0;
+    }
+
+    /* Collapsible Developer Details */
+    details {
+      margin-top: 16px;
+      padding: 10px 14px;
+      background: var(--surface-subtle);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    details summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text);
+      user-select: none;
+    }
+    .tech-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+    .tech-table th, .tech-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .tech-table th {
+      font-family: var(--font-body);
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Typography & Brand Mark Section */
+    .type-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 56px;
+    }
+    .type-row {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 20px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: baseline;
+    }
+    .type-row:last-child {
+      border-bottom: none;
+    }
+    .type-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Decision Reply Block */
+    .decision-section {
+      background: var(--surface);
+      border: 2px solid var(--text);
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: var(--shadow-lg);
+    }
+    .decision-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .decision-lead {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .copy-box {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text);
+      white-space: pre-wrap;
+      position: relative;
+      margin-bottom: 16px;
+      user-select: all;
+    }
+
+    .btn-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--text);
+      color: #FFFFFF;
+      border: none;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+    .btn-copy:hover {
+      opacity: 0.9;
+    }
+    .copy-status {
+      display: inline-block;
+      margin-left: 12px;
+      font-size: 13px;
+      color: #059669;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .copy-status.visible {
+      opacity: 1;
+    }
+
+    /* Print styles */
+    @media print {
+      body { background: #FFFFFF; }
+      .wrapper { max-width: 100%; padding: 0; }
+      .ref-card { break-inside: avoid; }
+      .palette-card { break-inside: avoid; }
+      details { display: block !important; }
+      details[open] summary ~ * { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+
+    <!-- Top Briefing Header -->
+    <header class="header">
+      <div class="badge">Stage 2 Visual Review</div>
+      <h1>{{PROJECT_NAME}} — Visual Identity & Palette Review</h1>
+      <p class="lead">{{REVIEW_SUMMARY}}</p>
+      <div class="callout-box">
+        <strong>What we need from you:</strong> Review the visual directions below, choose your favorite palette option, and return the reply template at the bottom.
+      </div>
+    </header>
+
+    <!-- Section 1: Live Reference Findings -->
+    <section>
+      <h2 class="section-title">Sites You Shared & What We Noticed</h2>
+      <p class="section-desc">
+        We retrieved and captured full-screen views of each reference site. Here are the specific engineering and aesthetic principles we drew from each:
+      </p>
+      <div class="reference-grid">
+        {{REFERENCE_CARDS}}
+      </div>
+    </section>
+
+    <!-- Section 2: Three Looks to Choose From -->
+    <section>
+      <h2 class="section-title">Visual Looks to Choose From</h2>
+      <p class="section-desc">
+        Each look below has been rendered as a live preview of a sample page in day and night views with contrast-checked colors:
+      </p>
+      <div class="palettes-container">
+        {{PALETTE_OPTIONS}}
+      </div>
+    </section>
+
+    <!-- Section 3: Typography & Personal Mark -->
+    <section class="type-section">
+      <h2 class="section-title">Typography & Brand System</h2>
+      <p class="section-desc">
+        How headings, reading body copy, and technical details pair across the site:
+      </p>
+      {{TYPOGRAPHY_SAMPLES}}
+    </section>
+
+    <!-- Section 4: Your Decision Template -->
+    <section class="decision-section">
+      <h2 class="decision-title">Your Decision</h2>
+      <p class="decision-lead">
+        Copy the template below, choose your preferred palette option, and send your reply to approve Gate 2:
+      </p>
+      <div class="copy-box" id="reply-template">{{DECISION_TEMPLATE}}</div>
+      <button class="btn-copy" onclick="copyTemplate()">Copy Reply Template</button>
+      <span class="copy-status" id="copy-status">✓ Copied to clipboard!</span>
+    </section>
+
+  </div>
+
+  <script>
+    function copyTemplate() {
+      const text = document.getElementById('reply-template').innerText;
+      navigator.clipboard.writeText(text).then(function() {
+        const status = document.getElementById('copy-status');
+        status.classList.add('visible');
+        setTimeout(function() {
+          status.classList.remove('visible');
+        }, 3000);
+      });
+    }
+  </script>
+
+</body>
+</html>

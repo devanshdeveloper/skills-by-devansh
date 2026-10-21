@@ -17,6 +17,8 @@ skills-by-devansh/
 │   │   └── SKILL.md                    # Single-file runbook & frontmatter
 │   ├── create-nww-website/             # Multi-stage website builder
 │   │   ├── SKILL.md                    # Master 12-stage pipeline runbook
+│   │   ├── assets/                     # Standalone templates & client review assets
+│   │   │   └── client-review-template.html
 │   │   ├── references/                 # Modular reference specifications
 │   │   │   ├── pipeline-stages.md      # State machine and approval gates
 │   │   │   ├── code-conventions.md     # Code style and limits
@@ -60,6 +62,7 @@ Skills in this repository conform to the skills.sh decentralized distribution st
 Skills may contain companion CLI utilities inside `scripts/`:
 - **`assets-optimizer`**: A Node.js utility utilizing `sharp` and `ffmpeg` to process, optimize, resize, and produce WebP assets and manifests.
 - **`stock-fetch`**: A Node.js utility connecting to Pixabay, Pexels, and Unsplash APIs to search, download, and log provenance for images.
+- **`client-review`**: A Node.js utility that automatically scans modular concept review directories and generates/updates client review hubs and portals.
 
 These utilities are self-contained and invoked via Node directly (`node index.js`).
 

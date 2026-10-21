@@ -56,7 +56,7 @@ The workflow proceeds strictly one stage at a time. Every stage requires explici
 |---|---|---|---|---|
 | **0** | **Intake Check** | `project-docs/client-answers.md` | **Gate 0:** Intake recap & CMS mode confirmation | [client-questionnaire.md](references/client-questionnaire.md) |
 | **1** | **Tech Stack** | `project-docs/tech-stack.md` | **Gate 1:** Tech stack sign-off | [pipeline-stages.md](references/pipeline-stages.md) |
-| **2** | **Design Theory** | `project-docs/design-theory.md` | **Gate 2:** Visual direction, tokens, voice & tone sign-off | [design-theory.md](references/design-theory.md) |
+| **2** | **Design Theory** | `project-docs/design-theory.md`, `project-docs/design-references/`, `project-docs/client-review/index.html` | **Gate 2:** Client visual review & palette selection sign-off (via `client-review/index.html`) | [design-theory.md](references/design-theory.md) |
 | **3** | **Page List** | `project-docs/page-list.md`, `page-design-notes.md` | **Gate 3:** Sitemap checklist & route structure sign-off | [page-list.md](references/page-list.md) |
 | **4** | **SEO Strategy** | `project-docs/seo-strategy.md` | **Gate 4:** Keywords, JSON-LD, sitemap, redirects sign-off | [seo-strategy.md](references/seo-strategy.md) |
 | **5** | **Layout Theory** | `project-docs/layout-system.md`, `page-specs/<slug>/layout.md` | **Gate 5:** Section blueprints & shared system sign-off | [layout-theory.md](references/layout-theory.md) |
@@ -108,6 +108,7 @@ Aesthetic polish is mandatory for Stages 2 and 8:
   DISABLE_TELEMETRY=1 npx skills add anthropics/skills --skill frontend-design
   ```
   If unavailable, apply the documented built-in taste rules.
+- **Client Visual Review at Gate 2:** Capture full-page reference screenshots into `project-docs/design-references/<slug>/` and compile `project-docs/client-review/index.html` from `assets/client-review-template.html`. Never ask the client to read raw technical design specs. Halt at Gate 2 with `router-state.md` set to `awaiting client decision` and await their palette choice before advancing.
 - **Aesthetic Principles:**
   - Curated semantic tokens with refined contrast; avoid flat or generic palettes.
   - Generous whitespace and modular typography hierarchy using `next/font`.
