@@ -13,7 +13,7 @@ Authoring and distribution repository for `skills-by-devansh`, a collection of A
 - `skills/`: Published skills catalog (`create-nextjs-website`, `create-nww-website`, `nww`, `publish`)
 - `skills/<name>/SKILL.md`: Core runbook with YAML frontmatter (`name`, `description`)
 - `skills/<name>/references/`: Modular stage guides and technical documentation
-- `skills/<name>/scripts/`: Companion CLI helper utilities (`assets-optimizer`, `stock-fetch`, `client-review`, `reference-capture`, `client-notify`, `structure-audit`)
+- `skills/<name>/scripts/`: Companion CLI helper utilities (`assets-optimizer`, `stock-fetch`, `client-review`, `reference-capture`, `client-notify`, `structure-audit`, `seo`)
 - `scripts/publish/`: Repository preflight validation, security scan, and release automation
 - `docs/`: Repository architecture and documentation
 - `.agents/`: Antigravity configuration layer (rules, skills, hooks)
@@ -31,6 +31,9 @@ Execute only verbatim commands matching what exists in this repository:
 - **Run Reference Capture**: `node skills/create-nww-website/scripts/reference-capture/index.js`
 - **Run Client Milestone Notifier**: `node skills/create-nww-website/scripts/client-notify/index.js`
 - **Run Structure & Deliverables Auditor**: `node skills/create-nww-website/scripts/structure-audit/index.js`
+- **Run CMS Seeder**: `node skills/create-nww-website/scripts/cms-seed/index.js --help`
+- **Run PageSpeed Check**: `node skills/create-nww-website/scripts/seo/pagespeed-check.js --help`
+- **Run Robots & Sitemap Parser**: `node skills/create-nww-website/scripts/seo/sitemap-robots-parser.js --help`
 - **Run Security Scan**: `node scripts/publish/security-scan.mjs`
 - **Run Preflight Checks**: `node scripts/publish/preflight.mjs --dry-run`
 - **Run Release (Dry Run)**: `node scripts/publish/release.mjs --dry-run`

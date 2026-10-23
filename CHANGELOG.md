@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [1.8.0] - 2026-10-23
+
+### Added
+- **CMS Seeding Engine (`scripts/cms-seed/index.js`)**: Production-grade companion CLI and exportable client helper for automated NWW CMS blog seeding. Supports verified backend contracts (`POST /api/blog/create-one`, `POST /api/blog/generate-slug`), automatic Mongoose strict mode `metadata` mapping, and `--auto-slug` conflict resolution.
+- **Dedicated CMS Architecture & Models Registry (`references/cms/models/`)**: Comprehensive model specifications covering all 25 modules in `WebsiteModules` (`blog`, `article`, `service`, `product`, `testimonial`, `faq`, `contact-us`, `lead`, `case-study`, `portfolio`, etc.) with endpoint matrices and Mongoose schemas.
+- **On-Demand ISR Revalidation Specification (`references/cms/revalidation-webhook.md`)**: Full turnkey guide for the CMS dashboard team covering `website.model.js` additions (`revalidation_webhook`, `revalidation_secret`), `WebsiteForm.jsx` inputs, and the `notifySite({ websiteId, resource, operation })` async dispatcher.
+- **Pure Page-Level Configuration Model (`references/cms/models/page-config.md`)**: Engineered the `WebsitePageConfig` contract where Next.js owns all layout, HTML structure, components, and animations, while the CMS supplies routing, SEO metadata, OpenGraph cards, conversion CTA controls (`showCTA`, `ctaHeadline`, `ctaSubtext`, button links), and page FAQs.
+- **Specialized SEO Tool Library & Scripts (`references/seo/`, `scripts/seo/`)**: 19-tool structured registry, tool availability check protocol, PageSpeed Insights auditor, and sitemap/robots parser.
+
+### Changed
+- **Pipeline Consolidation to 9 Stages (Stages 0 through 8)**: Streamlined the end-to-end website generation pipeline from 12 stages to 9 strictly human-gated stages:
+  - **Stage 5 (Page Specifications & CMS Schema)**: Single-mode markdown architecture (`page-specs/<slug>/page.md`). Absorbed former Stage 7 CMS Schema deliverables (`project-docs/cms-schema.md`, backend API requirements, content models, and seed files).
+  - **Stage 6 (Codebase Scaffolding, Foundation Build & Landing Page Showcase)**: Absorbed former Stage 8 Checklist emission (`project-docs/page-checklist.md`, `project-docs/theory-revisions.md`) and former Stage 9 Foundation Build (Next.js App Router scaffolding, global navigation, footer, theme tokens, asset optimizer run, `ResponsiveImage.js`, check scripts, CMS client layer, and stock `/credits`). Additionally constructs and styles the full interactive **Landing Page** (`site/app/page.js` + `_components/`) for client showcase review at Gate 6.
+  - **Stage 7 (Sub-Page Build Loop)**: Renumbered former Stage 10. Incrementally constructs remaining sub-pages (`about`, `services`, `contact`, `blog`, etc.) one-by-one with per-page review (Gate 7a) and binary QA sign-off (Gate 7b).
+  - **Stage 8 (Final Verification & Handover)**: Renumbered former Stage 11. Cross-page accessibility, performance scores, responsive checks, stock provenance audits, and deployment handover.
+- **Specialized Architecture & GSAP Skills Pre-Load**: Embedded mandatory loading protocol for 10 specialized agent skills prior to Next.js scaffolding in Stage 6, covering Vercel Labs React/Next.js standards, composition patterns, web design guidelines, token design systems, and the full GSAP animation suite.
+- **Companion Script Alignment**:
+  - `scripts/client-notify/index.js`: Consolidated milestone email templates to stages 0 through 8 and removed retired stages 9, 10, 11.
+  - `scripts/structure-audit/index.js`: Updated deliverables audit matrix (CMS Schema in Stage 5, Checklist in Stage 6, final audit in Stage 8) and aligned report headers.
+- **Scaffolding Verification (`scripts/client-review/verify-nextjs.mjs`)**: Updated companion script to audit `page-specs/<slug>/page.md` against `site.manifest.json` and component markers as the primary Gate 6 validator.
+- **Removed Obsolete Layout Previews**: Deleted obsolete HTML templates `assets/layout-page-template.html`, `assets/layout-index-template.html`, and `scripts/client-review/verify-layout.mjs`.
+
 ## [1.7.0] - 2026-10-21
 
 ### Added

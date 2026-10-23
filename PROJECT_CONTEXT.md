@@ -38,10 +38,10 @@ skills-by-devansh/
 ├── scripts/publish/                        # Repository release automation (preflight, security-scan, release)
 ├── skills/                                 # Distributed skills catalog (agentskills.io format)
 │   ├── create-nextjs-website/              # App Router scaffolding skill (single-file SKILL.md)
-│   ├── create-nww-website/                 # 12-stage human-gated website builder skill
+│   ├── create-nww-website/                 # 9-stage human-gated website builder skill
 │   │   ├── assets/                         # Client review portal templates and GitHub Pages action
 │   │   ├── references/                     # 14 modular stage references and technical specifications
-│   │   └── scripts/                        # 7 embedded CLI companion utilities (standalone tools)
+│   │   └── scripts/                        # 8 embedded CLI companion utilities (standalone tools)
 │   ├── nww/                                # Lightweight shortcut alias delegating to create-nww-website
 │   └── publish/                            # Maintainer-only skill enforcing 10 preflight gates
 ├── tests/                                  # Test runner & fixtures (tests/run-fixtures.mjs)
@@ -56,7 +56,7 @@ skills-by-devansh/
 - **Routing & Client/Server Boundaries (Target Sites)**: Next.js App Router (`site/app/<route>/page.js`) using React Server Components by default; thin page server components (<=80 lines) delegating interactive parts to scoped `_components/*.js` (<=250 lines) [read: `skills/create-nww-website/SKILL.md:86-95`].
 - **API & Data Access**: Target sites connect to Next Web Website (NWW) Headless CMS via Bearer token auth (`Authorization: Bearer ${CMS_SITE_KEY}`) fetching paginated articles (`/api/blog/paginate`) and individual posts (`/api/blog/read-one-by-slug/:slug`); leads submit to `/api/lead/submit` [read: `skills/create-nww-website/SKILL.md:127-131`, `references/cms-architecture.md:20-40`].
 - **Cache & Revalidation Pipeline**: On-demand ISR using constant-time hashed Bearer authentication on `POST /api/revalidate`, invalidating broad tags via `revalidateTag(tagFor(resource))` with fallback `REVALIDATE_SECONDS=60` [read: `skills/create-nww-website/SKILL.md:132-136`].
-- **Rendering & Preview Pipelines**: Dual layout generation modes: static HTML preview pages in `client-review/pages/` for Gate 5, or direct Next.js generation in `site/` with manifest `site/site.manifest.json` [read: `skills/create-nww-website/SKILL.md:88-90`].
+- **Rendering & Preview Pipelines**: Single-mode markdown page specifications in Stage 5 generating unified `page.md` blueprints; Stage 6 project scaffolding pre-loading 10 specialized architecture & GSAP skills and building the Next.js App Router codebase in `site/` with manifest `site/site.manifest.json` [read: `skills/create-nww-website/SKILL.md:88-132`].
 - **Media Optimization Pipeline**: Companion CLI uses `sharp` and `ffmpeg-static` to process source assets into WebP/AVIF format with responsive `srcset` and manifest output at CLS = 0 [read: `skills/create-nww-website/SKILL.md:143-150`].
 - **Tool Decoupling**: Companion scripts under `skills/create-nww-website/scripts/` are self-contained and run directly via Node.js without monorepo package workspace links [read: `docs/ARCHITECTURE.md:64-74`].
 

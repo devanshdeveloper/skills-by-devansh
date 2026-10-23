@@ -1,6 +1,6 @@
 # Asset Optimization & Responsive Media Workflow
 
-Image and media optimization is executed during Stage 9 Foundation Build. Source assets collected in `assets-source/` are transformed into lightweight, responsive WebP variants, indexed in a manifest, and rendered using a zero-CLS Server Component.
+Image and media optimization is executed during Stage 6 Foundation Build. Source assets collected in `assets-source/` are transformed into lightweight, responsive WebP variants, indexed in a manifest, and rendered using a zero-CLS Server Component.
 
 ---
 

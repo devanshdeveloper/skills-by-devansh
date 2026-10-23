@@ -200,16 +200,6 @@ function generateRootPortal(gate2Exists, gate5Exists) {
           ${gate2Exists ? '<a href="gate-2-design-theory/index.html" class="gate-link">Enter Gate 2 Hub →</a>' : '<span style="color:var(--text-muted);font-size:13px;">Pending</span>'}
         </div>
       </div>
-
-      <div class="gate-item">
-        <div class="gate-info">
-          <h3>Gate 5: Website Layout Blueprints & Page Architecture</h3>
-          <p>Inspect structural section-by-section layout blueprints, responsive phone views, and approve page flow.</p>
-        </div>
-        <div>
-          ${gate5Exists ? '<a href="pages/index.html" class="gate-link">Enter Layout Hub →</a>' : '<span style="color:var(--text-muted);font-size:13px;">Pending</span>'}
-        </div>
-      </div>
     </div>
   </div>
 </body>
@@ -257,10 +247,6 @@ function run() {
     return a.name.localeCompare(b.name);
   });
 
-  // Check if Gate 5 layout pages exist
-  const pagesDir = path.join(reviewBase, 'pages');
-  const gate5Exists = fs.existsSync(path.join(pagesDir, 'index.html'));
-
   // Generate Gate 2 Hub
   const gate2HubHtml = generateGate2Hub(concepts);
   const gate2HubPath = path.join(gate2Dir, 'index.html');
@@ -270,7 +256,7 @@ function run() {
   } else console.log('Preserved authored Gate 2 hub.');
 
   // Generate Root Review Portal
-  const rootPortalHtml = generateRootPortal(true, gate5Exists);
+  const rootPortalHtml = generateRootPortal(true);
   const rootPortalPath = path.join(reviewBase, 'index.html');
   if (!preserveHubs || !fs.existsSync(rootPortalPath)) {
     fs.writeFileSync(rootPortalPath, rootPortalHtml, 'utf-8');

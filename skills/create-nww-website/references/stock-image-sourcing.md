@@ -1,6 +1,6 @@
-﻿# Stock Image Sourcing
+# Stock Image Sourcing
 
-**Read this reference when:** Stage 0 reveals that stock images are needed, OR during Stage 6 when an `assets.md` slot has no client-provided asset and the project is approved for stock use.
+**Read this reference when:** Stage 0 reveals that stock images are needed, OR during Stage 5 when a `page.md` asset slot has no client-provided asset and the project is approved for stock use.
 
 ---
 
@@ -87,7 +87,7 @@ Also add to the Gate 0 Checklist:
 
 ## 4. Client-Asset Priority Rule
 
-For every slot in `assets.md`:
+For every slot in `page.md`:
 1. Client has supplied an asset for it -> use it. Do not fetch stock.
 2. Slot is a hard-excluded section type -> mark `placeholder` + `[STOCK-EXCLUDED]`. Do not fetch stock.
 3. No client asset, not hard-excluded, and stock is approved -> proceed to section 5.
@@ -96,7 +96,7 @@ For every slot in `assets.md`:
 
 ## 5. Hard Exclusions
 
-The following section types must **never** receive stock images. Mark them `placeholder` with note `[STOCK-EXCLUDED: requires real photos from client]` in `assets.md` and list them in `project-docs/asset-requests.md`:
+The following section types must **never** receive stock images. Mark them `placeholder` with note `[STOCK-EXCLUDED: requires real photos from client]` in `page.md` and list them in `project-docs/asset-requests.md`:
 
 - **Team / staff / leadership bios** -- must use real photos of the actual people.
 - **Testimonials / reviews** -- must use real headshots, or no photo at all.
@@ -110,7 +110,7 @@ Logos and brand marks are always `client-provided` or `agency-created`. Never st
 
 ## 6. Query Construction
 
-- 3-5 keywords from the slot's `Description` in `assets.md` and brand voice from `design-theory.md`.
+- 3-5 keywords from the slot's `Description` in `page.md` and brand voice from `design-theory.md`.
 - Append orientation filter matching slot aspect ratio (`horizontal` for `--ratio-hero`, `vertical` for portrait, `squarish` for square).
 - Minimum width: 1920 for LCP/hero slots, 1200 for standard content slots, 800 for thumbnails.
 - Use `order=popular` for Pixabay, `size=large` for Pexels, default sort for Unsplash.
@@ -136,7 +136,7 @@ If no image on the current result page passes all criteria, stop and ask for rev
 
 ## 8. Provenance Manifest
 
-Create `project-docs/stock-provenance.json` at Stage 6 start if stock images are used. Append one entry per image.
+Create `project-docs/stock-provenance.json` at Stage 5 start if stock images are used. Append one entry per image.
 
 Common fields (all providers):
 
@@ -164,7 +164,7 @@ Unsplash adds: `"hotlinkedUrl": "https://images.unsplash.com/..."`, `"downloadLo
 
 ### Credits page (all providers -- required if any stock image used)
 
-Stage 9 generates `site/app/credits/page.js` from `stock-provenance.json`. Lists every stock image with photographer name linked to their profile, provider name linked to provider homepage, and the page URL on the provider site. Link from footer as "Image Credits".
+Stage 6 generates `site/app/credits/page.js` from `stock-provenance.json`. Lists every stock image with photographer name linked to their profile, provider name linked to provider homepage, and the page URL on the provider site. Link from footer as "Image Credits".
 
 ### Per-provider attribution format
 
@@ -181,7 +181,7 @@ Alt text on all images must be descriptive and visual -- not a repeat of the sea
 ## 10. Credentials
 
 - Keys read only from env vars: `PIXABAY_API_KEY`, `PEXELS_API_KEY`, `UNSPLASH_ACCESS_KEY`.
-- Keys must never appear in: SKILL.md, references/, project-docs/, assets.md, stock-provenance.json, any file under site/, Next.js output bundles, .env.local, or any committed file.
+- Keys must never appear in: SKILL.md, references/, project-docs/, page.md, stock-provenance.json, any file under site/, Next.js output bundles, .env.local, or any committed file.
 - The fetch script reads keys from `process.env` only and never logs raw API response bodies.
 - `UNSPLASH_SECRET_KEY` is for OAuth only; never expose client-side.
 
@@ -203,7 +203,7 @@ Alt text on all images must be descriptive and visual -- not a repeat of the sea
 
 ## 12. Using the Fetch Script
 
-`scripts/stock-fetch/index.js` runs at authoring time during Stage 6. Execute from the project root:
+`scripts/stock-fetch/index.js` runs at authoring time during Stage 5. Execute from the project root:
 
     # Auto-select provider by priority
     node ../skills/create-nww-website/scripts/stock-fetch/index.js \
@@ -230,9 +230,9 @@ The script: checks env vars in priority order -> builds and fires the API search
 
 ---
 
-## 13. Gate 6 Stock Checklist
+## 13. Gate 5 Stock Checklist
 
-Append to the standard Gate 6 Review Checklist:
+Append to the standard Gate 5 Review Checklist:
 
 - [ ] Stock photography approved in `client-answers.md`? If no, skip remaining items.
 - [ ] All stock slots fetched using an approved provider key.
@@ -242,9 +242,9 @@ Append to the standard Gate 6 Review Checklist:
 - [ ] No provider API key present in any project file.
 - [ ] Stock image count is within the ceiling approved in `client-answers.md`.
 
-## 14. Stage 9 Stock Checklist
+## 14. Stage 6 Stock Checklist
 
-Append to the Gate 9 checklist:
+Append to the Gate 6 checklist:
 
 - [ ] `site/app/credits/page.js` generated from `stock-provenance.json` (if any stock used).
 - [ ] Footer links to `/credits` as "Image Credits".
@@ -252,9 +252,9 @@ Append to the Gate 9 checklist:
 - [ ] Unsplash per-image attribution rendered adjacent to each Unsplash image on the page.
 - [ ] Pixabay and Pexels images processed through assets-optimizer and served from `site/public/assets/`.
 
-## 15. Stage 11 Stock Checklist
+## 15. Stage 8 Stock Checklist
 
-Append to the Stage 11 Final Verification audit:
+Append to the Stage 8 Final Verification audit:
 
 - [ ] No stock API key present anywhere in `site/` build output.
 - [ ] `/credits` page renders correctly in production build.

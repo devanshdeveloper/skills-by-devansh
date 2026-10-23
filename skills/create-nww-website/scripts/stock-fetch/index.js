@@ -69,7 +69,7 @@ Usage:
 
 Required:
   --query, -q        Search keywords (3-5 words recommended)
-  --slot, -s         Slot ID in assets.md (e.g. srv-s1-hero)
+  --slot, -s         Slot ID in page.md (e.g. srv-s1-hero)
 
 Options:
   --page, -p         Page route (e.g. /services) [default: ""]

@@ -2,9 +2,9 @@
 /**
  * verify-nextjs.mjs
  * 
- * Zero-dependency companion validation script for create-nww-website's Next.js layout generation mode.
+ * Zero-dependency companion validation script for create-nww-website's Stage 6 Project Scaffolding.
  * Verifies parity and consistency across:
- * 1. Agent-facing blueprints: page-specs/<slug>/layout.md
+ * 1. Agent-facing page specifications: page-specs/<slug>/page.md
  * 2. Next.js machine manifest: site/site.manifest.json
  * 3. Actual Next.js code files: site/app/<route>/page.js, _components/*.js, and content modules.
  * 4. Section markers: data-section="<id>" attributes in JSX.
@@ -24,7 +24,7 @@ const pageSpecsDir = path.join(projectRoot, 'page-specs');
 const projDocsDir = path.join(projectRoot, 'project-docs');
 
 console.log('=================================================================');
-console.log('  NWW NEXT.JS SITE MANIFEST & CODE CONSISTENCY AUDITOR');
+console.log('  NWW NEXT.JS SITE MANIFEST & SCAFFOLDING CONSISTENCY AUDITOR');
 console.log('=================================================================');
 console.log(`Project Root: ${projectRoot}`);
 
@@ -47,7 +47,7 @@ if (!fs.existsSync(manifestPath)) {
 let manifest;
 try {
   manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
-  console.log(`✓ Manifest loaded: ${manifest.mode || 'nextjs'} mode (Variation: ${manifest.sourceVariation?.name || manifest.sourceVariation || 'Unknown'})`);
+  console.log(`✓ Manifest loaded: ${manifest.mode || 'scaffolded'} mode (Variation: ${manifest.sourceVariation?.name || manifest.sourceVariation || 'Unknown'})`);
   checksPassed++;
 } catch (e) {
   console.error(`✗ Error: Failed to parse ${manifestPath}: ${e.message}`);
@@ -62,7 +62,7 @@ if (manifest.preLaunchGuard && manifest.preLaunchGuard.enabled) {
   warnings.push('Manifest does not declare an active preLaunchGuard.');
 }
 
-// 4. Verify pages in manifest against page-specs/<slug>/layout.md
+// 4. Verify pages in manifest against page-specs/<slug>/page.md
 if (!Array.isArray(manifest.pages) || manifest.pages.length === 0) {
   errors.push('Manifest contains no pages.');
 } else {
@@ -72,20 +72,20 @@ if (!Array.isArray(manifest.pages) || manifest.pages.length === 0) {
     const slug = page.slug;
     console.log(`  Checking page slug: ${slug} (Route: ${page.route || '?'})`);
 
-    const layoutMdPath = path.join(pageSpecsDir, slug, 'layout.md');
-    if (!fs.existsSync(layoutMdPath)) {
-      errors.push(`[${slug}] layout.md missing at ${layoutMdPath}`);
+    const pageMdPath = path.join(pageSpecsDir, slug, 'page.md');
+    if (!fs.existsSync(pageMdPath)) {
+      errors.push(`[${slug}] page.md missing at ${pageMdPath}`);
       continue;
     }
 
-    const layoutContent = fs.readFileSync(layoutMdPath, 'utf-8');
+    const pageContent = fs.readFileSync(pageMdPath, 'utf-8');
 
-    // Extract section IDs from layout.md (### Section X: `id`)
-    const expectedSectionMatches = [...layoutContent.matchAll(/### Section\s+\d+:\s*`([^`]+)`/g)];
+    // Extract section IDs from page.md (### Section X: `id`)
+    const expectedSectionMatches = [...pageContent.matchAll(/### Section\s+\d+:\s*`([^`]+)`/g)];
     const expectedIds = expectedSectionMatches.map(m => m[1].trim());
 
     if (expectedIds.length === 0) {
-      warnings.push(`[${slug}] No sections found in layout.md.`);
+      warnings.push(`[${slug}] No sections found in page.md.`);
     }
 
     // Verify manifest sections
@@ -93,14 +93,14 @@ if (!Array.isArray(manifest.pages) || manifest.pages.length === 0) {
     const manifestIds = manifestSections.map(s => s.id);
 
     if (expectedIds.length !== manifestIds.length) {
-      errors.push(`[${slug}] Section count mismatch: layout.md has ${expectedIds.length}, manifest has ${manifestIds.length}.`);
+      errors.push(`[${slug}] Section count mismatch: page.md has ${expectedIds.length}, manifest has ${manifestIds.length}.`);
     }
 
     for (let i = 0; i < expectedIds.length; i++) {
       const expId = expectedIds[i];
       const manId = manifestIds[i];
       if (expId !== manId) {
-        errors.push(`[${slug}] Section order mismatch at index ${i}: expected '${expId}' from layout.md, found '${manId}' in manifest.`);
+        errors.push(`[${slug}] Section order mismatch at index ${i}: expected '${expId}' from page.md, found '${manId}' in manifest.`);
       }
     }
 
@@ -165,5 +165,5 @@ if (errors.length > 0) {
 }
 
 console.log(`✓ ALL CHECKS PASSED: ${checksPassed} assertions verified cleanly.`);
-console.log('Next.js codebase, manifest, and layout blueprints are 100% consistent.');
+console.log('Next.js codebase, manifest, and page specifications are 100% consistent.');
 process.exit(0);

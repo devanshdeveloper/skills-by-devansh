@@ -16,12 +16,13 @@ skills-by-devansh/
 │   ├── create-nextjs-website/          # App Router scaffolding skill
 │   │   └── SKILL.md                    # Single-file runbook & frontmatter
 │   ├── create-nww-website/             # Multi-stage website builder
-│   │   ├── SKILL.md                    # Master 12-stage pipeline runbook
+│   │   ├── SKILL.md                    # Master 9-stage pipeline runbook
 │   │   ├── assets/                     # Standalone templates & client review assets
 │   │   │   └── client-review-template.html
 │   │   ├── references/                 # Modular reference specifications
 │   │   │   ├── pipeline-stages.md      # State machine and approval gates
 │   │   │   ├── code-conventions.md     # Code style and limits
+│   │   │   ├── seo/                    # SEO Strategy, structured data & tool library
 │   │   │   ├── design-theory.md        # Tokens, type, and motion
 │   │   │   └── ... (10 more docs)      # Specific stage guidance
 │   │   └── scripts/                    # Embedded CLI helper tools
@@ -30,7 +31,9 @@ skills-by-devansh/
 │   │       ├── client-review/          # Gate 2 visual review hub and portal generator
 │   │       ├── reference-capture/      # Automated reference landing page DOM & screenshot capture
 │   │       ├── client-notify/          # Multi-stage client email review & approval notification engine
-│   │       └── structure-audit/        # Stage 11 deliverables and coding conventions validator
+│   │       ├── structure-audit/        # Stage 8 deliverables and coding conventions validator
+│   │       ├── cms-seed/               # Blog seeding CLI engine and schema validator
+│   │       └── seo/                    # PageSpeed Insights & sitemap/robots CLI helpers
 │   ├── nww/                            # Shortcut alias skill for create-nww-website
 │   │   └── SKILL.md                    # Fast shortcut delegation runbook
 │   └── publish/                        # Maintainer-only release skill (metadata.internal)

@@ -10,7 +10,7 @@
  *   node scripts/client-notify/index.js [projectRoot] [options]
  *
  * Options:
- *   --stage=<0-11>       Stage number (auto-detected from router-state.md if omitted)
+ *   --stage=<0-8>        Stage number (auto-detected from router-state.md if omitted)
  *   --gate=<name>        Gate identifier (auto-detected if omitted)
  *   --to=<email>         Client email address (parsed from client-answers.md or prompt)
  *   --client=<name>      Client name (parsed from client-answers.md or prompt)
@@ -169,54 +169,30 @@ function getStageTemplate(stage, context) {
     },
     5: {
       gate: 'Gate 5',
-      name: 'Layout Theory & Section Blueprints',
-      subject: `[${projectName}] Milestone Review: Section Layouts & Responsive Blueprints`,
-      action: 'Approve the section flow, responsive phone behavior, and content placements in your layout preview hub.',
-      deliverable: reviewUrl ? `${reviewUrl}/pages/index.html` : 'project-docs/client-review/pages/index.html',
-      summary: `Every page has been deconstructed into visual, responsive section blueprints with defined content capacity and visual hierarchies. Please review the visual layouts in the portal.`
+      name: 'Page Specifications & CMS Schema',
+      subject: `[${projectName}] Milestone Review: Page Specifications & CMS Schema`,
+      action: 'Approve the section flow, responsive layout blueprints, verbatim copywriting, media asset slots, and CMS schema (if enabled).',
+      deliverable: 'page-specs/<slug>/page.md & project-docs/cms-schema.md',
+      summary: `Every page has been specified in comprehensive markdown documents combining responsive layout blueprints, authentic verbatim copywriting, and media asset slots. When CMS integration is active, backend schemas, field definitions, and seed content are fully specified. Please review the deliverables.`
     },
     6: {
       gate: 'Gate 6',
-      name: 'Content & Asset Sourcing',
-      subject: `[${projectName}] Milestone Review: Production Copy & Imagery Inventory`,
-      action: 'Review and approve page copy, technical case studies, and sourced media assets.',
-      deliverable: reviewUrl ? `${reviewUrl} (or Client Review Portal)` : 'project-docs/client-review/index.html',
-      summary: `All page copy, case studies, technical summaries, and licensed image assets have been assembled and verified against your voice & tone guidelines.`
+      name: 'Codebase Scaffolding, Foundation Build & Landing Page Showcase',
+      subject: `[${projectName}] Milestone Review: Scaffolding, Foundation Shell & Landing Page Showcase`,
+      action: 'Preview the interactive Landing Page showcase, review the Next.js foundation shell, and approve before sub-page construction.',
+      deliverable: 'site/ directory & Landing Page Showcase at http://localhost:3000',
+      summary: `The Next.js App Router codebase has been scaffolded in site/ with the complete foundation shell (navigation, footer, theme tokens, motion setup, optimized assets) and the master page checklist. In addition, the Landing Page (Home) is fully constructed and styled with interactive sections, ready for your showcase review.`
     },
     7: {
       gate: 'Gate 7',
-      name: 'CMS Schema & Seed Data',
-      subject: `[${projectName}] Milestone Review: CMS Content Models & Seed Data`,
-      action: 'Confirm CMS field schemas, model structures, and webhook endpoints.',
-      deliverable: 'project-docs/cms-schema.md',
-      summary: `Custom post types, field schemas, and on-demand ISR revalidation endpoints for your CMS backend have been configured and verified.`
+      name: 'Sub-Page Build Loop',
+      subject: `[${projectName}] Milestone Review: Sub-Page Build Preview & Acceptance QA`,
+      action: 'Preview the interactive sub-pages and provide feedback or sign-off.',
+      deliverable: 'site/app routes',
+      summary: `The remaining sub-pages have been constructed one by one with full animations, responsive layouts, and CMS integrations, passing all static checklist items and binary QA.`
     },
     8: {
       gate: 'Gate 8',
-      name: 'Page Checklist & Taste Audit',
-      subject: `[${projectName}] Milestone Review: Master Static Checklist & Taste Sign-Off`,
-      action: 'Approve the final static checklist and design polish before code construction starts.',
-      deliverable: 'project-docs/page-checklist.md',
-      summary: `Our visual quality checklist is complete. All styling tokens, motion limits, and typography contrasts have been audited.`
-    },
-    9: {
-      gate: 'Gate 9',
-      name: 'Foundation Build & Base Shell',
-      subject: `[${projectName}] Milestone Review: Core Shell & Component Primitives`,
-      action: 'Review the base Next.js shell, responsive navigation, footer, and motion system.',
-      deliverable: 'site/ directory & base build preview',
-      summary: `The foundational Next.js codebase is operational with responsive navigation, footer shell, optimized assets, and passing build diagnostics.`
-    },
-    10: {
-      gate: 'Gate 10',
-      name: 'Page Build Loop & Binary QA',
-      subject: `[${projectName}] Milestone Review: Page Build Preview & Acceptance QA`,
-      action: 'Preview the interactive pages and provide feedback or sign-off.',
-      deliverable: 'site/app routes',
-      summary: `The interactive website routes have been constructed with full animations, responsive layouts, and CMS integrations ready for acceptance testing.`
-    },
-    11: {
-      gate: 'Gate 11',
       name: 'Final Verification & Handover',
       subject: `[${projectName}] Final Milestone: Production Verification & Handover`,
       action: 'Complete final sign-off, verify live production deployment, and receive handover assets.',

@@ -35,10 +35,25 @@ Before scaffolding or writing code in `site/`:
 
 ## Scaffolding & Dependency Governance
 
-Scaffold the Next.js application inside `site/` only after the Gate 2 variation decision is approved, using verified flags:
+Scaffold the Next.js application inside `site/` at Stage 6 after Gate 5 page specifications are approved, using verified flags:
+
+### 0. Specialized Architecture Skills Pre-Load
+Before running the generator or producing code in `site/`, the agent MUST load the 10 specialized architecture, composition, design system, and GSAP skills:
+```bash
+DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices
+DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-composition-patterns
+DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/agent-skills --skill web-design-guidelines
+DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/openreview --skill next-best-practices
+DISABLE_TELEMETRY=1 npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill design-system
+DISABLE_TELEMETRY=1 npx skills add https://github.com/heygen-com/hyperframes --skill gsap
+DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-core
+DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-scrolltrigger
+DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-performance
+DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-timeline
+```
 
 ### 1. Environment Check
-- Verify Node.js availability (`node -v` >= 18.18.0). If Node is missing or package installation fails, stop and report, keeping `html` mode as the fallback.
+- Verify Node.js availability (`node -v` >= 18.18.0). If Node is missing or package installation fails, stop and report to the user.
 
 ### 2. Verified Generator Command
 Execute the official generator with flags matching discovered conventions:
@@ -189,7 +204,7 @@ site/
 
 ## Scoped AGENTS.md Files Specification
 
-During Stage 9, the agent scaffolds `site/AGENTS.md` and 4 scoped AGENTS.md files:
+During Stage 6, the agent scaffolds `site/AGENTS.md` and 4 scoped AGENTS.md files:
 1. **Root `site/AGENTS.md`:** Maximum **150 lines**. Must preserve managed block markers:
    ```markdown
    <!-- BEGIN:nextjs-agent-rules -->
@@ -210,7 +225,7 @@ During Stage 9, the agent scaffolds `site/AGENTS.md` and 4 scoped AGENTS.md file
 
 ## Automated Verification Scripts & Package Commands
 
-Stage 9 adds three verification scripts to `site/scripts/` and wires them into `package.json`:
+Stage 6 adds three verification scripts to `site/scripts/` and wires them into `package.json`:
 - `check:structure`: `node scripts/check-structure.mjs` (verifies thin `page.js` <=80 lines, section <=250 lines, first-line `// section: <id>`, flat `components/`).
 - `check:assets`: `node scripts/check-assets.mjs` (verifies all rendered images exist in `public/assets/`, match manifest, and satisfy byte budgets: LCP <=100 KB, general <=60 KB, SVG <=5 KB).
 - `check:all`: Executes `pnpm lint && pnpm check:structure && pnpm check:assets`.

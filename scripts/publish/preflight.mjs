@@ -119,13 +119,17 @@ export function auditSkillSpecs(repoRoot = REPO_ROOT) {
       specErrors.push(`${skillName}: Forbidden README.md detected inside skill folder`);
     }
 
-    // Check references flat structure
+    // Check references structure (allow flat files and non-empty modular domain subdirectories)
     const refDir = path.join(skillPath, 'references');
     if (fs.existsSync(refDir)) {
       const refEntries = fs.readdirSync(refDir, { withFileTypes: true });
       for (const re of refEntries) {
         if (re.isDirectory()) {
-          specErrors.push(`${skillName}: Nested directory '${re.name}' in references/ violates flat structure`);
+          const subDir = path.join(refDir, re.name);
+          const subEntries = fs.readdirSync(subDir);
+          if (subEntries.length === 0) {
+            specErrors.push(`${skillName}: Empty directory '${re.name}' in references/`);
+          }
         }
       }
     }

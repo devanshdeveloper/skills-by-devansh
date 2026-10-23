@@ -63,7 +63,7 @@ All tokens must use names compatible with Tailwind CSS theme keys:
 - **Dual Motion Tokens:** Every motion token must be specified in **TWO forms**:
   1. The CSS/Tailwind theme variable (e.g., `--ease-hero: cubic-bezier(...)`).
   2. The GSAP value (e.g., `"power3.out"` or CustomEase curve) with duration in seconds.  
-  *These tokens are exported directly into `site/lib/motion.js` during Stage 9.*
+  *These tokens are exported directly into `site/lib/motion.js` during Stage 6.*
 - **Imagery & Icon Specs:** Named aspect ratios (e.g. `--ratio-hero`, `--ratio-card`), corner treatments, photo art direction, and Lucide icon stroke weight.
 
 ### 4. What to Avoid

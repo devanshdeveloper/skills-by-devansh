@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Stage 11 Structure & Deliverables Auditor for NWW Website Generator
+ * Stage 8 Structure & Deliverables Auditor for NWW Website Generator
  *
  * Audits:
  * 1. Project-Docs Completeness: Validates all required markdown deliverables per stage.
@@ -45,10 +45,10 @@ function auditProjectDocs() {
     { stage: 3, name: 'Page List Tracker', file: 'project-docs/page-list.md', min: 50 },
     { stage: 4, name: 'SEO Strategy', file: 'project-docs/seo-strategy.md', min: 100 },
     { stage: 5, name: 'Layout System', file: 'project-docs/layout-system.md', min: 100 },
-    { stage: 5, name: 'Gate 5 Layout Hub', file: 'project-docs/client-review/pages/index.html', min: 500 },
-    { stage: 6, name: 'Stock Provenance Log', file: 'project-docs/stock-provenance.json', min: 2 },
-    { stage: 7, name: 'CMS Schema Spec', file: 'project-docs/cms-schema.md', min: 100, optional: true },
-    { stage: 8, name: 'Page Build Checklist', file: 'project-docs/page-checklist.md', min: 100 },
+    { stage: 5, name: 'Stock Provenance Log', file: 'project-docs/stock-provenance.json', min: 2, optional: true },
+    { stage: 5, name: 'CMS Schema Spec', file: 'project-docs/cms-schema.md', min: 100, optional: true },
+    { stage: 6, name: 'Site Manifest', file: 'site/site.manifest.json', min: 50 },
+    { stage: 6, name: 'Page Build Checklist', file: 'project-docs/page-checklist.md', min: 100 },
     { stage: 'Router', name: 'Pipeline Router State', file: 'project-docs/router-state.md', min: 100 }
   ];
 
@@ -65,7 +65,7 @@ function auditCodeConventions() {
   if (!fs.existsSync(siteDir)) {
     return {
       scanned: false,
-      reason: 'Site directory not yet created (prior to Stage 9).'
+      reason: 'Site directory not yet created (prior to Stage 6 Scaffolding).'
     };
   }
 
@@ -110,7 +110,7 @@ function auditCodeConventions() {
 
 function run() {
   console.log('=================================================================');
-  console.log('  NWW STRUCTURE & DELIVERABLES AUDITOR (Stage 11)');
+  console.log('  NWW STRUCTURE & DELIVERABLES AUDITOR (Stage 8)');
   console.log('=================================================================');
 
   const docResults = auditProjectDocs();
@@ -146,12 +146,12 @@ function run() {
   }).join('\n');
 
   const codeSection = !codeResults.scanned
-    ? `> **Note:** Site code directory not yet initialized (scheduled for Stage 9 Foundation Build).\n`
+    ? `> **Note:** Site code directory not yet initialized (scheduled for Stage 6 Project Scaffolding).\n`
     : codeResults.violations.length === 0
       ? `✓ All **${codeResults.fileCount}** scanned JavaScript files comply with strict limits (page.js <= 80, sections <= 250, utils <= 500) and contain proper \`// section: <id>\` comments.\n`
       : codeResults.violations.map(v => `- ✗ \`${v.file}\`: ${v.issue}`).join('\n');
 
-  const auditContent = `# Structure & Deliverables Audit (Stage 11)
+  const auditContent = `# Structure & Deliverables Audit (Stage 8)
 
 **Generated:** ${new Date().toISOString().replace('T', ' ').substring(0, 16)}  
 **Auditor Engine:** NWW Structure Auditor (\`scripts/structure-audit/index.js\`)  
@@ -176,7 +176,7 @@ ${codeSection}
 ## 3. Audit Verdict
 
 - **Documentation Health:** ${docResults.filter(r => r.exists).length} / ${docResults.length} checkpoints verified.
-- **Code Health:** ${codeResults.scanned ? (codeResults.violations.length === 0 ? 'Compliant' : `${codeResults.violations.length} violations detected`) : 'Pending Stage 9'}.
+- **Code Health:** ${codeResults.scanned ? (codeResults.violations.length === 0 ? 'Compliant' : `${codeResults.violations.length} violations detected`) : 'Pending Stage 6'}.
 - **Next Actions:** Refer to \`project-docs/router-state.md\` for current gate approval requirements.
 `;
 

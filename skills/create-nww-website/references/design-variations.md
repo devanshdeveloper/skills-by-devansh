@@ -174,4 +174,4 @@ Update `project-docs/router-state.md`:
 - **Current Gate:** `Gate 2`
 - **Gate Status:** `Awaiting Client Decision Among Variations (via project-docs/client-review/gate-2-design-theory/index.html)`
 
-The agent monitors this file and halts until the client's decision is confirmed. Once confirmed, the chosen variation's tokens and layout principles become the binding foundation for Stage 3 (Page List) through Stage 11.
+The agent monitors this file and halts until the client's decision is confirmed. Once confirmed, the chosen variation's tokens and layout principles become the binding foundation for Stage 3 (Page List) through Stage 8.

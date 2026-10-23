@@ -5,7 +5,6 @@
     "portal": "node index.js",
     "preview": "node preview.mjs",
     "verify": "node verify.mjs",
-    "verify:layout": "node verify-layout.mjs",
     "verify:nextjs": "node verify-nextjs.mjs",
     "fetch-fonts": "node fetch-fonts.mjs"
   },

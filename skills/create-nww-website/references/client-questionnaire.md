@@ -41,11 +41,11 @@ Upon skill activation, the agent must immediately execute this sequence:
 - **Q4 [Website Type]:** What type of website are we building?  
   *(Answer: Choice | Allowed: `1: Business/Corporate`, `2: E-commerce`, `3: Blog/Publication`, `4: Portfolio`, `5: Booking/Service`, `6: Web App/SaaS`, `7: Redesign/Migration` | Default: `1: Business/Corporate` | Required: Yes | Consumer: Stage 3, Batch 7 branching)*
 - **Q5 [CMS Operational Mode]:** Will this website use the NWW CMS for a dynamic blog and form endpoints (`cms`), or is it a 100% static site (`none`)?  
-  *(Answer: Choice | Allowed: `none`, `cms` | Default: `none` | Required: Yes | Consumer: Stage 0 Gate 0, Stage 1, Stage 7)*
+  *(Answer: Choice | Allowed: `none`, `cms` | Default: `none` | Required: Yes | Consumer: Stage 0 Gate 0, Stage 1, Stage 5)*
 - **Q6 [Build Origin]:** Are we building this from scratch, or redesigning/migrating an existing site?  
   *(Answer: Choice | Allowed: `scratch`, `migration` | Default: `scratch` | Required: Yes | Consumer: Stage 3, Batch 7 branching)*
 - **Q7 [Timeline & Launch Date]:** What is your target launch date, and are there any hard deadlines (e.g., product launch, campaign, event)?  
-  *(Answer: Free text | Default: `Flexible / 4 weeks` | Required: Yes | Consumer: Stage 0, Stage 11)*
+  *(Answer: Free text | Default: `Flexible / 4 weeks` | Required: Yes | Consumer: Stage 0, Stage 8)*
 
 ### Batch 2: Branding, Design Direction & Inspiration (8 Questions)
 - **Q8 [Brand Assets Available]:** Do you have vector logo files (SVG, AI, EPS) in full-color, monochrome, and reversed light-on-dark variants?  
@@ -53,7 +53,7 @@ Upon skill activation, the agent must immediately execute this sequence:
 - **Q9 [Brand Palette & Tokens]:** Do you have established brand colors (provide hex codes), or should the agency curate a cohesive modern palette?  
   *(Answer: Choice / Free text | Allowed: Hex list or `curate-for-me` | Default: `curate-for-me` | Required: Yes | Consumer: Stage 2)*
 - **Q10 [Typography]:** Do you have licensed brand fonts, or should we select high-quality Google Fonts (e.g. Inter, Outfit, Plus Jakarta Sans)?  
-  *(Answer: Choice / Free text | Allowed: `google-fonts` or licensed font names | Default: `google-fonts` | Required: Yes | Consumer: Stage 2, Stage 9)*
+  *(Answer: Choice / Free text | Allowed: `google-fonts` or licensed font names | Default: `google-fonts` | Required: Yes | Consumer: Stage 2, Stage 6)*
 - **Q11 [Brand Personality Scale]:** Where does your brand sit across these 4 spectrums:  
   1. Minimal ↔ Maximal | 2. Corporate ↔ Playful | 3. Luxury ↔ Accessible | 4. Modern ↔ Classic  
   *(Answer: List of ratings | Default: `Balanced / Modern-Accessible` | Required: Yes | Consumer: Stage 2)*
@@ -68,7 +68,7 @@ Upon skill activation, the agent must immediately execute this sequence:
 - **Q13 [Disliked Websites]:** Share 1–2 website URLs whose overall design or vibe you dislike, and why?  
   *(Answer: List of URLs + commentary | Default: `None` | Required: Optional | Consumer: Stage 2)*
 - **Q14 [Motion & Animation]:** What is your animation preference: subtle & static by design (micro-interactions on hover, max 1 bold section), or completely static?  
-  *(Answer: Choice | Allowed: `subtle-gsap` (default), `static-only` | Default: `subtle-gsap` | Required: Yes | Consumer: Stage 2, Stage 9)*
+  *(Answer: Choice | Allowed: `subtle-gsap` (default), `static-only` | Default: `subtle-gsap` | Required: Yes | Consumer: Stage 2, Stage 6)*
 
 ### Batch 3: Pages, Sitemap & Verbatim Copywriting (6 Questions)
 - **Q15 [Core Page List]:** Which pages do you need at launch (e.g. Home, About, Services, Contact, Blog, Pricing, FAQ)?  
@@ -80,9 +80,9 @@ Upon skill activation, the agent must immediately execute this sequence:
 - **Q18 [Voice & Tone]:** Describe your brand's voice and tone (e.g. authoritative & technical, friendly & approachable, direct & punchy) and any words to avoid.  
   *(Answer: Free text | Default: `Clear, confident, professional` | Required: Yes | Consumer: Stage 2, Stage 6)*
 - **Q19 [Header & Footer Navigation]:** Any specific links, social profile links, or secondary utilities required in the header or footer?  
-  *(Answer: Free text | Default: `Standard top-level routes + legal footer` | Required: Optional | Consumer: Stage 5, Stage 9)*
+  *(Answer: Free text | Default: `Standard top-level routes + legal footer` | Required: Optional | Consumer: Stage 5, Stage 6)*
 - **Q20 [Forms & Lead Capture]:** What forms do you require (e.g. general contact inquiry, quote request, newsletter subscription)?  
-  *(Answer: List / Choice | Allowed: `contact`, `lead`, `newsletter`, `none` | Default: `contact` | Required: Yes | Consumer: Stage 3, Stage 7)*
+  *(Answer: List / Choice | Allowed: `contact`, `lead`, `newsletter`, `none` | Default: `contact` | Required: Yes | Consumer: Stage 3, Stage 5)*
 
 ### Batch 4: Imagery, Stock Intake & Media Pipeline (7 Questions)
 - **Q21 [Primary Imagery Source]:** What is the primary source of photos for the site: client-provided real photos, licensed stock imagery, or photoshoot planned?  
@@ -93,9 +93,9 @@ Upon skill activation, the agent must immediately execute this sequence:
   *(Branching: If No -> all open slots receive placeholder status; skip Q24–Q26. If Yes -> continue).*  
   *(Answer: Yes/No | Allowed: `yes`, `no` | Default: `yes` | Required: Conditional on stock considered | Consumer: Stage 0 Gate 0, Stage 6)*
 - **Q24 [Stock Credit - Q35b]:** Has it been confirmed that photographer credit will appear on the site (on a dedicated `/credits` page)?  
-  *(Answer: Yes/No | Allowed: `yes`, `no` | Default: `yes` | Required: Conditional on Q23 = Yes | Consumer: Stage 0, Stage 9)*
+  *(Answer: Yes/No | Allowed: `yes`, `no` | Default: `yes` | Required: Conditional on Q23 = Yes | Consumer: Stage 0, Stage 6)*
 - **Q25 [Stock Provider & Hosting - Q35c]:** Do you approve sourcing stock from approved providers (Pixabay, Pexels, Unsplash), downloaded and optimized on your server (Unsplash hotlinked)?  
-  *(Answer: Yes/No | Allowed: `yes`, `no` | Default: `yes` | Required: Conditional on Q23 = Yes | Consumer: Stage 0, Stage 6, Stage 9)*
+  *(Answer: Yes/No | Allowed: `yes`, `no` | Default: `yes` | Required: Conditional on Q23 = Yes | Consumer: Stage 0, Stage 6)*
 - **Q26 [Stock Image Ceiling - Q35d]:** What is the maximum stock image count ceiling for this project? (Default: 20 images; more than 20 requires explicit approval).  
   *(Answer: Number | Default: `20` | Required: Conditional on Q23 = Yes | Consumer: Stage 0, Stage 6)*
 - **Q27 [Downloadable Media]:** Do you have downloadable assets (PDF brochures, case study docs, product catalogs)?  
@@ -111,25 +111,25 @@ Upon skill activation, the agent must immediately execute this sequence:
 - **Q31 [Production Domain]:** What is the primary production domain or URL for the site (e.g. `https://example.com`)?  
   *(Answer: URL | Default: `https://example.com` | Required: Yes | Consumer: Stage 4)*
 - **Q32 [Analytics & Tracking]:** Do you have a Google Analytics 4 (GA4) account, and will you supply the Measurement ID env var name (`NEXT_PUBLIC_GA_ID`)?  
-  *(Answer: Choice | Allowed: `ga4`, `none`, `other` | Default: `ga4` | Required: Yes | Consumer: Stage 1, Stage 9)*
+  *(Answer: Choice | Allowed: `ga4`, `none`, `other` | Default: `ga4` | Required: Yes | Consumer: Stage 1, Stage 6)*
 - **Q33 [Legal Entity Details]:** What is your registered legal entity name, jurisdiction, and contact address for Privacy Policy and Terms of Service pages?  
-  *(Answer: Free text | Default: `Draft skeleton with needs-client-input` | Required: Yes | Consumer: Stage 6, Stage 10)*
+  *(Answer: Free text | Default: `Draft skeleton with needs-client-input` | Required: Yes | Consumer: Stage 5, Stage 7)*
 - **Q34 [Languages]:** What languages are needed? (Default is single language `en-US`).  
   *(Answer: Choice / List | Default: `en-US` | Required: Yes | Consumer: Stage 1, Stage 4)*
 
 ### Batch 6: CMS Backend Configuration & Seeding (Conditional: Only if Q5 is `cms`) (6 Questions)
 - **Q35 [CMS Instance Target]:** What is your non-production/staging CMS base URL (env var `SERVER_URL`, e.g. `https://api.nextwebworks.in`)? *Never provide secret credentials.*  
-  *(Answer: URL | Default: `https://api.nextwebworks.in` | Required: Conditional on `cms: cms` | Consumer: Stage 1, Stage 7)*
+  *(Answer: URL | Default: `https://api.nextwebworks.in` | Required: Conditional on `cms: cms` | Consumer: Stage 1, Stage 5)*
 - **Q36 [CMS Site Key Env Var]:** Confirm that you will provide the read-only Bearer token under the environment variable name `CMS_SITE_KEY`. *(Do NOT paste the key here).*  
-  *(Answer: Confirmation | Allowed: `confirmed` | Default: `confirmed` | Required: Conditional on `cms: cms` | Consumer: Stage 1, Stage 7)*
+  *(Answer: Confirmation | Allowed: `confirmed` | Default: `confirmed` | Required: Conditional on `cms: cms` | Consumer: Stage 1, Stage 5)*
 - **Q37 [Revalidate Secret Env Var]:** Confirm that you will configure the webhook secret under `REVALIDATE_SECRET`. *(Do NOT paste the secret here).*  
-  *(Answer: Confirmation | Allowed: `confirmed` | Default: `confirmed` | Required: Conditional on `cms: cms` | Consumer: Stage 1, Stage 7)*
+  *(Answer: Confirmation | Allowed: `confirmed` | Default: `confirmed` | Required: Conditional on `cms: cms` | Consumer: Stage 1, Stage 5)*
 - **Q38 [Initial Blog Seeding Volume]:** How many initial blog posts should be generated and seeded into the CMS (e.g., 3–5 sample posts)?  
-  *(Answer: Number | Default: `3` | Required: Conditional on `cms: cms` | Consumer: Stage 7)*
+  *(Answer: Number | Default: `3` | Required: Conditional on `cms: cms` | Consumer: Stage 5)*
 - **Q39 [Seed Post Publication State]:** Should initial seed posts be created in `published` or `draft` status?  
-  *(Answer: Choice | Allowed: `draft`, `published` | Default: `published` | Required: Conditional on `cms: cms` | Consumer: Stage 7)*
+  *(Answer: Choice | Allowed: `draft`, `published` | Default: `published` | Required: Conditional on `cms: cms` | Consumer: Stage 5)*
 - **Q40 [Form Notifications]:** Confirm you understand form submission notifications are configured directly inside your NWW CMS dashboard settings.  
-  *(Answer: Confirmation | Allowed: `acknowledged` | Default: `acknowledged` | Required: Conditional on `cms: cms` | Consumer: Stage 7)*
+  *(Answer: Confirmation | Allowed: `acknowledged` | Default: `acknowledged` | Required: Conditional on `cms: cms` | Consumer: Stage 5)*
 
 ### Batch 7: Type-Specific Scoping & Governance (Conditional on Q4 & Q6) (5 Questions)
 - **Q41 [Type Deep Dive]:**
@@ -142,16 +142,14 @@ Upon skill activation, the agent must immediately execute this sequence:
   *(Answer: Yes/No + List | Default: `None` | Required: Conditional on Migration | Consumer: Stage 4)*
 - **Q43 [Approval Stakeholder]:** Confirm the sole point of contact for gate sign-offs (Default: Devansh).  
   *(Answer: Free text | Default: `Devansh` | Required: Yes | Consumer: State Machine)*
-- **Q43b [Client Review Format Preference]:** What format do you prefer for reviewing visual design variations, layout blueprints, and page build milestones?  
-  *(Answer: Choice | Allowed: `local-folder` (default: HTML review portal opened locally in your browser), `github-pages` (deployed live static review website) | Default: `local-folder` | Required: Yes | Consumer: Gate 2, Gate 5, Gate 10 review delivery)*
-- **Q43c [Start Real Site in Next.js After Approval]:** Should the workflow start the real site in `site/` in Next.js mode once your Gate 2 design variation is approved?  
-  *(Answer: Choice | Allowed: `yes` (default: builds real Next.js site once in `site/` with manifest for token-efficient downstream stages), `no` (generates HTML layout previews only) | Default: `yes` | Required: Yes | Consumer: Stage 5 Layout Generation)*
+- **Q43b [Client Review Format Preference]:** What format do you prefer for reviewing visual design variations and page build milestones?  
+  *(Answer: Choice | Allowed: `local-folder` (default: HTML review portal opened locally in your browser), `github-pages` (deployed live static review website) | Default: `local-folder` | Required: Yes | Consumer: Gate 2, Gate 6, Gate 7 review delivery)*
 - **Q43d [Codebase Destination Folder]:** Confirm the directory at the project root for the real Next.js application codebase.  
-  *(Answer: Path | Default: `site/` | Required: Yes | Consumer: Stage 5 Scaffolding, Stage 9, Stage 10)*
+  *(Answer: Path | Default: `site/` | Required: Yes | Consumer: Stage 6 Scaffolding, Stage 7)*
 - **Q43e [Project Defaults if Unset]:** If no existing project files, lockfiles, or configs are discovered in the repository, confirm the default language and package manager.  
-  *(Answer: Free text / Choice | Allowed: Language: `javascript` [default] or `typescript`; Package Manager: `pnpm` [default], `npm`, `yarn`, `bun` | Default: `javascript` + `pnpm` | Required: Yes | Consumer: Stage 1 Tech Stack, Stage 5 Scaffolding)*
+  *(Answer: Free text / Choice | Allowed: Language: `javascript` [default] or `typescript`; Package Manager: `pnpm` [default], `npm`, `yarn`, `bun` | Default: `javascript` + `pnpm` | Required: Yes | Consumer: Stage 1 Tech Stack, Stage 6 Scaffolding)*
 - **Q44 [Post-Launch Maintenance]:** Who will maintain the codebase and content post-launch (client team vs agency)?  
-  *(Answer: Choice | Allowed: `client-team`, `agency`, `hybrid` | Default: `agency` | Required: Yes | Consumer: Stage 11 Handover)*
+  *(Answer: Choice | Allowed: `client-team`, `agency`, `hybrid` | Default: `agency` | Required: Yes | Consumer: Stage 8 Handover)*
 - **Q45 [Out-of-Scope Confirmation]:** Confirm out-of-scope items (e.g. custom PHP/WordPress platforms, backend custom microservices, direct database access).  
   *(Answer: Confirmation | Default: `confirmed` | Required: Yes | Consumer: Stage 1)*
 
@@ -227,7 +225,6 @@ After all questionnaire batches are completed, write the compiled answers to `pr
 ## 7. Governance & Launch Constraints
 - **Sole Approver:** [Devansh]
 - **Client Review Format:** [local-folder | github-pages]
-- **Start Real Site in Next.js:** [yes | no]
 - **Codebase Folder:** [site/]
 - **Default Language & PM:** [javascript / pnpm]
 - **Post-Launch Maintenance:** [Agency / Client]
@@ -242,15 +239,15 @@ Every question collected during the intake interview maps to explicit downstream
 
 | Batch | Question IDs | Domain / Focus | Consuming Pipeline Stage(s) | Primary Deliverable Impact |
 |---|---|---|---|---|
-| **Batch 1** | Q1–Q7 | Business Identity, Audience, Primary Action, CMS Mode | Stage 0 (Gate 0), Stage 1, Stage 2, Stage 3, Stage 5, Stage 7 | `client-answers.md`, `tech-stack.md`, CMS routing, page list |
-| **Batch 2** | Q8–Q11 | Brand Assets, Palette Tokens, Typography, Brand Scale | Stage 2, Stage 6, Stage 9 | `design-theory.md` design tokens, `site/AGENTS.md` |
+| **Batch 1** | Q1–Q7 | Business Identity, Audience, Primary Action, CMS Mode | Stage 0 (Gate 0), Stage 1, Stage 2, Stage 3, Stage 5 | `client-answers.md`, `tech-stack.md`, CMS routing, page list |
+| **Batch 2** | Q8–Q11 | Brand Assets, Palette Tokens, Typography, Brand Scale | Stage 2, Stage 5, Stage 6 | `design-theory.md` design tokens, `site/app/globals.css`, `site/AGENTS.md` |
 | **Batch 2** | Q12a–Q12d | References, Liked Principles, Avoids, Variations, Adherence | Stage 2 (Gate 2) | Reference capture, `design-variations.md` matrix, distance audit |
-| **Batch 2** | Q13–Q14 | Disliked Sites, Motion Preference | Stage 2, Stage 9 | `design-theory.md` Avoid list, `lib/motion.js` dual tokens |
-| **Batch 3** | Q15–Q20 | Sitemap, Section Needs, Copywriting, Voice & Tone, Forms | Stage 3, Stage 5, Stage 6, Stage 7 | `page-list.md`, `layout.md`, verbatim `content.md`, form API |
-| **Batch 4** | Q21–Q27 | Primary Photos, Rights, Stock Authorization & Providers | Stage 0 (Gate 0), Stage 6, Stage 9 | `assets.md`, `stock-provenance.json`, `/credits` page |
-| **Batch 5** | Q28–Q34 | SEO Keywords, Geo Focus, Domain, Analytics, Legal | Stage 1, Stage 4, Stage 6, Stage 9 | `seo-strategy.md`, JSON-LD schemas, GA4 integration |
-| **Batch 6** | Q35–Q40 | CMS Target, Site Key, Revalidate Secret, Post Seeding | Stage 1, Stage 7 | `cms-schema.md`, `cms-seed/`, ISR webhook configuration |
-| **Batch 7** | Q41–Q45, Q43b–Q43e | Type Scoping, Migration Redirects, Approver, Review Format, Next.js Mode, Codebase Path, Stack Defaults, Maintenance | Stage 1, Stage 2, Stage 3, Stage 4, Stage 5, Stage 9, Stage 11 | Redirects map, handover docs, review portal delivery, `site/` scaffolding, `site.manifest.json` |
+| **Batch 2** | Q13–Q14 | Disliked Sites, Motion Preference | Stage 2, Stage 5, Stage 6 | `design-theory.md` Avoid list, motion intent, `lib/motion.js` dual tokens |
+| **Batch 3** | Q15–Q20 | Sitemap, Section Needs, Copywriting, Voice & Tone, Forms | Stage 3, Stage 5, Stage 6 | `page-list.md`, `page.md`, form API |
+| **Batch 4** | Q21–Q27 | Primary Photos, Rights, Stock Authorization & Providers | Stage 0 (Gate 0), Stage 5, Stage 6 | `page.md`, `stock-provenance.json`, `/credits` page |
+| **Batch 5** | Q28–Q34 | SEO Keywords, Geo Focus, Domain, Analytics, Legal | Stage 1, Stage 4, Stage 5, Stage 6, Stage 7 | `seo-strategy.md`, JSON-LD schemas, GA4 integration |
+| **Batch 6** | Q35–Q40 | CMS Target, Site Key, Revalidate Secret, Post Seeding | Stage 1, Stage 5 | `cms-schema.md`, `cms-seed/`, ISR webhook configuration |
+| **Batch 7** | Q41–Q45, Q43b, Q43d–Q43e | Type Scoping, Migration Redirects, Approver, Review Format, Codebase Path, Stack Defaults, Maintenance | Stage 1, Stage 2, Stage 3, Stage 4, Stage 6, Stage 7, Stage 8 | Redirects map, handover docs, review portal delivery, `site/` scaffolding, `site.manifest.json` |
 
 ---
 
