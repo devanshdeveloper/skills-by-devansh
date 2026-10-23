@@ -7,7 +7,44 @@ description: Scaffold modern Next.js web applications with App Router, TypeScrip
 
 Guide for AI agents to scaffold, configure, and develop modern Next.js web applications.
 
+---
+
+## Quick Start
+
+### 1. Install
+
+```bash
+npx skills add devanshdeveloper/skills-by-devansh --skill create-nextjs-website
+```
+
+Or run without installing (one-shot):
+
+```bash
+npx skills use devanshdeveloper/skills-by-devansh@create-nextjs-website
+```
+
+### 2. Starter Prompt
+
+Copy and paste into your AI assistant (Antigravity, Cursor, Claude Code, or Codex CLI):
+
+````markdown
+Activate the create-nextjs-website skill and scaffold a new project in the current directory.
+
+Project details:
+- Project Name: [e.g. my-portfolio]
+- Language: [TypeScript or JavaScript]
+- Styling: [e.g. Tailwind CSS / Vanilla CSS / CSS Modules]
+- Package Manager: [npm / pnpm / bun]
+- Pages / Routes needed: [e.g. Home, About, Projects, Contact]
+- Special requirements: [e.g. dark mode toggle, blog via MDX, i18n, auth]
+
+Please scaffold the Next.js App Router project, configure layout and metadata, and verify the dev server starts cleanly.
+````
+
+---
+
 ## When to Use
+
 
 - When the user asks to create or scaffold a new Next.js website or web application.
 - When initializing a project with Next.js App Router, TypeScript, and clean component architecture.

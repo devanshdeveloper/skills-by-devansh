@@ -15,31 +15,125 @@ A collection of agent skills compatible with the [skills.sh](https://skills.sh/)
 
 ## Installation
 
-Install all skills from this repository to your active project or configured agent:
+Install all public skills from this repository in one command:
 
 ```bash
 npx skills add devanshdeveloper/skills-by-devansh
 ```
 
-### Install a Specific Skill
-
-```bash
-npx skills add devanshdeveloper/skills-by-devansh --skill create-nextjs-website
-```
-
-### Preview Skills Without Installing
-
-To list all skills available in this repository without modifying your workspace:
+Preview skills without installing:
 
 ```bash
 npx skills add devanshdeveloper/skills-by-devansh --list
 ```
 
-### Run a Skill Interactively Without Installing
+---
+
+## Skill: `create-nww-website`
+
+End-to-end 9-stage pipeline for building Next.js websites with optional NWW CMS integration.
+
+### Install
+
+```bash
+npx skills add devanshdeveloper/skills-by-devansh --skill create-nww-website
+```
+
+Or run without installing (one-shot):
+
+```bash
+npx skills use devanshdeveloper/skills-by-devansh@create-nww-website
+```
+
+### Starter Prompt
+
+Copy and paste into your AI assistant (Antigravity, Cursor, Claude Code, or Codex CLI):
+
+````markdown
+Activate the create-nww-website skill. Here is our project brief to initialize Stage 0 Intake:
+
+## 1. Project Identity & Purpose
+- Business / Brand Name: [e.g. Minit Charger]
+- Core Offering: [e.g. Turnkey Level 3 DC fast charging infrastructure for commercial transit and electric bus fleets.]
+- Target Audience: [e.g. Municipal transit directors, commercial depot operators, fleet logistics managers]
+- Primary Conversion Action: [e.g. Schedule Feasibility Study / Book a Consultation]
+- Website Type: [e.g. Business/Corporate]
+- CMS Mode: [Choose: "cms" (dynamic blog, lead capture, page configs) or "none" (100% static)]
+- Build Origin: [Choose: "scratch" or "migration"]
+- Target Launch Timeline: [e.g. 4 weeks]
+
+## 2. Branding & Design Direction
+- Brand Colors: [e.g. Primary: #0A192F, Accent: #00E5FF, Neutral: #F8FAFC]
+- Typography: [e.g. Headings: Plus Jakarta Sans, Body: Inter]
+- Design Personality: [e.g. Modern, technical authority, clean spatial grids, high trust]
+- Motion Preference: [Choose: "subtle-gsap" or "static-only"]
+- Design References:
+  - https://stripe.com (spatial grid, typography hierarchy)
+  - https://linear.app (sleek dark accents, micro-interactions)
+
+## 3. Scope & Pages
+- Core Pages: [e.g. Home, Solutions, About, Blog, Contact]
+- Forms Needed: [e.g. Lead capture & consultation request]
+- Imagery: [e.g. Licensed stock (Pixabay / Unsplash) + client diagrams]
+
+Please parse this into `project-docs/client-answers.md` and present the Gate 0 Intake Recap for confirmation.
+````
+
+---
+
+## Skill: `create-nextjs-website`
+
+Scaffold a modern Next.js project with App Router, TypeScript, and clean component architecture.
+
+### Install
+
+```bash
+npx skills add devanshdeveloper/skills-by-devansh --skill create-nextjs-website
+```
+
+Or run without installing (one-shot):
 
 ```bash
 npx skills use devanshdeveloper/skills-by-devansh@create-nextjs-website
 ```
+
+### Starter Prompt
+
+````markdown
+Activate the create-nextjs-website skill and scaffold a new project in the current directory.
+
+Project details:
+- Project Name: [e.g. my-portfolio]
+- Language: [TypeScript or JavaScript]
+- Styling: [e.g. Tailwind CSS / Vanilla CSS / CSS Modules]
+- Package Manager: [npm / pnpm / bun]
+- Pages / Routes needed: [e.g. Home, About, Projects, Contact]
+- Special requirements: [e.g. dark mode toggle, blog via MDX, i18n, auth]
+
+Please scaffold the Next.js App Router project, configure layout and metadata, and verify the dev server starts cleanly.
+````
+
+---
+
+## Skill: `nww`
+
+Fast shortcut alias — activates the `create-nww-website` pipeline in one word.
+
+### Install
+
+```bash
+npx skills add devanshdeveloper/skills-by-devansh --skill nww
+```
+
+### Starter Prompt
+
+```text
+nww
+```
+
+> The agent activates `create-nww-website` immediately. Type `nww` to begin the intake interview, or `nww` followed by your brief to fast-track Gate 0.
+
+---
 
 ## How It Works with skills.sh
 

@@ -9,6 +9,58 @@ This skill orchestrates the end-to-end creation of production-grade Next.js App 
 
 ---
 
+## Quick Start
+
+### 1. Install
+
+```bash
+npx skills add devanshdeveloper/skills-by-devansh --skill create-nww-website
+```
+
+Or run without installing (one-shot):
+
+```bash
+npx skills use devanshdeveloper/skills-by-devansh@create-nww-website
+```
+
+### 2. Starter Prompt
+
+Copy and paste into your AI assistant (Antigravity, Cursor, Claude Code, or Codex CLI) to fast-track Gate 0:
+
+````markdown
+Activate the create-nww-website skill. Here is our project brief to initialize Stage 0 Intake:
+
+## 1. Project Identity & Purpose
+- Business / Brand Name: [e.g. Minit Charger]
+- Core Offering: [e.g. Turnkey Level 3 DC fast charging infrastructure for commercial transit and electric bus fleets.]
+- Target Audience: [e.g. Municipal transit directors, commercial depot operators, fleet logistics managers]
+- Primary Conversion Action: [e.g. Schedule Feasibility Study / Book a Consultation]
+- Website Type: [e.g. Business/Corporate]
+- CMS Mode: [Choose: "cms" (dynamic blog, lead capture, page configs) or "none" (100% static Next.js)]
+- Build Origin: [Choose: "scratch" or "migration"]
+- Target Launch Timeline: [e.g. 4 weeks]
+
+## 2. Branding & Design Direction
+- Brand Colors: [e.g. Primary: #0A192F, Accent: #00E5FF, Neutral: #F8FAFC]
+- Typography: [e.g. Headings: Plus Jakarta Sans, Body: Inter]
+- Design Personality: [e.g. Modern, technical authority, clean spatial grids, high trust]
+- Motion Preference: [Choose: "subtle-gsap" or "static-only"]
+- Design References:
+  - https://stripe.com (spatial grid, typography hierarchy)
+  - https://linear.app (sleek dark accents, micro-interactions)
+
+## 3. Scope & Pages
+- Core Pages: [e.g. Home, Solutions, About, Blog, Contact]
+- Forms Needed: [e.g. Lead capture & consultation request]
+- Imagery: [e.g. Licensed stock (Pixabay / Unsplash) + client diagrams]
+
+Please parse this into `project-docs/client-answers.md` and present the Gate 0 Intake Recap for confirmation.
+````
+
+> **Tip:** If you prefer a guided interview, just type `nww` and the agent will walk you through each batch (5–7 questions per turn) interactively.
+
+---
+
 ## Mandatory Start-Up Rule (Activation Protocol)
 
 **ON ACTIVATION, IMMEDIATELY EXECUTE THIS START-UP PROTOCOL BEFORE ANY OTHER WORK:**

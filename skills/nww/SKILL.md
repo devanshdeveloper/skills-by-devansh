@@ -7,7 +7,30 @@ description: Fast shortcut alias to start the NWW website pipeline. Use when the
 
 This skill is a lightweight alias for `create-nww-website`.
 
+---
+
+## Quick Start
+
+### 1. Install
+
+```bash
+npx skills add devanshdeveloper/skills-by-devansh --skill nww
+```
+
+### 2. Starter Prompt
+
+```text
+nww
+```
+
+> The agent immediately activates the `create-nww-website` pipeline. You can also fast-track Gate 0 by typing `nww` followed by your project brief — the skill will extract all known answers in one pass.
+>
+> For a complete brief template, see the [`create-nww-website` Quick Start](../create-nww-website/SKILL.md#quick-start).
+
+---
+
 ## When to Use
+
 
 - When the user runs `/nww` or enters shortcut trigger phrases such as `"nww"` or `"start nww"`.
 - When quick activation of the Next Web Website (NWW) site creation pipeline is requested.

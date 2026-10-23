@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.8.0] - 2026-10-23
+## [1.8.1] - 2026-10-23
+
+### Added
+- **`## Quick Start` Sections in All SKILL.md Files**: Each public skill (`create-nww-website`, `create-nextjs-website`, `nww`) now contains a self-contained `## Quick Start` section with install command, one-shot run command, and a copy-paste starter prompt for immediate use in Antigravity, Cursor, Claude Code, or Codex CLI.
+- **Per-Skill Install + Starter Prompt Sections in Root README**: Replaced the generic `## Installation` block with dedicated `## Skill: <name>` subsections, each containing install command, one-shot run command, and a ready-to-use starter prompt template.
+
+
 
 ### Added
 - **CMS Seeding Engine (`scripts/cms-seed/index.js`)**: Production-grade companion CLI and exportable client helper for automated NWW CMS blog seeding. Supports verified backend contracts (`POST /api/blog/create-one`, `POST /api/blog/generate-slug`), automatic Mongoose strict mode `metadata` mapping, and `--auto-slug` conflict resolution.
