@@ -280,4 +280,77 @@ Before clearing Gate 0 and advancing to Stage 1 Tech Stack:
 - [ ] If migration, legacy site crawled into `previous-site/` and content carry-forward choices documented in `client-context/answers/batch-06-legacy-site-migration/answers.md`.
 - [ ] Root `.env.example` created with credential placeholders for external connections.
 - [ ] Client milestone email preference confirmed.
+- [ ] `client-context/open-questions.md` created with at least 20 targeted open questions for continuous client discovery.
 - [ ] Explicit human sign-off obtained for Gate 0.
+
+---
+
+## 8. Gate 0 Takeoff: The 20 Rolling Open Questions Protocol (`client-context/open-questions.md`)
+
+When Gate 0 is ready for takeoff (i.e. all initial 7 discovery batches have been processed and confirmed, and the agent prepares Gate 0 sign-off / transition to Stage 1 Tech Stack), the agent **MUST** initialize and maintain:
+
+```text
+client-context/open-questions.md
+```
+
+### Purpose & Continuous Discovery Loop
+Client discovery is not a static gate that closes forever; it is a **continuous, asynchronous refinement loop**.
+1. **Never Halts Pipeline Momentum:** The pipeline advances sequentially through Stages 1 to 8 without waiting for open questions to be answered.
+2. **Rolling Queue of >= 20 Questions:** The file must maintain **at least 20 active, high-value open questions** at all times.
+3. **Dynamic Removal & Replenishment:**
+   - When the client provides an answer to a question in `open-questions.md`:
+     1. **Remove:** Delete the answered question from `client-context/open-questions.md`.
+     2. **Persist:** Record the question and answer in the matching modular batch file (`client-context/answers/batch-[number]-[batch-name]/answers.md`) or `client-context/asset-manifest.md`.
+     3. **Replenish:** Formulate and add a new targeted open question into `open-questions.md` so the active pool remains at **>= 20 questions**.
+4. **Immediate Action on Code & Downstream Specs:**
+   - **If the Next.js site is already generated (`site/app/...`, `site/components/...`, `site/content/...`):** The agent **immediately implements the answer directly in the generated code**—updating React components, page copy, layout system, theme tokens, metadata, or CMS data.
+   - **If before site generation:** The agent updates the respective planning specification (`layout-system.md`, `page-specs/`, `seo-strategy.md`).
+   - If the answer impacts a milestone decision, record the update in `project-docs/router-state.md` and offer a milestone update to the client.
+
+### Standard 20 Takeoff Open Questions Template
+
+When generating `client-context/open-questions.md` at Gate 0 takeoff, seed it with at least 20 project-specific questions modeled on these categories:
+
+```markdown
+# Client Open Questions (Rolling Queue)
+
+> **Instructions for Client & Team:**  
+> This document tracks ongoing, high-value questions to refine copywriting, visual assets, conversion details, and integrations.  
+> Whenever an answer is provided, the question is removed, the answer is codified into the respective batch answers file and live site code, and a new question is added to keep the refinement queue active (minimum 20 open questions).
+
+---
+
+### Batch 01: Core Identity & Narrative Hooks
+1. **[Q-01] Founder Narrative Hook:** What is the authentic founder quote, story, or "aha moment" to feature prominently in the About or Hero section?
+2. **[Q-02] Core Competitive Differentiator:** What is the single biggest reason clients choose you over your closest direct competitor?
+3. **[Q-03] Primary Conversion Outcome:** What exact user action defines a successful visit (e.g. booked calendar call, Stripe checkout, newsletter signup, enterprise inquiry form)?
+
+### Batch 02: Branding & Micro-Interactions
+4. **[Q-04] Primary CTA Hover Dynamics:** What micro-interaction behavior do you prefer for primary buttons (e.g. magnetic cursor pull, subtle color inversion, glowing border, scale lift)?
+5. **[Q-05] Dark / Light Mode Policy:** Should the website feature a user-switchable theme toggle, or remain permanently locked to your primary brand theme?
+6. **[Q-06] Custom Typography Licenses:** Are there licensed proprietary web font files (`.woff2`) to include, or should we use optimized Google Font pairings?
+
+### Batch 03: Route Sitemap & Verbatim Copy
+7. **[Q-07] Verified Client Testimonials:** Can you provide 2–3 authentic customer quotes with full names, professional titles, and company names?
+8. **[Q-08] Case Study Quantifiable Metrics:** What specific quantifiable results or data points can we highlight (e.g. "+140% organic reach", "Saved 25 hrs/week")?
+9. **[Q-09] Header Navigation Priority:** Exactly which 4–6 links should be visible in the desktop navbar, and should the header remain sticky with blur backdrop?
+10. **[Q-10] Footer Legal Disclaimers & Entities:** What exact legal company name, registration number, and copyright notice belong in the global footer?
+
+### Batch 04: Visual Asset Manifest & Media
+11. **[Q-11] Vector Brand Logos (SVG):** Can you provide high-resolution SVG or transparent PNG logos for both light and dark backgrounds?
+12. **[Q-12] Team Headshots & Photography:** Are authentic team headshots available, or should neutral minimalist vector illustrations be generated?
+13. **[Q-13] Trust Banner Partner Logos:** Can you provide 4–8 monochrome or color SVG logos of clients, partners, or press outlets for social proof?
+14. **[Q-14] Product / Service Visuals:** Do you have high-res UI screenshots, photography, or mockups ready for your featured deliverables?
+
+### Batch 05: Type-Specific Features & Integrations
+15. **[Q-15] Third-Party Scheduling / Form Links:** What is your exact scheduling link (e.g. Calendly, Cal.com) or external form endpoint URL?
+16. **[Q-16] Pricing Tiers & Billing Nuances:** What are the exact tier names, pricing numbers, feature bullet points, and monthly/annual toggle discount percentages?
+17. **[Q-17] Lead Capture Form Fields:** Exactly which fields are mandatory on contact forms (e.g. Name, Business Email, Company, Phone, Project Budget Range)?
+
+### Batch 06: Legacy Content Migration (If Applicable)
+18. **[Q-18] High-Traffic Legacy Content:** Are there specific historical blog posts, articles, or resources that receive organic search traffic and must be migrated verbatim?
+19. **[Q-19] Deprecated Pages & 301 Target:** Are there legacy pages or retired service offerings that should 301 redirect directly to the home page or a specific new service page?
+
+### Batch 07: Technical SEO, Domain & Analytics
+20. **[Q-20] Production Domain & DNS Access:** What is your verified production domain (`https://...`), and do you have access to DNS management (Cloudflare, GoDaddy, Namecheap) for Vercel SSL verification?
+```

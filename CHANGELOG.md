@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.5] - 2026-10-25
+
+### Added
+- **Gate 0 Takeoff Rolling Open Questions Protocol (`client-context/open-questions.md`)**: Engineered an asynchronous continuous discovery loop activated upon Gate 0 takeoff. Maintains a rolling queue of at least 20 targeted, granular open questions for the client:
+  - As answers are received, the answered question is removed, logged to its appropriate batch answer file (`client-context/answers/batch-*/answers.md`), and replenished with a new targeted open question (sustaining >= 20 questions).
+  - **Downstream Action Engine**: Answers are immediately acted upon in the live Next.js codebase (updating React components, page copy, layout system, theme tokens, metadata, or CMS seed data) even if the site is already scaffolded and built, ensuring continuous client refinement without halting pipeline momentum.
+- **Companion Script Audit Updates**: Updated `scripts/client-intake/index.js` and `scripts/structure-audit/index.js` to inspect and audit `client-context/open-questions.md` for queue health (>= 20 questions).
+
 ## [1.9.4] - 2026-10-25
 
 ### Added

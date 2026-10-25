@@ -55,9 +55,10 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
   3. If site migration (`build_origin: migration`), crawl and archive the existing website into `previous-site/` BEFORE Gate 1 (crawling all routes, screenshots, stripped markdown, full HTML, and `sitemap-legacy.xml`). Execute: `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --mode migration`. This capture must occur in Stage 0 so that existing routes, redirects, copywriting, and media are documented before technical planning begins.
   4. Execute visual asset audit, legacy asset harvesting, and per-entity asset intake to compile `client-context/asset-manifest.md`.
   5. Generate root `.env.example` with credential placeholders for external connections (SEO tools, client email sending).
+  6. When Gate 0 is ready for takeoff, generate `client-context/open-questions.md` containing at least 20 targeted, granular open questions for continuous client discovery.
 - **Inputs:** User prompt notes, `client-context/` files, legacy site crawl (`previous-site/`), or interactive questionnaire responses.
-- **Outputs:** `client-context/answers/batch-*/answers.md`, `client-context/asset-manifest.md`, `.env.example`, and `previous-site/` (if migration, crawled before Gate 1).
-- **Gate 0:** Human reviews and confirms the intake summary across modular batch answers, asset readiness manifest, confirmed project slug, and CMS mode selection (`none` or `cms`). The agent records human sign-off in `project-docs/router-state.md` (`Gate 0: Intake Confirmed`).
+- **Outputs:** `client-context/answers/batch-*/answers.md`, `client-context/asset-manifest.md`, `client-context/open-questions.md` (rolling queue of >= 20 open questions), `.env.example`, and `previous-site/` (if migration, crawled before Gate 1).
+- **Gate 0:** Human reviews and confirms the intake summary across modular batch answers, asset readiness manifest, initial rolling open questions, confirmed project slug, and CMS mode selection (`none` or `cms`). The agent records human sign-off in `project-docs/router-state.md` (`Gate 0: Intake Confirmed`).
 
 ### Stage 1: Tech Stack Specification
 - **Goal:** Author `project-docs/client-review/gate-1-tech-stack/tech-stack.md` defining the stack, pre-filling defaults and asking only about deviations. Stack is Next.js App Router, Tailwind CSS, JavaScript-only (`.js`, `.jsx`), `pnpm`, container standalone output, Lucide icons, GSAP (omitted if `motion: disabled`), and image mode `pre-optimized`.
@@ -163,8 +164,9 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 4. **Client Notification Prompt:** At every gate sign-off, ask the user: *"Would you like to notify the client for this milestone? Run `node scripts/client-notify/index.js` to preview and send upon approval."*
 5. **Always Public Deployments for Client:** All links sent to the client (Gate 2 variations via GitHub Pages, Next.js site via Vercel) MUST be public HTTPS deployments. Never forward localhost URLs to the client.
 6. **In-Place Revisions Discipline:** If a client requests revisions at any gate, do NOT create an extra markdown file (e.g. no `theory-revisions.md`). Make modifications directly to the existing deliverable document. If an important client requirement note needs to be recorded, create `client-requirements/` folder and place the note there.
-7. **Client Context Folder:** Store all client-provided materials, briefs, and inputs in `client-context/` (e.g. `client-context/answers/batch-[number]-[batch-name]/answers.md` and `client-context/asset-manifest.md`).
+7. **Client Context Folder:** Store all client-provided materials, briefs, and inputs in `client-context/` (e.g. `client-context/answers/batch-[number]-[batch-name]/answers.md`, `client-context/asset-manifest.md`, and `client-context/open-questions.md`).
 8. **Client Review Gate Rule (Markdown is Internal):** No client-facing gate ever asks the client to open, read, or approve raw `.md` files. Every client review gate (Gates 0, 2, 3, 5, 6, 7a, 8b) presents HTML previews, live public URLs, or plain-language summaries. All `.md` files are strictly internal developer artifacts.
+9. **Continuous Discovery Loop & Rolling Open Questions (`client-context/open-questions.md`):** At Gate 0 takeoff, generate `client-context/open-questions.md` with at least 20 targeted open questions across batches. Maintain this rolling queue: when answers arrive at any downstream stage (even after `site/` has been scaffolded and constructed), the agent immediately removes the answered question, logs the answer to the appropriate batch file, adds a new question to keep the queue at >= 20, and **immediately implements the answer in the live site code and component specs**.
 
 ---
 
@@ -185,6 +187,7 @@ Every client website project created through this pipeline must strictly follow 
 │   │   ├── batch-06-legacy-site-migration/answers.md   # [Conditional if legacy site exists]
 │   │   └── batch-07-seo-analytics-governance/answers.md
 │   ├── asset-manifest.md                 # Complete visual asset inventory, harvesting & generation manifest
+│   ├── open-questions.md                 # [Gate 0 Takeoff] Rolling queue of >= 20 open questions for continuous discovery
 │   ├── branding/                         # Client logos (SVG/PNG), brand guidelines, color palettes
 │   ├── uploads/                          # Client-provided images, team headshots, PDFs, brochures
 │   └── notes/                            # Raw notes, transcripts, or initial requirements from client

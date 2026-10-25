@@ -67,6 +67,7 @@ When an agent executes the `create-nww-website` or `nww` pipeline to develop a w
 ├── client-context/                       # All raw client inputs, brand assets, discovery questionnaires
 │   ├── answers/                          # Modular batch discovery & intake answers (batch-01 to batch-07)
 │   ├── asset-manifest.md                 # Complete visual asset inventory, harvesting & generation manifest
+│   ├── open-questions.md                 # Rolling pool of >= 20 open questions for continuous client discovery
 │   ├── branding/                         # Brand logos, color guides, visual assets
 │   ├── uploads/                          # Client-provided images, headshots, brochures
 │   └── notes/                            # Raw notes, transcripts, or initial requirements

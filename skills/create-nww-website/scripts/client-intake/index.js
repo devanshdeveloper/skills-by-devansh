@@ -111,6 +111,23 @@ async function main() {
       process.exit(1);
     }
   }
+
+  // Audit rolling open questions pool (client-context/open-questions.md)
+  const openQuestionsPath = path.join(projectRoot, 'client-context', 'open-questions.md');
+  console.log(`\nAuditing rolling open questions: ${openQuestionsPath}`);
+  if (fs.existsSync(openQuestionsPath)) {
+    const text = fs.readFileSync(openQuestionsPath, 'utf-8');
+    const questionMatches = text.match(/(?:^|\n)\s*(?:###\s*Q|\d+\.|\-\s*\[\s*\]|\-\s*\*\*Q)/gi) || [];
+    const count = questionMatches.length;
+    console.log(`[STATUS] Open questions queue active: ${count} question(s) documented.`);
+    if (count < 20) {
+      console.log(`  [NOTE] Queue has ${count} questions (target: at least 20 open questions for continuous discovery).`);
+    } else {
+      console.log(`  [COMPLETE] Healthy open questions queue (>= 20 questions).`);
+    }
+  } else {
+    console.log('[PENDING] No open-questions.md found. Required at Gate 0 takeoff before proceeding to Stage 1.');
+  }
 }
 
 main().catch((err) => {

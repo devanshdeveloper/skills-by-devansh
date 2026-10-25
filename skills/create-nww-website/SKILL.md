@@ -115,7 +115,7 @@ The workflow proceeds strictly one stage at a time. Every stage requires explici
 
 | Stage | Name | Key Deliverables | Gate Approval | Reference Guide |
 |:---:|:---|:---|:---|:---|
-| **0** | **Intake Check** | `client-context/answers/batch-*/answers.md`, `client-context/asset-manifest.md`, `.env.example`, `previous-site/` (if migration, crawled before Gate 1) | **Gate 0:** Intake recap across batch answers, asset manifest & CMS mode confirmation | [gate-0-intake/SKILL.md](references/gate-0-intake/SKILL.md), [client-questionnaire.md](references/gate-0-intake/client-questionnaire.md) |
+| **0** | **Intake Check** | `client-context/answers/batch-*/answers.md`, `client-context/asset-manifest.md`, `client-context/open-questions.md` (>= 20 questions), `.env.example`, `previous-site/` (if migration, crawled before Gate 1) | **Gate 0:** Intake recap across batch answers, asset manifest, open questions & CMS mode confirmation | [gate-0-intake/SKILL.md](references/gate-0-intake/SKILL.md), [client-questionnaire.md](references/gate-0-intake/client-questionnaire.md) |
 | **1** | **Tech Stack** | `project-docs/client-review/gate-1-tech-stack/tech-stack.md` | **Gate 1:** Tech stack sign-off (Internal Developer Gate) | [gate-1-tech-stack/SKILL.md](references/gate-1-tech-stack/SKILL.md) |
 | **2** | **Design Theory & Variations** | `project-docs/client-review/gate-2-design-theory/design-theory.md`, variation HTML files (HTML + Tailwind + jQuery), `gate-2-design-theory/index.html` review hub | **Gate 2:** Client visual review & variation selection sign-off (via live public deployment) | [gate-2-design-theory/SKILL.md](references/gate-2-design-theory/SKILL.md), [design-variations.md](references/gate-2-design-theory/design-variations.md) |
 | **3** | **Page List & Sitemap** | `project-docs/client-review/gate-3-page-list/page-list.md` (zero unstated markdowns) | **Gate 3:** Sitemap & route structure sign-off | [gate-3-page-list/SKILL.md](references/gate-3-page-list/SKILL.md) |
@@ -135,6 +135,7 @@ The workflow proceeds strictly one stage at a time. Every stage requires explici
 4. **Public Deployments for Client:** All links sent to the client (Gate 2 variations via GitHub Pages, Next.js site via Vercel) MUST be public HTTPS deployments. Never forward localhost URLs to the client.
 5. **Master Checklist:** Track page completion solely in `project-docs/client-review/gate-3-page-list/page-list.md` checkboxes (`- [x] Page Name`).
 6. **Client Milestone Notifications:** At every stage completion and gate sign-off, ask the user if they wish to dispatch an email notification to the client. Run `node scripts/client-notify/index.js` to preview the draft. The script enforces explicit user approval before sending and logs the event to `project-docs/router-state.md`.
+7. **Continuous Discovery Loop & Rolling Open Questions (`client-context/open-questions.md`):** At Gate 0 takeoff, generate `client-context/open-questions.md` with at least 20 targeted open questions across batches. Maintain this rolling queue: when answers arrive at any downstream stage (even after `site/` has been scaffolded and constructed), the agent immediately removes the answered question, logs the answer to the appropriate batch file, adds a new question to keep the queue at >= 20, and **immediately implements the answer in the live site code and component specs**.
 
 ---
 
@@ -155,6 +156,7 @@ All client projects developed through this pipeline strictly adhere to the follo
 │   │   ├── batch-06-legacy-site-migration/answers.md (if migration)
 │   │   └── batch-07-seo-analytics-governance/answers.md
 │   ├── asset-manifest.md                 # Visual asset inventory, provenance & status
+│   ├── open-questions.md                 # [Gate 0 Takeoff] Rolling queue of >= 20 open questions for continuous discovery
 │   ├── branding/                         # Client logos (SVG/PNG), brand guidelines, color palettes
 │   ├── uploads/                          # Client-provided images, team headshots, PDFs, brochures
 │   └── notes/                            # Raw notes, transcripts, or initial requirements from client

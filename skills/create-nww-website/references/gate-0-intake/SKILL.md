@@ -99,6 +99,7 @@ REVALIDATION_SECRET=reval_token_xyz
 Before requesting Gate 0 approval, verify that all required assets exist:
 - [ ] `client-context/answers/batch-*/answers.md`: Documented answers to each intake batch with confirmed project slug.
 - [ ] `client-context/asset-manifest.md`: Audited inventory of legacy, per-entity, stock, and generated assets.
+- [ ] `client-context/open-questions.md`: Seeded with at least 20 targeted open questions for continuous client discovery.
 - [ ] `project-docs/client-brief.md`: Structured project brief synthesizing goals, target audience, and brand voice.
 - [ ] `project-docs/router-state.md`: Initialized stage tracker (`stage: 0`, `gate_0: pending`).
 - [ ] `previous-site/`: Crawled legacy site assets (if migration).
@@ -106,12 +107,27 @@ Before requesting Gate 0 approval, verify that all required assets exist:
 
 ---
 
-## Gate 0 Approval Protocol
+## Gate 0 Approval & Takeoff Protocol
 
 1. Present the project brief, asset manifest summary, selected CMS mode, and motion tier to the user/client.
-2. Halt execution and explicitly prompt:
-   > *"Stage 0 Intake is complete. Please review the confirmed batch answers (`client-context/answers/batch-*/answers.md`), asset manifest (`client-context/asset-manifest.md`), confirmed CMS mode, and motion tier. Respond with 'approved' to proceed to Stage 1 (Tech Stack)."*
-3. Update `project-docs/router-state.md` upon explicit confirmation.
+2. Initialize `client-context/open-questions.md` with at least 20 targeted, granular open questions spanning copywriting, assets, conversion, integrations, and technical domain requirements.
+3. Halt execution and explicitly prompt:
+   > *"Stage 0 Intake is complete. Please review the confirmed batch answers (`client-context/answers/batch-*/answers.md`), asset manifest (`client-context/asset-manifest.md`), initial rolling open questions (`client-context/open-questions.md`), confirmed CMS mode, and motion tier. Respond with 'approved' to proceed to Stage 1 (Tech Stack)."*
+4. Update `project-docs/router-state.md` upon explicit confirmation (`Gate 0: Intake Confirmed`).
+
+---
+
+## Continuous Discovery Loop Across Downstream Stages & Live Code
+
+Client discovery does not end at Gate 0:
+1. **Never Halts Pipeline Momentum:** The pipeline advances through Stages 1 to 8 without waiting for answers.
+2. **Rolling Queue:** When the client provides answers:
+   - Remove the answered question from `client-context/open-questions.md`.
+   - Record the answer in the respective `client-context/answers/batch-*/answers.md` file (or `client-context/asset-manifest.md`).
+   - Add a new targeted question into `client-context/open-questions.md` to keep the active queue at **>= 20 questions**.
+3. **Immediate Action on Code & Specs:**
+   - **If the Next.js site is already generated (`site/`):** Immediately implement the answer in the codebase (updating components, page copy, layout system, theme tokens, metadata, or CMS seed data).
+   - **If before site generation:** Update the relevant stage specifications (`layout-system.md`, `page-specs/`, `seo-strategy.md`).
 
 ---
 
