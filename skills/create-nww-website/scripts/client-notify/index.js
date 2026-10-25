@@ -60,7 +60,9 @@ function parseRouterState() {
 }
 
 function parseClientDetails() {
-  const answersPath = path.join(projDocs, 'client-answers.md');
+  const primaryPath = path.join(projectRoot, 'client-context', 'client-answers.md');
+  const fallbackPath = path.join(projDocs, 'client-answers.md');
+  const answersPath = fs.existsSync(primaryPath) ? primaryPath : fallbackPath;
   if (!fs.existsSync(answersPath)) {
     return { name: 'Client', email: '', company: '' };
   }
@@ -130,7 +132,7 @@ function getStageTemplate(stage, context) {
       name: 'Intake Check & Scope Confirmation',
       subject: `[${projectName}] Milestone Review: Intake Brief & CMS Scope Ready`,
       action: 'Confirm the intake answers and CMS mode so technical architecture can begin.',
-      deliverable: 'Project Discovery Brief & Scope Summary',
+      deliverable: 'client-context/client-answers.md',
       summary: `We have codified your discovery answers, branding preferences, reference sites, and CMS scope into the initial Project Brief. Please review the scope details to ensure full alignment before we generate the technical architecture.`
     },
     1: {
@@ -138,7 +140,7 @@ function getStageTemplate(stage, context) {
       name: 'Tech Stack Specification',
       subject: `[${projectName}] Milestone Review: Tech Stack & System Architecture`,
       action: 'Review and approve the technology stack, framework conventions, and rendering strategy.',
-      deliverable: 'project-docs/tech-stack.md',
+      deliverable: 'project-docs/client-review/gate-1-tech-stack/tech-stack.md',
       summary: `The core technology stack has been defined—including Next.js App Router, Tailwind CSS semantic tokens, motion libraries, and hosting specifications. Please confirm this architecture before we move to visual design theory.`
     },
     2: {
@@ -156,7 +158,7 @@ function getStageTemplate(stage, context) {
       name: 'Page List & Sitemap',
       subject: `[${projectName}] Milestone Review: Route Hierarchy & Sitemap Scope`,
       action: 'Review and approve the complete sitemap, route list, and page types.',
-      deliverable: reviewUrl ? `${reviewUrl} (Sitemap Section)` : 'project-docs/client-review/index.html',
+      deliverable: reviewUrl ? `${reviewUrl} (Sitemap Section)` : 'project-docs/client-review/gate-3-page-list/page-list.md',
       summary: `We have finalized the complete route hierarchy and master page inventory. Please confirm the pages and URLs before we lock the SEO strategy.`
     },
     4: {
@@ -164,7 +166,7 @@ function getStageTemplate(stage, context) {
       name: 'SEO Strategy & Structured Data',
       subject: `[${projectName}] Milestone Review: SEO Keywords & JSON-LD Schemas`,
       action: 'Approve the keyword mapping, meta title/description rules, and structured data.',
-      deliverable: 'project-docs/seo-strategy.md',
+      deliverable: 'project-docs/client-review/gate-4-seo-strategy/seo-strategy.md',
       summary: `The SEO architecture has been established—covering unique meta tags per route, OpenGraph preview cards, search indexing rules, and rich JSON-LD schemas.`
     },
     5: {
@@ -172,7 +174,7 @@ function getStageTemplate(stage, context) {
       name: 'Page Specifications & CMS Schema',
       subject: `[${projectName}] Milestone Review: Page Specifications & CMS Schema`,
       action: 'Approve the section flow, responsive layout blueprints, verbatim copywriting, media asset slots, and CMS schema (if enabled).',
-      deliverable: 'page-specs/<slug>/page.md & project-docs/cms-schema.md',
+      deliverable: 'project-docs/client-review/gate-5-page-specs/ & gate-5-cms-schema/cms-schema.md',
       summary: `Every page has been specified in comprehensive markdown documents combining responsive layout blueprints, authentic verbatim copywriting, and media asset slots. When CMS integration is active, backend schemas, field definitions, and seed content are fully specified. Please review the deliverables.`
     },
     6: {
@@ -180,15 +182,15 @@ function getStageTemplate(stage, context) {
       name: 'Codebase Scaffolding, Foundation Build & Landing Page Showcase',
       subject: `[${projectName}] Milestone Review: Scaffolding, Foundation Shell & Landing Page Showcase`,
       action: 'Preview the interactive Landing Page showcase, review the Next.js foundation shell, and approve before sub-page construction.',
-      deliverable: 'site/ directory & Landing Page Showcase at http://localhost:3000',
-      summary: `The Next.js App Router codebase has been scaffolded in site/ with the complete foundation shell (navigation, footer, theme tokens, motion setup, optimized assets) and the master page checklist. In addition, the Landing Page (Home) is fully constructed and styled with interactive sections, ready for your showcase review.`
+      deliverable: reviewUrl || 'Public Showcase URL (e.g. GitHub Pages preview)',
+      summary: `The Next.js App Router codebase has been scaffolded in site/ with the complete foundation shell (navigation, footer, theme tokens, motion setup, optimized assets) and the master page checklist. In addition, the Landing Page (Home) is fully constructed, deployed to a public review URL, and ready for your showcase review.`
     },
     7: {
       gate: 'Gate 7',
       name: 'Sub-Page Build Loop',
       subject: `[${projectName}] Milestone Review: Sub-Page Build Preview & Acceptance QA`,
       action: 'Preview the interactive sub-pages and provide feedback or sign-off.',
-      deliverable: 'site/app routes',
+      deliverable: reviewUrl || 'site/app routes',
       summary: `The remaining sub-pages have been constructed one by one with full animations, responsive layouts, and CMS integrations, passing all static checklist items and binary QA.`
     },
     8: {
@@ -196,7 +198,7 @@ function getStageTemplate(stage, context) {
       name: 'Final Verification & Handover',
       subject: `[${projectName}] Final Milestone: Production Verification & Handover`,
       action: 'Complete final sign-off, verify live production deployment, and receive handover assets.',
-      deliverable: 'project-docs/structure-audit.md & Production URL',
+      deliverable: 'project-docs/client-review/gate-8-final-verification/structure-audit.md & Production URL',
       summary: `All cross-page audits, performance scores, accessibility checks, and production deployments are complete. Your website is ready for handover.`
     }
   };
@@ -318,6 +320,10 @@ async function run() {
   const clientName = flags.client || clientInfo.name;
   let recipient = flags.to || clientInfo.email;
   const reviewUrl = flags.link || routerInfo.liveUrl || null;
+  if (reviewUrl && (reviewUrl.includes('localhost') || reviewUrl.includes('127.0.0.1'))) {
+    console.warn('\n[WARNING] Review URL points to localhost/127.0.0.1. Clients cannot access localhost!');
+    console.warn('Deploy variations or showcases to a public URL (e.g. GitHub Pages preview) before sending to client.\n');
+  }
 
   const context = {
     projectName: routerInfo.projectName,

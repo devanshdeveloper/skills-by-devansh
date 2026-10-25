@@ -1,6 +1,6 @@
 # Client Discovery Questionnaire & Site Brief Specification
 
-**Read this reference when:** The skill is activated and needs to execute the intake interview, resume an existing brief, prefill from user notes, or format `project-docs/client-answers.md` for Gate 0 approval.
+**Read this reference when:** The skill is activated and needs to execute the intake interview, resume an existing brief, prefill from user notes, or format `client-context/client-answers.md` for Gate 0 approval.
 
 ---
 
@@ -8,22 +8,27 @@
 
 Upon skill activation, the agent must immediately execute this sequence:
 
-1. **Pre-Flight Brief Check (Single Read-Only Action):**
-   - Inspect the workspace for `project-docs/client-answers.md`.
-   - **Case A — Existing Brief Found & Complete:** Output an executive intake recap, flag any non-standard choices, and prompt the user: *"Existing site brief found in `project-docs/client-answers.md`. Please review and confirm to clear Gate 0, or specify any updates."* Halt for confirmation.
+1. **Client Milestone Email Question:**
+   - Ask the user at the start: *"Would you like client milestone approval emails prepared and dispatched at each stage?"* Record the preference.
+2. **Pre-Flight Brief Check (Single Read-Only Action):**
+   - Inspect the workspace for `client-context/client-answers.md` (fallback check `project-docs/client-answers.md`).
+   - **Case A — Existing Brief Found & Complete:** Output an executive intake recap, flag any non-standard choices, and prompt the user: *"Existing site brief found in `client-context/client-answers.md`. Please review and confirm to clear Gate 0, or specify any updates."* Halt for confirmation.
    - **Case B — Existing Brief Found but Partial:** Load answered fields, acknowledge them to the user, and present ONLY the first batch containing unfulfilled questions.
    - **Case C — User Provided a Pasted Brief or Notes in Prompt:** Extract known answers into memory, report what was successfully parsed, and present ONLY the remaining gap questions.
    - **Case D — Fresh Project:** **Immediately present Batch 1 (Questions 1 to 7)** in plain language.
-2. **Absolute Restrictions Before Presenting Batch 1:**
+3. **Site Migration & Environment Setup:**
+   - If user indicates a site migration (`build_origin: migration`), create `previous-site/` folder to archive the previous site content post-build (`previous-site/<slug>/index.html`, `content.md`, `screenshot.png`).
+   - In the project root folder, generate a `.env.example` file with placeholders for external connections (e.g. SEO tools, client email sending).
+4. **Absolute Restrictions Before Presenting Batch 1:**
    - **NO** file searches, tree walks, or repository inspections beyond the single brief check.
    - **NO** shell commands, dependency installations, or Next.js scaffolding.
    - **NO** planning documents or router state initialization before answers are captured.
-3. **Pacing & Interactive Dialogue:**
+5. **Pacing & Interactive Dialogue:**
    - Present exactly one batch (5 to 7 questions) per conversation turn.
    - Wait for user response before presenting the subsequent batch.
    - For vague or contradictory replies, ask a concise follow-up question. Never fabricate or guess required answers.
    - If an optional question receives "I don't know" or "decide later", assign the documented project default.
-4. **Secret Hygiene Guardrail:**
+6. **Secret Hygiene Guardrail:**
    - Never request, accept, or record secret credentials, API keys, or passwords in chat or files.
    - If the user provides a secret, immediately reject it, remind them to keep credentials in `.env.local`, and record only the environment variable name (`CMS_SITE_KEY`, `SERVER_URL`, `REVALIDATE_SECRET`, `PIXABAY_API_KEY`).
 
@@ -142,8 +147,8 @@ Upon skill activation, the agent must immediately execute this sequence:
   *(Answer: Yes/No + List | Default: `None` | Required: Conditional on Migration | Consumer: Stage 4)*
 - **Q43 [Approval Stakeholder]:** Confirm the sole point of contact for gate sign-offs (Default: Devansh).  
   *(Answer: Free text | Default: `Devansh` | Required: Yes | Consumer: State Machine)*
-- **Q43b [Client Review Format Preference]:** What format do you prefer for reviewing visual design variations and page build milestones?  
-  *(Answer: Choice | Allowed: `local-folder` (default: HTML review portal opened locally in your browser), `github-pages` (deployed live static review website) | Default: `local-folder` | Required: Yes | Consumer: Gate 2, Gate 6, Gate 7 review delivery)*
+- **Q43b [Client Review Format Preference]:** Confirm public deployment for client review milestones. (Note: Client review requires a live public deployment such as GitHub Pages for Gate 2 variations or Vercel for Next.js; localhost URLs cannot be forwarded to the client).  
+  *(Answer: Choice | Allowed: `github-pages` (default for Gate 2 variations), `vercel` (for Next.js staging/production) | Default: `github-pages` | Required: Yes | Consumer: Gate 2, Gate 6, Gate 7 review delivery)*
 - **Q43d [Codebase Destination Folder]:** Confirm the directory at the project root for the real Next.js application codebase.  
   *(Answer: Path | Default: `site/` | Required: Yes | Consumer: Stage 6 Scaffolding, Stage 7)*
 - **Q43e [Project Defaults if Unset]:** If no existing project files, lockfiles, or configs are discovered in the repository, confirm the default language and package manager.  
@@ -155,9 +160,9 @@ Upon skill activation, the agent must immediately execute this sequence:
 
 ---
 
-## 3. Site Brief Deliverable Template (`project-docs/client-answers.md`)
+## 3. Site Brief Deliverable Template (`client-context/client-answers.md`)
 
-After all questionnaire batches are completed, write the compiled answers to `project-docs/client-answers.md`:
+After all questionnaire batches are completed, write the compiled answers to `client-context/client-answers.md`:
 
 ```markdown
 # Client Discovery Answers & Site Brief
@@ -254,7 +259,7 @@ Every question collected during the intake interview maps to explicit downstream
 ## 5. Gate 0 Discovery Sign-Off Checklist
 
 Before clearing Gate 0 and advancing to Stage 1 Tech Stack:
-- [ ] Questionnaire answers captured in `project-docs/client-answers.md`.
+- [ ] Questionnaire answers captured in `client-context/client-answers.md`.
 - [ ] Primary conversion action and target audience confirmed.
 - [ ] Reference URLs fetched and inspected.
 - [ ] Gate 2 variation count (default 3) and adherence mode (`principles-only`) confirmed.

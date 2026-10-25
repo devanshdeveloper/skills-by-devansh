@@ -54,7 +54,7 @@ Activate the create-nww-website skill. Here is our project brief to initialize S
 - Forms Needed: [e.g. Lead capture & consultation request]
 - Imagery: [e.g. Licensed stock (Pixabay / Unsplash) + client diagrams]
 
-Please parse this into `project-docs/client-answers.md` and present the Gate 0 Intake Recap for confirmation.
+Please parse this into `client-context/client-answers.md` and present the Gate 0 Intake Recap for confirmation.
 ````
 
 > **Tip:** If you prefer a guided interview, just type `nww` and the agent will walk you through each batch (5–7 questions per turn) interactively.
@@ -65,26 +65,31 @@ Please parse this into `project-docs/client-answers.md` and present the Gate 0 I
 
 **ON ACTIVATION, IMMEDIATELY EXECUTE THIS START-UP PROTOCOL BEFORE ANY OTHER WORK:**
 
-1. **First Action:** Check if the site brief file `project-docs/client-answers.md` already exists (single read-only check).
+1. **Client Milestone Email Question:**
+   - Ask the user at the start: *"Would you like client milestone approval emails prepared and dispatched at each stage?"* Record the preference.
+2. **First Action:** Check if the site brief file `client-context/client-answers.md` already exists (single read-only check; fallback check `project-docs/client-answers.md`).
    - **If brief exists and is complete:** Present an intake recap, highlight any variations from project defaults, and halt for user confirmation to proceed to Gate 0.
    - **If brief exists but is partial:** Acknowledge answered fields, and present ONLY the first batch containing unanswered questions.
-   - **If user provided a pasted brief or project notes in their prompt:** Extract known answers into `project-docs/client-answers.md`, report what was captured, and present ONLY the remaining gap questions.
+   - **If user provided a pasted brief or project notes in their prompt:** Extract known answers into `client-context/client-answers.md`, report what was captured, and present ONLY the remaining gap questions.
    - **If no brief exists:** **IMMEDIATELY output Batch 1 (Questions 1 to 7)** of the intake questionnaire.
-2. **Absolute Restrictions Before Presenting Batch 1:**
+3. **Site Migration & Environment Setup:**
+   - If user indicates a site migration (`build_origin: migration`), create `previous-site/` folder to archive previous site content after the new site is built (`previous-site/<slug>/index.html`, `content.md`, `screenshot.png`).
+   - In the project root folder, generate a `.env.example` file with credential placeholders for external connections (e.g. SEO tools, client email sending).
+4. **Absolute Restrictions Before Presenting Batch 1:**
    - **ZERO** preliminary file searches, directory listings, or repository scans.
    - **ZERO** project scaffolding, bash commands, package installations, or code edits.
    - **ZERO** planning artifact creation before answers are collected.
-3. **Execution & Pacing:**
+5. **Execution & Pacing:**
    - Present questions in progressive batches of 5 to 7 questions as defined in [references/client-questionnaire.md](references/client-questionnaire.md).
    - Wait for the user's reply before presenting the subsequent batch.
    - Never guess or fabricate missing required answers. For optional questions, record approved defaults if the user answers "I don't know" or "decide later".
    - **Secret Hygiene:** NEVER request, accept, or record secret credentials, API keys, or passwords. Request environment variable names only (`CMS_SITE_KEY`, `SERVER_URL`, `REVALIDATE_SECRET`, `PIXABAY_API_KEY`).
-   - Save all answers to `project-docs/client-answers.md`.
-4. **Gate 0 Enforced Halt:**
+   - Save all answers to `client-context/client-answers.md`.
+6. **Gate 0 Enforced Halt:**
    - Present the completed intake summary and asset inventory for explicit human confirmation.
    - **HALT EXECUTION.** Do not proceed to Stage 1 Tech Stack or start any building until explicit confirmation is granted.
 
-Read [references/client-questionnaire.md](references/client-questionnaire.md) immediately on activation to present the intake batches and compile `project-docs/client-answers.md`.
+Read [references/client-questionnaire.md](references/client-questionnaire.md) immediately on activation to present the intake batches and compile `client-context/client-answers.md`.
 
 ---
 
@@ -106,15 +111,15 @@ The workflow proceeds strictly one stage at a time. Every stage requires explici
 
 | Stage | Name | Key Deliverables | Gate Approval | Reference Guide |
 |:---:|:---|:---|:---|:---|
-| **0** | **Intake Check** | `project-docs/client-answers.md` | **Gate 0:** Intake recap & CMS mode confirmation | [client-questionnaire.md](references/client-questionnaire.md) |
-| **1** | **Tech Stack** | `project-docs/tech-stack.md` | **Gate 1:** Tech stack sign-off (Internal Developer Gate) | [pipeline-stages.md](references/pipeline-stages.md) |
-| **2** | **Design Theory & Variations** | `project-docs/design-theory.md`, `project-docs/design-references/`, `project-docs/client-review/index.html` | **Gate 2:** Client visual review & variation selection sign-off (via `client-review/index.html`) | [design-theory.md](references/design-theory.md), [design-variations.md](references/design-variations.md) |
-| **3** | **Page List & Sitemap** | `project-docs/page-list.md`, `page-design-notes.md` | **Gate 3:** Sitemap & route structure sign-off (via review portal / chat recap) | [page-list.md](references/page-list.md) |
-| **4** | **SEO Strategy** | `project-docs/seo-strategy.md` | **Gate 4:** Keywords, JSON-LD, sitemap, redirects sign-off | [seo-strategy.md](references/seo/seo-strategy.md) |
-| **5** | **Page Specifications & CMS Schema** | `page-specs/<slug>/page.md`, `page-specs/_shared/*.md`, `project-docs/layout-system.md`, and if CMS active: `cms-schema.md`, `cms-backend-requirements.md`, `cms-seed/` | **Gate 5:** Page specifications & CMS schema sign-off | [page-specifications.md](references/page-specifications.md) |
-| **6** | **Scaffolding, Foundation & Landing Page Showcase** | Pre-load 10 skills; generate `page-checklist.md` & `theory-revisions.md`; scaffold `site/` foundation shell, tokens, optimizer, check scripts; **construct full Landing Page (`site/app/page.js`) for client showcase** | **Gate 6:** Scaffolding, foundation & landing page showcase sign-off | [project-scaffolding.md](references/project-scaffolding.md) |
+| **0** | **Intake Check** | `client-context/client-answers.md`, `.env.example`, `previous-site/` (if migration) | **Gate 0:** Intake recap & CMS mode confirmation | [client-questionnaire.md](references/client-questionnaire.md) |
+| **1** | **Tech Stack** | `project-docs/client-review/gate-1-tech-stack/tech-stack.md` | **Gate 1:** Tech stack sign-off (Internal Developer Gate) | [pipeline-stages.md](references/pipeline-stages.md) |
+| **2** | **Design Theory & Variations** | `project-docs/client-review/gate-2-design-theory/design-theory.md`, variation HTML files (HTML + Tailwind + jQuery), `gate-2-design-theory/index.html` review hub | **Gate 2:** Client visual review & variation selection sign-off (via live public deployment) | [design-theory.md](references/design-theory.md), [design-variations.md](references/design-variations.md) |
+| **3** | **Page List & Sitemap** | `project-docs/client-review/gate-3-page-list/page-list.md` (zero unstated markdowns) | **Gate 3:** Sitemap & route structure sign-off | [page-list.md](references/page-list.md) |
+| **4** | **SEO Strategy** | `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md` (ask client for tool connections upfront) | **Gate 4:** Keywords, JSON-LD, sitemap, redirects sign-off | [seo-strategy.md](references/seo/seo-strategy.md) |
+| **5** | **Page Specifications & CMS Schema** | `page-specs/<slug>/page.md`, `page-specs/_shared/*.md`, `gate-5-page-specs/layout-system.md` (only `Shared Components`), `gate-5-cms-requirements/` (`list.md`, read-only `prompt.md`), `gate-5-cms-schema/`, `gate-5-cms-content/` | **Gate 5:** Page specifications & CMS schema sign-off (Single Mode: Markdown only) | [page-specifications.md](references/page-specifications.md) |
+| **6** | **Scaffolding, Foundation & Landing Page Showcase** | Load approved GSAP skills; block on unresolved CMS requirements; `site/.env.example`; file size efficiency; scaffold `site/`; `page-checklist.md`; **construct full Landing Page (`site/app/page.js`) for client showcase** | **Gate 6:** Scaffolding, foundation & landing page showcase sign-off | [project-scaffolding.md](references/project-scaffolding.md) |
 | **7** | **Sub-Page Build Loop** | `site/app/<route>/page.js`, `_components/`, `page-specs/<slug>/checklist-state.md` for remaining sub-pages | **Gate 7a:** Sub-page build review<br>**Gate 7b:** Sub-page binary QA sign-off | [build-one-page.md](references/build-one-page.md) |
-| **8** | **Final Verification & Handover** | `project-docs/structure-audit.md`, production audit, client handover (deploy via `deploy-to-vercel`) | **Gate 8a:** Cross-page fixes approval<br>**Gate 8b:** Final handover sign-off | [pipeline-stages.md](references/pipeline-stages.md) |
+| **8** | **Final Verification & Handover** | `project-docs/client-review/gate-8-final-verification/structure-audit.md`, production audit, client handover (deploy via `deploy-to-vercel`, email notification) | **Gate 8a:** Cross-page fixes approval<br>**Gate 8b:** Final handover sign-off | [pipeline-stages.md](references/pipeline-stages.md) |
 
 ---
 
@@ -122,9 +127,103 @@ The workflow proceeds strictly one stage at a time. Every stage requires explici
 
 1. **State Tracking:** Maintain `project-docs/router-state.md` at all times. Update gate progress (`pending | approved`), current stage, open questions, webhook status (`pending | built-on-branch | deployed | verified`), and per-page track (`layout: pending|approved`, `content: pending|approved`, `build: not started|built-pending`).
 2. **Never Auto-Advance:** When completing a stage, present the deliverable summary to the user and halt execution until the user grants explicit approval.
-3. **Handling Rejections:** If the user requests modifications, update the stage outputs and re-present for approval.
-4. **Master Checklist:** Track page completion solely in `project-docs/page-list.md` checkboxes (`- [x] Page Name`).
-5. **Client Milestone Notifications:** At every stage completion and gate sign-off, ask the user if they wish to dispatch an email notification to the client. Run `node scripts/client-notify/index.js` to preview the draft. The script enforces explicit user approval before sending and logs the event to `project-docs/router-state.md`.
+3. **Handling Rejections & In-Place Revisions:** If the client requests modifications at any gate, do NOT create an extra markdown file (e.g. no `theory-revisions.md`). Make modifications directly to existing deliverable files in-place. If requirement notes are needed, store them in `client-requirements/`.
+4. **Public Deployments for Client:** All links sent to the client (Gate 2 variations via GitHub Pages, Next.js site via Vercel) MUST be public HTTPS deployments. Never forward localhost URLs to the client.
+5. **Master Checklist:** Track page completion solely in `project-docs/client-review/gate-3-page-list/page-list.md` checkboxes (`- [x] Page Name`).
+6. **Client Milestone Notifications:** At every stage completion and gate sign-off, ask the user if they wish to dispatch an email notification to the client. Run `node scripts/client-notify/index.js` to preview the draft. The script enforces explicit user approval before sending and logs the event to `project-docs/router-state.md`.
+
+---
+
+## Canonical Project File Structure Specification
+
+All client projects developed through this pipeline strictly adhere to the following locked file and directory structure. No extraneous markdown files, alternate layouts, or legacy paths may be created.
+
+```text
+<client-project-root>/
+├── .env.example                          # [Stage 0] Root environment template (SEO tools, Resend email keys)
+├── client-context/                       # [Stage 0] Dedicated repository for all raw client inputs & assets
+│   ├── client-answers.md                 # Complete compiled Stage 0 discovery & intake brief
+│   ├── branding/                         # Client logos (SVG/PNG), brand guidelines, color palettes
+│   ├── uploads/                          # Client-provided images, team headshots, PDFs, brochures
+│   └── notes/                            # Raw notes, transcripts, or initial requirements from client
+├── previous-site/                        # [Stage 0 - If Migration] Old website archive & migration data
+│   ├── sitemap-legacy.xml                # Crawled URLs from existing website for 301 redirects
+│   ├── content-export/                   # Scraped or exported legacy blog posts, pages, and metadata
+│   └── media/                            # Downloaded legacy media assets for optimization
+├── client-requirements/                  # [Optional] Recorded client requirement notes during in-place revisions
+│   └── client-revision-notes.md          # Client revision feedback notes (revisions applied directly in-place)
+├── project-docs/                         # Project pipeline management & tracking
+│   ├── router-state.md                   # Live pipeline state, current stage, gate status & email logs
+│   ├── page-checklist.md                 # [Stage 6] Master QA checklist (binary PASS/FAIL criteria)
+│   ├── design-references/                # [Stage 2] Benchmark reference scrapes (landing pages only)
+│   │   ├── sources.md                    # Ledger of all benchmark reference sites analyzed
+│   │   └── <domain>/                     # Scraped reference site assets (internal visual analysis only)
+│   │       ├── page.html
+│   │       ├── content.md
+│   │       ├── screenshot-full-1440.png
+│   │       └── capture.json
+│   └── client-review/                    # Human-gated client review deliverables
+│       ├── index.html                    # Root Review Portal (indexes all active gate deliverables)
+│       ├── gate-1-tech-stack/
+│       │   └── tech-stack.md             # [Stage 1] Tech stack specification & architecture
+│       ├── gate-2-design-theory/
+│       │   ├── design-theory.md          # [Stage 2] Visual direction, typography, colors, spatial system
+│       │   ├── index.html                # Gate 2 concept comparison & review hub
+│       │   ├── variation-1-<slug>/       # [Stage 2] Variation 1 (HTML + Tailwind CSS + jQuery)
+│       │   │   └── index.html            # Deployed to public URL (e.g. GitHub Pages preview)
+│       │   ├── variation-2-<slug>/       # [Stage 2] Variation 2 (HTML + Tailwind CSS + jQuery)
+│       │   │   └── index.html
+│       │   └── variation-3-<slug>/       # [Stage 2] Variation 3 (HTML + Tailwind CSS + jQuery)
+│       │       └── index.html
+│       ├── gate-3-page-list/
+│       │   └── page-list.md              # [Stage 3] Master page inventory & route hierarchy (no page-design-notes.md)
+│       ├── gate-4-seo-strategy/
+│       │   └── seo-strategy.md           # [Stage 4] Keywords, metadata, JSON-LD & Search Console check
+│       ├── gate-5-page-specs/            # [Stage 5] Single-Mode Markdown page blueprints
+│       │   ├── layout-system.md          # Global shared components layout spec (ONLY ## Shared Components)
+│       │   ├── home.md                   # Verbatim copywriting, responsive layouts & media slots
+│       │   └── <page-slug>.md
+│       ├── gate-5-cms-requirements/      # [Stage 5 - If CMS Enabled] CMS gap checklist & query prompt
+│       │   ├── list.md                   # Blocking CMS checklist (must be resolved before Stage 6)
+│       │   └── prompt.md                 # Read-only query prompt to run in client CMS IDE
+│       ├── gate-5-cms-schema/            # [Stage 5 - If CMS Enabled] CMS collection schemas
+│       │   └── cms-schema.md             # Data schemas, field types, relationships, validation rules
+│       ├── gate-5-cms-content/           # [Stage 5 - If CMS Enabled] Seed content inventory & records
+│       │   ├── index.md                  # Seed content inventory and collection map
+│       │   └── <collection>-<slug>.json  # Authentic JSON seed records
+│       └── gate-8-final-verification/
+│           └── structure-audit.md        # [Stage 8] Automated deliverable compliance & code limits audit
+└── site/                                 # [Stage 6 Scaffolding & Stage 7 Sub-Page Construction]
+    ├── .env.example                      # Site environment template (Next.js variables, CMS API tokens)
+    ├── package.json                      # Next.js App Router, Tailwind CSS, Lucide icons, GSAP
+    ├── next.config.mjs                   # Next.js configuration (images, redirects, headers)
+    ├── tailwind.config.js                # Design token mapping from Stage 2 Design Theory
+    ├── postcss.config.js
+    ├── site.manifest.json                # Project build manifest and page status registry
+    ├── public/                           # Optimized production assets (fonts, images, icons, robots, sitemap)
+    │   ├── favicon.ico
+    │   ├── robots.txt
+    │   ├── sitemap.xml
+    │   ├── fonts/                        # Self-hosted variable fonts (no Google Fonts CDN links)
+    │   ├── images/                       # Optimized WebP/AVIF images (via assets-optimizer)
+    │   └── icons/                        # Optimized SVGs (via SVGO)
+    ├── app/                              # Next.js App Router
+    │   ├── layout.js                     # Root layout (< 80 lines)
+    │   ├── globals.css                   # Tailwind tokens, CSS variables, typography reset
+    │   ├── page.js                       # [Stage 6] Home / Landing Page Showcase (< 80 lines)
+    │   ├── _components/                  # Section components (< 250 lines, // section: <id>)
+    │   ├── <sub-page-slug>/              # [Stage 7] Sub-pages built sequentially (page.js + _components/)
+    │   │   ├── page.js                   # (< 80 lines)
+    │   │   └── _components/              # (< 250 lines)
+    │   └── api/                          # Backend route handlers (revalidation webhooks, contact)
+    ├── components/                       # Global shared components defined in layout-system.md
+    │   ├── Header.jsx
+    │   ├── Footer.jsx
+    │   ├── Navigation.jsx
+    │   ├── MobileMenu.jsx
+    │   └── ui/                           # UI primitives (< 250 lines each: Button, Card, Badge, Modal)
+    └── lib/                              # Shared helper utilities (< 500 lines each: cms, utils, seo, animations)
+```
 
 ---
 
@@ -151,29 +250,20 @@ For complete coding rules, consult [references/code-conventions.md](references/c
 
 ---
 
-## Scaffolding Architecture & Specialized Skills
+## Scaffolding Architecture & Animation Skills
 
-Before executing Stage 6 project scaffolding, the agent MUST load the 10 specialized architecture, composition, design system, and GSAP animation skills:
+Before executing Stage 6 project scaffolding:
+1. **CMS Blocking Guard:** Confirm zero unresolved items exist in `project-docs/client-review/gate-5-cms-requirements/list.md`. Scaffolding is blocked until all CMS requirements are resolved.
+2. **File Size & Token Efficiency:** Scaffolding code must be as small as possible without limiting features of the page.
+3. **Environment Template:** Scaffold `site/.env.example` with required site variables (`SERVER_URL`, `CMS_SITE_KEY`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_PREVIEW_GUARD`).
+4. **GSAP Animation Suite:** Load the approved GSAP skills:
 
 ```bash
-# Next.js & React Architecture Standards (Vercel Labs)
-DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices
-DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-composition-patterns
-DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/agent-skills --skill web-design-guidelines
-DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/openreview --skill next-best-practices
-
-# Design System & Token Architecture
-DISABLE_TELEMETRY=1 npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill design-system
-
-# GSAP Animation Suite
-DISABLE_TELEMETRY=1 npx skills add https://github.com/heygen-com/hyperframes --skill gsap
 DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-core
 DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-scrolltrigger
 DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-performance
 DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-timeline
 ```
-
-These skills govern code conventions during Next.js initialization, Server Component boundary enforcement, token design system injection, and GSAP motion orchestration.
 
 For complete scaffolding instructions, consult [references/project-scaffolding.md](references/project-scaffolding.md).
 
@@ -187,7 +277,9 @@ Aesthetic polish is mandatory for Stages 2 and 8:
   DISABLE_TELEMETRY=1 npx skills add anthropics/skills --skill frontend-design
   ```
   If unavailable, apply the documented built-in taste rules.
-- **Client Visual Review & Variations at Gate 2:** Capture reference landing pages into `project-docs/design-references/<domain>/` as analysis inputs only using `scripts/reference-capture/index.js`. Extract abstract principles and build $N$ original full-page landing page variation previews in `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` across the 9 dimensions per [references/design-variations.md](references/design-variations.md). Run the pre-presentation similarity audit (`_checks/similarity-audit.md`) confirming distance rules (>= 4 dimensions divergent from nearest references, <= 3 dimensions shared between variations, zero shared classes/IDs/assets, word overlap <= 5 words). Compile the Gate 2 comparison hub and root portal using `scripts/client-review/index.js` (optionally deployed live to GitHub Pages via `assets/client-review-pages.yml`). Never ask the client to read raw technical specs. Halt at Gate 2 with `router-state.md` set to `Gate 2: Awaiting Client Decision Among Variations` and await client selection before advancing. The agent never self-approves Gate 2.
+- **Client Visual Review & Variations at Gate 2:** Capture reference landing pages into `project-docs/design-references/<domain>/` as analysis inputs only using `scripts/reference-capture/index.js`. Extract abstract principles and build $N$ original full-page landing page variation previews in `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` using **HTML + Tailwind CSS + jQuery** (to save future tokens) across the 9 dimensions per [references/design-variations.md](references/design-variations.md). Run the pre-presentation similarity audit (`_checks/similarity-audit.md`) confirming distance rules (>= 4 dimensions divergent from nearest references, <= 3 dimensions shared between variations, zero shared classes/IDs/assets, word overlap <= 5 words).
+- **Public Deployment Required (No Prompt Copying):** Gate 2 variations are sent to the client via a mandatory public deployment (e.g. GitHub Pages). We do NOT include the "copy the prompt" or "Copy My Decision" button section. Forwarding localhost deployment links to the client is strictly forbidden.
+- **In-Place Revisions:** If client requests revisions, edit existing files in-place; do NOT create extra markdown files. Save requirement notes in `client-requirements/`.
 - **Aesthetic Principles:**
   - Curated semantic tokens with refined contrast; avoid flat or generic palettes.
   - Generous whitespace and modular typography hierarchy using `next/font`.
@@ -200,14 +292,14 @@ Keep reusable Gate 2 tooling in this skill's `scripts/client-review/`, not in a 
 
 ---
 
-## SEO Architecture & Specialized Skills
+## SEO Architecture & Tool Connections
 
 Technical SEO standards are enforced across Stage 4 (SEO Strategy) and Stage 8 (Pre-Launch SEO Audit):
-- **Specialized SEO Skills:** Before starting Stage 4, load the specialized SEO agent skills:
+- **Upfront Client Tool Inquiry:** Before starting Stage 4, ask the client for any tool connections (Google Search Console, Google Analytics 4, Ahrefs, SEMrush, PageSpeed API). Placeholders are documented in root `.env.example`.
+- **Specialized SEO Skills:** Load approved specialized SEO skills:
   ```bash
   DISABLE_TELEMETRY=1 npx skills add https://github.com/coreyhaines31/marketingskills --skill seo-audit
   DISABLE_TELEMETRY=1 npx skills add https://github.com/coreyhaines31/marketingskills --skill ai-seo
-  DISABLE_TELEMETRY=1 npx skills add https://github.com/anthropics/knowledge-work-plugins --skill seo-audit
   ```
 - **SEO Tool Library & Truth in Auditing:** Before auditing, run the Tool Availability Check per [references/seo/seo-tool-library.md](references/seo/seo-tool-library.md) against [references/seo/seo-tool-registry.json](references/seo/seo-tool-registry.json). Distinguish connected APIs, user export files, and manual checks without pretending to execute disconnected tools.
 - **Companion CLI Utilities:**
@@ -267,12 +359,12 @@ For deep-dive instructions, consult the matching reference document:
 2. [Client Discovery Questionnaire](references/client-questionnaire.md) — 7-batch structured intake questionnaire, branching rules, and site brief template.
 3. [Design Theory & Visual System](references/design-theory.md) — Color palette, modular type scale, voice & tone, and dual motion tokens.
 4. [Design Variations & Similarity Audit](references/design-variations.md) — 9-dimension variation framework, anti-copy distance rules, similarity audit protocol, and decision capture.
-5. [Page List & Sitemap Architecture](references/page-list.md) — Master build tracker checklist, URL routes, and `page-design-notes.md`.
+5. [Page List & Sitemap Architecture](references/page-list.md) — Master build tracker checklist, URL routes, and zero unstated markdowns.
 6. [SEO Strategy & Structured Data](references/seo/seo-strategy.md) — Pre-stage skills, SEO tool availability checks, keywords, single H1, JSON-LD schemas, sitemaps, robots, and redirects.
 7. [Page Specifications & CMS Schema](references/page-specifications.md) — Unified markdown specifications (`page-specs/<slug>/page.md`), section blueprints, verbatim copywriting, cross-page layout system, and CMS data schemas/seeds.
 8. [Codebase Scaffolding, Foundation & Landing Page Showcase](references/project-scaffolding.md) — Next.js initialization in `site/`, QA checklist emission, foundation shell, optimizer run, scoped AGENTS.md, check scripts, route mapping (`site.manifest.json`), and **full Landing Page showcase construction**.
 9. [Asset Optimization & Media Pipeline](references/asset-optimization.md) — Optimizer execution, manifest schema, budgets, and `ResponsiveImage.js`.
-10. [Page Checklists & Taste Verification](references/page-checklist.md) — Master static checklist template, theory revisions, and `checklist-state.md`.
+10. [Page Checklists & Taste Verification](references/page-checklist.md) — Master static checklist template, in-place revisions, and `checklist-state.md`.
 11. [Code Conventions & Agent Rules](references/code-conventions.md) — App Router standards, file line limits, scoped AGENTS.md, and check scripts.
 12. [Sub-Page Build Loop](references/build-one-page.md) — Incremental sub-page build pipeline (Stage 7), Gates 7a & 7b, GSAP integration, and self-critique.
 13. [CMS Architecture & Integration](references/cms-architecture.md) — NWW CMS client, authenticated reads, revalidation route, and form endpoints.

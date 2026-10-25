@@ -2,26 +2,30 @@
 
 Stage 4 establishes the search engine optimization (SEO) architecture for the entire site. It guarantees that every page complies with technical SEO best practices, rich structured data, keyword targeting, and canonical integrity.
 
-The output deliverable is saved to `project-docs/seo-strategy.md`.
+The output deliverable is saved to `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md`.
 
 ---
 
-## Pre-Stage Skills & Tool Availability Check
+## Pre-Stage Skills & Tool Connection Check
 
-Before commencing Stage 4 (SEO Strategy), verify whether the following specialized SEO agent skills are loaded in your agent environment. If missing, load them before starting research and strategy authoring:
+Before commencing Stage 4 (SEO Strategy):
 
-```bash
-DISABLE_TELEMETRY=1 npx skills add https://github.com/coreyhaines31/marketingskills --skill seo-audit
-DISABLE_TELEMETRY=1 npx skills add https://github.com/coreyhaines31/marketingskills --skill ai-seo
-DISABLE_TELEMETRY=1 npx skills add https://github.com/anthropics/knowledge-work-plugins --skill seo-audit
-```
+1. **Ask Client for Tool Connections (Mandatory Check):**
+   - **Ask the client if they have any tool connections available** before proceeding (e.g. Google Search Console, Google Analytics 4, Ahrefs, SEMrush, PageSpeed Insights API, Screaming Frog crawl exports).
+   - If API credentials or tokens are provided, direct the user to store them in the root `.env.example` / `.env.local`. Never record raw secrets in planning documents.
+
+2. **Pre-Load Approved Specialized SEO Skills:**
+   ```bash
+   DISABLE_TELEMETRY=1 npx skills add https://github.com/coreyhaines31/marketingskills --skill seo-audit
+   DISABLE_TELEMETRY=1 npx skills add https://github.com/coreyhaines31/marketingskills --skill ai-seo
+   ```
 
 *Fallback rule:* If any skill installation fails or is restricted in the execution environment, proceed using the built-in SEO architecture and technical specifications outlined in this document.
 
 ### SEO Tool Library & Upfront Availability Audit
 Consult [seo-tool-library.md](seo-tool-library.md) and [seo-tool-registry.json](seo-tool-registry.json) to conduct the mandatory **Tool Availability Check** across the 8 audit categories (Search Performance, Analytics, Crawlers, Speed/CWV, Structured Data, Keywords/Backlinks, Indexation/Rendering, and AI/GEO Search):
 - Determine whether data sources are **Connected** (API/MCP), **Export-Based** (CSV/XLSX), or **Manual**.
-- Record detected modes and fallback paths in section 1 of `project-docs/seo-strategy.md`.
+- Record detected modes and fallback paths in section 1 of `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md`.
 - Never claim to have run a tool that is not connected. If third-party volume or crawler tools are absent, request user export files using the prompts in [seo-tool-library.md](seo-tool-library.md) or mark unverified metrics as `needs-tool-validation`.
 
 ---

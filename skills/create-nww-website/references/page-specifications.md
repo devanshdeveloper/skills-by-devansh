@@ -1,33 +1,37 @@
 # Page Specifications & CMS Schema (Stage 5)
 
-Stage 5 deconstructs every page from `project-docs/page-list.md` into discrete, responsive section blueprints, complete verbatim copywriting, and structured asset references. If CMS mode is `cms`, Stage 5 also authors the complete CMS schema mapping, backend requirements, and seed data.
+Stage 5 deconstructs every page from `project-docs/client-review/gate-3-page-list/page-list.md` into discrete, responsive section blueprints, complete verbatim copywriting, and structured asset references. If CMS mode is `cms`, Stage 5 also authors the complete CMS schema mapping, backend requirements, and seed data.
 
-Stage 5 operates in a **single mode: Markdown**. It generates unified specification documents `page-specs/<slug>/page.md` for every page slug, shared units, the cross-page layout system, and (if CMS mode is enabled) CMS schemas and seed files. There are no dual modes, no static HTML preview pages, and no early Next.js scaffolding in Stage 5. Codebase scaffolding and foundation construction are deferred exclusively to Stage 6.
+Stage 5 operates strictly in a **single mode: Markdown**. It generates unified specification documents `page-specs/<slug>/page.md` for every page slug, shared units, the cross-page layout system in `project-docs/client-review/gate-5-page-specs/layout-system.md`, and (if CMS mode is enabled and context complete) CMS schemas and seed files. **All other modes (Next.js and HTML preview modes) are permanently deleted.** Codebase scaffolding and foundation construction are deferred exclusively to Stage 6.
+
+Do NOT create any additional unstated markdown files. Specifically, do NOT generate `project-docs/migration-inventory.md`, `project-docs/editor-handover-outline.md`, `project-docs/context-update.md`, or `project-docs/cms-foundation-tasks.md`.
 
 ---
 
 ## Deliverables Summary
 
-Stage 5 authors deliverables across five strict markdown locations:
+Stage 5 authors deliverables across strict markdown locations:
 
-1. **Per-Page Specifications:** Saved to `page-specs/<slug>/page.md` for every page slug in `project-docs/page-list.md`. Combines section layout blueprints, verbatim copywriting, and asset slots into a single cohesive document.
+1. **Per-Page Specifications:** Saved to `page-specs/<slug>/page.md` for every page slug in `project-docs/client-review/gate-3-page-list/page-list.md`. Combines section layout blueprints, verbatim copywriting, and asset slots into a single cohesive document.
 2. **Shared Units:**
    - Shared text units: `page-specs/_shared/<component-slug>.md` (e.g. `shared-nav.md`, `shared-footer.md`, `site-settings.md`).
    - Shared brand assets: `page-specs/_shared/brand-assets.md`.
-3. **Cross-Page Layout System:** Saved to `project-docs/layout-system.md` to document components reused across 2+ pages (e.g. `Nav`, `Footer`, `CTABanner`, `ResponsiveImage`).
-4. **CMS Schema & Content Seeds (if `cms: cms`):**
-   - `project-docs/cms-schema.md` (Blog post model mapping, fields, author/category schemas).
-   - `project-docs/cms-backend-requirements.md` (API endpoint specs, Bearer auth, ISR webhook contracts).
-   - `project-docs/cms-seed/blog-<slug>.json` & `project-docs/cms-seed/index.md` (Initial seed posts).
-   - `project-docs/cms-foundation-tasks.md` & `project-docs/editor-handover-outline.md`.
-5. **Stock Provenance Manifest (if stock used):** Saved to `project-docs/stock-provenance.json` when licensed stock imagery is sourced during asset slot authoring.
+3. **Cross-Page Layout System:** Saved to `project-docs/client-review/gate-5-page-specs/layout-system.md` containing ONLY one section: `## Shared Components`.
+4. **CMS Requirements & Investigation (if `cms: cms`):**
+   - **Incomplete Context Guard:** If CMS context seems incomplete, create `project-docs/client-review/gate-5-cms-requirements/list.md` listing missing details, and do NOT proceed to CMS schema or content until this is resolved.
+   - **Read-Only Investigation Prompt:** Provide a strictly read-only prompt in `project-docs/client-review/gate-5-cms-requirements/prompt.md` for the user to paste into their CMS agentic IDE to fetch needed answers (no write commands).
+   - `project-docs/client-review/gate-5-cms-requirements/cms-backend-requirements.md` (API endpoint specs, Bearer auth, ISR webhook contracts).
+5. **CMS Schema & Content Seeds (when requirements complete):**
+   - `project-docs/client-review/gate-5-cms-schema/cms-schema.md` (Blog post model mapping, fields, author/category schemas).
+   - `project-docs/client-review/gate-5-cms-content/blog-<slug>.json` & `project-docs/client-review/gate-5-cms-content/index.md` (Initial seed posts).
+6. **Stock Provenance Manifest (if stock used):** Saved to `project-docs/stock-provenance.json` when licensed stock imagery is sourced during asset slot authoring.
 
 ---
 
 ## Gate 2 Variation Precondition (Non-Negotiable)
 
 Before initiating Stage 5 research or authoring `page.md` specifications:
-1. **Inspect Chosen Variation:** Verify that the chosen design variation from Gate 2 is formally recorded in `project-docs/router-state.md` and `project-docs/design-theory.md`.
+1. **Inspect Chosen Variation:** Verify that the chosen design variation from Gate 2 is formally recorded in `project-docs/router-state.md` and `project-docs/client-review/gate-2-design-theory/design-theory.md`.
 2. **Enforced Halt if Missing:** If Gate 2 is still pending, or if no variation choice is recorded, **HALT EXECUTION IMMEDIATELY**. Ask the user to confirm the Gate 2 variation decision.
 3. **Never Self-Select:** The agent must never choose or assume a variation on behalf of the client.
 4. **Clean Boundary:** No code generation or codebase initialization occurs in Stage 5. `site/` remains untouched until Stage 6.
@@ -198,47 +202,47 @@ Every asset slot must be cataloged using existing assets or approved stock sourc
 
 ---
 
-## Deliverable Structure 2: Cross-Page Layout System (`project-docs/layout-system.md`)
+## Deliverable Structure 2: Cross-Page Layout System (`project-docs/client-review/gate-5-page-specs/layout-system.md`)
 
-Documents system-wide components reused across 2+ pages:
+Documents system-wide components reused across 2+ pages. Per repository rules, this document must contain ONLY one section:
 
 ```markdown
 # Cross-Page Layout System
 
-## Shared Components (Reused across 2+ pages)
+## Shared Components
 - `Nav`: Global sticky navigation header. Text fields: Nav links, CTA label. Capacity: links <= 20 chars. Media: Logo variant.
 - `Footer`: Global site footer. Text fields: Company summary, column link labels, copyright. Capacity: summary <= 150 chars. Media: Reversed logo variant.
 - `CTABanner`: Pre-footer conversion callout. Text fields: Heading, subhead, button label. Capacity: heading <= 60 chars, subhead <= 140 chars.
 - `ResponsiveImage`: Manifest-driven image component rendering srcset, sizes, and LQIP blur placeholders.
-
-## Layout Inconsistencies Resolved
-- Explicit resolutions for conflicting patterns discovered during multi-page research.
 ```
 
 ---
 
-## Deliverable Structure 3: CMS Schema & Content Seeds (When `cms: cms`)
+## Deliverable Structure 3: CMS Requirements, Schema & Content (When `cms: cms`)
 
-When CMS mode is `cms`, Stage 5 authors the complete CMS mapping and seed requirements alongside page specifications:
+When CMS mode is `cms`, Stage 5 authors CMS requirements, schema, and content across dedicated gate subdirectories:
 
-1. **`project-docs/cms-schema.md`:**
-   - Field-by-field mapping of Blog Post content models (`title`, `slug`, `content`, `excerpt`, `cover_image`, `image`, `author`, `category`, `tags`, `postedAt`, `lastUpdatedAt`).
-   - Category and tag classification taxonomies.
-   - Form schema models for contact inquiries (`/api/website-contact-us/:id/submit`) and lead capture (`/api/lead/submit`).
-2. **`project-docs/cms-backend-requirements.md`:**
+1. **Incomplete CMS Context Guard (`project-docs/client-review/gate-5-cms-requirements/list.md`):**
+   - If CMS requirements or data structures are incomplete, create `project-docs/client-review/gate-5-cms-requirements/list.md` itemizing all missing elements.
+   - **Enforced Halt:** Do NOT proceed to `gate-5-cms-schema/` or `gate-5-cms-content/` until `list.md` is resolved.
+2. **Read-Only Investigation Prompt (`project-docs/client-review/gate-5-cms-requirements/prompt.md`):**
+   - Provide a strictly read-only prompt for the user to paste into their CMS agentic IDE to fetch needed answers (endpoints, model structures, tenant keys). Never include write or mutation commands.
+3. **`project-docs/client-review/gate-5-cms-requirements/cms-backend-requirements.md`:**
    - Base URL configuration (`SERVER_URL`).
    - Read & Write endpoint contracts (`GET /api/blog/paginate`, `GET /api/blog/read-one-by-slug/:slug`, `POST /api/blog/create-one`, `POST /api/blog/generate-slug`) with Bearer token authentication (`Authorization: Bearer ${CMS_SITE_KEY}`).
    - On-demand ISR revalidation webhook contract (`POST /api/revalidate`) using `REVALIDATE_SECRET` with canonical tag `cms:blog`.
-3. **`project-docs/cms-seed/`:**
-   - Author at least 3 realistic blog post seed JSON files (`project-docs/cms-seed/blog-<slug>.json`) matching client tone and SEO target keywords. Note: Store category and tags inside `metadata.category` and `metadata.tags` to prevent Mongoose strict-mode stripping.
-   - Author `project-docs/cms-seed/index.md` indexing all seed articles, categories, and author bios.
+4. **`project-docs/client-review/gate-5-cms-schema/cms-schema.md`:**
+   - Field-by-field mapping of Blog Post content models (`title`, `slug`, `content`, `excerpt`, `cover_image`, `image`, `author`, `category`, `tags`, `postedAt`, `lastUpdatedAt`).
+   - Category and tag classification taxonomies.
+   - Form schema models for contact inquiries (`/api/website-contact-us/:id/submit`) and lead capture (`/api/lead/submit`).
+5. **`project-docs/client-review/gate-5-cms-content/`:**
+   - Author at least 3 realistic blog post seed JSON files (`project-docs/client-review/gate-5-cms-content/blog-<slug>.json`) matching client tone and SEO target keywords. Note: Store category and tags inside `metadata.category` and `metadata.tags` to prevent Mongoose strict-mode stripping.
+   - Author `project-docs/client-review/gate-5-cms-content/index.md` indexing all seed articles, categories, and author bios.
    - Execute seed validation and insertion via companion script:
      ```bash
      node skills/create-nww-website/scripts/cms-seed/index.js --dry-run
      node skills/create-nww-website/scripts/cms-seed/index.js --auto-slug
      ```
-4. **`project-docs/cms-foundation-tasks.md` & `editor-handover-outline.md`:**
-   - Documents client editorial workflows and checklist tasks for CMS backend provisioning.
 
 For technical CMS details, consult [references/cms-architecture.md](cms-architecture.md).
 
@@ -258,13 +262,14 @@ For technical CMS details, consult [references/cms-architecture.md](cms-architec
 - [ ] Precondition satisfied: Gate 2 chosen design variation is recorded in `router-state.md` and `design-theory.md`.
 - [ ] Every page in `page-list.md` has a complete markdown specification at `page-specs/<slug>/page.md`.
 - [ ] Shared units created at `page-specs/_shared/*.md` (nav, footer, brand assets).
-- [ ] Shared 2+ page components cataloged in `project-docs/layout-system.md`.
+- [ ] Shared 2+ page components cataloged in `project-docs/client-review/gate-5-page-specs/layout-system.md` with only one section: `## Shared Components`.
 - [ ] Verbatim copywriting drafted for all sections; unconfirmed draft text carries `data-placeholder="true"`.
 - [ ] Asset slots cataloged with 8-tag taxonomy; stock images (if used) fetched via `scripts/stock-fetch/index.js` and logged in `project-docs/stock-provenance.json`.
-- [ ] If `cms: cms` active: `project-docs/cms-schema.md`, `project-docs/cms-backend-requirements.md`, and seed files in `project-docs/cms-seed/` authored and verified.
+- [ ] If `cms: cms` active: all items in `gate-5-cms-requirements/list.md` resolved; read-only prompt delivered in `prompt.md`; `gate-5-cms-schema/cms-schema.md` and content seeds authored.
+- [ ] Zero unneeded markdown files were generated (no `migration-inventory.md`, `editor-handover-outline.md`, `context-update.md`, or `cms-foundation-tasks.md`).
 - [ ] Motion intent defaults to `static by design` with at most one bold moment per page.
 - [ ] `project-docs/router-state.md` updated to `Gate 5: Awaiting Page Specification & CMS Schema Decision`.
 
 ### Gate 5 Presentation & Downstream Handover
 Present Gate 5 in plain language summarizing the page structure, verbatim copywriting highlights, asset inventory, and CMS content schemas/seed data. Upon Gate 5 approval:
-- Advance to **Stage 6 (Codebase Scaffolding, Foundation Build & Landing Page Showcase)** to initialize `site/`, build the foundation shell, wire tokens, and construct the live landing page for client showcase.
+- Advance to **Stage 6 (Codebase Scaffolding, Foundation Build & Landing Page Showcase)** to initialize `site/`, build the foundation shell, wire tokens, and construct the live landing page for client showcase. (Ensure zero unresolved CMS requirements exist before initializing Stage 6).

@@ -10,12 +10,12 @@ The deliverable outputs are saved to `project-docs/client-review/gate-2-design-t
 
 The Gate 2 workflow proceeds in seven sequential, non-negotiable steps:
 
-1. **Capture References (Analysis Inputs Only):** Execute reference capture (`node skills/create-nww-website/scripts/reference-capture/index.js`) for landing pages specified in `project-docs/client-answers.md`.
-2. **Extract Abstract Principles:** Synthesize reference observations into abstract design principles in `project-docs/design-theory.md` (e.g., "Asymmetric 12-column grid with generous whitespace and high-contrast typography").
+1. **Capture References (Analysis Inputs Only):** Execute reference capture (`node skills/create-nww-website/scripts/reference-capture/index.js`) for landing pages specified in `client-context/client-answers.md`.
+2. **Extract Abstract Principles:** Synthesize reference observations into abstract design principles in `project-docs/client-review/gate-2-design-theory/design-theory.md` (e.g., "Asymmetric 12-column grid with generous whitespace and high-contrast typography").
 3. **Define the Variation Framework:** Formulate an architectural matrix for $N$ variations (default: 3) defining specific choices across the 9 varying dimensions while keeping content and technical constraints constant.
-4. **Build $N$ Variation Previews:** Construct $N$ complete, self-contained landing page previews in `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` using the client's authentic copy.
+4. **Build $N$ Variation Previews:** Construct $N$ complete, self-contained landing page previews in `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` using **HTML + Tailwind CSS + jQuery** (to save future tokens) and the client's authentic copy.
 5. **Run Similarity Audit:** Execute the pre-presentation similarity audit, validating text, code, asset, and structural distance against all references and between variations. Compile the internal report to `_checks/similarity-audit.md`.
-6. **Assemble Client Comparison Hub:** Compile the plain-language comparison hub at `project-docs/client-review/gate-2-design-theory/index.html` and root review portal at `project-docs/client-review/index.html`.
+6. **Assemble Client Comparison Hub & Deploy Publicly:** Compile the plain-language comparison hub at `project-docs/client-review/gate-2-design-theory/index.html` (without prompt copy boxes). Deploy live to GitHub Pages so the client receives a public HTTPS link (never forward localhost).
 7. **Halt for Client Decision:** Update `project-docs/router-state.md` to `Gate 2: Awaiting Client Decision Among Variations`. **The agent never approves Gate 2, never selects a variation, and never initiates Stage 3.**
 
 ```mermaid
@@ -146,6 +146,9 @@ If any variation fails a distance threshold, selector collision check, or word o
 
 The comparison hub and variation previews are client deliverables and must adhere to professional communication standards:
 
+- **Technology Stack (HTML + Tailwind CSS + jQuery):** Every landing page variation (`<variation-slug>/index.html`) MUST be built using **semantic HTML + Tailwind CSS + jQuery**. This saves future tokens, eliminates heavy JavaScript bundle overhead, and keeps previews lightweight and interactive.
+- **Mandatory Public Deployment:** Deliverables will be sent directly to the client. We ALWAYS require a live public deployment (such as GitHub Pages via `.github/workflows/deploy-pages.yml`) to forward to the client. **Forwarding localhost deployment links to the client is strictly forbidden.**
+- **No Prompt Copying Section:** The comparison hub is sent directly to the client; do NOT include "copy the prompt" or "Copy My Decision" prompt sections or buttons intended for pasting into an AI assistant.
 - **Plain-Language Tone:** All descriptions, titles, and explanations must avoid technical web jargon. Use accessible terminology (e.g., "Warm paper-like background" instead of "HSL 38 25% 94% CSS custom property"; "Clean single-column reading layout" instead of "max-w-prose container with 80ch margin auto").
 - **Collapsed Developer Details:** Technical specifications (Tailwind tokens, GSAP easing equations, WCAG contrast ratios, responsive breakpoints) must be enclosed inside `<details><summary>Developer Architecture & Tokens</summary>`.
 - **Self-Contained & Offline:** Previews must open via standard browser file access (`file://`) or local preview server without broken styles, broken images, or external web font requests.
@@ -153,25 +156,22 @@ The comparison hub and variation previews are client deliverables and must adher
 
 ---
 
-## 8. Decision Capture Protocol
+## 8. Decision Capture & Revision Protocol
 
 Progress remains halted at Gate 2 until the client explicitly selects a variation.
 
-### Copy-Ready Decision Template
-The comparison hub (`project-docs/client-review/gate-2-design-theory/index.html`) must present a copy-ready response snippet with a one-click copy button:
+### Client Decision Confirmation
+The client reviews the live public deployment and communicates their variation selection and any adjustments directly via email or chat.
 
-```markdown
-I have reviewed the Gate 2 landing page design variations.
-
-Chosen Variation: [Variation 1 / Variation 2 / Variation 3]
-Requested Adjustments: [None / State specific tweaks to typography, color, or sections]
-Elements to Avoid: [State anything observed that should not appear downstream]
-Gate 2 Sign-Off: APPROVED - Proceed to Stage 3 Page List
-```
+### In-Place Revisions Discipline
+If the client asks for revisions at Gate 2 (or any gate):
+1. **Never Create Extra Markdown Files:** Do NOT generate `theory-revisions.md`, revision logs, or separate markdown documents.
+2. **Make Changes In-Place:** Apply modifications directly to the existing deliverable files (`design-theory.md`, `<variation-slug>/index.html`).
+3. **Capture Requirements When Desired:** If there is a substantial new client requirement worth preserving as a note, store it in `client-requirements/` (e.g. `client-requirements/gate-2-client-feedback.md`).
 
 ### Router State Wording
 Update `project-docs/router-state.md`:
 - **Current Gate:** `Gate 2`
-- **Gate Status:** `Awaiting Client Decision Among Variations (via project-docs/client-review/gate-2-design-theory/index.html)`
+- **Gate Status:** `Awaiting Client Decision Among Variations (via public review deployment)`
 
 The agent monitors this file and halts until the client's decision is confirmed. Once confirmed, the chosen variation's tokens and layout principles become the binding foundation for Stage 3 (Page List) through Stage 8.

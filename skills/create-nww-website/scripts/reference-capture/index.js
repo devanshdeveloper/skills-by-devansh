@@ -247,7 +247,9 @@ async function run() {
   console.log(`  Target Project: ${projectRoot}`);
   console.log('=================================================================');
 
-  const answersPath = path.join(projDocs, 'client-answers.md');
+  const primaryAnswers = path.join(projectRoot, 'client-context', 'client-answers.md');
+  const fallbackAnswers = path.join(projDocs, 'client-answers.md');
+  const answersPath = fs.existsSync(primaryAnswers) ? primaryAnswers : fallbackAnswers;
   const refs = parseReferencesFromBrief(answersPath);
 
   if (refs.length === 0) {

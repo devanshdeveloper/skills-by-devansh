@@ -2,7 +2,7 @@
 
 Stage 2 establishes the aesthetic foundation of the website. Before any layouts or code are written, the design theory codifies the color palette, typography system, spatial tokens, dual motion tokens, voice & tone, and visual hierarchy.
 
-The deliverable is saved to `project-docs/design-theory.md`.
+The deliverable is saved to `project-docs/client-review/gate-2-design-theory/design-theory.md`.
 
 ---
 
@@ -10,7 +10,7 @@ The deliverable is saved to `project-docs/design-theory.md`.
 
 When entering Stage 2:
 1. **Live-Fetch & Capture Reference Sites (Landing Pages Only):**
-   - For every liked reference URL in `project-docs/client-answers.md`, capture the landing page directly into `project-docs/design-references/<domain>/` (where `<domain>` is lowercase hostname without `www.`, landing page only, query strings stripped) using `node skills/create-nww-website/scripts/reference-capture/index.js`.
+   - For every liked reference URL in `client-context/client-answers.md`, capture the landing page directly into `project-docs/design-references/<domain>/` (where `<domain>` is lowercase hostname without `www.`, landing page only, query strings stripped) using `node skills/create-nww-website/scripts/reference-capture/index.js`.
    - Produce four standard artifacts per landing page:
      - `page.html`: Rendered DOM post-hydration saved verbatim (external assets not mirrored).
      - `content.md`: Verbatim stripped text preserving headings, paragraphs, and links (zero paraphrasing or summarizing).
@@ -120,25 +120,20 @@ For local fonts, add project-specific entries `{ family, stem, folder, weights }
 
 Keep reusable scripts and dependencies in the skill. Keep only site-specific review deliverables under `project-docs/client-review/`, and place supplementary Gate 2 reports and working notes in `gate-2-design-theory/_checks/`. The canonical design theory and router state remain at the paths required by the pipeline.
 
-### Tooling, Playwright Binaries & Review Confidentiality
+### Public Deployment & Deliverable Standards
 
-- **Playwright Browser Binaries**: Automated reference capture (`scripts/reference-capture/index.js`) and accessibility verification (`scripts/client-review/verify.mjs`) require Chromium binaries. If not pre-installed in the environment, run:
-  ```bash
-  npx playwright install chromium
-  ```
-- **Review Confidentiality on GitHub Pages**: Deploying client review hubs via GitHub Pages (`assets/client-review-pages.yml`) creates an unauthenticated, publicly reachable website on public repositories. If client assets, brand strategy, or copy are confidential, do NOT deploy to public GitHub Pages; use the built-in local preview server instead:
-  ```bash
-  node skills/create-nww-website/scripts/client-review/preview.mjs [projectRoot]
-  ```
+- **Public Deployment Required**: The Gate 2 landing page variations and comparison hub will be sent directly to the client. A live public deployment (such as GitHub Pages via `.github/workflows/deploy-pages.yml` from `assets/client-review-pages.yml`) MUST always be used. **Forwarding localhost deployment links to the client is strictly forbidden.**
+- **No Prompt Copying Section**: The review package is client-facing; do NOT include "copy the prompt" or "Copy My Decision" buttons designed for pasting into an AI assistant.
+- **Technology Stack for Variations**: All Gate 2 landing page variation previews (`<variation-slug>/index.html`) MUST be built using **HTML + Tailwind CSS + jQuery** to save future tokens, minimize complexity, and ensure lightweight interactivity.
 
 Before presenting to the user for Gate 2 sign-off:
 - [ ] Reference landing pages captured into `project-docs/design-references/<domain>/` (`page.html`, `content.md`, `screenshot-full-1440.png`, `capture.json`) as analysis inputs only.
 - [ ] Reference capture ledger compiled in `project-docs/design-references/sources.md` starting with mandatory third-party usage notice (zero fabricated images, zero copied assets).
-- [ ] Technical design theory authored to `project-docs/design-theory.md` (abstract principles, tokens, typography, motion, avoid list).
-- [ ] $N$ full-page landing page variation previews (default 3) compiled to `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` featuring distinct architectural personalities and real client content per [references/design-variations.md](design-variations.md).
+- [ ] Technical design theory authored to `project-docs/client-review/gate-2-design-theory/design-theory.md` (abstract principles, tokens, typography, motion, avoid list).
+- [ ] $N$ full-page landing page variation previews (default 3) compiled to `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` built using **HTML + Tailwind CSS + jQuery** featuring distinct architectural personalities and real client content per [references/design-variations.md](design-variations.md).
 - [ ] Pre-presentation similarity audit executed and report compiled to `project-docs/client-review/gate-2-design-theory/_checks/similarity-audit.md` confirming compliance with distance rules (zero shared classes/IDs, zero hotlinks, word overlap <= 5 words).
-- [ ] Static review generator script executed (`node skills/create-nww-website/scripts/client-review/index.js`) to generate Gate 2 comparison hub (`gate-2-design-theory/index.html`) and root portal (`client-review/index.html`).
-- [ ] Package is 100% self-contained: opens by double-click offline, zero external requests, and all technical jargon explained or collapsed into developer details. Optionally deployed to GitHub Pages via `.github/workflows/deploy-pages.yml` (from `assets/client-review-pages.yml`) for instant live client links.
+- [ ] Static review generator script executed (`node skills/create-nww-website/scripts/client-review/index.js`) to generate Gate 2 comparison hub (`gate-2-design-theory/index.html`) without prompt copy boxes.
+- [ ] Public deployment live on GitHub Pages and verified accessible via HTTPS (no localhost links provided).
 - [ ] `project-docs/router-state.md` updated to `Gate 2: Awaiting Client Decision Among Variations (via project-docs/client-review/gate-2-design-theory/index.html)`.
-- [ ] Client decision (selection among variations, requested adjustments, elements to avoid) confirmed before Gate 2 approval and Stage 3 initiation. Never ask the client to review the raw technical markdown spec.
+- [ ] Client decision confirmed before Gate 2 approval and Stage 3 initiation. (If revisions requested, update files directly in-place; do not create separate revision files. Record requirement notes in `client-requirements/`).
 

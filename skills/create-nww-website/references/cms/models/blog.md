@@ -6,12 +6,16 @@ The `Blog` module is the primary managed editorial content model in NWW CMS, wit
 
 ## 1. Endpoints
 
-- **Mount Path:** `/api/blog` (Public: `/api/blog/public`)
-- **Paginate (List):** `GET /api/blog/paginate` (Public: `GET /api/blog/public/paginate`)
-- **Read by Slug:** `GET /api/blog/read-one-by-slug/:slug` (Public: `GET /api/blog/public/read-by-slug/:slug`)
+- **Mount Path:** `/api/blog`
+- **Paginate (List):** `GET /api/blog/paginate`
+  - **Status Filter Rule:** Must explicitly supply `?status=published` (omission drops the status filter in backend `ModelHelper.createQueryFilter`, leaking draft/rejected/pending articles).
+  - **Tenant Verification:** Automatically verified via `Authorization: Bearer ${CMS_SITE_KEY}` token; no `?user=` query parameter is required.
+  - **Date Guard:** Backend does not filter `postedAt`; frontend/caller must defensively filter `postedAt <= new Date()`.
+  - **Response Envelope:** `{ success: true, data: { items: [...] }, pagination: { totalDocuments, page, limit, totalPages, nextPage, previousPage } }`.
+- **Read by Slug:** `GET /api/blog/read-by-slug/:slug` (Slugs are globally unique across the database; returns `{ success: true, data: { ...blogDoc } }`).
 - **Read by ID:** `GET /api/blog/read-one/:id`
-- **Create Post:** `POST /api/blog/create-one`
-- **Slug Generator:** `POST /api/blog/generate-slug` (Body: `{ "title": "..." }`)
+- **Create Post:** `POST /api/blog/create-one` (Requires JWT with `CREATE` permissions on `WebsiteModules.Blog`).
+- **Slug Generator:** `POST /api/blog/generate-slug` (Requires JWT; Body: `{ "title": "..." }`).
 - **Update Post:** `PUT /api/blog/update-one/:id`
 - **Delete Post:** `DELETE /api/blog/delete-one/:id` or `DELETE /api/blog/soft-delete-one/:id`
 - **Revalidation Tag:** `cms:blog`

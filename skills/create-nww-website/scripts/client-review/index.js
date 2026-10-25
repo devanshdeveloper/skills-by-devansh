@@ -136,10 +136,10 @@ function generateGate2Hub(concepts) {
     </div>
 
     <div class="decision-banner">
-      <h3>How to Make Your Decision</h3>
-      <p>1. Open each variation preview page above to evaluate the layout, typography, and responsive design.<br>
-         2. When you select the direction that best fits your goals, use the "Copy My Decision" button at the bottom of that page.<br>
-         3. Paste your confirmation into our chat to approve Gate 2 and begin Stage 3.</p>
+      <h3>Client Review Instructions</h3>
+      <p>1. Open each variation preview page above to experience the layout, typography hierarchy, and interactive design.<br>
+         2. Reply to your review notification or notify the project team with your preferred variation (e.g. Variation 1, 2, or 3) and any revision notes.<br>
+         3. Upon your approval, we proceed to Stage 3 (Page List & Sitemap Scope).</p>
     </div>
   </div>
 </body>
@@ -147,7 +147,31 @@ function generateGate2Hub(concepts) {
 `;
 }
 
-function generateRootPortal(gate2Exists, gate5Exists) {
+function generateRootPortal(gatesStatus = {}) {
+  const gates = [
+    { id: 'gate-1', name: 'Gate 1: Tech Stack Specification', path: 'gate-1-tech-stack/tech-stack.md', desc: 'Architecture, framework choices, and rendering strategy.' },
+    { id: 'gate-2', name: 'Gate 2: Landing Page Variations & Design Review', path: 'gate-2-design-theory/index.html', desc: 'Full landing page variations, responsive previews, and design theory.' },
+    { id: 'gate-3', name: 'Gate 3: Page List & Sitemap Scope', path: 'gate-3-page-list/page-list.md', desc: 'Route hierarchy, complete sitemap, and page inventory.' },
+    { id: 'gate-4', name: 'Gate 4: SEO Strategy & Keyword Mapping', path: 'gate-4-seo-strategy/seo-strategy.md', desc: 'Metadata, keyword targeting, and structured data specifications.' },
+    { id: 'gate-5', name: 'Gate 5: Page Specifications & CMS Schema', path: 'gate-5-page-specs/', desc: 'Responsive layout blueprints, copywriting, asset slots, and CMS schemas.' },
+    { id: 'gate-8', name: 'Gate 8: Final Verification & Audit', path: 'gate-8-final-verification/structure-audit.md', desc: 'Automated deliverable compliance audit and production sign-off.' }
+  ];
+
+  const itemsHtml = gates.map(g => {
+    const exists = gatesStatus[g.id];
+    return `
+      <div class="gate-item">
+        <div class="gate-info">
+          <h3>${g.name}</h3>
+          <p>${g.desc}</p>
+        </div>
+        <div>
+          ${exists ? `<a href="${g.path}" class="gate-link">View Deliverable →</a>` : '<span style="color:var(--text-muted);font-size:13px;">Pending</span>'}
+        </div>
+      </div>
+    `;
+  }).join('\n');
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -191,15 +215,7 @@ function generateRootPortal(gate2Exists, gate5Exists) {
     </div>
 
     <div class="gates-list">
-      <div class="gate-item">
-        <div class="gate-info">
-          <h3>Gate 2: Landing Page Variations & Design Review</h3>
-          <p>Explore full landing page variations, responsive previews, and submit your variation selection.</p>
-        </div>
-        <div>
-          ${gate2Exists ? '<a href="gate-2-design-theory/index.html" class="gate-link">Enter Gate 2 Hub →</a>' : '<span style="color:var(--text-muted);font-size:13px;">Pending</span>'}
-        </div>
-      </div>
+      ${itemsHtml}
     </div>
   </div>
 </body>
@@ -255,8 +271,18 @@ function run() {
     console.log(`✓ Generated: ${path.relative(projectRoot, gate2HubPath)} (${gate2HubHtml.length} bytes)`);
   } else console.log('Preserved authored Gate 2 hub.');
 
+  // Detect gates status
+  const gatesStatus = {
+    'gate-1': fs.existsSync(path.join(reviewBase, 'gate-1-tech-stack', 'tech-stack.md')),
+    'gate-2': fs.existsSync(gate2HubPath),
+    'gate-3': fs.existsSync(path.join(reviewBase, 'gate-3-page-list', 'page-list.md')),
+    'gate-4': fs.existsSync(path.join(reviewBase, 'gate-4-seo-strategy', 'seo-strategy.md')),
+    'gate-5': fs.existsSync(path.join(reviewBase, 'gate-5-page-specs')),
+    'gate-8': fs.existsSync(path.join(reviewBase, 'gate-8-final-verification', 'structure-audit.md'))
+  };
+
   // Generate Root Review Portal
-  const rootPortalHtml = generateRootPortal(true);
+  const rootPortalHtml = generateRootPortal(gatesStatus);
   const rootPortalPath = path.join(reviewBase, 'index.html');
   if (!preserveHubs || !fs.existsSync(rootPortalPath)) {
     fs.writeFileSync(rootPortalPath, rootPortalHtml, 'utf-8');

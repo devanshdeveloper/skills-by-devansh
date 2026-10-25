@@ -16,7 +16,9 @@ const path = require('node:path');
 const args = process.argv.slice(2);
 const positional = args.filter(a => !a.startsWith('--'));
 const projectRoot = positional[0] ? path.resolve(positional[0]) : process.cwd();
-const briefPath = path.join(projectRoot, 'project-docs', 'client-answers.md');
+const primaryBrief = path.join(projectRoot, 'client-context', 'client-answers.md');
+const fallbackBrief = path.join(projectRoot, 'project-docs', 'client-answers.md');
+const briefPath = fs.existsSync(primaryBrief) ? primaryBrief : fallbackBrief;
 
 const REQUIRED_SECTIONS = [
   { key: 'Business / Site Name', pattern: /business|site name|brand/i },

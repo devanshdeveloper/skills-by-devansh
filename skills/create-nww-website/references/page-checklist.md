@@ -2,7 +2,7 @@
 
 The master static QA verification checklist establishes binary pass/fail criteria across individual pages, the foundation shell, and the final production audit. It is generated during **Stage 6 (Codebase Scaffolding, Foundation Build & Landing Page Showcase)** and enforced across Stage 6, Stage 7 (Sub-Page Build Loop), and Stage 8 (Final Verification & Handover).
 
-The outputs are saved to `project-docs/theory-revisions.md` and `project-docs/page-checklist.md`.
+The output is saved to `project-docs/page-checklist.md`. (Do NOT generate `theory-revisions.md`; make revisions directly to existing files in-place. If requirement notes are needed, store them in `client-requirements/`).
 
 During Stage 7 sub-page builds, per-page QA execution results are logged to `page-specs/<slug>/checklist-state.md` and recorded in `site/build-log.md`. The master checklist file itself remains a clean static template.
 
@@ -12,10 +12,10 @@ During Stage 7 sub-page builds, per-page QA execution results are logged to `pag
 
 Before compiling the checklist in Stage 6:
 1. **Taste Skill Check:** Verify if `frontend-design` is available per [design-theory.md](design-theory.md) or apply built-in taste rules.
-2. **Theory Revisions:** Cross-examine `design-theory.md` and `page-specs/<slug>/page.md` against taste standards:
+2. **In-Place Quality Adjustments:** Cross-examine design theory and page specifications against taste standards:
    - Identify generic defaults (warm-cream defaults, unearned fade-and-slide-up animations across multiple sections).
-   - Revise theories in place to ensure distinctive styling justified by client references.
-   - Record every modification in `project-docs/theory-revisions.md` (what changed, why, and which files were updated).
+   - Revise theories and specs directly in-place to ensure distinctive styling justified by client references.
+   - Do NOT create separate revision files.
 
 ---
 
@@ -23,9 +23,6 @@ Before compiling the checklist in Stage 6:
 
 ```markdown
 # Master QA Checklist & Taste Quality Contract
-
-## Theory Revisions Summary
-[Summary of adjustments made during taste review, or "No revisions needed — theories already avoid generic defaults."]
 
 ---
 
@@ -124,7 +121,7 @@ When building page `<slug>` in Stage 7:
 
 ## Stage 6 QA Integration Checklist
 
-- [ ] All theory revisions documented in `project-docs/theory-revisions.md`.
 - [ ] Master checklist template authored at `project-docs/page-checklist.md`.
 - [ ] Per-page checks include binary pass/fail criteria for structure, taste, SEO, motion, and assets.
+- [ ] In-place revisions verified (zero `theory-revisions.md` or unneeded markdown files generated).
 - [ ] User approves checklist criteria alongside Stage 6 Foundation and Landing Page showcase.

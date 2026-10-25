@@ -22,32 +22,33 @@ const projectRoot = process.argv[2] ? path.resolve(process.argv[2]) : process.cw
 const projDocs = path.join(projectRoot, 'project-docs');
 const siteDir = path.join(projectRoot, 'site');
 
-function checkFile(relPath, minBytes = 10) {
-  const full = path.join(projectRoot, relPath);
-  if (!fs.existsSync(full)) return { exists: false, size: 0, valid: false };
-  const stat = fs.statSync(full);
-  return {
-    exists: true,
-    size: stat.size,
-    valid: stat.size >= minBytes
-  };
+function checkFile(relPaths, minBytes = 10) {
+  const paths = Array.isArray(relPaths) ? relPaths : [relPaths];
+  for (const relPath of paths) {
+    const full = path.join(projectRoot, relPath);
+    if (fs.existsSync(full)) {
+      const stat = fs.statSync(full);
+      return { exists: true, size: stat.size, valid: stat.size >= minBytes, file: relPath };
+    }
+  }
+  return { exists: false, size: 0, valid: false, file: paths[0] };
 }
 
 function auditProjectDocs() {
   const checks = [
-    { stage: 0, name: 'Client Intake Answers', file: 'project-docs/client-answers.md', min: 100 },
-    { stage: 1, name: 'Tech Stack Specification', file: 'project-docs/tech-stack.md', min: 100 },
-    { stage: 2, name: 'Design Theory', file: 'project-docs/design-theory.md', min: 100 },
-    { stage: 2, name: 'Reference Sources Ledger', file: 'project-docs/design-references/sources.md', min: 100 },
+    { stage: 0, name: 'Client Intake Answers', file: ['client-context/client-answers.md', 'project-docs/client-answers.md'], min: 100 },
+    { stage: 0, name: 'Root Environment Template', file: '.env.example', min: 10 },
+    { stage: 1, name: 'Tech Stack Specification', file: ['project-docs/client-review/gate-1-tech-stack/tech-stack.md', 'project-docs/tech-stack.md'], min: 100 },
+    { stage: 2, name: 'Design Theory', file: ['project-docs/client-review/gate-2-design-theory/design-theory.md', 'project-docs/design-theory.md'], min: 100 },
+    { stage: 2, name: 'Reference Sources Ledger', file: ['project-docs/design-references/sources.md', 'project-docs/client-review/gate-2-design-theory/sources.md'], min: 100, optional: true },
     { stage: 2, name: 'Gate 2 Review Hub', file: 'project-docs/client-review/gate-2-design-theory/index.html', min: 500 },
-    { stage: 2, name: 'Gate 2 Similarity Audit', file: 'project-docs/client-review/gate-2-design-theory/_checks/similarity-audit.md', min: 100 },
     { stage: 2, name: 'Root Review Portal', file: 'project-docs/client-review/index.html', min: 500 },
-    { stage: 3, name: 'Page List Tracker', file: 'project-docs/page-list.md', min: 50 },
-    { stage: 4, name: 'SEO Strategy', file: 'project-docs/seo-strategy.md', min: 100 },
-    { stage: 5, name: 'Layout System', file: 'project-docs/layout-system.md', min: 100 },
-    { stage: 5, name: 'Stock Provenance Log', file: 'project-docs/stock-provenance.json', min: 2, optional: true },
-    { stage: 5, name: 'CMS Schema Spec', file: 'project-docs/cms-schema.md', min: 100, optional: true },
-    { stage: 6, name: 'Site Manifest', file: 'site/site.manifest.json', min: 50 },
+    { stage: 3, name: 'Page List Tracker', file: ['project-docs/client-review/gate-3-page-list/page-list.md', 'project-docs/page-list.md'], min: 50 },
+    { stage: 4, name: 'SEO Strategy', file: ['project-docs/client-review/gate-4-seo-strategy/seo-strategy.md', 'project-docs/seo-strategy.md'], min: 100 },
+    { stage: 5, name: 'Layout System Spec', file: ['project-docs/client-review/gate-5-page-specs/layout-system.md', 'project-docs/layout-system.md'], min: 100 },
+    { stage: 5, name: 'CMS Schema Spec', file: ['project-docs/client-review/gate-5-cms-schema/cms-schema.md', 'project-docs/cms-schema.md'], min: 100, optional: true },
+    { stage: 6, name: 'Site Environment Template', file: 'site/.env.example', min: 10, optional: true },
+    { stage: 6, name: 'Site Manifest', file: 'site/site.manifest.json', min: 50, optional: true },
     { stage: 6, name: 'Page Build Checklist', file: 'project-docs/page-checklist.md', min: 100 },
     { stage: 'Router', name: 'Pipeline Router State', file: 'project-docs/router-state.md', min: 100 }
   ];
@@ -180,9 +181,15 @@ ${codeSection}
 - **Next Actions:** Refer to \`project-docs/router-state.md\` for current gate approval requirements.
 `;
 
+  const gate8Dir = path.join(projectRoot, 'project-docs', 'client-review', 'gate-8-final-verification');
+  fs.mkdirSync(gate8Dir, { recursive: true });
+  const gate8AuditPath = path.join(gate8Dir, 'structure-audit.md');
+  fs.writeFileSync(gate8AuditPath, auditContent, 'utf-8');
+  console.log(`✓ Audit report written to: ${path.relative(projectRoot, gate8AuditPath)}`);
+
   const auditPath = path.join(projDocs, 'structure-audit.md');
   fs.writeFileSync(auditPath, auditContent, 'utf-8');
-  console.log(`✓ Audit report written to: ${path.relative(projectRoot, auditPath)}`);
+  console.log(`✓ Audit report copy written to: ${path.relative(projectRoot, auditPath)}`);
 
   console.log('\n=================================================================');
   console.log('  AUDIT COMPLETE');

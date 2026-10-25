@@ -7,10 +7,12 @@ Stage 6 initializes the Next.js App Router application in `site/`, generates the
 ## 1. Role & Responsibilities
 
 Stage 6 is the foundational engineering and initial showcase stage:
-1. **Pre-scaffolding Engineering Standards:** Pre-loads 10 specialized agent skills covering Next.js App Router conventions, React composition patterns, design system tokens, and the GSAP animation suite.
-2. **Master QA & Taste Checklist Generation:** Emits `project-docs/page-checklist.md` and `project-docs/theory-revisions.md` defining binary pass/fail acceptance criteria.
-3. **Codebase Initialization:** Scaffolds Next.js App Router in `site/` with verified conventions without nested git tracking.
-4. **Production Foundation Shell:**
+1. **CMS Blocking Guard:** Verify zero unresolved items exist in `project-docs/client-review/gate-5-cms-requirements/list.md`. If any CMS requirements remain incomplete, **HALT EXECUTION** and do not proceed to scaffolding.
+2. **Pre-scaffolding GSAP Standards:** Pre-loads approved GSAP animation skills.
+3. **Master QA Checklist Generation:** Emits `project-docs/page-checklist.md` defining binary pass/fail acceptance criteria (revisions are applied in-place; do NOT generate `theory-revisions.md`).
+4. **Codebase Initialization & File Size Discipline:** Scaffolds Next.js App Router in `site/` with verified conventions without nested git tracking. Any generated file must not limit the file size of the scaffolding site; code should be as small as possible while preserving all features of the page.
+5. **Site Env Template:** Generates `site/.env.example` with all variables needed by the Next.js site.
+6. **Production Foundation Shell:**
    - Injects design tokens into `site/app/globals.css` and `site/styles/tokens.css`.
    - Assembles global shell: `Nav.js`, `Footer.js`, root layout `site/app/layout.js`, and `site/components/ResponsiveImage.js`.
    - Exports dual GSAP & CSS motion tokens to `site/lib/motion.js`.
@@ -19,14 +21,14 @@ Stage 6 is the foundational engineering and initial showcase stage:
    - Scaffolds `site/AGENTS.md` and 4 scoped AGENTS.md files (`app/`, `components/`, `lib/`, `content/`).
    - Wires CMS data access layer (`site/lib/cms/`) if `cms: cms`.
    - Generates `/credits` page (`site/app/credits/page.js`) if stock imagery was sourced.
-5. **Route & Component Scaffolding:** Scaffolds all App Router routes and section components with `// section: <id>` and `data-section="<id>"` markers, decoupling content into `site/content/`, and emitting `site/site.manifest.json`.
-6. **Full Landing Page Construction for Client Showcase:**
+7. **Route & Component Scaffolding:** Scaffolds all App Router routes and section components with `// section: <id>` and `data-section="<id>"` markers, decoupling content into `site/content/`, and emitting `site/site.manifest.json`.
+8. **Full Landing Page Construction for Client Showcase:**
    - Implements thin `site/app/page.js` (<= 80 lines).
    - Fully codes and styles all home section components in `site/app/_components/` (<= 250 lines).
    - Wires authentic verbatim copy from `site/content/home.js`.
    - Connects optimized media assets via `ResponsiveImage.js`.
    - Applies tasteful, subtle GSAP motion wrapped in `useGSAP` with container scopes and unmount cleanup.
-7. **Gate 6 Client Showcase:** Presents the fully functional, interactive Landing Page to the client along with passing build diagnostics (`pnpm build`).
+9. **Gate 6 Client Showcase:** Presents the fully functional, interactive Landing Page to the client along with passing build diagnostics (`pnpm build`).
 
 ---
 
@@ -34,14 +36,14 @@ Stage 6 is the foundational engineering and initial showcase stage:
 
 - **Target Folder:** `site/` strictly at the project root.
 - **Safety Precondition:** If `site/` already exists and is not empty, **HALT EXECUTION IMMEDIATELY** and ask the user how to proceed. Never overwrite or re-initialize an existing codebase.
-- **Containment Scope:** All codebase writes are confined exclusively to `site/`. Planning docs update `project-docs/page-checklist.md`, `project-docs/theory-revisions.md`, `project-docs/router-state.md`, and `project-docs/launch-checklist.md`.
+- **Containment Scope:** All codebase writes are confined exclusively to `site/`. Planning docs update `project-docs/page-checklist.md`, `project-docs/router-state.md`, and `project-docs/launch-checklist.md`.
 
 ---
 
 ## 3. Runtime Convention Discovery Procedure
 
 Before scaffolding or generating code in `site/`:
-1. **Document Inspection:** Read `project-docs/tech-stack.md` and `project-docs/code-conventions.md`.
+1. **Document Inspection:** Read `project-docs/client-review/gate-1-tech-stack/tech-stack.md` and `project-docs/code-conventions.md`.
 2. **Lockfile Detection:** Check project root for:
    - `pnpm-lock.yaml` -> `pnpm`
    - `package-lock.json` -> `npm`
@@ -66,21 +68,11 @@ Before scaffolding or generating code in `site/`:
 
 ## 4. Scaffolding & Foundation Execution Protocol
 
-### Step 0: Load Specialized Architecture & Engineering Skills
-Before scaffolding or writing code in `site/`, the agent MUST load the specialized agent skills covering Next.js App Router best practices, React composition patterns, web design guidelines, token design systems, and the GSAP animation suite:
+### Step 0: Load Approved Animation Skills
+Before scaffolding or writing code in `site/`, verify that zero unresolved items exist in `project-docs/client-review/gate-5-cms-requirements/list.md`. Then load the approved GSAP animation suite:
 
 ```bash
-# Next.js & React Architecture Standards (Vercel Labs)
-DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices
-DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-composition-patterns
-DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/agent-skills --skill web-design-guidelines
-DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/openreview --skill next-best-practices
-
-# Design System & Token Architecture
-DISABLE_TELEMETRY=1 npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill design-system
-
 # GSAP Animation Suite
-DISABLE_TELEMETRY=1 npx skills add https://github.com/heygen-com/hyperframes --skill gsap
 DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-core
 DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-scrolltrigger
 DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-performance
@@ -89,7 +81,7 @@ DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --sk
 
 *(Note: For React-specific GSAP lifecycle hooks and unmount cleanup, `greensock/gsap-skills` also supplies `gsap-react`.)*
 
-### Step 1: Initialize Next.js Application
+### Step 1: Initialize Next.js Application & Env Template
 Execute the official generator non-interactively using verified flags matching discovered conventions:
 ```bash
 # Example for discovered JavaScript + pnpm stack:
@@ -97,14 +89,23 @@ pnpm create next-app@latest site --js --tailwind --app --eslint --import-alias "
 ```
 - **Mandatory Flag `--disable-git`:** Prevents creating a nested git repository within the parent workspace.
 - **Dependency Boundary:** No third-party packages beyond the official generator and the approved tech stack may be installed.
+- **File Size & Token Efficiency:** Generated files in `site/` must be as small as possible without limiting the features or functionality of the page.
+- **Site Environment Template:** Create `site/.env.example` documenting all required variables:
+  ```env
+  SERVER_URL="https://cms.example.com"
+  CMS_SITE_KEY="your-cms-site-key"
+  REVALIDATE_SECRET="your-revalidate-secret"
+  NEXT_PUBLIC_SITE_URL="https://example.com"
+  NEXT_PUBLIC_PREVIEW_GUARD="true"
+  ```
 
-### Step 2: Generate Master QA Checklist & Theory Revisions
-Generate the QA acceptance artifacts before building pages:
-- `project-docs/theory-revisions.md`: Records taste adjustments, typography contrast audits, and motion limits.
+### Step 2: Generate Master QA Checklist
+Generate the master QA acceptance checklist before building pages:
 - `project-docs/page-checklist.md`: Master static QA checklist establishing binary pass/fail checks across individual pages, the foundation shell, and final cross-page verification.
+- **In-Place Revisions Rule:** Do NOT generate `project-docs/theory-revisions.md`. When revisions are requested, edit existing deliverable files in-place. If requirement notes are needed, place them in `client-requirements/`.
 
 ### Step 3: Wire Design Tokens & Foundation Shell
-- Extract semantic tokens from `project-docs/design-theory.md` (colors, typography scale, container widths, radii) and wire them into `site/app/globals.css` and `site/styles/tokens.css`.
+- Extract semantic tokens from `project-docs/client-review/gate-2-design-theory/design-theory.md` (colors, typography scale, container widths, radii) and wire them into `site/app/globals.css` and `site/styles/tokens.css`.
 - Export GSAP and CSS motion tokens into `site/lib/motion.js`.
 - Promote shared navigation header (`Nav.js`) and footer (`Footer.js`) to `site/components/`.
 - Install `site/components/ResponsiveImage.js` for zero-CLS server-rendered image loading with LQIP blur placeholders.
@@ -256,9 +257,12 @@ pnpm build
 Build must compile with zero errors.
 
 ### Gate 6 Review Checklist
-- [ ] 10 specialized architecture & GSAP skills pre-loaded.
+- [ ] Precondition satisfied: Zero unresolved CMS requirements in `gate-5-cms-requirements/list.md`.
+- [ ] Approved GSAP animation skills pre-loaded.
 - [ ] Next.js App Router codebase initialized in `site/` without nested git repo.
-- [ ] `project-docs/theory-revisions.md` and `project-docs/page-checklist.md` generated.
+- [ ] `site/.env.example` generated.
+- [ ] File size discipline verified: code is lean and token-efficient without limiting features.
+- [ ] `project-docs/page-checklist.md` generated (no separate `theory-revisions.md` file).
 - [ ] Foundation shell operational: Nav, Footer, tokens, `ResponsiveImage.js`, motion tokens.
 - [ ] Asset optimizer executed; `assets-optimize.config.md` persisted.
 - [ ] Scoped AGENTS.md files and check scripts operational (`pnpm check:all` passes).

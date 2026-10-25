@@ -52,6 +52,68 @@ skills-by-devansh/
 
 ---
 
+## Client Project Architecture (`<client-project-root>/`)
+
+When an agent executes the `create-nww-website` or `nww` pipeline to develop a website for a client, the generated workspace strictly follows this locked canonical directory architecture:
+
+```text
+<client-project-root>/
+├── .env.example                          # Root environment template (SEO tools, Resend email keys)
+├── client-context/                       # All raw client inputs, brand assets, discovery questionnaires
+│   ├── client-answers.md                 # Stage 0 discovery & intake brief
+│   ├── branding/                         # Brand logos, color guides, visual assets
+│   ├── uploads/                          # Client-provided images, headshots, brochures
+│   └── notes/                            # Raw notes, transcripts, or initial requirements
+├── previous-site/                        # [If Migration] Old website archive, legacy URLs, scraped pages
+│   ├── sitemap-legacy.xml                # Crawled URLs from existing website for 301 redirects
+│   ├── content-export/                   # Scraped legacy blog posts, pages, and metadata
+│   └── media/                            # Legacy media assets
+├── client-requirements/                  # [Optional] Recorded client requirement notes during in-place revisions
+│   └── client-revision-notes.md          # Client revision feedback notes (revisions applied directly in-place)
+├── project-docs/                         # Project pipeline management & tracking
+│   ├── router-state.md                   # Live pipeline state, current stage, gate status & email logs
+│   ├── page-checklist.md                 # Stage 6 master QA acceptance checklist
+│   ├── design-references/                # Benchmark reference scrapes (landing pages only)
+│   │   ├── sources.md                    # Ledger of all benchmark reference sites analyzed
+│   │   └── <domain>/                     # Scraped reference site assets (internal visual analysis only)
+│   └── client-review/                    # Human-gated client review deliverables
+│       ├── index.html                    # Root Review Portal (indexes all active gate deliverables)
+│       ├── gate-1-tech-stack/
+│       │   └── tech-stack.md             # Stage 1 tech stack specification
+│       ├── gate-2-design-theory/
+│       │   ├── design-theory.md          # Stage 2 visual direction, typography, colors, motion
+│       │   ├── index.html                # Gate 2 concept comparison & review hub
+│       │   └── variation-<N>-<slug>/     # HTML + Tailwind + jQuery variations (deployed to public URL)
+│       ├── gate-3-page-list/
+│       │   └── page-list.md              # Master page inventory & route hierarchy (no page-design-notes.md)
+│       ├── gate-4-seo-strategy/
+│       │   └── seo-strategy.md           # Keywords, metadata, JSON-LD & Search Console check
+│       ├── gate-5-page-specs/            # Single-Mode Markdown page blueprints
+│       │   ├── layout-system.md          # Global shared components layout spec (ONLY ## Shared Components)
+│       │   └── <page-slug>.md
+│       ├── gate-5-cms-requirements/      # [If CMS Enabled] Blocking checklist (list.md) & read-only query (prompt.md)
+│       ├── gate-5-cms-schema/            # [If CMS Enabled] Collection schemas & models (cms-schema.md)
+│       ├── gate-5-cms-content/           # [If CMS Enabled] Authentic JSON seed content
+│       └── gate-8-final-verification/
+│           └── structure-audit.md        # Stage 8 deliverables compliance & code limits audit
+└── site/                                 # Production Next.js App Router codebase
+    ├── .env.example                      # Site environment template (Next.js variables, CMS API tokens)
+    ├── package.json                      # Next.js App Router, Tailwind CSS, Lucide icons, GSAP
+    ├── next.config.mjs                   # Next.js configuration (images, redirects, headers)
+    ├── tailwind.config.js                # Design token mapping from Stage 2 Design Theory
+    ├── postcss.config.js
+    ├── site.manifest.json                # Project build manifest and page status registry
+    ├── public/                           # Self-hosted variable fonts, optimized WebP/AVIF images, SVGs
+    ├── app/                              # Next.js App Router (layout.js, globals.css, thin page.js <= 80 lines)
+    │   ├── page.js                       # Stage 6 Home / Landing Page Showcase (< 80 lines)
+    │   ├── _components/                  # Section components (< 250 lines, // section: <id>)
+    │   └── <sub-page-slug>/              # Stage 7 sub-pages built sequentially
+    ├── components/                       # Global shared components defined in layout-system.md
+    └── lib/                              # Shared helper utilities (< 500 lines: cms, utils, seo, animations)
+```
+
+---
+
 ## Skills.sh & Discovery Model
 
 Skills in this repository conform to the skills.sh decentralized distribution standard:

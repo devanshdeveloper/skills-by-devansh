@@ -114,22 +114,59 @@ export async function cmsFetch(path, resource, init = {}) {
 
 /**
  * Fetch paginated blog articles.
+ *
+ * CRITICAL CODE REQUIREMENTS:
+ * 1. Must explicitly append ?status=published (omission causes backend ModelHelper to drop
+ *    the status filter, exposing draft/rejected/pending articles).
+ * 2. Tenant verification is handled via the Authorization: Bearer ${CMS_SITE_KEY} token;
+ *    no user parameter is required in the query.
+ * 3. Defensively filter against future postedAt timestamps (backend does not filter future dates).
+ * 4. Paginated items are returned inside res.data.items.
  */
 export async function getPaginatedBlogPosts(page = 1, limit = 10) {
-  return cmsFetch(
-    `/api/blog/paginate?page=${page}&limit=${limit}`,
+  const json = await cmsFetch(
+    `/api/blog/paginate?status=published&page=${page}&limit=${limit}`,
     'blog'
   );
+
+  const items = json?.data?.items || [];
+  const now = new Date();
+
+  // Defensive future-post filter (backend does not filter future postedAt dates)
+  const publishedItems = items.filter(post => {
+    if (!post.postedAt) return true;
+    return new Date(post.postedAt) <= now;
+  });
+
+  return {
+    ...json,
+    data: {
+      ...json?.data,
+      items: publishedItems
+    }
+  };
 }
 
 /**
  * Fetch a single blog article by unique URL slug.
+ * Backend route: GET /api/blog/read-by-slug/:slug
+ * Slugs are globally unique across the database.
  */
 export async function getBlogPostBySlug(slug) {
-  return cmsFetch(
-    `/api/blog/read-one-by-slug/${slug}`,
+  const json = await cmsFetch(
+    `/api/blog/read-by-slug/${encodeURIComponent(slug)}`,
     'blog'
   );
+
+  const post = json?.data || null;
+  if (!post) return null;
+
+  // Defensive future-post filter
+  if (post.postedAt && new Date(post.postedAt) > new Date()) {
+    return null;
+  }
+
+  return post;
 }
 
 /**
@@ -335,20 +372,27 @@ node skills/create-nww-website/scripts/cms-seed/index.js --auto-slug
 
 The NWW CMS provides standard endpoints for form capture:
 
-### 1. Contact Form (`WebsiteContactUs`)
-- **Route:** `POST /api/website-contact-us/:id/submit` (where `:id` is the website contact form ID).
+### 1. Public Contact Form (`POST /api/form/:id/submit`)
+- **Route:** `POST /api/form/:id/submit` (where `:id` is the public `CMS_CONTACT_FORM_ID`).
+  *(Note: `/api/form/:id/submit` is the unauthenticated route mounted in `UnauthenticalRoutes.js`. `/api/website-contact-us` is an authenticated admin route).*
+- **Public Access Condition:** Permitted when `form.isPublic === true` on the target `Form` record.
 - **Headers:** `Content-Type: application/json`
-- **Body Schema:**
+- **Supported Storage Modes:**
+  1. **Dynamic FormResponse Mode (Recommended for custom website forms):**
+     When `form.model` is null or omitted, any submitted key-value pairs (e.g. `fullName`, `email`, `message`, `organization`, `inquiryType`) are flexibly persisted into `FormResponse.responses: [{ field, value }]`.
+  2. **Relational WebsiteContactUs Mode:**
+     When `form.model = "WebsiteContactUs"`, the backend creates a `WebsiteContactUs` record. Note that `website-contact-us.model.js` strictly requires: `firstName`, `lastName`, `email`, `phone`, and `message`.
+- **Sample Payload (Dynamic Form):**
   ```json
   {
-    "firstName": "Jane",
-    "lastName": "Doe",
+    "fullName": "Jane Doe",
     "email": "jane@example.com",
     "phone": "+1-555-0199",
+    "organization": "Acme Corp",
     "message": "Project inquiry details..."
   }
   ```
-  *(Notifications: Form submission email alerts are configured directly by the client inside CMS dashboard settings).*
+- **Email Dispatch Notice:** Submissions are recorded in MongoDB only. The backend does NOT automatically dispatch email alerts upon submission via `EmailHelper`. Direct transactional email alerts should be handled via a Next.js Server Action or API route (e.g., Resend) if immediate inbox delivery is needed.
 
 ### 2. Lead Capture
 - **Route:** `POST /api/lead/submit`

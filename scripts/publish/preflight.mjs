@@ -344,7 +344,7 @@ export async function checkG6PrivacyAndIsolation(repoRoot) {
     for (const f of skillFiles) {
       const text = fs.readFileSync(f, 'utf-8');
       const relFile = path.relative(repoRoot, f).replace(/\\/g, '/');
-      if (text.includes('context/')) {
+      if (/(?:^|[^a-zA-Z0-9_-])context\//.test(text)) {
         privacyErrors.push(`Reference to 'context/' found in published file: ${relFile}`);
       }
       const absMatch = text.match(/(?:^|[\s"'`(<[])([a-zA-Z]:[\\/](?![\\/])[^\s"'`>]+|(?:\/Users\/|\/home\/)[^\s"'`>]+)/);

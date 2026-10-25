@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-10-25
+
+### Added
+- **Canonical Project File Structure Specification**: Codified the strict client workspace layout with `client-context/`, `gate-1-tech-stack/` through `gate-8-final-verification/`, root and site `.env.example`, `previous-site/` migration directory, and optional `client-requirements/` across `SKILL.md`, `references/pipeline-stages.md`, and `docs/ARCHITECTURE.md`.
+- **HTML + Tailwind + jQuery Gate 2 Variations**: Enforced interactive static prototype stack for Gate 2 variations with mandatory public preview deployment (GitHub Pages) and strict prohibition of localhost URLs.
+- **Stage 0 Client Approval Email Prompt**: Added upfront capture of client approval email addresses to automate milestone notifications.
+- **CMS Blocking Gate on Stage 6**: Embedded blocking precondition checking `gate-5-cms-requirements/list.md` before scaffolding CMS code.
+- **SEO Tool Connection Protocol**: Added mandatory check in Stage 4 to ask clients for Google Search Console and analytics tool access upfront.
+
+### Changed
+- **In-Place Revisions Discipline**: Formally banned creation of extra markdown files (e.g. `theory-revisions.md`); revisions are applied directly in-place, and requirement notes are placed in `client-requirements/`.
+- **Deleted Extraneous Markdown Documents**: Permanently banned `page-design-notes.md`, `migration-inventory.md`, `editor-handover-outline.md`, `context-update.md`, and `cms-foundation-tasks.md`.
+- **Single-Mode Markdown Page Specifications**: Removed HTML and Next.js blueprint toggles in Stage 5 in favor of a single unified Markdown specification per page; `layout-system.md` is streamlined to contain only `## Shared Components`.
+- **Scaffolding Skill Load Pruning**: Removed 7 unneeded skill installations, keeping the approved GSAP animation suite.
+- **CMS Backend Contract Alignments**: Reconciled blog pagination (`?status=published` mandatory, defensive future `postedAt` filter, `data.items` response unwrap), slug lookup, and contact form submission (`POST /api/form/:id/submit` with dynamic `FormResponse` and relational `WebsiteContactUs` modes).
+- **Companion CLI Script Updates**: Updated `client-notify`, `client-review`, `structure-audit`, `client-intake`, and `reference-capture` to support `client-context/` and new gate folders.
+
 ## [1.8.1] - 2026-10-23
 
 ### Added

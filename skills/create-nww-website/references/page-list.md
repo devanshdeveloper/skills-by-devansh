@@ -1,14 +1,14 @@
 # Page List & Information Architecture Specification
 
-Stage 3 builds the complete sitemap, route hierarchy, and navigation structure. The output file `project-docs/page-list.md` is formatted as a **markdown checklist** that serves as the single source of truth for page completion throughout Stages 8, 9, and 10.
+Stage 3 builds the complete sitemap, route hierarchy, and navigation structure. The output file `project-docs/client-review/gate-3-page-list/page-list.md` is formatted as a **markdown checklist** that serves as the single source of truth for page completion throughout Stages 6, 7, and 8.
 
-If page types appear that were not covered during Stage 2 Design Theory (e.g., pricing tables, dashboard, careers portal), the agent also outputs `project-docs/page-design-notes.md`.
+Do NOT generate `page-design-notes.md`. Do not create any additional markdown files.
 
 ---
 
-## Deliverable Structure (`project-docs/page-list.md`)
+## Deliverable Structure (`project-docs/client-review/gate-3-page-list/page-list.md`)
 
-`project-docs/page-list.md` must be formatted as an actionable markdown checklist organized into 5 logical categories:
+`project-docs/client-review/gate-3-page-list/page-list.md` must be formatted as an actionable markdown checklist organized into 5 logical categories:
 
 ```markdown
 # Page List & Master Build Tracker
@@ -129,5 +129,5 @@ Before presenting to the user for Gate 3 sign-off:
 - [ ] Every core, secondary, dynamic, utility, and compliance page is cataloged.
 - [ ] Routes follow Next.js App Router kebab-case conventions.
 - [ ] Dynamic pages specify data source (`cms` or `site/data`) and expected entry count.
-- [ ] `project-docs/page-design-notes.md` is authored if new page types were introduced.
-- [ ] User approves `project-docs/page-list.md` before initiating Stage 4 (SEO Strategy).
+- [ ] User approves `project-docs/client-review/gate-3-page-list/page-list.md` before initiating Stage 4 (SEO Strategy).
+- [ ] Zero unstated markdown files were generated (no `page-design-notes.md`).
