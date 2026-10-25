@@ -14,8 +14,16 @@ This skill is a lightweight alias for `create-nww-website`.
 ### 1. Install
 
 ```bash
-npx skills add devanshdeveloper/skills-by-devansh --skill nww
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill nww
 ```
+
+Or run without installing (one-shot):
+
+```bash
+DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@nww
+```
+
+> **Tip (Windows PowerShell):** Use `$env:DISABLE_TELEMETRY="1"; npx skills ...`
 
 ### 2. Starter Prompt
 

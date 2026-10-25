@@ -147,6 +147,26 @@ If any variation fails a distance threshold, selector collision check, or word o
 The comparison hub and variation previews are client deliverables and must adhere to professional communication standards:
 
 - **Technology Stack (HTML + Tailwind CSS + jQuery):** Every landing page variation (`<variation-slug>/index.html`) MUST be built using **semantic HTML + Tailwind CSS + jQuery**. This saves future tokens, eliminates heavy JavaScript bundle overhead, and keeps previews lightweight and interactive.
+- **Repeating Cards Normal CSS Rule (Token Optimization):** When building landing page variations in HTML + Tailwind CSS + jQuery, whenever components repeat (e.g. 3–6 feature cards, service tiles, metric boxes, pricing tiers, testimonial cards), **use normal CSS** instead of repeating long strings of inline Tailwind utility classes on every individual card element.
+  - Define card rules in a scoped `<style>` block in the HTML `<head>`:
+    ```html
+    <style>
+      .feature-card {
+        background: #0f172a;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 1.75rem;
+        transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      }
+      .feature-card:hover {
+        transform: translateY(-4px);
+        border-color: #00E5FF;
+        box-shadow: 0 12px 30px -10px rgba(0, 229, 255, 0.15);
+      }
+    </style>
+    ```
+  - In the HTML body, simply reference `<div class="feature-card">` for each repeated instance.
+  - **Downstream Transition Rule:** When that same structure and styling is ported into the Next.js `site/` codebase during Stage 6 and Stage 7, convert the repeated card styling using Tailwind's **`@apply`** rule in `site/app/globals.css` (e.g. `@layer components { .feature-card { @apply bg-slate-900 border border-white/10 rounded-2xl p-7 transition-all ...; } }`). This keeps React section components thin, clean, and well under the 250-line limit.
 - **Mandatory Public Deployment:** Deliverables will be sent directly to the client. We ALWAYS require a live public deployment (such as GitHub Pages via `.github/workflows/deploy-pages.yml`) to forward to the client. **Forwarding localhost deployment links to the client is strictly forbidden.**
 - **No Prompt Copying Section:** The comparison hub is sent directly to the client; do NOT include "copy the prompt" or "Copy My Decision" prompt sections or buttons intended for pasting into an AI assistant.
 - **Plain-Language Tone:** All descriptions, titles, and explanations must avoid technical web jargon. Use accessible terminology (e.g., "Warm paper-like background" instead of "HSL 38 25% 94% CSS custom property"; "Clean single-column reading layout" instead of "max-w-prose container with 80ch margin auto").

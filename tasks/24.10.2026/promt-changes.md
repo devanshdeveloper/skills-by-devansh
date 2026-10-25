@@ -75,3 +75,7 @@ create a folder client-requirements/ and put it there.
 Use the same script for fetching examples (references) and previous site (migration).
 The script fetches at least each and every page type with `content.md`, `index.html`, and `screenshot.png`.
 
+25. In HTML + Tailwind CSS + jQuery generation (Gate 2 variations), use normal CSS in a `<style>` block when cards are repeating instead of duplicating inline Tailwind class strings, saving tokens.
+26. When that same card structure goes into the `site/` Next.js App Router codebase, use the Tailwind `@apply` rule (in `site/app/globals.css`) to keep components clean and within line limits.
+27. Provide an install and one-shot run command without telemetry (`DISABLE_TELEMETRY=1 npx skills ...`) for every skill.
+

@@ -14,14 +14,16 @@ This skill orchestrates the end-to-end creation of production-grade Next.js App 
 ### 1. Install
 
 ```bash
-npx skills add devanshdeveloper/skills-by-devansh --skill create-nww-website
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nww-website
 ```
 
 Or run without installing (one-shot):
 
 ```bash
-npx skills use devanshdeveloper/skills-by-devansh@create-nww-website
+DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@create-nww-website
 ```
+
+> **Tip (Windows PowerShell):** Use `$env:DISABLE_TELEMETRY="1"; npx skills ...`
 
 ### 2. Starter Prompt
 
@@ -245,6 +247,7 @@ All website code is generated under the `site/` directory:
   - Every section component must open with `// section: <id>` and render `data-section="<id>"`.
 - **Pre-Launch Guard:** `robots: { index: false, follow: false }` metadata, dynamic `robots.js`, and visual `<PreviewBanner />` active by default until production launch checklist sign-off.
 - **Shared Component Promotion Rule (2+ Pages):** Any component reused across **2+ pages** lives in flat `site/components/`. Page-local components live in `_components/` within their route.
+- **Repeating Cards & Component Styling (@apply Rule):** When repeating card components (features, metrics, testimonials, team grids) are ported into the Next.js App Router codebase (`site/app/globals.css`), define them using the Tailwind **`@apply`** rule within `@layer components` (e.g. `@layer components { .feature-card { @apply bg-card border border-border rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:border-primary/40; } }`). This keeps JSX section components clean, prevents repeating multi-line utility strings, and strictly honors the <= 250 line limit.
 - **Scoped AGENTS.md Guidance:** Scaffold `site/AGENTS.md` (<=150 lines) and 4 scoped files: `site/app/AGENTS.md`, `site/components/AGENTS.md`, `site/lib/AGENTS.md`, and `site/content/AGENTS.md`, each with fixed H2 headings: `## Architecture`, `## Conventions`, `## Anti-patterns`, `## Commands`.
 
 For complete coding rules, consult [references/gate-6-scaffolding/code-conventions.md](references/gate-6-scaffolding/code-conventions.md).
@@ -285,6 +288,7 @@ Aesthetic polish is mandatory for Stages 2 and 8:
   ```
   If unavailable, apply the documented built-in taste rules.
 - **Client Visual Review & Variations at Gate 2:** Capture reference landing pages into `project-docs/design-references/<domain>/` as analysis inputs only using `scripts/reference-capture/index.js`. Extract abstract principles and build $N$ original full-page landing page variation previews in `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` using **HTML + Tailwind CSS + jQuery** (to save future tokens) across the 9 dimensions per [references/gate-2-design-theory/design-variations.md](references/gate-2-design-theory/design-variations.md). Run the pre-presentation similarity audit (`_checks/similarity-audit.md`) confirming distance rules (>= 4 dimensions divergent from nearest references, <= 3 dimensions shared between variations, zero shared classes/IDs/assets, word overlap <= 5 words).
+- **Repeating Cards Normal CSS Rule (Token Optimization):** In Gate 2 HTML + Tailwind CSS + jQuery variations, whenever components such as cards, grid items, or list tiles repeat (e.g. 3–6 feature cards, service boxes, metric counters), **use normal CSS** in a `<style>` block (e.g. `.feature-card { background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1.5rem; transition: transform 0.25s ease; }`) instead of duplicating 20+ Tailwind utility classes inline on every single repeated element. This saves tokens, keeps HTML clean, and prevents bloated previews. When that same card structure is ported to the Next.js `site/` codebase, convert it using Tailwind's **`@apply`** rule in `site/app/globals.css`.
 - **Public Deployment Required (No Prompt Copying):** Gate 2 variations are sent to the client via a mandatory public deployment (e.g. GitHub Pages). We do NOT include the "copy the prompt" or "Copy My Decision" button section. Forwarding localhost deployment links to the client is strictly forbidden.
 - **In-Place Revisions:** If client requests revisions, edit existing files in-place; do NOT create extra markdown files. Save requirement notes in `client-requirements/`.
 - **Aesthetic Principles:**

@@ -14,14 +14,16 @@ Guide for AI agents to scaffold, configure, and develop modern Next.js web appli
 ### 1. Install
 
 ```bash
-npx skills add devanshdeveloper/skills-by-devansh --skill create-nextjs-website
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nextjs-website
 ```
 
 Or run without installing (one-shot):
 
 ```bash
-npx skills use devanshdeveloper/skills-by-devansh@create-nextjs-website
+DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@create-nextjs-website
 ```
+
+> **Tip (Windows PowerShell):** Use `$env:DISABLE_TELEMETRY="1"; npx skills ...`
 
 ### 2. Starter Prompt
 

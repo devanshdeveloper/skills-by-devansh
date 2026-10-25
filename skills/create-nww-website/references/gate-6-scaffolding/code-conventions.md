@@ -125,6 +125,28 @@ To preserve readability, modularity, and assist AI agent maintenance:
      ```
 3. **Utility, Config & Content Files:**
    - Maximum **500 lines**. Content exceeding 500 lines must be split into section-based objects.
+4. **Repeating Cards & Component Styling (@apply Rule):**
+   - When components repeat across a section or across pages (such as feature cards, service grids, metric counters, team members, or testimonial cards):
+     - Do **NOT** copy-paste lengthy 30-token Tailwind class strings onto every repeated JSX element.
+     - Instead, define the card component class in `site/app/globals.css` using Tailwind's **`@apply`** directive within `@layer components`:
+       ```css
+       @layer components {
+         .feature-card {
+           @apply relative bg-card border border-border/60 rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:border-primary/50 hover:-translate-y-1;
+         }
+         .feature-card-icon {
+           @apply w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4;
+         }
+         .feature-card-title {
+           @apply text-xl font-semibold tracking-tight text-foreground mb-2;
+         }
+         .feature-card-desc {
+           @apply text-sm text-muted-foreground leading-relaxed;
+         }
+       }
+       ```
+     - In your section component (`_components/*.js`), consume the semantic class: `<div className="feature-card">`.
+     - This keeps section components concise and readable, easily respecting the strict **<= 250 line limit**, while maintaining consistency with tokens.
 
 ---
 

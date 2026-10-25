@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.2] - 2026-10-25
+
+### Added
+- **Repeating Cards Normal CSS Rule (Gate 2 Variations)**: Codified rule across `SKILL.md`, `references/gate-2-design-theory/SKILL.md`, and `references/gate-2-design-theory/design-variations.md` requiring normal CSS in a `<style>` block when cards, list items, or grid tiles repeat in Gate 2 HTML + Tailwind CSS + jQuery variations to dramatically reduce token consumption and eliminate repetitive inline utility strings.
+- **Repeating Cards `@apply` Rule (`site/` Next.js App Router)**: Codified downstream rule across `SKILL.md`, `references/gate-6-scaffolding/SKILL.md`, `references/gate-6-scaffolding/code-conventions.md`, and `references/gate-7-sub-pages/SKILL.md` enforcing the use of Tailwind's `@apply` directive in `site/app/globals.css` (within `@layer components`) when repeating card structures are implemented in React, keeping section components concise and strictly within the <= 250 line limit.
+- **Telemetry-Free Installation Commands for All Skills**: Updated all quick start install and one-shot execution commands across `README.md`, `skills/create-nww-website/SKILL.md`, `skills/create-nextjs-website/SKILL.md`, and `skills/nww/SKILL.md` with explicit `DISABLE_TELEMETRY=1` prefixes and Windows PowerShell `$env:DISABLE_TELEMETRY="1"` guidance.
+
 ## [1.9.1] - 2026-10-25
 
 ### Added

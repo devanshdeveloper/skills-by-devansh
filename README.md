@@ -18,13 +18,13 @@ A collection of agent skills compatible with the [skills.sh](https://skills.sh/)
 Install all public skills from this repository in one command:
 
 ```bash
-npx skills add devanshdeveloper/skills-by-devansh
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh
 ```
 
 Preview skills without installing:
 
 ```bash
-npx skills add devanshdeveloper/skills-by-devansh --list
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --list
 ```
 
 ---
@@ -36,13 +36,13 @@ End-to-end 9-stage pipeline for building Next.js websites with optional NWW CMS 
 ### Install
 
 ```bash
-npx skills add devanshdeveloper/skills-by-devansh --skill create-nww-website
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nww-website
 ```
 
 Or run without installing (one-shot):
 
 ```bash
-npx skills use devanshdeveloper/skills-by-devansh@create-nww-website
+DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@create-nww-website
 ```
 
 ### Starter Prompt
@@ -88,13 +88,13 @@ Scaffold a modern Next.js project with App Router, TypeScript, and clean compone
 ### Install
 
 ```bash
-npx skills add devanshdeveloper/skills-by-devansh --skill create-nextjs-website
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nextjs-website
 ```
 
 Or run without installing (one-shot):
 
 ```bash
-npx skills use devanshdeveloper/skills-by-devansh@create-nextjs-website
+DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@create-nextjs-website
 ```
 
 ### Starter Prompt
@@ -122,7 +122,13 @@ Fast shortcut alias — activates the `create-nww-website` pipeline in one word.
 ### Install
 
 ```bash
-npx skills add devanshdeveloper/skills-by-devansh --skill nww
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill nww
+```
+
+Or run without installing (one-shot):
+
+```bash
+DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@nww
 ```
 
 ### Starter Prompt

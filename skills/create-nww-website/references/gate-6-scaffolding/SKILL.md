@@ -111,6 +111,7 @@ Generate the master QA acceptance checklist before building pages:
 
 ### Step 3: Wire Design Tokens & Foundation Shell
 - Extract semantic tokens from `project-docs/client-review/gate-2-design-theory/design-theory.md` (colors, typography scale, container widths, radii) and wire them into `site/app/globals.css` and `site/styles/tokens.css`.
+- **Repeating Card Component Styling (@apply Rule):** When porting repeating card designs (feature grids, metrics, testimonials) from Gate 2 HTML variations, define component classes in `site/app/globals.css` using Tailwind's **`@apply`** directive within `@layer components` (e.g. `.feature-card { @apply bg-card border border-border rounded-2xl p-6 transition-all; }`). This keeps JSX section components clean and within the <=250 line limit.
 - Export motion tokens into `site/lib/motion.js`: if `motion: disabled`, export pure CSS/Tailwind transitions; if motion is active, export dual GSAP easing equations and CSS transitions per [gsap-animation-tiers.md](gsap-animation-tiers.md).
 - Promote shared navigation header (`Nav.js`) and footer (`Footer.js`) to `site/components/`.
 - Install `site/components/ResponsiveImage.js` for zero-CLS server-rendered image loading with LQIP blur placeholders.

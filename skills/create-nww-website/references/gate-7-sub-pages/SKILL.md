@@ -39,6 +39,7 @@ Before touching code for sub-page `<slug>`:
      ```
    - Render `data-section="<id>"` on the root tag.
    - Semantic landmarks (`<section id="...">`, `<header>`, `<footer>`, `<article>`).
+   - **Repeating Cards (@apply Rule):** For repeating card grids or service lists, consume Tailwind's `@apply` classes defined in `globals.css` (e.g. `className="service-card"`) rather than repetitive inline utility strings to keep component line counts comfortably under 250 lines.
    - If section requires client state or GSAP animation, isolate into `'use client'` component.
 3. **Copy Source Rule:**
    - All text must import from `site/content/<slug>.js`. Zero hardcoded copy in component JSX.
