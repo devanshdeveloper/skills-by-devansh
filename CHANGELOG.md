@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.3] - 2026-10-25
+
+### Fixed
+- **Multi-Page Page-Type Discovery in Reference Crawler (`scripts/site-fetch/index.js`)**: Fixed `crawlReferences` in the universal site fetcher to probe XML sitemaps and discover homepage navigation links for benchmark design references rather than capturing only the `home` landing page. Now clusters distinct page types up to `--max-pages` and captures `<domain>/<slug>/` (`index.html`, `content.md`, `screenshot.png`, `capture.json`), updating the `sources.md` audit ledger with all sampled page types.
+- **Canonical Tree & Documentation Synchronization**: Aligned `design-references/` tree and descriptions in `SKILL.md`, `references/gate-0-intake/pipeline-stages.md`, `references/gate-2-design-theory/SKILL.md`, and `docs/ARCHITECTURE.md` to reflect multi-page page-type benchmarks.
+
 ## [1.9.2] - 2026-10-25
 
 ### Added

@@ -188,13 +188,10 @@ Every client website project created through this pipeline must strictly follow 
 ├── project-docs/                         # Project pipeline management & tracking
 │   ├── router-state.md                   # Live pipeline state, current stage, gate status & email logs
 │   ├── page-checklist.md                 # [Stage 6] Master QA checklist (binary PASS/FAIL criteria)
-│   ├── design-references/                # [Stage 2] Benchmark reference scrapes (landing pages only)
-│   │   ├── sources.md                    # Ledger of all benchmark reference sites analyzed
-│   │   └── <domain>/                     # Scraped reference site assets (internal visual analysis only)
-│   │       ├── page.html
-│   │       ├── content.md
-│   │       ├── screenshot-full-1440.png
-│   │       └── capture.json
+│   ├── design-references/                # [Stage 2] Benchmark reference scrapes (page-type snapshots via site-fetch)
+│   │   ├── sources.md                    # Ledger of all benchmark reference sites and captured page types
+│   │   └── <domain>/                     # Scraped reference site assets (<domain>/<slug>/)
+│   │       └── <slug>/                   # Per-page snapshot (<slug>/index.html, content.md, screenshot.png)
 │   └── client-review/                    # Human-gated client review deliverables
 │       ├── index.html                    # Root Review Portal (indexes all active gate deliverables)
 │       ├── gate-1-tech-stack/

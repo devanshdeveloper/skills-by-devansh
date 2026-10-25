@@ -553,21 +553,50 @@ async function crawlReferences({ briefPath, outDir, maxPages = 3, timeoutMs = 20
     const siteDir = path.join(outDir, ref.domain);
     console.log(`\nProcessing reference [${ref.name}] (${ref.cleanUrl})...`);
 
-    // Capture home/landing page
-    const homeDir = path.join(siteDir, 'home');
-    const { record } = await capturePageArtifacts(browser, ref.cleanUrl, 'home', homeDir, timeoutMs);
-    allResults.push({ ref, record });
+    // 1. Discover sitemap URLs and homepage links for this reference site
+    const sitemapUrls = await discoverSitemapUrls(ref.cleanUrl);
+
+    const probeContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const probePage = await probeContext.newPage();
+    let internalLinks = [];
+    try {
+      await probePage.goto(ref.cleanUrl, { waitUntil: 'domcontentloaded', timeout: timeoutMs });
+      internalLinks = await extractInternalLinksFromPage(probePage, ref.cleanUrl);
+    } catch (e) {
+      console.log(`  Notice: Initial probe encountered: ${e.message}`);
+    } finally {
+      await probePage.close();
+      await probeContext.close();
+    }
+
+    const allDiscovered = Array.from(new Set([cleanUrlString(new URL(ref.cleanUrl)), ...sitemapUrls, ...internalLinks]));
+    const pagesToCapture = clusterAndSamplePageTypes(allDiscovered, ref.cleanUrl, maxPages);
+
+    console.log(`  Identified ${pagesToCapture.length} page type(s) for ${ref.name}: ${pagesToCapture.map(p => `[${p.slug}]`).join(', ')}`);
+
+    const siteRecords = [];
+    for (const item of pagesToCapture) {
+      const pageDir = path.join(siteDir, item.slug);
+      const { record } = await capturePageArtifacts(browser, item.url, item.slug, pageDir, timeoutMs);
+      siteRecords.push(record);
+    }
+    allResults.push({ ref, records: siteRecords });
   }
 
   await browser.close();
 
   // Generate sources.md ledger
-  const rows = allResults.map(({ ref, record }) => {
-    const isSuccess = record.status === 'success';
-    const filesStr = isSuccess
-      ? `home/index.html<br>home/content.md<br>home/screenshot.png`
+  const rows = allResults.map(({ ref, records }) => {
+    const successRecords = records.filter(r => r.status === 'success');
+    const filesStr = records.length > 0
+      ? records.map(r => r.status === 'success'
+          ? `${r.slug}/index.html<br>${r.slug}/content.md<br>${r.slug}/screenshot.png`
+          : `${r.slug}: Error (${r.error || 'Failed'})`
+        ).join('<br><br>')
       : 'Capture error';
-    const statusStr = isSuccess ? '**Captured (design benchmark only)**' : `**Failed**: ${record.error}`;
+    const statusStr = successRecords.length > 0
+      ? `**Captured (${successRecords.length} page type(s))**`
+      : '**Capture failed**';
     return `| \`${ref.domain}\` | ${ref.name} | \`${ref.requestedUrl}\` | ${filesStr} | 1440 × 900 px | ${statusStr} |`;
   }).join('\n');
 

@@ -35,7 +35,7 @@ flowchart TD
 
 ## 2. Principles, Not Pixels (Anti-Copy Abstraction Barrier)
 
-Captured reference artifacts (`page.html`, `content.md`, `screenshot-full-1440.png`, `capture.json`) are **strictly analysis inputs**. They serve exclusively to extract high-level design principles, spatial rhythm, and aesthetic tendencies.
+Captured reference artifacts (`<slug>/index.html`, `<slug>/content.md`, `<slug>/screenshot.png`, `<slug>/capture.json`) are **strictly analysis inputs**. They serve exclusively to extract high-level design principles, spatial rhythm, and aesthetic tendencies.
 
 ### Zero-Tolerance Anti-Copy Prohibitions
 When building variations or downstream pages:

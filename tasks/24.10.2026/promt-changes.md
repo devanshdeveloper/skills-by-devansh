@@ -78,4 +78,5 @@ The script fetches at least each and every page type with `content.md`, `index.h
 25. In HTML + Tailwind CSS + jQuery generation (Gate 2 variations), use normal CSS in a `<style>` block when cards are repeating instead of duplicating inline Tailwind class strings, saving tokens.
 26. When that same card structure goes into the `site/` Next.js App Router codebase, use the Tailwind `@apply` rule (in `site/app/globals.css`) to keep components clean and within line limits.
 27. Provide an install and one-shot run command without telemetry (`DISABLE_TELEMETRY=1 npx skills ...`) for every skill.
+28. Fix `crawlReferences` in `site-fetch/index.js` to probe sitemaps and discover internal navigation links for benchmark reference sites, cluster distinct page types up to `--max-pages`, and capture snapshots across all representative sub-pages (`<slug>/index.html`, `content.md`, `screenshot.png`).
 

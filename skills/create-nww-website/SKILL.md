@@ -158,13 +158,10 @@ All client projects developed through this pipeline strictly adhere to the follo
 ├── project-docs/                         # Project pipeline management & tracking
 │   ├── router-state.md                   # Live pipeline state, current stage, gate status & email logs
 │   ├── page-checklist.md                 # [Stage 6] Master QA checklist (binary PASS/FAIL criteria)
-│   ├── design-references/                # [Stage 2] Benchmark reference scrapes (landing pages only)
-│   │   ├── sources.md                    # Ledger of all benchmark reference sites analyzed
-│   │   └── <domain>/                     # Scraped reference site assets (internal visual analysis only)
-│   │       ├── page.html
-│   │       ├── content.md
-│   │       ├── screenshot-full-1440.png
-│   │       └── capture.json
+│   ├── design-references/                # [Stage 2] Benchmark reference scrapes (page-type snapshots via site-fetch)
+│   │   ├── sources.md                    # Ledger of all benchmark reference sites and captured page types
+│   │   └── <domain>/                     # Scraped reference site assets (<domain>/<slug>/)
+│   │       └── <slug>/                   # Per-page snapshot (<slug>/index.html, content.md, screenshot.png)
 │   └── client-review/                    # Human-gated client review deliverables
 │       ├── index.html                    # Root Review Portal (indexes all active gate deliverables)
 │       ├── gate-1-tech-stack/
@@ -287,7 +284,7 @@ Aesthetic polish is mandatory for Stages 2 and 8:
   DISABLE_TELEMETRY=1 npx skills add anthropics/skills --skill frontend-design
   ```
   If unavailable, apply the documented built-in taste rules.
-- **Client Visual Review & Variations at Gate 2:** Capture reference landing pages into `project-docs/design-references/<domain>/` as analysis inputs only using `scripts/reference-capture/index.js`. Extract abstract principles and build $N$ original full-page landing page variation previews in `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` using **HTML + Tailwind CSS + jQuery** (to save future tokens) across the 9 dimensions per [references/gate-2-design-theory/design-variations.md](references/gate-2-design-theory/design-variations.md). Run the pre-presentation similarity audit (`_checks/similarity-audit.md`) confirming distance rules (>= 4 dimensions divergent from nearest references, <= 3 dimensions shared between variations, zero shared classes/IDs/assets, word overlap <= 5 words).
+- **Client Visual Review & Variations at Gate 2:** Capture reference benchmark sites into `project-docs/design-references/<domain>/<slug>/` across key page types (Home, About, Work, etc.) as analysis inputs only using `node skills/create-nww-website/scripts/site-fetch/index.js --brief client-context/client-answers.md --out project-docs/design-references --mode references`. Extract abstract principles and build $N$ original full-page landing page variation previews in `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` using **HTML + Tailwind CSS + jQuery** (to save future tokens) across the 9 dimensions per [references/gate-2-design-theory/design-variations.md](references/gate-2-design-theory/design-variations.md). Run the pre-presentation similarity audit (`_checks/similarity-audit.md`) confirming distance rules (>= 4 dimensions divergent from nearest references, <= 3 dimensions shared between variations, zero shared classes/IDs/assets, word overlap <= 5 words).
 - **Repeating Cards Normal CSS Rule (Token Optimization):** In Gate 2 HTML + Tailwind CSS + jQuery variations, whenever components such as cards, grid items, or list tiles repeat (e.g. 3–6 feature cards, service boxes, metric counters), **use normal CSS** in a `<style>` block (e.g. `.feature-card { background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1.5rem; transition: transform 0.25s ease; }`) instead of duplicating 20+ Tailwind utility classes inline on every single repeated element. This saves tokens, keeps HTML clean, and prevents bloated previews. When that same card structure is ported to the Next.js `site/` codebase, convert it using Tailwind's **`@apply`** rule in `site/app/globals.css`.
 - **Public Deployment Required (No Prompt Copying):** Gate 2 variations are sent to the client via a mandatory public deployment (e.g. GitHub Pages). We do NOT include the "copy the prompt" or "Copy My Decision" button section. Forwarding localhost deployment links to the client is strictly forbidden.
 - **In-Place Revisions:** If client requests revisions, edit existing files in-place; do NOT create extra markdown files. Save requirement notes in `client-requirements/`.

@@ -9,12 +9,12 @@ The deliverable is saved to `project-docs/client-review/gate-2-design-theory/des
 ## Prerequisites & Taste Skill Activation
 
 When entering Stage 2:
-1. **Live-Fetch & Capture Reference Sites (Landing Pages Only):**
-   - For every liked reference URL in `client-context/client-answers.md`, capture the landing page directly into `project-docs/design-references/<domain>/` (where `<domain>` is lowercase hostname without `www.`, landing page only, query strings stripped) using `node skills/create-nww-website/scripts/reference-capture/index.js`.
-   - Produce four standard artifacts per landing page:
-     - `page.html`: Rendered DOM post-hydration saved verbatim (external assets not mirrored).
+1. **Live-Fetch & Capture Reference Sites (Key Page Types via site-fetch):**
+   - For every liked reference URL in `client-context/client-answers.md`, discover sitemap URLs, navigate internal links, cluster representative page types up to `--max-pages`, and capture snapshots directly into `project-docs/design-references/<domain>/<slug>/` using `node skills/create-nww-website/scripts/site-fetch/index.js --brief client-context/client-answers.md --out project-docs/design-references --mode references` (or companion wrapper `node skills/create-nww-website/scripts/reference-capture/index.js`).
+   - Produce four standard artifacts per page type:
+     - `index.html`: Rendered DOM post-hydration saved verbatim (external assets not mirrored).
      - `content.md`: Verbatim stripped text preserving headings, paragraphs, and links (zero paraphrasing or summarizing).
-     - `screenshot-full-1440.png`: Full-page 1440px desktop screenshot after lazy content loads.
+     - `screenshot.png`: Full-page 1440px desktop screenshot after lazy content loads.
      - `capture.json`: Structured metadata record (URL, final URL, title, viewport, sizes, status).
    - Compile `project-docs/design-references/sources.md` starting with the mandatory third-party usage notice (captures are strictly for internal design analysis and never reused in client code), followed by the complete audit table.
    - *Fallback rule:* If capture fails or the URL is unreachable/blocked, record the failure in `capture.json` and `sources.md`, ask the user to provide screenshots, and **never fabricate placeholders or mock images**.
@@ -128,7 +128,7 @@ Keep reusable scripts and dependencies in the skill. Keep only site-specific rev
 - **Repeating Cards Normal CSS Rule (Token Optimization)**: When generating variation HTML, if components such as cards, grid items, or list tiles repeat (e.g. 3–6 feature cards, service boxes), use **normal CSS** in a `<style>` block rather than repeating long inline Tailwind utility strings on every card. When ported downstream to Next.js `site/`, use Tailwind's **`@apply`** rule in `globals.css`.
 
 Before presenting to the user for Gate 2 sign-off:
-- [ ] Reference landing pages captured into `project-docs/design-references/<domain>/` (`page.html`, `content.md`, `screenshot-full-1440.png`, `capture.json`) as analysis inputs only.
+- [ ] Reference benchmark sites captured into `project-docs/design-references/<domain>/<slug>/` (`index.html`, `content.md`, `screenshot.png`, `capture.json`) across representative page types as analysis inputs only.
 - [ ] Reference capture ledger compiled in `project-docs/design-references/sources.md` starting with mandatory third-party usage notice (zero fabricated images, zero copied assets).
 - [ ] Technical design theory authored to `project-docs/client-review/gate-2-design-theory/design-theory.md` (abstract principles, tokens, typography, motion, avoid list).
 - [ ] $N$ full-page landing page variation previews (default 3) compiled to `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` built using **HTML + Tailwind CSS + jQuery** featuring distinct architectural personalities, normal CSS for repeating cards, and real client content per [design-variations.md](design-variations.md).

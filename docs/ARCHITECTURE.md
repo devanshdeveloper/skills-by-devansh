@@ -78,9 +78,10 @@ When an agent executes the `create-nww-website` or `nww` pipeline to develop a w
 ├── project-docs/                         # Project pipeline management & tracking
 │   ├── router-state.md                   # Live pipeline state, current stage, gate status & email logs
 │   ├── page-checklist.md                 # Stage 6 master QA acceptance checklist
-│   ├── design-references/                # Benchmark reference scrapes (landing pages only)
-│   │   ├── sources.md                    # Ledger of all benchmark reference sites analyzed
-│   │   └── <domain>/                     # Scraped reference site assets (internal visual analysis only)
+│   ├── design-references/                # Benchmark reference scrapes (page-type snapshots via site-fetch)
+│   │   ├── sources.md                    # Ledger of all benchmark reference sites and captured page types
+│   │   └── <domain>/                     # Scraped reference site assets (<domain>/<slug>/)
+│   │       └── <slug>/                   # Per-page snapshot (<slug>/index.html, content.md, screenshot.png)
 │   └── client-review/                    # Human-gated client review deliverables
 │       ├── index.html                    # Root Review Portal (indexes all active gate deliverables)
 │       ├── gate-1-tech-stack/
@@ -137,7 +138,8 @@ Skills may contain companion CLI utilities inside `scripts/`:
 - **`assets-optimizer`**: A Node.js utility utilizing `sharp` and `ffmpeg` to process, optimize, resize, and produce WebP assets and manifests.
 - **`stock-fetch`**: A Node.js utility connecting to Pixabay, Pexels, and Unsplash APIs to search, download, and log provenance for images.
 - **`client-review`**: A Node.js utility that automatically scans modular concept review directories and generates/updates client review hubs and portals.
-- **`reference-capture`**: A Node.js utility capturing full rendered DOM (`page.html`), stripped Markdown (`content.md`), full-page screenshots (`screenshot-full-1440.png`), and audit metadata (`capture.json`) into `project-docs/design-references/<domain>/`.
+- **`site-fetch`**: A unified Node.js crawler for both Stage 0 previous site migrations and Stage 2 design references. Probes sitemaps, discovers internal navigation links, clusters page types up to `--max-pages`, and captures rendered DOM (`<slug>/index.html`), stripped markdown (`<slug>/content.md`), full-page screenshots (`<slug>/screenshot.png`), and `sitemap-legacy.xml`.
+- **`reference-capture`**: A backwards-compatible CLI wrapper delegating directly to `site-fetch` for Stage 2 design reference discovery and capture.
 - **`client-notify`**: A Node.js utility providing stage-by-stage client email drafting, Resend/SendGrid/SMTP dispatch upon explicit user approval, clickable `mailto:` links, and automated logging in `router-state.md`.
 - **`structure-audit`**: A Node.js utility auditing project documentation across all 12 stages, enforcing strict line limits and section comments, and compiling `project-docs/structure-audit.md`.
 
