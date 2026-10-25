@@ -67,8 +67,9 @@ Consult [client-questionnaire.md](client-questionnaire.md) for master orchestrat
 5. [Batch 05: Type-Specific Architectural Routing](batch-05-type-specific-routing/questionnaire.md) (E-commerce, Portfolio, SaaS, Booking, Blog, Corporate)
 6. [Batch 06: Legacy Website Migration & Content Carry-Forward](batch-06-legacy-site-migration/questionnaire.md) (Q26a–Q26e, if migration)
 7. [Batch 07: Technical SEO, Domain, Analytics & Governance](batch-07-seo-analytics-governance/questionnaire.md) (Q27–Q36)
+8. [Batch 08: Rolling Discovery & Refinement Open Questions](batch-08-open-questions/questionnaire.md) (Single batch of 20 active unanswered questions, on-demand client email)
 
-Store confirmed client responses in `client-context/answers/batch-[number]-[batch-name]/answers.md` and compiled assets in `client-context/asset-manifest.md`.
+Store confirmed client responses in `client-context/answers/batch-[number]-[batch-name]/answers.md`, compiled assets in `client-context/asset-manifest.md`, and rolling open questions in `client-context/open-questions.md`.
 
 ---
 

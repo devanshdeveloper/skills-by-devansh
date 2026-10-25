@@ -94,6 +94,7 @@ The intake questionnaire is split into 7 modular, deep-dive reference documents:
 | `batch-05-type-specific-routing` | Deep-dive dynamic routing for: **E-commerce**, **Portfolio**, **SaaS / Web App**, **Booking / Service**, **Blog / Publication**, and **Corporate** | Injects type-specific modules (Stripe, Calendly, Case Studies, Pricing Matrices, Taxonomies) | [batch-05 questionnaire](batch-05-type-specific-routing/questionnaire.md) |
 | `batch-06-legacy-site-migration` | Legacy site migration disposition: route action (`carry-verbatim`, `rewrite`, `merge`, `retire`), content carry-forward decisions, 301 redirect map | Essential for Stage 4 301 redirects and preserving existing SEO equity | [batch-06 questionnaire](batch-06-legacy-site-migration/questionnaire.md) |
 | `batch-07-seo-analytics-governance` | Search queries, market focus, production domain, GA4 ID, legal entity details, review deployment format, codebase folder, sign-off approver | Sets up `site/.env.example`, legal pages, review portals, and governance | [batch-07 questionnaire](batch-07-seo-analytics-governance/questionnaire.md) |
+| `batch-08-open-questions` | **Single Consolidated Batch of 20 Unanswered Questions**: Rolling discovery & refinement queue (`open-questions.md`) for continuous client discovery | Can be emailed to client at any time (`--questions`); dynamically refilled; immediate live code action | [batch-08 questionnaire](batch-08-open-questions/questionnaire.md) |
 
 ---
 

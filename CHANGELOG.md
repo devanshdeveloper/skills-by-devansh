@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.6] - 2026-10-25
+
+### Added
+- **Single Batch Questionnaire for 20 Rolling Open Questions (`batch-08-open-questions`)**: Created `skills/create-nww-website/references/gate-0-intake/batch-08-open-questions/questionnaire.md` grouping the 20 rolling open questions into a single consolidated batch.
+- **Strict Already-Answered Filtering**: Codified strict rule ensuring any question whose topic, detail, or asset is already documented in Batches 01 to 07 (`client-context/answers/batch-*/answers.md`) or `client-context/asset-manifest.md` is strictly filtered out so the batch contains only genuine, unanswered gap questions.
+- **On-Demand Open Questions Mailer (`--questions`)**: Added `--questions` CLI flag and `batch-08-open-questions` support to `scripts/client-notify/index.js`, allowing maintainers and users to draft or dispatch milestone review emails containing the active 20 open questions at any time.
+
 ## [1.9.5] - 2026-10-25
 
 ### Added

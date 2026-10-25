@@ -11,7 +11,8 @@
  *
  * Options:
  *   --stage=<0-8>        Stage number (auto-detected from router-state.md if omitted)
- *   --batch=<1-7>        Gate 0 batch number or slug for batch-by-batch client confirmation emails
+ *   --batch=<1-8>        Gate 0 batch number or slug (1-7 for milestone confirmations, 8 for open questions)
+ *   --questions          On-demand flag to draft or send email with the 20 open questions from open-questions.md
  *   --gate=<name>        Gate identifier (auto-detected if omitted)
  *   --to=<email>         Client email address (parsed from batch answers or prompt)
  *   --client=<name>      Client name (parsed from batch-01 answers or prompt)
@@ -244,8 +245,36 @@ const BATCH_MAP = {
   '7': 'batch-07-seo-analytics-governance',
   '07': 'batch-07-seo-analytics-governance',
   'batch-07': 'batch-07-seo-analytics-governance',
-  'batch-07-seo-analytics-governance': 'batch-07-seo-analytics-governance'
+  'batch-07-seo-analytics-governance': 'batch-07-seo-analytics-governance',
+  '8': 'batch-08-open-questions',
+  '08': 'batch-08-open-questions',
+  'batch-08': 'batch-08-open-questions',
+  'batch-08-open-questions': 'batch-08-open-questions',
+  'questions': 'batch-08-open-questions',
+  'open-questions': 'batch-08-open-questions'
 };
+
+function getOpenQuestionsSummary(projRoot) {
+  const openQuestionsPath = path.join(projRoot, 'client-context', 'open-questions.md');
+  if (fs.existsSync(openQuestionsPath)) {
+    const raw = fs.readFileSync(openQuestionsPath, 'utf-8');
+    const lines = raw.split('\n');
+    const questions = [];
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (/^(?:\d+\.|\-\s*\[\s*\]|\-\s*\*\*\[?Q|###\s*Q)/i.test(trimmed)) {
+        questions.push(trimmed.replace(/^-\s*\[\s*\]\s*/, '').replace(/^-\s*\*\*/, '').replace(/\*\*$/, ''));
+      }
+    }
+    if (questions.length > 0) {
+      return `We have compiled the current active queue of open discovery and refinement questions (${questions.length} questions):\n\n` +
+             questions.join('\n') +
+             `\n\nYour answers will directly shape the copywriting, visual assets, and functional specs. Simply reply to this email with your thoughts or answers.`;
+    }
+    return `We have compiled the current open discovery questions in client-context/open-questions.md. Please review and reply with your answers.`;
+  }
+  return `We have compiled the current open discovery questions in client-context/open-questions.md. Please review and reply with your answers.`;
+}
 
 function getBatchTemplate(batchKey, context) {
   const { projectName } = context;
@@ -307,6 +336,14 @@ function getBatchTemplate(batchKey, context) {
       action: 'Confirm primary target search queries, analytics measurement platforms, and compliance governance.',
       deliverable: 'client-context/answers/batch-07-seo-analytics-governance/answers.md',
       summary: `We have defined your target search queries, geographic intent, tracking tool integrations, and legal/compliance governance policies.`
+    },
+    'batch-08-open-questions': {
+      gate: 'Discovery & Refinement',
+      name: 'Client Open Questions (20 Unanswered Questions Batch)',
+      subject: `[${projectName}] Action Requested: Please Review & Answer These Open Questions`,
+      action: 'Please reply directly to this email with your answers or notes for these questions.',
+      deliverable: 'client-context/open-questions.md',
+      summary: getOpenQuestionsSummary(projectRoot)
     }
   };
 
@@ -431,7 +468,9 @@ async function run() {
     reviewUrl
   };
 
-  const template = flags.batch ? getBatchTemplate(flags.batch, context) : getStageTemplate(stage, context);
+  const isQuestionsMode = Boolean(flags.questions) || flags.batch === '8' || flags.batch === 'questions' || flags.batch === 'open-questions';
+  const batchFlag = isQuestionsMode ? 'batch-08-open-questions' : flags.batch;
+  const template = batchFlag ? getBatchTemplate(batchFlag, context) : getStageTemplate(stage, context);
   const draft = buildEmailDraft(template, context);
 
   // If no recipient found, ask interactively
