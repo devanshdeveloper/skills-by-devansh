@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.9] - 2026-10-25
+
+### Added
+- **Batch Intake Questionnaire Email Mode (`--type=questions` / `--questions --batch=N`)**: Extended `scripts/client-notify/index.js` with `getBatchQuestionnaireTemplate()` so milestone emails for discovery batches (Batches 01 to 07, or Batch 08) dispatch the actual discovery questions directly to clients requesting their answers, rather than sending approval/answers confirmation summaries.
+
 ## [1.9.8] - 2026-10-25
 
 ### Changed
