@@ -34,7 +34,7 @@ All NWW client websites strictly follow this standard modern stack:
 
 ## Motion Tier Configuration Rules
 
-Check Q14 in `client-context/client-answers.md`:
+Check GSAP Animation Tier in `client-context/answers/batch-02-branding-motion/answers.md`:
 
 1. **Tier: `disabled`**:
    - Do **NOT** install `gsap` or `@gsap/react` in `site/package.json`.

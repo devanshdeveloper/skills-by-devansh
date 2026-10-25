@@ -16,8 +16,8 @@ const { crawlReferences, parseReferencesFromBrief } = require('../site-fetch/ind
 
 async function run() {
   const projectRoot = process.argv[2] ? path.resolve(process.argv[2]) : process.cwd();
-  const primaryAnswers = path.join(projectRoot, 'client-context', 'client-answers.md');
-  const fallbackAnswers = path.join(projectRoot, 'project-docs', 'client-answers.md');
+  const primaryAnswers = path.join(projectRoot, 'client-context', 'answers', 'batch-02-branding-motion', 'answers.md');
+  const fallbackAnswers = path.join(projectRoot, 'client-context', 'answers', 'batch-01-core-identity', 'answers.md');
   const briefPath = fs.existsSync(primaryAnswers) ? primaryAnswers : fallbackAnswers;
   const outDir = path.join(projectRoot, 'project-docs', 'design-references');
 

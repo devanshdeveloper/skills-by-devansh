@@ -65,7 +65,7 @@ Before fetching, verify the matching env var exists. If a provider key is missin
 
 ## 3. Intake Branch (Stage 0 Addition)
 
-At Gate 0, after Q35 in section F (Assets and Media), ask these four questions. Record answers in `project-docs/client-answers.md` under "Stock Photography Decisions":
+At Gate 0, in Batch 04 (Asset Harvesting, Inventory & Generation), ask these stock authorization questions. Record answers in `client-context/answers/batch-04-asset-harvesting-generation/answers.md` and `client-context/asset-manifest.md`:
 
 **Q35a.** For image slots not supplied by the client -- is the project authorized to use licensed stock photography?
 - **No** -> all open image slots receive `placeholder` + `needs-client-input`. Skip remaining questions. No stock fetch will occur.
@@ -234,13 +234,13 @@ The script: checks env vars in priority order -> builds and fires the API search
 
 Append to the standard Gate 5 Review Checklist:
 
-- [ ] Stock photography approved in `client-answers.md`? If no, skip remaining items.
+- [ ] Stock photography approved in `client-context/answers/batch-04-asset-harvesting-generation/answers.md`? If no, skip remaining items.
 - [ ] All stock slots fetched using an approved provider key.
 - [ ] All stock images pass all seven selection criteria.
 - [ ] `project-docs/stock-provenance.json` complete -- one entry per image, all required fields populated.
 - [ ] Hard-excluded sections carry `placeholder` + `[STOCK-EXCLUDED]` -- no stock in team, testimonial, portfolio, or premises sections.
 - [ ] No provider API key present in any project file.
-- [ ] Stock image count is within the ceiling approved in `client-answers.md`.
+- [ ] Stock image count is within the ceiling approved in `client-context/answers/batch-04-asset-harvesting-generation/answers.md`.
 
 ## 14. Stage 6 Stock Checklist
 

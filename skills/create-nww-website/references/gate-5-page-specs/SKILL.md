@@ -40,10 +40,18 @@ Before initiating Stage 5 research or authoring `page.md` specifications:
 
 ## Research Protocol
 
-1. **Live-Fetch Reference Layouts:** Fetch liked and disliked reference websites before drawing structural conclusions. Extract section orders, hero patterns, grid systems, and content density changes.
-2. **Attribution:** Clearly attribute each section's structural choice to a client-provided reference, agent-sourced research, or the page's primary conversion CTA.
-3. **Research Bounds:** Maximum 3 fetches per page type across references, and 25 fetches total. If a URL blocks access, mark as "unverified" and fall back to the client's description.
-4. **Principles-Not-Pixels Abstraction Barrier:** The similarity audit and no-clone rules from [design-variations.md](../gate-2-design-theory/design-variations.md) strictly apply. All layouts are synthesized from abstract design principles and authentic client content. Never copy DOM markup, CSS classes, element IDs, or visual assets from captured reference websites.
+1. **Benchmark Reference Inspection & Mapping:**
+   - Inspect all captured design benchmark sub-pages in `project-docs/design-references/<domain>/<slug>/` (`index.html`, `content.md`, `screenshot.png`) and the ledger `project-docs/design-references/sources.md`.
+   - If this project is a migration, also inspect legacy page captures in `previous-site/<slug>/` (`index.html`, `content.md`, `screenshot.png`).
+   - For the specific page being specified (e.g. `/services`, `/about`, `/blog`, `/case-studies`, `/contact`, `/pricing`), identify analogous pages among the references (e.g. `/apps`, `/notes`, `/journal`, `/capabilities-data-engineering`).
+   - Extract section sequence patterns, hero spatial rhythm, grid systems, card density, and conversion CTA placements.
+2. **Benchmark Reference Mapping in Deliverables:**
+   - In each `page-specs/<slug>/page.md`, author an explicit section: `## 0. Reference Benchmark Mapping & Similar Page Alignment`.
+   - Map each planned page to the analogous captured reference pages, key structural takeaways, and how the planned page synthesizes these principles while diverging into the client's authentic brand voice.
+3. **Attribution & Section Anchors:**
+   - Clearly attribute each section's structural choice with a `- Reference Benchmark Anchor:` in its layout blueprint pointing to a captured benchmark page or client conversion goal.
+4. **Research Bounds:** Maximum 3 fetches per page type across references, and 25 fetches total. If a URL blocks access, mark as "unverified" and fall back to the client's description.
+5. **Principles-Not-Pixels Abstraction Barrier:** The similarity audit and no-clone rules from [design-variations.md](../gate-2-design-theory/design-variations.md) strictly apply. All layouts are synthesized from abstract design principles and authentic client content. Never copy DOM markup, CSS classes, element IDs, or visual assets from captured reference websites.
 
 ---
 
@@ -66,13 +74,23 @@ To keep code maintainable, avoid duplicate components, and prevent monolithic fi
 
 ## Deliverable Structure 1: Per-Page Specification (`page-specs/<slug>/page.md`)
 
-Each page in `project-docs/page-list.md` receives a dedicated specification file combining metadata, layout blueprint, verbatim copywriting, and media asset slots:
+Each page in `project-docs/page-list.md` receives a dedicated specification file combining reference benchmarking, metadata, layout blueprint, verbatim copywriting, and media asset slots:
 
 ```markdown
 # Page Specification: [Page Name] ([Static | Dynamic CMS])
 Route: /route-path
 Slug: [slug]
 Layout Pattern: [e.g. Single-column narrative scroll with sticky visual]
+
+---
+
+## 0. Reference Benchmark Mapping & Similar Page Alignment
+
+| Benchmark Reference Page | Captured Artifact Path | Key Structural / Spatial Takeaways | Applied Synthesis in this Page |
+|---|---|---|---|
+| `newmaterial.ai` (`[capabilities-data-engineering]`) | `project-docs/design-references/newmaterial.ai/capabilities-data-engineering/` | Asymmetric 2-column hero with sticky metrics sidebar; structured capability cards with minimal borders. | Adopted generous spatial breathing room and high-contrast metric callout in Hero; adapted cards into 3-column responsive grid. |
+| `bymayo.co.uk` (`[apps]`) | `project-docs/design-references/bymayo.co.uk/apps/` | Compact card presentation with subtle hover transitions and direct tag filtering. | Informs Section 2 service category pills and card hover states. |
+| `previous-site` (Legacy) | `previous-site/services/` | Legacy bullet lists of capabilities without clear hierarchy or primary conversion CTA. | Fully replaced legacy unformatted text with distinct narrative sections and targeted conversion CTAs. |
 
 ---
 
@@ -115,7 +133,8 @@ seo:
 - **Layout Blueprint:**
   - Structure: Two-column desktop (60/40 text vs visual), stacking vertically on mobile.
   - Spacing: Generous vertical padding (`py-24` desktop, `py-12` mobile).
-  - Rationale: Grounded in Aesop reference spatial rhythm (client reference analysis).
+  - Reference Benchmark Anchor: `project-docs/design-references/newmaterial.ai/capabilities-data-engineering/` (asymmetric hero balance and spatial rhythm).
+  - Rationale: Grounded in Aesop and New Material reference spatial rhythm (client reference analysis).
 - **Verbatim Copywriting:**
   - Status: `agency-created`
   - Eyebrow: "Digital Engineering"
@@ -204,14 +223,14 @@ Every asset slot must be cataloged using existing assets or approved stock sourc
 
 ## Deliverable Structure 2: Cross-Page Layout System (`project-docs/client-review/gate-5-page-specs/layout-system.md`)
 
-Documents system-wide components reused across 2+ pages. Per repository rules, this document must contain ONLY one section:
+Documents system-wide components reused across 2+ pages. Synthesizes global navigation, footer, and shell patterns observed across captured design benchmarks (`project-docs/design-references/**/home/index.html`). Per repository rules, this document must contain ONLY one section:
 
 ```markdown
 # Cross-Page Layout System
 
 ## Shared Components
-- `Nav`: Global sticky navigation header. Text fields: Nav links, CTA label. Capacity: links <= 20 chars. Media: Logo variant.
-- `Footer`: Global site footer. Text fields: Company summary, column link labels, copyright. Capacity: summary <= 150 chars. Media: Reversed logo variant.
+- `Nav`: Global sticky navigation header. Text fields: Nav links, CTA label. Capacity: links <= 20 chars. Media: Logo variant. Benchmark alignment: Minimal fixed header inspired by `bymayo.co.uk` and `f13.com`.
+- `Footer`: Global site footer. Text fields: Company summary, column link labels, copyright. Capacity: summary <= 150 chars. Media: Reversed logo variant. Benchmark alignment: Multi-column sitemap footer modeled after `newmaterial.ai` and `tinycomputer.co`.
 - `CTABanner`: Pre-footer conversion callout. Text fields: Heading, subhead, button label. Capacity: heading <= 60 chars, subhead <= 140 chars.
 - `ResponsiveImage`: Manifest-driven image component rendering srcset, sizes, and LQIP blur placeholders.
 ```
@@ -261,6 +280,8 @@ For technical CMS details, consult [cms-architecture.md](cms-architecture.md).
 ### Before Presenting Gate 5 to the User
 - [ ] Precondition satisfied: Gate 2 chosen design variation is recorded in `router-state.md` and `design-theory.md`.
 - [ ] Every page in `page-list.md` has a complete markdown specification at `page-specs/<slug>/page.md`.
+- [ ] Each `page.md` contains `## 0. Reference Benchmark Mapping & Similar Page Alignment` referencing captured sub-pages (`project-docs/design-references/<domain>/<slug>/` or `previous-site/<slug>/`).
+- [ ] Section blueprints cite `- Reference Benchmark Anchor:` attributing structural layout and density to benchmark observations.
 - [ ] Shared units created at `page-specs/_shared/*.md` (nav, footer, brand assets).
 - [ ] Shared 2+ page components cataloged in `project-docs/client-review/gate-5-page-specs/layout-system.md` with only one section: `## Shared Components`.
 - [ ] Verbatim copywriting drafted for all sections; unconfirmed draft text carries `data-placeholder="true"`.

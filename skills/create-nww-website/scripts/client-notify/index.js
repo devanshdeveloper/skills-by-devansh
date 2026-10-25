@@ -11,9 +11,10 @@
  *
  * Options:
  *   --stage=<0-8>        Stage number (auto-detected from router-state.md if omitted)
+ *   --batch=<1-7>        Gate 0 batch number or slug for batch-by-batch client confirmation emails
  *   --gate=<name>        Gate identifier (auto-detected if omitted)
- *   --to=<email>         Client email address (parsed from client-answers.md or prompt)
- *   --client=<name>      Client name (parsed from client-answers.md or prompt)
+ *   --to=<email>         Client email address (parsed from batch answers or prompt)
+ *   --client=<name>      Client name (parsed from batch-01 answers or prompt)
  *   --link=<url>         Review URL (auto-detected from GitHub Pages / local portal)
  *   --confirm            Grant approval to send (otherwise prompts interactively)
  *   --dry-run            Only display the draft without prompting or sending
@@ -39,7 +40,7 @@ const projDocs = path.join(projectRoot, 'project-docs');
 
 function parseRouterState() {
   const routerPath = path.join(projDocs, 'router-state.md');
-  if (!fs.existsSync(routerPath)) return { stage: 2, gate: 'Gate 2', status: 'In Review' };
+  if (!fs.existsSync(routerPath)) return { stage: 2, gate: 'Gate 2', status: 'In Review', projectName: 'Website Project' };
   const content = fs.readFileSync(routerPath, 'utf-8');
 
   const stageMatch = content.match(/Current Stage:[\s*_]*Stage\s*(\d+)/i);
@@ -60,13 +61,15 @@ function parseRouterState() {
 }
 
 function parseClientDetails() {
-  const primaryPath = path.join(projectRoot, 'client-context', 'client-answers.md');
-  const fallbackPath = path.join(projDocs, 'client-answers.md');
-  const answersPath = fs.existsSync(primaryPath) ? primaryPath : fallbackPath;
-  if (!fs.existsSync(answersPath)) {
+  const batch01Path = path.join(projectRoot, 'client-context', 'answers', 'batch-01-core-identity', 'answers.md');
+  const batch07Path = path.join(projectRoot, 'client-context', 'answers', 'batch-07-seo-analytics-governance', 'answers.md');
+  let content = '';
+  if (fs.existsSync(batch01Path)) content += fs.readFileSync(batch01Path, 'utf-8') + '\n';
+  if (fs.existsSync(batch07Path)) content += fs.readFileSync(batch07Path, 'utf-8');
+
+  if (!content) {
     return { name: 'Client', email: '', company: '' };
   }
-  const content = fs.readFileSync(answersPath, 'utf-8');
 
   const nameMatch = content.match(/Client Name:\s*([^\n]+)/i) ||
                     content.match(/Project Name:\s*([^\n—\-]+)/i);
@@ -132,7 +135,7 @@ function getStageTemplate(stage, context) {
       name: 'Intake Check & Scope Confirmation',
       subject: `[${projectName}] Milestone Review: Intake Brief & CMS Scope Ready`,
       action: 'Confirm the intake answers and CMS mode so technical architecture can begin.',
-      deliverable: 'client-context/client-answers.md',
+      deliverable: 'client-context/answers/',
       summary: `We have codified your discovery answers, branding preferences, reference sites, and CMS scope into the initial Project Brief. Please review the scope details to ensure full alignment before we generate the technical architecture.`
     },
     1: {
@@ -211,6 +214,103 @@ function getStageTemplate(stage, context) {
     deliverable: reviewUrl || 'project-docs/client-review/index.html',
     summary: `Stage ${stage} deliverables have been generated and are ready for your review.`
   };
+}
+
+const BATCH_MAP = {
+  '1': 'batch-01-core-identity',
+  '01': 'batch-01-core-identity',
+  'batch-01': 'batch-01-core-identity',
+  'batch-01-core-identity': 'batch-01-core-identity',
+  '2': 'batch-02-branding-motion',
+  '02': 'batch-02-branding-motion',
+  'batch-02': 'batch-02-branding-motion',
+  'batch-02-branding-motion': 'batch-02-branding-motion',
+  '3': 'batch-03-sitemap-copy',
+  '03': 'batch-03-sitemap-copy',
+  'batch-03': 'batch-03-sitemap-copy',
+  'batch-03-sitemap-copy': 'batch-03-sitemap-copy',
+  '4': 'batch-04-asset-harvesting-generation',
+  '04': 'batch-04-asset-harvesting-generation',
+  'batch-04': 'batch-04-asset-harvesting-generation',
+  'batch-04-asset-harvesting-generation': 'batch-04-asset-harvesting-generation',
+  '5': 'batch-05-type-specific-routing',
+  '05': 'batch-05-type-specific-routing',
+  'batch-05': 'batch-05-type-specific-routing',
+  'batch-05-type-specific-routing': 'batch-05-type-specific-routing',
+  '6': 'batch-06-legacy-site-migration',
+  '06': 'batch-06-legacy-site-migration',
+  'batch-06': 'batch-06-legacy-site-migration',
+  'batch-06-legacy-site-migration': 'batch-06-legacy-site-migration',
+  '7': 'batch-07-seo-analytics-governance',
+  '07': 'batch-07-seo-analytics-governance',
+  'batch-07': 'batch-07-seo-analytics-governance',
+  'batch-07-seo-analytics-governance': 'batch-07-seo-analytics-governance'
+};
+
+function getBatchTemplate(batchKey, context) {
+  const { projectName } = context;
+  const canonical = BATCH_MAP[String(batchKey).toLowerCase().trim()] || 'batch-01-core-identity';
+
+  const templates = {
+    'batch-01-core-identity': {
+      gate: 'Gate 0 (Batch 01)',
+      name: 'Core Identity & Technical Slug Confirmation',
+      subject: `[${projectName}] Milestone Review: Core Identity & Technical Project Slug Approved`,
+      action: 'Confirm your business name, technical project slug, target market, and primary goals.',
+      deliverable: 'client-context/answers/batch-01-core-identity/answers.md',
+      summary: `We have compiled and verified your Core Identity discovery answers, including the confirmed technical project slug. This slug will govern repository naming, preview variation domains, and Vercel hosting.`
+    },
+    'batch-02-branding-motion': {
+      gate: 'Gate 0 (Batch 02)',
+      name: 'Branding, Visual Personality & Motion Tier Confirmation',
+      subject: `[${projectName}] Milestone Review: Visual Identity & GSAP Motion Tier Approved`,
+      action: 'Review and confirm your brand visual direction, color pairings, typography, and motion tier.',
+      deliverable: 'client-context/answers/batch-02-branding-motion/answers.md',
+      summary: `We have codified your brand personality, color palette tokens, typography rules, liked design references, and approved motion tier to prepare for Gate 2 design variations.`
+    },
+    'batch-03-sitemap-copy': {
+      gate: 'Gate 0 (Batch 03)',
+      name: 'Route Sitemap & Copywriting Scope Confirmation',
+      subject: `[${projectName}] Milestone Review: Route Hierarchy & Copywriting Scope Approved`,
+      action: 'Confirm the planned route hierarchy, primary conversion calls-to-action, and copywriting source strategy.',
+      deliverable: 'client-context/answers/batch-03-sitemap-copy/answers.md',
+      summary: `We have outlined your website's route structure, required page inventory, conversion paths, and content sourcing approach.`
+    },
+    'batch-04-asset-harvesting-generation': {
+      gate: 'Gate 0 (Batch 04)',
+      name: 'Asset Harvesting & Generation Manifest Confirmation',
+      subject: `[${projectName}] Milestone Review: Visual Asset Manifest & Sourcing Strategy Approved`,
+      action: 'Review and confirm your media asset inventory, brand assets, custom generation needs, and stock sourcing permissions.',
+      deliverable: 'client-context/asset-manifest.md & client-context/answers/batch-04-asset-harvesting-generation/answers.md',
+      summary: `We have generated the master visual asset manifest—cataloging all client uploads, legacy media to harvest, custom visual assets to create, and licensed stock photography criteria.`
+    },
+    'batch-05-type-specific-routing': {
+      gate: 'Gate 0 (Batch 05)',
+      name: 'Website Archetype & Functional Requirements Confirmation',
+      subject: `[${projectName}] Milestone Review: Archetype Deep-Dive & Functional Scope Approved`,
+      action: 'Confirm the specialized architectural requirements for your specific website archetype.',
+      deliverable: 'client-context/answers/batch-05-type-specific-routing/answers.md',
+      summary: `We have documented the specialized architectural requirements tailored to your site type (e-commerce, SaaS, portfolio, booking, corporate, or content publication).`
+    },
+    'batch-06-legacy-site-migration': {
+      gate: 'Gate 0 (Batch 06)',
+      name: 'Legacy Site Migration & 301 Redirect Strategy Confirmation',
+      subject: `[${projectName}] Milestone Review: Legacy Content Carry-Forward & 301 Redirect Plan Approved`,
+      action: 'Confirm legacy content to carry forward, assets to preserve, and SEO redirect mappings.',
+      deliverable: 'client-context/answers/batch-06-legacy-site-migration/answers.md',
+      summary: `We have audited your legacy website archive, mapped URLs for 301 redirect preservation, and categorized legacy media assets for carry-forward.`
+    },
+    'batch-07-seo-analytics-governance': {
+      gate: 'Gate 0 (Batch 07)',
+      name: 'SEO Target Keywords, Analytics & Governance Confirmation',
+      subject: `[${projectName}] Milestone Review: SEO Target Keywords & Analytics Governance Approved`,
+      action: 'Confirm primary target search queries, analytics measurement platforms, and compliance governance.',
+      deliverable: 'client-context/answers/batch-07-seo-analytics-governance/answers.md',
+      summary: `We have defined your target search queries, geographic intent, tracking tool integrations, and legal/compliance governance policies.`
+    }
+  };
+
+  return templates[canonical] || templates['batch-01-core-identity'];
 }
 
 function buildEmailDraft(template, context) {
@@ -326,12 +426,12 @@ async function run() {
   }
 
   const context = {
-    projectName: routerInfo.projectName,
+    projectName: flags.project || routerInfo.projectName || 'Website Project',
     clientName,
     reviewUrl
   };
 
-  const template = getStageTemplate(stage, context);
+  const template = flags.batch ? getBatchTemplate(flags.batch, context) : getStageTemplate(stage, context);
   const draft = buildEmailDraft(template, context);
 
   // If no recipient found, ask interactively
@@ -410,4 +510,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { run, getStageTemplate, buildEmailDraft };
+module.exports = { run, getStageTemplate, getBatchTemplate, buildEmailDraft };

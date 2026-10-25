@@ -202,7 +202,7 @@
     "outputs": ["Average monthly searches", "3-month and YoY change percentage", "Competition level (low/medium/high)", "Top of page bid ranges"],
     "audit_stages": ["content", "on-page", "local"],
     "known_limits": "Accounts with zero ad spend show wide volume ranges (e.g. 100-1K); groups synonymous keywords together; commercial intent focused.",
-    "how_to_verify_output": "Ensure currency, language, and location targeting match the project brief recorded in client-answers.md.",
+    "how_to_verify_output": "Ensure currency, language, and location targeting match the project brief recorded in client-context/answers/batch-07-seo-analytics-governance/answers.md.",
     "official_doc_url": "https://support.google.com/google-ads/answer/7337243",
     "last_verified": "2026-10-23",
     "confidence": "verified"

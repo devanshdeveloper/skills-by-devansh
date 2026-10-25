@@ -90,7 +90,7 @@ export const metadata = {
     canonical: '/',
     languages: {
       'en-US': '/',
-      // 'es-ES': '/es', // Add localized paths if multi-language is enabled in client-answers.md
+      // 'es-ES': '/es', // Add localized paths if multi-language is enabled in client-context/answers/batch-07-seo-analytics-governance/answers.md
     },
     types: {
       'application/rss+xml': '/feed.xml',
@@ -627,7 +627,7 @@ export default function robots() {
         disallow: ['/api/', '/admin/'],
       },
       {
-        // Restrict bulk LLM model training scrapers if specified in client-answers.md
+        // Restrict bulk LLM model training scrapers if specified in client-context/answers/batch-07-seo-analytics-governance/answers.md
         userAgent: ['GPTBot', 'ClaudeBot', 'Google-Extended', 'CCBot'],
         disallow: ['/'],
       },

@@ -69,7 +69,7 @@ Before scaffolding or generating code in `site/`:
 ## 4. Scaffolding & Foundation Execution Protocol
 
 ### Step 0: Motion Tier Check & Skills Pre-Load
-Before scaffolding or writing code in `site/`, verify that zero unresolved items exist in `project-docs/client-review/gate-5-cms-requirements/list.md`. Check the client's selected animation tier from `client-context/client-answers.md` (Q14) against [gsap-animation-tiers.md](gsap-animation-tiers.md):
+Before scaffolding or writing code in `site/`, verify that zero unresolved items exist in `project-docs/client-review/gate-5-cms-requirements/list.md`. Check the client's selected animation tier from `client-context/answers/batch-02-branding-motion/answers.md` against [gsap-animation-tiers.md](gsap-animation-tiers.md):
 
 - **If `motion: disabled`:**
   - Do **NOT** execute the skill load commands.
@@ -93,6 +93,8 @@ Execute the official generator non-interactively using verified flags matching d
 pnpm create next-app@latest site --js --tailwind --app --eslint --import-alias "@/*" --disable-git --use-pnpm
 ```
 - **Mandatory Flag `--disable-git`:** Prevents creating a nested git repository within the parent workspace.
+- **Project Name & Slug Synchronization:** Immediately update `site/package.json` so that `"name": "<project-slug>"` matches the confirmed technical project slug from `client-context/answers/batch-01-core-identity/answers.md` (Batch 01 Q1b).
+- **Vercel Project Setup:** When linking or deploying to Vercel for client reviews, use this confirmed project slug (`vercel link --project <project-slug>`). Localhost forwarding is strictly forbidden for client review milestones.
 - **Dependency Boundary:** No third-party packages beyond the official generator and the approved tech stack may be installed.
 - **File Size & Token Efficiency:** Generated files in `site/` must be as small as possible without limiting the features or functionality of the page.
 - **Site Environment Template:** Create `site/.env.example` documenting all required variables:

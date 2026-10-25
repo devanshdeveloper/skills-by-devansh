@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.4] - 2026-10-25
+
+### Added
+- **Modular Batch Discovery & Intake System (`gate-0-intake/batch-*`)**: Modularized Gate 0 intake questionnaire into 7 self-contained batches with explicit confirmation gates:
+  - `batch-01-core-identity`: Core identity, technical project slug, business model, and goals.
+  - `batch-02-branding-motion`: Visual personality tokens, typography pairings, and GSAP motion tiers.
+  - `batch-03-sitemap-copy`: Route structure, page inventory, conversion paths, and copy sourcing.
+  - `batch-04-asset-harvesting-generation`: Comprehensive visual asset inventory, legacy asset harvesting, custom generation specs, and stock sourcing permissions, outputting to `client-context/asset-manifest.md`.
+  - `batch-05-type-specific-routing`: Deep-dive questions dynamically tailored to website archetype (e-commerce, SaaS, portfolio, booking, corporate, blog).
+  - `batch-06-legacy-site-migration`: Legacy website content carry-forward inventory and 301 redirect map.
+  - `batch-07-seo-analytics-governance`: Primary keywords, geographic intent, tracking platforms, and compliance governance.
+- **Batch-by-Batch Milestone Client Email Notifications**: Added `--batch=<1-7>` flag support to `scripts/client-notify/index.js`, enabling progressive batch-level client confirmation emails and mailto previews after each discovery questionnaire batch is completed.
+- **Enforced Technical Project Slug Governance**: Added explicit client question for technical project slug in Batch 01, propagating it strictly across Gate 2 variation folder names (`<project-slug>-v[1..N]`), `site/package.json`, and Vercel project deployment linking.
+
+### Removed
+- **Complete Deletion of `client-answers.md`**: Purged all occurrences of `client-answers.md` across runbooks, reference documents, schemas, and companion scripts in favor of modular batch answer storage (`client-context/answers/batch-[number]-[batch-name]/answers.md`) and dedicated visual asset manifest (`client-context/asset-manifest.md`).
+
 ## [1.9.3] - 2026-10-25
 
 ### Fixed

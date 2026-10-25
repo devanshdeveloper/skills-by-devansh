@@ -34,6 +34,7 @@ Activate the create-nww-website skill. Here is our project brief to initialize S
 
 ## 1. Project Identity & Purpose
 - Business / Brand Name: [e.g. Minit Charger]
+- Technical Project Name / Vercel Slug: [e.g. minit-charger]
 - Core Offering: [e.g. Turnkey Level 3 DC fast charging infrastructure for commercial transit and electric bus fleets.]
 - Target Audience: [e.g. Municipal transit directors, commercial depot operators, fleet logistics managers]
 - Primary Conversion Action: [e.g. Schedule Feasibility Study / Book a Consultation]
@@ -54,9 +55,9 @@ Activate the create-nww-website skill. Here is our project brief to initialize S
 ## 3. Scope & Pages
 - Core Pages: [e.g. Home, Solutions, About, Blog, Contact]
 - Forms Needed: [e.g. Lead capture & consultation request]
-- Imagery: [e.g. Licensed stock (Pixabay / Unsplash) + client diagrams]
+- Imagery & Assets: [e.g. Client-provided photos + licensed stock (Pixabay / Unsplash) + legacy site reuse]
 
-Please parse this into `client-context/client-answers.md` and present the Gate 0 Intake Recap for confirmation.
+Please parse this into `client-context/answers/batch-*/answers.md` and `client-context/asset-manifest.md`, then present the Gate 0 Intake Recap for confirmation.
 ````
 
 > **Tip:** If you prefer a guided interview, just type `nww` and the agent will walk you through each batch (5–7 questions per turn) interactively.
@@ -69,11 +70,11 @@ Please parse this into `client-context/client-answers.md` and present the Gate 0
 
 1. **Client Milestone Email Question:**
    - Ask the user at the start: *"Would you like client milestone approval emails prepared and dispatched at each stage?"* Record the preference.
-2. **First Action:** Check if the site brief file `client-context/client-answers.md` already exists (single read-only check; fallback check `project-docs/client-answers.md`).
-   - **If brief exists and is complete:** Present an intake recap, highlight any variations from project defaults, and halt for user confirmation to proceed to Gate 0.
-   - **If brief exists but is partial:** Acknowledge answered fields, and present ONLY the first batch containing unanswered questions.
-   - **If user provided a pasted brief or project notes in their prompt:** Extract known answers into `client-context/client-answers.md`, report what was captured, and present ONLY the remaining gap questions.
-   - **If no brief exists:** **IMMEDIATELY output Batch 1 (Questions 1 to 7)** of the intake questionnaire.
+2. **First Action:** Check if the intake answers directory `client-context/answers/` already exists (single read-only check; inspect `client-context/answers/batch-01-core-identity/answers.md`).
+   - **If answers exist and are complete:** Present an intake recap across batches, highlight any variations from project defaults, and halt for user confirmation to proceed to Gate 0.
+   - **If answers exist but are partial:** Acknowledge answered fields, and present ONLY the first batch containing unanswered questions.
+   - **If user provided a pasted brief or project notes in their prompt:** Extract known answers into `client-context/answers/batch-*/answers.md`, report what was captured, and present ONLY the remaining gap questions.
+   - **If no answers exist:** **IMMEDIATELY output Batch 01 (Questions Q1a to Q8)** of the intake questionnaire.
 3. **Site Migration & Environment Setup:**
    - If user indicates a site migration (`build_origin: migration`), crawl and archive the previous website into `previous-site/` BEFORE Gate 1 (`previous-site/<slug>/index.html`, `content.md`, `screenshot.png`, `sitemap-legacy.xml`). Fetching the previous site must be completed in Stage 0 so that existing routes, redirects, copywriting, and media assets are preserved before technical planning begins.
    - Run the universal site fetcher: `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --mode migration`
@@ -87,12 +88,12 @@ Please parse this into `client-context/client-answers.md` and present the Gate 0
    - Wait for the user's reply before presenting the subsequent batch.
    - Never guess or fabricate missing required answers. For optional questions, record approved defaults if the user answers "I don't know" or "decide later".
    - **Secret Hygiene:** NEVER request, accept, or record secret credentials, API keys, or passwords. Request environment variable names only (`CMS_SITE_KEY`, `SERVER_URL`, `REVALIDATE_SECRET`, `PIXABAY_API_KEY`).
-   - Save all answers to `client-context/client-answers.md`.
+   - Save all answers to `client-context/answers/batch-[number]-[batch-name]/answers.md` and compiled asset inventories to `client-context/asset-manifest.md`.
 6. **Gate 0 Enforced Halt:**
-   - Present the completed intake summary and asset inventory for explicit human confirmation.
+   - Present the completed intake summary across modular batch answers, confirmed technical project slug, and asset manifest for explicit human confirmation.
    - **HALT EXECUTION.** Do not proceed to Stage 1 Tech Stack or start any building until explicit confirmation is granted.
 
-Read [references/gate-0-intake/client-questionnaire.md](references/gate-0-intake/client-questionnaire.md) immediately on activation to present the intake batches and compile `client-context/client-answers.md`.
+Read [references/gate-0-intake/client-questionnaire.md](references/gate-0-intake/client-questionnaire.md) immediately on activation to present the intake batches and compile modular batch answer files in `client-context/answers/batch-*/answers.md` and `client-context/asset-manifest.md`.
 
 ---
 
@@ -114,14 +115,14 @@ The workflow proceeds strictly one stage at a time. Every stage requires explici
 
 | Stage | Name | Key Deliverables | Gate Approval | Reference Guide |
 |:---:|:---|:---|:---|:---|
-| **0** | **Intake Check** | `client-context/client-answers.md`, `.env.example`, `previous-site/` (if migration, crawled before Gate 1) | **Gate 0:** Intake recap & CMS mode confirmation | [gate-0-intake/SKILL.md](references/gate-0-intake/SKILL.md), [client-questionnaire.md](references/gate-0-intake/client-questionnaire.md) |
+| **0** | **Intake Check** | `client-context/answers/batch-*/answers.md`, `client-context/asset-manifest.md`, `.env.example`, `previous-site/` (if migration, crawled before Gate 1) | **Gate 0:** Intake recap across batch answers, asset manifest & CMS mode confirmation | [gate-0-intake/SKILL.md](references/gate-0-intake/SKILL.md), [client-questionnaire.md](references/gate-0-intake/client-questionnaire.md) |
 | **1** | **Tech Stack** | `project-docs/client-review/gate-1-tech-stack/tech-stack.md` | **Gate 1:** Tech stack sign-off (Internal Developer Gate) | [gate-1-tech-stack/SKILL.md](references/gate-1-tech-stack/SKILL.md) |
 | **2** | **Design Theory & Variations** | `project-docs/client-review/gate-2-design-theory/design-theory.md`, variation HTML files (HTML + Tailwind + jQuery), `gate-2-design-theory/index.html` review hub | **Gate 2:** Client visual review & variation selection sign-off (via live public deployment) | [gate-2-design-theory/SKILL.md](references/gate-2-design-theory/SKILL.md), [design-variations.md](references/gate-2-design-theory/design-variations.md) |
 | **3** | **Page List & Sitemap** | `project-docs/client-review/gate-3-page-list/page-list.md` (zero unstated markdowns) | **Gate 3:** Sitemap & route structure sign-off | [gate-3-page-list/SKILL.md](references/gate-3-page-list/SKILL.md) |
 | **4** | **SEO Strategy** | `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md` (ask client for tool connections upfront) | **Gate 4:** Keywords, JSON-LD, sitemap, redirects sign-off | [gate-4-seo-strategy/SKILL.md](references/gate-4-seo-strategy/SKILL.md) |
-| **5** | **Page Specifications & CMS Schema** | `page-specs/<slug>/page.md`, `page-specs/_shared/*.md`, `gate-5-page-specs/layout-system.md` (only `Shared Components`), `gate-5-cms-requirements/` (`list.md`, read-only `prompt.md`), `gate-5-cms-schema/`, `gate-5-cms-content/` | **Gate 5:** Page specifications & CMS schema sign-off (Single Mode: Markdown only) | [gate-5-page-specs/SKILL.md](references/gate-5-page-specs/SKILL.md) |
+| **5** | **Page Specifications & CMS Schema** | `page-specs/<slug>/page.md` (with benchmark reference mapping), `page-specs/_shared/*.md`, `gate-5-page-specs/layout-system.md` (only `Shared Components`), `gate-5-cms-requirements/` (`list.md`, read-only `prompt.md`), `gate-5-cms-schema/`, `gate-5-cms-content/` | **Gate 5:** Page specifications & CMS schema sign-off (Single Mode: Markdown only) | [gate-5-page-specs/SKILL.md](references/gate-5-page-specs/SKILL.md) |
 | **6** | **Scaffolding, Foundation & Landing Page Showcase** | Load approved GSAP skills (skip if motion: disabled); block on unresolved CMS requirements; `site/.env.example`; file size efficiency; scaffold `site/`; `page-checklist.md`; **construct full Landing Page (`site/app/page.js`) for client showcase** | **Gate 6:** Scaffolding, foundation & landing page showcase sign-off | [gate-6-scaffolding/SKILL.md](references/gate-6-scaffolding/SKILL.md) |
-| **7** | **Sub-Page Build Loop** | `site/app/<route>/page.js`, `_components/`, `page-specs/<slug>/checklist-state.md` for remaining sub-pages | **Gate 7a:** Sub-page build review<br>**Gate 7b:** Sub-page binary QA sign-off | [gate-7-sub-pages/SKILL.md](references/gate-7-sub-pages/SKILL.md) |
+| **7** | **Sub-Page Build Loop** | Inspect benchmark reference sub-pages prior to coding; `site/app/<route>/page.js`, `_components/`, `page-specs/<slug>/checklist-state.md` for remaining sub-pages | **Gate 7a:** Sub-page build review<br>**Gate 7b:** Sub-page binary QA sign-off | [gate-7-sub-pages/SKILL.md](references/gate-7-sub-pages/SKILL.md) |
 | **8** | **Final Verification & Handover** | `project-docs/client-review/gate-8-final-verification/structure-audit.md`, production audit, client handover (deploy via `deploy-to-vercel`, email notification) | **Gate 8a:** Cross-page fixes approval<br>**Gate 8b:** Final handover sign-off | [gate-8-final-verification/SKILL.md](references/gate-8-final-verification/SKILL.md) |
 
 ---
@@ -145,7 +146,15 @@ All client projects developed through this pipeline strictly adhere to the follo
 <client-project-root>/
 ├── .env.example                          # [Stage 0] Root environment template (SEO tools, Resend email keys)
 ├── client-context/                       # [Stage 0] Dedicated repository for all raw client inputs & assets
-│   ├── client-answers.md                 # Complete compiled Stage 0 discovery & intake brief
+│   ├── answers/                          # Confirmed modular intake batch answers
+│   │   ├── batch-01-core-identity/answers.md
+│   │   ├── batch-02-branding-motion/answers.md
+│   │   ├── batch-03-sitemap-copy/answers.md
+│   │   ├── batch-04-asset-harvesting-generation/answers.md
+│   │   ├── batch-05-type-specific-routing/answers.md
+│   │   ├── batch-06-legacy-site-migration/answers.md (if migration)
+│   │   └── batch-07-seo-analytics-governance/answers.md
+│   ├── asset-manifest.md                 # Visual asset inventory, provenance & status
 │   ├── branding/                         # Client logos (SVG/PNG), brand guidelines, color palettes
 │   ├── uploads/                          # Client-provided images, team headshots, PDFs, brochures
 │   └── notes/                            # Raw notes, transcripts, or initial requirements from client
@@ -234,9 +243,9 @@ All website code is generated under the `site/` directory:
 - **Framework:** Next.js App Router (`app/` directory, React Server Components by default).
 - **Runtime Convention Discovery:** Package manager (`pnpm`, `npm`, `yarn`, `bun`), language (`JavaScript` or `TypeScript`), and directory structure are discovered dynamically from lockfiles and project configs at run time, never hard-coded.
 - **Markdown Specifications, Scaffolding & Landing Page Pipeline:**
-  - Stage 5 generates unified markdown `page-specs/<slug>/page.md` per slug combining layout blueprints, verbatim copywriting, asset references, and CMS schemas/seeds without HTML or mode toggles.
-  - Stage 6 executes project scaffolding, generates the master QA checklist, builds the production foundation shell, emits `site/site.manifest.json`, and **fully constructs the Landing Page (`site/app/page.js`) for client showcase**.
-  - Stage 7 incrementally constructs remaining sub-pages with per-page review and binary QA sign-off.
+  - Stage 5 generates unified markdown `page-specs/<slug>/page.md` per slug combining benchmark reference mapping, layout blueprints, verbatim copywriting, asset references, and CMS schemas/seeds without HTML or mode toggles.
+  - Stage 6 executes project scaffolding, generates the master QA checklist, builds the production foundation shell, emits `site/site.manifest.json`, and **fully constructs the Landing Page (`site/app/page.js`) for client showcase**. (No sub-page benchmarking needed for Gate 6).
+  - Stage 7 incrementally constructs remaining sub-pages with benchmark reference inspection in Step 1, per-page review, and binary QA sign-off.
 - **Strict Line Limits & Markers:**
   - Thin page server component (`page.js`): **<= 80 lines**.
   - Section component (`_components/*.js`): **<= 250 lines** (hard limit 300).
@@ -284,7 +293,7 @@ Aesthetic polish is mandatory for Stages 2 and 8:
   DISABLE_TELEMETRY=1 npx skills add anthropics/skills --skill frontend-design
   ```
   If unavailable, apply the documented built-in taste rules.
-- **Client Visual Review & Variations at Gate 2:** Capture reference benchmark sites into `project-docs/design-references/<domain>/<slug>/` across key page types (Home, About, Work, etc.) as analysis inputs only using `node skills/create-nww-website/scripts/site-fetch/index.js --brief client-context/client-answers.md --out project-docs/design-references --mode references`. Extract abstract principles and build $N$ original full-page landing page variation previews in `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` using **HTML + Tailwind CSS + jQuery** (to save future tokens) across the 9 dimensions per [references/gate-2-design-theory/design-variations.md](references/gate-2-design-theory/design-variations.md). Run the pre-presentation similarity audit (`_checks/similarity-audit.md`) confirming distance rules (>= 4 dimensions divergent from nearest references, <= 3 dimensions shared between variations, zero shared classes/IDs/assets, word overlap <= 5 words).
+- **Client Visual Review & Variations at Gate 2:** Capture reference benchmark sites into `project-docs/design-references/<domain>/<slug>/` across key page types (Home, About, Work, etc.) as analysis inputs only using `node skills/create-nww-website/scripts/site-fetch/index.js --brief client-context/answers/batch-02-branding-motion/answers.md --out project-docs/design-references --mode references`. Extract abstract principles and build $N$ original full-page landing page variation previews in `project-docs/client-review/gate-2-design-theory/<project-slug>-v[1..N]/index.html` using **HTML + Tailwind CSS + jQuery** (to save future tokens) across the 9 dimensions per [references/gate-2-design-theory/design-variations.md](references/gate-2-design-theory/design-variations.md). Run the pre-presentation similarity audit (`_checks/similarity-audit.md`) confirming distance rules (>= 4 dimensions divergent from nearest references, <= 3 dimensions shared between variations, zero shared classes/IDs/assets, word overlap <= 5 words).
 - **Repeating Cards Normal CSS Rule (Token Optimization):** In Gate 2 HTML + Tailwind CSS + jQuery variations, whenever components such as cards, grid items, or list tiles repeat (e.g. 3–6 feature cards, service boxes, metric counters), **use normal CSS** in a `<style>` block (e.g. `.feature-card { background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1.5rem; transition: transform 0.25s ease; }`) instead of duplicating 20+ Tailwind utility classes inline on every single repeated element. This saves tokens, keeps HTML clean, and prevents bloated previews. When that same card structure is ported to the Next.js `site/` codebase, convert it using Tailwind's **`@apply`** rule in `site/app/globals.css`.
 - **Public Deployment Required (No Prompt Copying):** Gate 2 variations are sent to the client via a mandatory public deployment (e.g. GitHub Pages). We do NOT include the "copy the prompt" or "Copy My Decision" button section. Forwarding localhost deployment links to the client is strictly forbidden.
 - **In-Place Revisions:** If client requests revisions, edit existing files in-place; do NOT create extra markdown files. Save requirement notes in `client-requirements/`.

@@ -20,10 +20,15 @@ Ingest Specs -> Confirm -> Code Thin Page & Sections -> Self-Critique -> Gate 7a
 
 ### Step 1: Ingest Specifications & Confirm
 Before touching code for sub-page `<slug>`:
-1. Read `page-specs/<slug>/page.md` and `project-docs/layout-system.md` for section layout, verbatim copy, and asset slots.
-2. Read `project-docs/page-checklist.md` for QA acceptance criteria.
-3. Read `site/AGENTS.md` and the scoped AGENTS.md for each folder the page touches.
-4. **Confirm (Self-Check):** Restate in 3–5 bullets: layout pattern, section sequence, primary CTA, and any taste revision applying to this page.
+1. Read `page-specs/<slug>/page.md` and `project-docs/layout-system.md` for section layout, verbatim copy, asset slots, and `## 0. Reference Benchmark Mapping & Similar Page Alignment`.
+2. Inspect the analogous captured reference sub-pages from `project-docs/design-references/<domain>/<slug>/` (`index.html`, `content.md`, `screenshot.png`) and (if site migration) `previous-site/<slug>/` to review authentic spatial rhythm, card density, and interactive states for this specific page type. (Note: Gate 6 does not require sub-page benchmarking as it focuses solely on the Landing Page / Home).
+3. Read `project-docs/page-checklist.md` for QA acceptance criteria.
+4. Read `site/AGENTS.md` and the scoped AGENTS.md for each folder the page touches.
+5. **Confirm (Self-Check):** Restate in 4–5 bullets:
+   - Layout pattern & section sequence.
+   - Primary CTA & conversion pathway.
+   - Benchmark Reference Alignment: Key spatial rhythm, card density, and structural pattern adopted from the captured benchmark reference.
+   - Any client feedback or taste revisions applying to this page.
 
 ### Step 2: Implement Thin Page & Section Components
 1. **Thin Page Server Component (`site/app/<route>/page.js`):**

@@ -10,7 +10,7 @@ The deliverable outputs are saved to `project-docs/client-review/gate-2-design-t
 
 The Gate 2 workflow proceeds in seven sequential, non-negotiable steps:
 
-1. **Capture References (Analysis Inputs Only):** Execute reference capture (`node skills/create-nww-website/scripts/reference-capture/index.js`) for landing pages specified in `client-context/client-answers.md`.
+1. **Capture References (Analysis Inputs Only):** Execute reference capture (`node skills/create-nww-website/scripts/reference-capture/index.js`) for landing pages specified in `client-context/answers/batch-02-branding-motion/answers.md`.
 2. **Extract Abstract Principles:** Synthesize reference observations into abstract design principles in `project-docs/client-review/gate-2-design-theory/design-theory.md` (e.g., "Asymmetric 12-column grid with generous whitespace and high-contrast typography").
 3. **Define the Variation Framework:** Formulate an architectural matrix for $N$ variations (default: 3) defining specific choices across the 9 varying dimensions while keeping content and technical constraints constant.
 4. **Build $N$ Variation Previews:** Construct $N$ complete, self-contained landing page previews in `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` using **HTML + Tailwind CSS + jQuery** (to save future tokens) and the client's authentic copy.

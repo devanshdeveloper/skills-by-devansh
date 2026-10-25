@@ -49,5 +49,5 @@ nww
    - Immediately activate and delegate execution to the [create-nww-website](../create-nww-website/SKILL.md) skill.
 
 2. **Mandatory Start-Up Rule:**
-   - Adhere strictly to the activation protocol defined in `create-nww-website`: always begin with the read-only brief check (`client-context/client-answers.md`) and immediately present Batch 1 of the intake questionnaire.
+   - Adhere strictly to the activation protocol defined in `create-nww-website`: always begin with the read-only brief check (`client-context/answers/`) and immediately present Batch 01 of the intake questionnaire.
    - Do not perform any preliminary file reading, repository scanning, planning, command execution, or code generation before the intake questionnaire is presented.

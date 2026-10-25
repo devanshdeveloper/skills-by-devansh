@@ -13,8 +13,8 @@
  *   # Migrate previous website (discovers and captures each page type):
  *   node skills/create-nww-website/scripts/site-fetch/index.js --url https://legacy.com --out previous-site --mode migration
  *
- *   # Capture design reference examples from client-answers.md (Q12):
- *   node skills/create-nww-website/scripts/site-fetch/index.js --brief client-context/client-answers.md --out project-docs/design-references --mode references
+ *   # Capture design reference examples from batch-02-branding-motion/answers.md:
+ *   node skills/create-nww-website/scripts/site-fetch/index.js --brief client-context/answers/batch-02-branding-motion/answers.md --out project-docs/design-references --mode references
  *
  *   # Standalone site crawl:
  *   node skills/create-nww-website/scripts/site-fetch/index.js --url https://example.com --out captured-site/ --max-pages 15
@@ -28,14 +28,26 @@ const https = require('node:https');
 const http = require('node:http');
 const { URL } = require('node:url');
 
-// Resolve Playwright from local node_modules, companion packages, or npx cache
+// Resolve Playwright from project cwd, local node_modules, companion packages, or npx cache
 let chromium;
-try {
-  let pw;
-  try { pw = require('playwright'); }
-  catch { pw = require('../client-review/node_modules/playwright'); }
-  chromium = pw.chromium;
-} catch {
+const candidatePaths = [
+  'playwright',
+  path.join(process.cwd(), 'node_modules', 'playwright'),
+  path.join(process.cwd(), 'site', 'node_modules', 'playwright'),
+  path.join(__dirname, '..', 'client-review', 'node_modules', 'playwright')
+];
+
+for (const candidate of candidatePaths) {
+  try {
+    const pw = require(candidate);
+    if (pw && pw.chromium) {
+      chromium = pw.chromium;
+      break;
+    }
+  } catch {}
+}
+
+if (!chromium) {
   try {
     const npxCache = path.join(process.env.LOCALAPPDATA || '', 'npm-cache', '_npx');
     if (fs.existsSync(npxCache)) {
@@ -44,7 +56,7 @@ try {
         const candidate = path.join(npxCache, h, 'node_modules', 'playwright');
         if (fs.existsSync(candidate)) {
           chromium = require(candidate).chromium;
-          break;
+          if (chromium) break;
         }
       }
     }
@@ -62,7 +74,7 @@ Options:
   --url <url>           Target website URL to crawl and capture.
   --out <dir>           Output directory (e.g. 'previous-site' or 'project-docs/design-references').
   --mode <type>         Operation mode: 'migration' (default for --url) or 'references' (for --brief).
-  --brief <file>        Path to client-answers.md to parse liked reference sites (Q12).
+  --brief <file>        Path to batch answers file (e.g. client-context/answers/batch-02-branding-motion/answers.md) to parse liked reference sites.
   --max-pages <number>  Max unique page types to capture per site (default: 15).
   --timeout <ms>        Navigation timeout in milliseconds (default: 20000).
   --help                Show this help message.
@@ -72,7 +84,7 @@ Examples:
   node site-fetch/index.js --url https://old-site.com --out previous-site --mode migration
 
   # Fetch all design references from intake brief:
-  node site-fetch/index.js --brief client-context/client-answers.md --out project-docs/design-references --mode references
+  node site-fetch/index.js --brief client-context/answers/batch-02-branding-motion/answers.md --out project-docs/design-references --mode references
 `);
 }
 
@@ -424,7 +436,7 @@ function generateSitemapLegacyXml(urls, outputPath) {
   fs.writeFileSync(outputPath, xml, 'utf-8');
 }
 
-// Parse references from client-answers.md (Q12)
+// Parse references from batch-02-branding-motion answers (Liked References)
 function parseReferencesFromBrief(answersPath) {
   if (!fs.existsSync(answersPath)) return [];
   const text = fs.readFileSync(answersPath, 'utf-8');
@@ -661,8 +673,8 @@ async function main() {
     outDir = outDir || (mode === 'migration' ? path.join(process.cwd(), 'previous-site') : path.join(process.cwd(), 'captured-site'));
     await crawlSite({ targetUrl, outDir: path.resolve(outDir), mode, maxPages, timeoutMs });
   } else {
-    // Default fallback: check if brief exists in client-context/client-answers.md
-    const defaultBrief = path.join(process.cwd(), 'client-context', 'client-answers.md');
+    // Default fallback: check if brief exists in client-context/answers/batch-02-branding-motion/answers.md
+    const defaultBrief = path.join(process.cwd(), 'client-context', 'answers', 'batch-02-branding-motion', 'answers.md');
     if (fs.existsSync(defaultBrief)) {
       console.log(`No arguments supplied. Found intake brief at ${defaultBrief}. Running references mode...`);
       const defaultOut = path.join(process.cwd(), 'project-docs', 'design-references');

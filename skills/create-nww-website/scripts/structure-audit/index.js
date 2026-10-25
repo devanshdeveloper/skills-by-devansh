@@ -36,7 +36,8 @@ function checkFile(relPaths, minBytes = 10) {
 
 function auditProjectDocs() {
   const checks = [
-    { stage: 0, name: 'Client Intake Answers', file: ['client-context/client-answers.md', 'project-docs/client-answers.md'], min: 100 },
+    { stage: 0, name: 'Client Intake Answers (Batch 01)', file: ['client-context/answers/batch-01-core-identity/answers.md'], min: 100 },
+    { stage: 0, name: 'Client Asset Manifest', file: ['client-context/asset-manifest.md'], min: 100 },
     { stage: 0, name: 'Root Environment Template', file: '.env.example', min: 10 },
     { stage: 1, name: 'Tech Stack Specification', file: ['project-docs/client-review/gate-1-tech-stack/tech-stack.md', 'project-docs/tech-stack.md'], min: 100 },
     { stage: 2, name: 'Design Theory', file: ['project-docs/client-review/gate-2-design-theory/design-theory.md', 'project-docs/design-theory.md'], min: 100 },

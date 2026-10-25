@@ -76,7 +76,7 @@ Activate the create-nww-website skill. Here is our project brief to initialize S
 - Forms Needed: [e.g. Lead capture & consultation request]
 - Imagery: [e.g. Licensed stock (Pixabay / Unsplash) + client diagrams]
 
-Please parse this into `project-docs/client-answers.md` and present the Gate 0 Intake Recap for confirmation.
+Please parse this into `client-context/answers/batch-[number]-[batch-name]/answers.md` and present the Gate 0 Intake Recap for confirmation.
 ````
 
 ---

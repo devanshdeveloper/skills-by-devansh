@@ -38,7 +38,7 @@ Before scaffolding or writing code in `site/`:
 Scaffold the Next.js application inside `site/` at Stage 6 after Gate 5 page specifications are approved, using verified flags:
 
 ### 0. GSAP Animation Skills Pre-Load & Motion Tier Guard
-Before running the generator or producing code in `site/`, verify the client's chosen motion tier from `client-context/client-answers.md` (Q14) against [gsap-animation-tiers.md](gsap-animation-tiers.md):
+Before running the generator or producing code in `site/`, verify the client's chosen motion tier from `client-context/answers/batch-02-branding-motion/answers.md` against [gsap-animation-tiers.md](gsap-animation-tiers.md):
 - If `motion: disabled`: Do **NOT** load GSAP skills and do **NOT** install `gsap` or `@gsap/react` in `site/package.json`.
 - If `motion: low | medium | high | max | ultra`: Pre-load the approved GSAP animation suite:
 ```bash

@@ -65,7 +65,8 @@ When an agent executes the `create-nww-website` or `nww` pipeline to develop a w
 <client-project-root>/
 ├── .env.example                          # Root environment template (SEO tools, Resend email keys)
 ├── client-context/                       # All raw client inputs, brand assets, discovery questionnaires
-│   ├── client-answers.md                 # Stage 0 discovery & intake brief
+│   ├── answers/                          # Modular batch discovery & intake answers (batch-01 to batch-07)
+│   ├── asset-manifest.md                 # Complete visual asset inventory, harvesting & generation manifest
 │   ├── branding/                         # Brand logos, color guides, visual assets
 │   ├── uploads/                          # Client-provided images, headshots, brochures
 │   └── notes/                            # Raw notes, transcripts, or initial requirements

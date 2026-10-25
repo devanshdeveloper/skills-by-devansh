@@ -440,7 +440,7 @@ Please set at least one of the following environment variables:
   - UNSPLASH_ACCESS_KEY  (Priority 3)
 
 If no stock photography is approved for this project, record the decision in
-client-answers.md and use neutral placeholder images instead.
+client-context/answers/batch-04-asset-harvesting-generation/answers.md and use neutral placeholder images instead.
 `);
         process.exit(1);
     }

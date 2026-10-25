@@ -51,30 +51,31 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 ### Stage 0: Intake Check
 - **Goal:** Execute the start-up activation protocol from [client-questionnaire.md](client-questionnaire.md):
   1. Ask the user in the beginning whether they want client milestone approval emails dispatched at each stage.
-  2. Inspect `client-context/client-answers.md` (or prefill from user prompt notes) to compile the intake brief.
+  2. Inspect `client-context/answers/` (or prefill from user prompt notes) to compile the intake brief, confirming the **Technical Project Name / Vercel Slug** for downstream naming (variations, `package.json`, Vercel project linkage).
   3. If site migration (`build_origin: migration`), crawl and archive the existing website into `previous-site/` BEFORE Gate 1 (crawling all routes, screenshots, stripped markdown, full HTML, and `sitemap-legacy.xml`). Execute: `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --mode migration`. This capture must occur in Stage 0 so that existing routes, redirects, copywriting, and media are documented before technical planning begins.
-  4. Generate root `.env.example` with credential placeholders for any external connection (SEO tools, client email sending).
-- **Inputs:** User prompt, `client-context/` files, or interactive questionnaire responses.
-- **Outputs:** `client-context/client-answers.md`, `.env.example`, and `previous-site/` (if migration, crawled before Gate 1).
-- **Gate 0:** Human reviews and confirms the intake summary and CMS mode selection (`none` or `cms`). The agent records human sign-off in `project-docs/router-state.md` (`Gate 0: Intake Confirmed`).
+  4. Execute visual asset audit, legacy asset harvesting, and per-entity asset intake to compile `client-context/asset-manifest.md`.
+  5. Generate root `.env.example` with credential placeholders for external connections (SEO tools, client email sending).
+- **Inputs:** User prompt notes, `client-context/` files, legacy site crawl (`previous-site/`), or interactive questionnaire responses.
+- **Outputs:** `client-context/answers/batch-*/answers.md`, `client-context/asset-manifest.md`, `.env.example`, and `previous-site/` (if migration, crawled before Gate 1).
+- **Gate 0:** Human reviews and confirms the intake summary across modular batch answers, asset readiness manifest, confirmed project slug, and CMS mode selection (`none` or `cms`). The agent records human sign-off in `project-docs/router-state.md` (`Gate 0: Intake Confirmed`).
 
 ### Stage 1: Tech Stack Specification
 - **Goal:** Author `project-docs/client-review/gate-1-tech-stack/tech-stack.md` defining the stack, pre-filling defaults and asking only about deviations. Stack is Next.js App Router, Tailwind CSS, JavaScript-only (`.js`, `.jsx`), `pnpm`, container standalone output, Lucide icons, GSAP (omitted if `motion: disabled`), and image mode `pre-optimized`.
-- **Inputs:** `client-context/client-answers.md` and `previous-site/` (if migration).
+- **Inputs:** `client-context/answers/` and `previous-site/` (if migration).
 - **Outputs:** `project-docs/client-review/gate-1-tech-stack/tech-stack.md` and initial `project-docs/router-state.md`.
 - **Gate 1:** Internal developer confirms stack choices and framework parameters.
 
 ### Stage 2: Design Theory & Variations
-- **Goal:** Author design principles in `project-docs/client-review/gate-2-design-theory/design-theory.md`, fetch reference sites into `project-docs/design-references/` via `node skills/create-nww-website/scripts/site-fetch/index.js --brief client-context/client-answers.md --out project-docs/design-references --mode references`, build $N$ original landing page variation previews in `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` using **HTML + Tailwind CSS + jQuery** (to save future tokens), pass similarity audit distance rules (`_checks/similarity-audit.md`), and compile review hub at `project-docs/client-review/gate-2-design-theory/index.html`.
+- **Goal:** Author design principles in `project-docs/client-review/gate-2-design-theory/design-theory.md`, fetch reference sites into `project-docs/design-references/` via `node skills/create-nww-website/scripts/site-fetch/index.js --brief client-context/answers/batch-02-branding-motion/answers.md --out project-docs/design-references --mode references`, build $N$ original landing page variation previews in `project-docs/client-review/gate-2-design-theory/<project-slug>-v[1..N]/index.html` using **HTML + Tailwind CSS + jQuery** (to save future tokens), pass similarity audit distance rules (`_checks/similarity-audit.md`), and compile review hub at `project-docs/client-review/gate-2-design-theory/index.html`.
 - **Client Presentation & Public Deployment:** Gate 2 variations are sent to the client. We do NOT include the "copy the prompt" or "Copy My Decision" prompt sections. We ALWAYS require a live public deployment (e.g. GitHub Pages via workflow) to forward to the client; localhost deployment URLs are strictly forbidden for client forwarding.
-- **Inputs:** `client-context/client-answers.md`.
+- **Inputs:** `client-context/answers/`.
 - **Outputs:** `project-docs/client-review/gate-2-design-theory/design-theory.md`, `project-docs/design-references/`, variation HTML files, `_checks/similarity-audit.md`, and review hub (`project-docs/client-review/gate-2-design-theory/index.html`).
 - **Gate 2:** Client reviews visual variations via the public review deployment and selects one. The agent records human selection in `project-docs/router-state.md` (`Gate 2: Variation <slug> Selected`).
 
 ### Stage 3: Page List & Sitemap
 - **Goal:** Author `project-docs/client-review/gate-3-page-list/page-list.md`. Map every URL route, title, primary purpose, visual anchors, and shared component candidates.
 - **Rules:** Do NOT generate `page-design-notes.md` (file generation deleted). Do NOT create any additional unstated markdown files.
-- **Inputs:** `client-context/client-answers.md`, approved design theory, and `previous-site/` (if migration, for legacy route inventory and redirect planning).
+- **Inputs:** `client-context/answers/`, approved design theory, and `previous-site/` (if migration, for legacy route inventory and redirect planning).
 - **Outputs:** `project-docs/client-review/gate-3-page-list/page-list.md`.
 - **Gate 3:** Client / lead developer confirms the sitemap, URL route hierarchy, and page inventory.
 
@@ -89,11 +90,11 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 - **Gate 4:** Target keywords confirmed with the client in plain text; technical JSON-LD schemas, canonical rules, and redirect maps approved by the internal developer.
 
 ### Stage 5: Page Specifications & CMS Schema
-- **Goal:** Author comprehensive markdown specifications (`page-specs/<slug>/page.md`) unifying responsive layout blueprints, verbatim copywriting, and media asset slots for every page. Define shared units in `page-specs/_shared/*.md`, multi-page components in `project-docs/client-review/gate-5-page-specs/layout-system.md` (containing ONLY one section: `## Shared Components`), and log sourced stock images in `project-docs/stock-provenance.json` (if stock is authorized).
+- **Goal:** Author comprehensive markdown specifications (`page-specs/<slug>/page.md`) unifying responsive layout blueprints, verbatim copywriting, media asset slots, and explicit benchmark cross-referencing to analogous pages captured from benchmark websites (`project-docs/design-references/<domain>/<slug>/` or `previous-site/<slug>/`). Define shared units in `page-specs/_shared/*.md`, multi-page components in `project-docs/client-review/gate-5-page-specs/layout-system.md` (containing ONLY one section: `## Shared Components`, aligned with benchmark header/footer patterns), and log sourced stock images in `project-docs/stock-provenance.json` (if stock is authorized).
 - **Single Mode Enforced:** Gate 5 operates strictly in ONE mode: **Markdown only**. Remove all Next.js and HTML preview modes in Gate 5.
 - **Incomplete CMS Context Protocol:** If CMS context seems incomplete, create `project-docs/client-review/gate-5-cms-requirements/list.md` and do NOT proceed to CMS schema or content until this is resolved. Hand over a strictly READ-ONLY prompt in `project-docs/client-review/gate-5-cms-requirements/prompt.md` for the user to paste into their CMS agentic IDE to fetch answers (no write prompts).
 - **Deliverables:**
-  - `page-specs/<slug>/page.md` for every page in `page-list.md`.
+  - `page-specs/<slug>/page.md` for every page in `page-list.md` (including `## 0. Reference Benchmark Mapping & Similar Page Alignment` and section layout reference anchors).
   - `page-specs/_shared/<component-slug>.md` (nav, footer, site settings) and `page-specs/_shared/brand-assets.md`.
   - `project-docs/client-review/gate-5-page-specs/layout-system.md` (contains ONLY section: `## Shared Components`).
   - `project-docs/stock-provenance.json` (if stock imagery is sourced).
@@ -102,7 +103,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 - **Gate 5:** Client / lead developer reviews and approves the unified page specifications (layout, copy, asset slots) and CMS data models/seeds. Progress is recorded in `project-docs/router-state.md` (`Gate 5: Page Specifications & CMS Schema Approved`).
 
 ### Stage 6: Codebase Scaffolding, Foundation Build & Landing Page Showcase
-- **Goal:** Pre-load approved GSAP animation skills (unless `motion: disabled`), generate master QA checklist, build production foundation shell, scaffold all application routes, create `site/.env.example`, and **fully construct the Landing Page (`site/app/page.js` + `_components/`) for client showcase**.
+- **Goal:** Pre-load approved GSAP animation skills (unless `motion: disabled`), generate master QA checklist, build production foundation shell, scaffold all application routes, create `site/.env.example`, and **fully construct the Landing Page (`site/app/page.js` + `_components/`) for client showcase**. (Note: Gate 6 does not require sub-page benchmarking as it focuses exclusively on the Landing Page / Home).
 - **Motion Tiering & Skills Pre-Load:** Consult [gsap-animation-tiers.md](../gate-6-scaffolding/gsap-animation-tiers.md).
   - If `motion: disabled`: Do **NOT** load GSAP skills and do **NOT** install `gsap` or `@gsap/react` in `site/package.json`.
   - If `motion: low | medium | high | max | ultra`: Pre-load approved GSAP animation suite:
@@ -128,7 +129,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 - **Gate 6:** Client reviews the live interactive Landing Page showcase and approves codebase foundation. Progress is recorded in `project-docs/router-state.md` (`Gate 6: Scaffolding, Foundation & Landing Page Approved`).
 
 ### Stage 7: Sub-Page Build Loop (Per-Page Sub-Pipeline)
-- **Goal:** Incrementally build every remaining page from `project-docs/client-review/gate-3-page-list/page-list.md` (e.g. `about`, `services`, `contact`, `blog`) strictly one by one in order. Since the Landing Page was already built in Stage 6 and all route stubs exist in `site.manifest.json`, the agent modifies only the target sub-page components and content modules.
+- **Goal:** Incrementally build every remaining page from `project-docs/client-review/gate-3-page-list/page-list.md` (e.g. `about`, `services`, `contact`, `blog`) strictly one by one in order. Prior to coding each sub-page, inspect the analogous benchmark sub-pages from `project-docs/design-references/<domain>/<slug>/` (and `previous-site/<slug>/` if migration) to mirror spatial rhythm and card density. Since the Landing Page was already built in Stage 6 and all route stubs exist in `site.manifest.json`, the agent modifies only the target sub-page components and content modules.
 - **Sub-Pipeline per sub-page:**
   1. **Build:** Implement/refine thin `site/app/<route>/page.js` (<=80 lines) and section components in `site/app/<route>/_components/` (<=250 lines). Follow verbatim copy, exact tokens, and ensure `data-section="<id>"` markers match `page.md`.
   2. **Self-Critique:** Agent tests against `project-docs/page-checklist.md`, runs `pnpm check:structure` and `pnpm check:assets`, logs per-page verification to `page-specs/<slug>/checklist-state.md`, and records results in `site/build-log.md`.
@@ -162,7 +163,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 4. **Client Notification Prompt:** At every gate sign-off, ask the user: *"Would you like to notify the client for this milestone? Run `node scripts/client-notify/index.js` to preview and send upon approval."*
 5. **Always Public Deployments for Client:** All links sent to the client (Gate 2 variations via GitHub Pages, Next.js site via Vercel) MUST be public HTTPS deployments. Never forward localhost URLs to the client.
 6. **In-Place Revisions Discipline:** If a client requests revisions at any gate, do NOT create an extra markdown file (e.g. no `theory-revisions.md`). Make modifications directly to the existing deliverable document. If an important client requirement note needs to be recorded, create `client-requirements/` folder and place the note there.
-7. **Client Context Folder:** Store all client-provided materials, briefs, and inputs in `client-context/` (e.g. `client-context/client-answers.md`).
+7. **Client Context Folder:** Store all client-provided materials, briefs, and inputs in `client-context/` (e.g. `client-context/answers/batch-[number]-[batch-name]/answers.md` and `client-context/asset-manifest.md`).
 8. **Client Review Gate Rule (Markdown is Internal):** No client-facing gate ever asks the client to open, read, or approve raw `.md` files. Every client review gate (Gates 0, 2, 3, 5, 6, 7a, 8b) presents HTML previews, live public URLs, or plain-language summaries. All `.md` files are strictly internal developer artifacts.
 
 ---
@@ -175,7 +176,15 @@ Every client website project created through this pipeline must strictly follow 
 <client-project-root>/
 ├── .env.example                          # [Stage 0] Root environment template (SEO tools, Resend email keys)
 ├── client-context/                       # [Stage 0] Dedicated repository for all raw client inputs & assets
-│   ├── client-answers.md                 # Complete compiled Stage 0 discovery & intake brief
+│   ├── answers/                          # Modular batch discovery & intake answers
+│   │   ├── batch-01-core-identity/answers.md
+│   │   ├── batch-02-branding-motion/answers.md
+│   │   ├── batch-03-sitemap-copy/answers.md
+│   │   ├── batch-04-asset-harvesting-generation/answers.md
+│   │   ├── batch-05-type-specific-routing/answers.md
+│   │   ├── batch-06-legacy-site-migration/answers.md   # [Conditional if legacy site exists]
+│   │   └── batch-07-seo-analytics-governance/answers.md
+│   ├── asset-manifest.md                 # Complete visual asset inventory, harvesting & generation manifest
 │   ├── branding/                         # Client logos (SVG/PNG), brand guidelines, color palettes
 │   ├── uploads/                          # Client-provided images, team headshots, PDFs, brochures
 │   └── notes/                            # Raw notes, transcripts, or initial requirements from client

@@ -57,7 +57,7 @@ Such as screenshots, stripped markdown from html, full html with proper folder c
 
 19. you can handover a prompt to the user inside the cms requirement folder, the user will paste that prompt in the cms agentic ide to get you answers. do not write a write prompt. read only prompt
 
-20. for any client context things, create a new folder called client-context/ and put it there. for example client-answers.md or anything which is a input from the client. 
+20. for any client context things, create a new folder called client-context/ and put it there. for example client-context/answers/ or anything which is a input from the client. 
 
 21. if a client ask for revision in any gate. do not create a extra markdown. do make changes directly to the existing. 
 
