@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.1] - 2026-10-25
+
+### Added
+- **References Folderization into 9 Gate Subdirectories (`references/gate-*`)**: Reorganized `create-nww-website/references/` into dedicated gate folders (`gate-0-intake/` through `gate-8-final-verification/`), leaving zero loose files in the root of `references/`. Authored an individual `SKILL.md` runbook for every gate and organized all stage guides, CMS schemas, SEO tools, and animation references cleanly under their respective gates.
+- **Universal Website Fetcher Companion Script (`scripts/site-fetch/index.js`)**: Engineered a unified Node.js crawler for both Stage 0 previous site migrations and Stage 2 design references. Probes sitemaps (`/sitemap.xml`, `/sitemap_index.xml`) and internal DOM links, clusters routes to capture at least each unique page type, and generates `<slug>/index.html` (rendered DOM), `<slug>/content.md` (verbatim stripped markdown), and `<slug>/screenshot.png` (full-page screenshot), along with `sitemap-legacy.xml` and manifest indexes.
+- **6-Tier GSAP Animation Architecture (`references/gate-6-scaffolding/gsap-animation-tiers.md`)**: Engineered an exhaustive 6-tier motion system (`disabled`, `low`, `medium`, `high`, `max`, `ultra`). Includes conditional skill loading (if `disabled`, zero GSAP skills are pre-loaded and `gsap` is omitted from `site/package.json`), Next.js App Router `'use client'` isolation guidelines, and production-ready code examples for Awwwards-caliber pinned horizontal scroll, SplitText masked reveals, magnetic buttons, Lenis smooth scroll ticker sync, 3D card tilt via `quickTo`, narrative perspective stacks, and decoupled WebGL / Three.js canvas architecture.
+- **Intake Questionnaire Motion Tier Expansion**: Updated Q14 in `references/gate-0-intake/client-questionnaire.md` with explicit choices for `disabled`, `low`, `medium` (default), `high`, `max`, and `ultra`, synchronized with the Site Brief template and Coverage Matrix.
+
+### Changed
+- **Pre-Gate 1 Previous Site Archiving**: Explicitly codified that crawling and archiving legacy websites into `previous-site/` (`<slug>/index.html`, `content.md`, `screenshot.png`, `sitemap-legacy.xml`) must occur during Stage 0 strictly BEFORE Gate 1 sign-off, ensuring routes, 301 redirects, media assets, and copywriting are preserved before technical architecture begins.
+- **Canonical Structure & Stage Inputs Alignment**: Updated canonical project trees and Stage 1/3 inputs across `SKILL.md`, `references/pipeline-stages.md`, and `docs/ARCHITECTURE.md` to reference `previous-site/<slug>/` snapshots and legacy sitemaps.
+- **Scaffolding Skills Pruning & Motion Guard**: Removed obsolete skill loads in `references/code-conventions.md` and added conditional GSAP skill pre-loading guards across `SKILL.md`, `references/pipeline-stages.md`, and `references/project-scaffolding.md`.
+
 ## [1.9.0] - 2026-10-25
 
 ### Added

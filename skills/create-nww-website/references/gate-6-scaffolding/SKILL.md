@@ -68,9 +68,15 @@ Before scaffolding or generating code in `site/`:
 
 ## 4. Scaffolding & Foundation Execution Protocol
 
-### Step 0: Load Approved Animation Skills
-Before scaffolding or writing code in `site/`, verify that zero unresolved items exist in `project-docs/client-review/gate-5-cms-requirements/list.md`. Then load the approved GSAP animation suite:
+### Step 0: Motion Tier Check & Skills Pre-Load
+Before scaffolding or writing code in `site/`, verify that zero unresolved items exist in `project-docs/client-review/gate-5-cms-requirements/list.md`. Check the client's selected animation tier from `client-context/client-answers.md` (Q14) against [gsap-animation-tiers.md](gsap-animation-tiers.md):
 
+- **If `motion: disabled`:**
+  - Do **NOT** execute the skill load commands.
+  - Do **NOT** install `gsap` or `@gsap/react` in `site/package.json`.
+  - Proceed directly to Step 1.
+- **If `motion: low | medium | high | max | ultra`:**
+  - Load the approved GSAP animation suite:
 ```bash
 # GSAP Animation Suite
 DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-core
@@ -78,8 +84,7 @@ DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --sk
 DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-performance
 DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-timeline
 ```
-
-*(Note: For React-specific GSAP lifecycle hooks and unmount cleanup, `greensock/gsap-skills` also supplies `gsap-react`.)*
+  - For `high`, `max`, or `ultra` projects, install required companion libraries (e.g. `pnpm add lenis/react` for smooth scrolling, or `three` for ultra WebGL scenes) per [gsap-animation-tiers.md](gsap-animation-tiers.md).
 
 ### Step 1: Initialize Next.js Application & Env Template
 Execute the official generator non-interactively using verified flags matching discovered conventions:
@@ -106,7 +111,7 @@ Generate the master QA acceptance checklist before building pages:
 
 ### Step 3: Wire Design Tokens & Foundation Shell
 - Extract semantic tokens from `project-docs/client-review/gate-2-design-theory/design-theory.md` (colors, typography scale, container widths, radii) and wire them into `site/app/globals.css` and `site/styles/tokens.css`.
-- Export GSAP and CSS motion tokens into `site/lib/motion.js`.
+- Export motion tokens into `site/lib/motion.js`: if `motion: disabled`, export pure CSS/Tailwind transitions; if motion is active, export dual GSAP easing equations and CSS transitions per [gsap-animation-tiers.md](gsap-animation-tiers.md).
 - Promote shared navigation header (`Nav.js`) and footer (`Footer.js`) to `site/components/`.
 - Install `site/components/ResponsiveImage.js` for zero-CLS server-rendered image loading with LQIP blur placeholders.
 - Wire `Nav` and `Footer` into root layout `site/app/layout.js`.
@@ -231,7 +236,7 @@ Stage 6 does not stop at structural scaffolding; it immediately builds out the *
 1. **Thin Home Page Server Component:** `site/app/page.js` (<= 80 lines) exports metadata and renders Home section components in blueprint order.
 2. **Polished Section Components:** Every section in `page-specs/home/page.md` is fully coded and styled in `site/app/_components/<SectionName>.js` (<= 250 lines).
 3. **Copy & Media Wiring:** Fully wired to verbatim copy in `site/content/home.js` and optimized images rendered via `ResponsiveImage.js`.
-4. **Taste & Motion Discipline:** Subtle GSAP motion wrapped in `useGSAP` with container scopes, `gsap.matchMedia()` honoring `prefers-reduced-motion`, and at most ONE bold moment on the page.
+4. **Taste & Motion Discipline:** Animation strictly adhering to the selected motion tier (`disabled`, `low`, `medium`, `high`, `max`, `ultra`) per [gsap-animation-tiers.md](gsap-animation-tiers.md). If motion is active, wrap in `useGSAP` with container scopes, `gsap.matchMedia()` honoring `prefers-reduced-motion`, and at most ONE bold moment on the page.
 5. **Client Showcase Readiness:** The landing page is immediately previewable via local dev server (`pnpm dev`) or review portal for client inspection and sign-off.
 
 ---
@@ -258,7 +263,7 @@ Build must compile with zero errors.
 
 ### Gate 6 Review Checklist
 - [ ] Precondition satisfied: Zero unresolved CMS requirements in `gate-5-cms-requirements/list.md`.
-- [ ] Approved GSAP animation skills pre-loaded.
+- [ ] Approved GSAP animation skills pre-loaded (or skipped if `motion: disabled`).
 - [ ] Next.js App Router codebase initialized in `site/` without nested git repo.
 - [ ] `site/.env.example` generated.
 - [ ] File size discipline verified: code is lean and token-efficient without limiting features.

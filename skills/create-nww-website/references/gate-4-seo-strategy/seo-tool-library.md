@@ -160,18 +160,13 @@ To register a new tool, maintainers must add a strictly formatted JSON object to
   "purpose": "Precise one-sentence description of what this tool audits.",
   "access_method": "connected | export | manual | api",
   "cost_model": "free | freemium | paid",
-  "inputs_required": ["Array of required prerequisites, credentials, or file inputs"],
-  "outputs": ["Array of specific metrics, tables, or artifacts produced"],
-  "audit_stages": ["Array of served stages from: indexation, technical, on-page, content, links, local, performance, geo-ai-search"],
-  "known_limits": "Explicit technical limitations, rate limits, latency, or sampling rules.",
-  "how_to_verify_output": "Exact procedure to confirm that tool output is authentic and accurate.",
-  "official_doc_url": "https://official-documentation-url-verified-via-web-search",
+  "inputs_required": ["List of specific user or API inputs"],
+  "outputs": ["List of deliverable artifacts or parsed data fields"],
+  "audit_stages": ["indexation", "technical", "on-page", "content", "links", "local", "performance", "geo-ai-search"],
+  "known_limits": "Known rate limits, quotas, sampling rules, or data freshness delays.",
+  "how_to_verify_output": "Exact procedure to verify parsed tool outputs against primary source UI.",
+  "official_doc_url": "https://documentation-url",
   "last_verified": "YYYY-MM-DD",
-  "confidence": "verified | unverified"
+  "confidence": "verified | experimental | community"
 }
 ```
-
-### Verification Criteria Before Adding:
-1. **Search Verification:** The `official_doc_url` must be verified via web search before committing. If documentation cannot be verified, set `"confidence": "unverified"`.
-2. **Pricing Accuracy:** Do not guess pricing. Categorize strictly as `free`, `freemium` (free tier with limits), or `paid` (subscription required).
-3. **No Redundancy:** Confirm the tool provides distinct capabilities not already covered by default free tools before adding.

@@ -43,7 +43,7 @@ Before initiating Stage 5 research or authoring `page.md` specifications:
 1. **Live-Fetch Reference Layouts:** Fetch liked and disliked reference websites before drawing structural conclusions. Extract section orders, hero patterns, grid systems, and content density changes.
 2. **Attribution:** Clearly attribute each section's structural choice to a client-provided reference, agent-sourced research, or the page's primary conversion CTA.
 3. **Research Bounds:** Maximum 3 fetches per page type across references, and 25 fetches total. If a URL blocks access, mark as "unverified" and fall back to the client's description.
-4. **Principles-Not-Pixels Abstraction Barrier:** The similarity audit and no-clone rules from [references/design-variations.md](design-variations.md) strictly apply. All layouts are synthesized from abstract design principles and authentic client content. Never copy DOM markup, CSS classes, element IDs, or visual assets from captured reference websites.
+4. **Principles-Not-Pixels Abstraction Barrier:** The similarity audit and no-clone rules from [design-variations.md](../gate-2-design-theory/design-variations.md) strictly apply. All layouts are synthesized from abstract design principles and authentic client content. Never copy DOM markup, CSS classes, element IDs, or visual assets from captured reference websites.
 
 ---
 
@@ -193,7 +193,7 @@ Every asset slot must be cataloged using existing assets or approved stock sourc
 ### The 8-Tag Status Taxonomy
 1. `client-provided`: Asset supplied directly by the client with confirmed commercial usage rights (located in `assets-source/` or brand folder).
 2. `agency-created`: Asset created in-house (vector icons via Lucide, charts, typography graphics).
-3. `stock-licensed`: Commercial stock photography/illustration with source and licence verified. Follow [references/stock-image-sourcing.md](stock-image-sourcing.md) for approved providers (Pixabay, Pexels, Unsplash). Sourced via `scripts/stock-fetch/index.js` at Stage 5 authoring time and logged to `project-docs/stock-provenance.json`.
+3. `stock-licensed`: Commercial stock photography/illustration with source and licence verified. Follow [stock-image-sourcing.md](stock-image-sourcing.md) for approved providers (Pixabay, Pexels, Unsplash). Sourced via `scripts/stock-fetch/index.js` at Stage 5 authoring time and logged to `project-docs/stock-provenance.json`.
 4. `ai-generated`: Synthesized imagery requiring recorded written client sign-off.
 5. `placeholder`: Neutral generated placeholder image with visible dimensions and ratio label.
 6. `drafted-placeholder`: Realistic copy drafted for review; requires `data-placeholder="true"`.
@@ -244,7 +244,7 @@ When CMS mode is `cms`, Stage 5 authors CMS requirements, schema, and content ac
      node skills/create-nww-website/scripts/cms-seed/index.js --auto-slug
      ```
 
-For technical CMS details, consult [references/cms-architecture.md](cms-architecture.md).
+For technical CMS details, consult [cms-architecture.md](cms-architecture.md).
 
 ---
 

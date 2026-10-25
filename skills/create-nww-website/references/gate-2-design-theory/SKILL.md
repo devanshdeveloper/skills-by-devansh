@@ -93,7 +93,7 @@ A compact audit table:
 
 Captured reference files (`page.html`, `content.md`, `screenshot-full-1440.png`) are **strictly analysis inputs**. Never reproduce, clone, or mimic a reference website. Instead, extract abstract design principles (e.g., spatial rhythm, typographic contrast, tonal mood) and use them to synthesize original landing page variations from the client's authentic content.
 
-Before building variations, consult [references/design-variations.md](design-variations.md) for mandatory rules governing:
+Before building variations, consult [design-variations.md](design-variations.md) for mandatory rules governing:
 - **The 9-Dimension Variation Framework:** Layout & grid, section order & composition, type pairing & hierarchy, palette & contrast, shape & component language, motion character, imagery treatment, density & spacing, and navigation pattern.
 - **Quantitative Distance Rules:** Each variation must differ on at least 4 of 9 dimensions from nearest references; no two variations share > 3 dimensions; zero shared classes, IDs, inline styles, or assets; max 5-word consecutive text overlap.
 - **Mandatory Similarity Audit:** Pre-presentation automated audit compiling `_checks/similarity-audit.md`.
@@ -130,10 +130,9 @@ Before presenting to the user for Gate 2 sign-off:
 - [ ] Reference landing pages captured into `project-docs/design-references/<domain>/` (`page.html`, `content.md`, `screenshot-full-1440.png`, `capture.json`) as analysis inputs only.
 - [ ] Reference capture ledger compiled in `project-docs/design-references/sources.md` starting with mandatory third-party usage notice (zero fabricated images, zero copied assets).
 - [ ] Technical design theory authored to `project-docs/client-review/gate-2-design-theory/design-theory.md` (abstract principles, tokens, typography, motion, avoid list).
-- [ ] $N$ full-page landing page variation previews (default 3) compiled to `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` built using **HTML + Tailwind CSS + jQuery** featuring distinct architectural personalities and real client content per [references/design-variations.md](design-variations.md).
+- [ ] $N$ full-page landing page variation previews (default 3) compiled to `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` built using **HTML + Tailwind CSS + jQuery** featuring distinct architectural personalities and real client content per [design-variations.md](design-variations.md).
 - [ ] Pre-presentation similarity audit executed and report compiled to `project-docs/client-review/gate-2-design-theory/_checks/similarity-audit.md` confirming compliance with distance rules (zero shared classes/IDs, zero hotlinks, word overlap <= 5 words).
 - [ ] Static review generator script executed (`node skills/create-nww-website/scripts/client-review/index.js`) to generate Gate 2 comparison hub (`gate-2-design-theory/index.html`) without prompt copy boxes.
 - [ ] Public deployment live on GitHub Pages and verified accessible via HTTPS (no localhost links provided).
 - [ ] `project-docs/router-state.md` updated to `Gate 2: Awaiting Client Decision Among Variations (via project-docs/client-review/gate-2-design-theory/index.html)`.
 - [ ] Client decision confirmed before Gate 2 approval and Stage 3 initiation. (If revisions requested, update files directly in-place; do not create separate revision files. Record requirement notes in `client-requirements/`).
-

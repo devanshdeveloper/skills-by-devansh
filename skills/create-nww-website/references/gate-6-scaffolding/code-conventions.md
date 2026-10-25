@@ -37,15 +37,11 @@ Before scaffolding or writing code in `site/`:
 
 Scaffold the Next.js application inside `site/` at Stage 6 after Gate 5 page specifications are approved, using verified flags:
 
-### 0. Specialized Architecture Skills Pre-Load
-Before running the generator or producing code in `site/`, the agent MUST load the 10 specialized architecture, composition, design system, and GSAP skills:
+### 0. GSAP Animation Skills Pre-Load & Motion Tier Guard
+Before running the generator or producing code in `site/`, verify the client's chosen motion tier from `client-context/client-answers.md` (Q14) against [gsap-animation-tiers.md](gsap-animation-tiers.md):
+- If `motion: disabled`: Do **NOT** load GSAP skills and do **NOT** install `gsap` or `@gsap/react` in `site/package.json`.
+- If `motion: low | medium | high | max | ultra`: Pre-load the approved GSAP animation suite:
 ```bash
-DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices
-DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-composition-patterns
-DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/agent-skills --skill web-design-guidelines
-DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/openreview --skill next-best-practices
-DISABLE_TELEMETRY=1 npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill design-system
-DISABLE_TELEMETRY=1 npx skills add https://github.com/heygen-com/hyperframes --skill gsap
 DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-core
 DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-scrolltrigger
 DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-performance

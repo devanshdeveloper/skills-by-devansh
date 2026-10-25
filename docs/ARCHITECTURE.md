@@ -19,17 +19,22 @@ skills-by-devansh/
 │   │   ├── SKILL.md                    # Master 9-stage pipeline runbook
 │   │   ├── assets/                     # Standalone templates & client review assets
 │   │   │   └── client-review-template.html
-│   │   ├── references/                 # Modular reference specifications
-│   │   │   ├── pipeline-stages.md      # State machine and approval gates
-│   │   │   ├── code-conventions.md     # Code style and limits
-│   │   │   ├── seo/                    # SEO Strategy, structured data & tool library
-│   │   │   ├── design-theory.md        # Tokens, type, and motion
-│   │   │   └── ... (10 more docs)      # Specific stage guidance
+│   │   ├── references/                 # Modular gate reference specifications (zero loose files in root)
+│   │   │   ├── gate-0-intake/          # Stage 0: SKILL.md, client-questionnaire.md, pipeline-stages.md
+│   │   │   ├── gate-1-tech-stack/      # Stage 1: SKILL.md
+│   │   │   ├── gate-2-design-theory/   # Stage 2: SKILL.md, design-variations.md
+│   │   │   ├── gate-3-page-list/       # Stage 3: SKILL.md
+│   │   │   ├── gate-4-seo-strategy/    # Stage 4: SKILL.md, seo-tool-library.md, seo-tool-registry.json
+│   │   │   ├── gate-5-page-specs/      # Stage 5: SKILL.md, cms-architecture.md, stock-image-sourcing.md, cms/
+│   │   │   ├── gate-6-scaffolding/     # Stage 6: SKILL.md, gsap-animation-tiers.md, code-conventions.md, asset-optimization.md, page-checklist.md
+│   │   │   ├── gate-7-sub-pages/       # Stage 7: SKILL.md
+│   │   │   └── gate-8-final-verification/ # Stage 8: SKILL.md
 │   │   └── scripts/                    # Embedded CLI helper tools
 │   │       ├── assets-optimizer/       # Sharp/ffmpeg image/video pipeline
 │   │       ├── stock-fetch/            # Stock image provenance & fetch
 │   │       ├── client-review/          # Gate 2 visual review hub and portal generator
 │   │       ├── reference-capture/      # Automated reference landing page DOM & screenshot capture
+│   │       ├── site-fetch/             # Universal site crawler & page-type capture (previous site & references)
 │   │       ├── client-notify/          # Multi-stage client email review & approval notification engine
 │   │       ├── structure-audit/        # Stage 8 deliverables and coding conventions validator
 │   │       ├── cms-seed/               # Blog seeding CLI engine and schema validator
@@ -64,9 +69,9 @@ When an agent executes the `create-nww-website` or `nww` pipeline to develop a w
 │   ├── branding/                         # Brand logos, color guides, visual assets
 │   ├── uploads/                          # Client-provided images, headshots, brochures
 │   └── notes/                            # Raw notes, transcripts, or initial requirements
-├── previous-site/                        # [If Migration] Old website archive, legacy URLs, scraped pages
+├── previous-site/                        # [If Migration - Crawled Before Gate 1] Legacy site archive
 │   ├── sitemap-legacy.xml                # Crawled URLs from existing website for 301 redirects
-│   ├── content-export/                   # Scraped legacy blog posts, pages, and metadata
+│   ├── <slug>/                           # Per-page snapshot (<slug>/index.html, content.md, screenshot.png)
 │   └── media/                            # Legacy media assets
 ├── client-requirements/                  # [Optional] Recorded client requirement notes during in-place revisions
 │   └── client-revision-notes.md          # Client revision feedback notes (revisions applied directly in-place)

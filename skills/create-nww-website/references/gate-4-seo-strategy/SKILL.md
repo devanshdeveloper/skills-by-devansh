@@ -390,12 +390,6 @@ export default function JsonLd({ schema }) {
        })),
      };
    }
-   // Usage on /services/web-development:
-   // createBreadcrumbSchema([
-   //   { name: 'Home', url: '/' },
-   //   { name: 'Services', url: '/services' },
-   //   { name: 'Web Development', url: '/services/web-development' },
-   // ])
    ```
 
 5. **`Article` / `BlogPosting` (CMS Blog Post Detail Routes):**

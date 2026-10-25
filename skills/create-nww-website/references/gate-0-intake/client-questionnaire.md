@@ -17,7 +17,7 @@ Upon skill activation, the agent must immediately execute this sequence:
    - **Case C — User Provided a Pasted Brief or Notes in Prompt:** Extract known answers into memory, report what was successfully parsed, and present ONLY the remaining gap questions.
    - **Case D — Fresh Project:** **Immediately present Batch 1 (Questions 1 to 7)** in plain language.
 3. **Site Migration & Environment Setup:**
-   - If user indicates a site migration (`build_origin: migration`), create `previous-site/` folder to archive the previous site content post-build (`previous-site/<slug>/index.html`, `content.md`, `screenshot.png`).
+   - If user indicates a site migration (`build_origin: migration`), crawl and archive the previous website into `previous-site/` BEFORE Gate 1 (`previous-site/<slug>/index.html`, `content.md`, `screenshot.png`, `sitemap-legacy.xml`) using `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --mode migration`. This capture must occur in Stage 0 so that existing routes, redirects, copywriting, and media assets are preserved before technical planning begins.
    - In the project root folder, generate a `.env.example` file with placeholders for external connections (e.g. SEO tools, client email sending).
 4. **Absolute Restrictions Before Presenting Batch 1:**
    - **NO** file searches, tree walks, or repository inspections beyond the single brief check.
@@ -72,8 +72,14 @@ Upon skill activation, the agent must immediately execute this sequence:
   *(Answer: Choice | Allowed: `principles-only` (default: extract abstract principles, 100% original layout/markup/copy), `loose-inspiration` (broad creative departure) | Default: `principles-only` | Required: Yes | Consumer: Stage 2 Gate 2 distance rules)*
 - **Q13 [Disliked Websites]:** Share 1–2 website URLs whose overall design or vibe you dislike, and why?  
   *(Answer: List of URLs + commentary | Default: `None` | Required: Optional | Consumer: Stage 2)*
-- **Q14 [Motion & Animation]:** What is your animation preference: subtle & static by design (micro-interactions on hover, max 1 bold section), or completely static?  
-  *(Answer: Choice | Allowed: `subtle-gsap` (default), `static-only` | Default: `subtle-gsap` | Required: Yes | Consumer: Stage 2, Stage 6)*
+- **Q14 [GSAP Animation Tier]:** What level of motion and animation should be implemented?  
+  - `disabled`: Static layout only. Do NOT load GSAP skills; do NOT install `gsap` library in Next.js site. Pure CSS/Tailwind transitions.
+  - `low`: Subtle micro-interactions, hover scale, gentle scroll fades (15–20px translateY), standard stagger (0.05s). Zero pinning, zero continuous scrubbing.
+  - `medium` *(Default)*: Standard modern agency motion. Coordinated section entrance, `ScrollTrigger.batch()`, sticky navbar blur, animated counters (max 1 bold section).
+  - `high`: Award-winning marketing site tier. Pinned horizontal scroll track, scrubbed timelines, SplitText masked word reveals, magnetic buttons, Lenis smooth scroll ticker sync.
+  - `max`: Immersive narrative experience. Multi-stage pinned card stacking in 3D perspective (`rotationX`, `scale`), 60fps 3D card tilt via `quickTo`, velocity-aware inertia skewing (`self.getVelocity()`).
+  - `ultra`: Experiential Awwwards SOTD / WebGL tier. Decoupled Three.js canvas architecture, camera flight through 3D space driven by master ScrollTrigger scrub, custom GLSL shader displacement, 120fps GPU budget.  
+  *(Answer: Choice | Allowed: `disabled`, `low`, `medium` (default), `high`, `max`, `ultra` | Default: `medium` | Required: Yes | Consumer: Stage 1, Stage 2, Stage 6, [gsap-animation-tiers.md](../gate-6-scaffolding/gsap-animation-tiers.md))*
 
 ### Batch 3: Pages, Sitemap & Verbatim Copywriting (6 Questions)
 - **Q15 [Core Page List]:** Which pages do you need at launch (e.g. Home, About, Services, Contact, Blog, Pricing, FAQ)?  
@@ -192,7 +198,7 @@ After all questionnaire batches are completed, write the compiled answers to `cl
 - **Gate 2 Variation Count:** [3]
 - **Reference Adherence Mode:** [principles-only | loose-inspiration]
 - **Disliked References:** [URLs and anti-patterns to avoid]
-- **Motion Preference:** [subtle-gsap | static-only]
+- **Motion Preference:** [disabled | low | medium | high | max | ultra]
 
 ## 3. Sitemap & Content Architecture
 - **Core Pages:** [Home, About, Services, Contact, Blog]
@@ -247,7 +253,7 @@ Every question collected during the intake interview maps to explicit downstream
 | **Batch 1** | Q1–Q7 | Business Identity, Audience, Primary Action, CMS Mode | Stage 0 (Gate 0), Stage 1, Stage 2, Stage 3, Stage 5 | `client-answers.md`, `tech-stack.md`, CMS routing, page list |
 | **Batch 2** | Q8–Q11 | Brand Assets, Palette Tokens, Typography, Brand Scale | Stage 2, Stage 5, Stage 6 | `design-theory.md` design tokens, `site/app/globals.css`, `site/AGENTS.md` |
 | **Batch 2** | Q12a–Q12d | References, Liked Principles, Avoids, Variations, Adherence | Stage 2 (Gate 2) | Reference capture, `design-variations.md` matrix, distance audit |
-| **Batch 2** | Q13–Q14 | Disliked Sites, Motion Preference | Stage 2, Stage 5, Stage 6 | `design-theory.md` Avoid list, motion intent, `lib/motion.js` dual tokens |
+| **Batch 2** | Q13–Q14 | Disliked Sites, GSAP Animation Tier (`disabled`, `low`, `medium`, `high`, `max`, `ultra`) | Stage 1, Stage 2, Stage 5, Stage 6 | `design-theory.md` Avoid list, motion tier selection, GSAP skill load guard, `lib/motion.js` tokens, [gsap-animation-tiers.md](../gate-6-scaffolding/gsap-animation-tiers.md) |
 | **Batch 3** | Q15–Q20 | Sitemap, Section Needs, Copywriting, Voice & Tone, Forms | Stage 3, Stage 5, Stage 6 | `page-list.md`, `page.md`, form API |
 | **Batch 4** | Q21–Q27 | Primary Photos, Rights, Stock Authorization & Providers | Stage 0 (Gate 0), Stage 5, Stage 6 | `page.md`, `stock-provenance.json`, `/credits` page |
 | **Batch 5** | Q28–Q34 | SEO Keywords, Geo Focus, Domain, Analytics, Legal | Stage 1, Stage 4, Stage 5, Stage 6, Stage 7 | `seo-strategy.md`, JSON-LD schemas, GA4 integration |

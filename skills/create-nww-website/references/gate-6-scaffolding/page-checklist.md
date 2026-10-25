@@ -11,7 +11,7 @@ During Stage 7 sub-page builds, per-page QA execution results are logged to `pag
 ## Taste Verification Pass (Stage 6 Prerequisite)
 
 Before compiling the checklist in Stage 6:
-1. **Taste Skill Check:** Verify if `frontend-design` is available per [design-theory.md](design-theory.md) or apply built-in taste rules.
+1. **Taste Skill Check:** Verify if `frontend-design` is available per [design-theory.md](../gate-2-design-theory/SKILL.md) or apply built-in taste rules.
 2. **In-Place Quality Adjustments:** Cross-examine design theory and page specifications against taste standards:
    - Identify generic defaults (warm-cream defaults, unearned fade-and-slide-up animations across multiple sections).
    - Revise theories and specs directly in-place to ensure distinctive styling justified by client references.

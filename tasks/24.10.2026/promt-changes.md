@@ -41,9 +41,9 @@
 Another irrevalant file "project-docs\editor-handover-outline.md"
 Another irrevalant file "project-docs\context-update.md"
 
-13. If the user says it is a site migration, create a folder called. previous-site/. we will put all the previous site content there after the new site is build.
-
-Such as screenshots striped markdown from html, full html with proper folder conventions like previous-site/<slug>/inde.html
+13. If the user says it is a site migration, crawl and archive the previous website into `previous-site/` BEFORE Gate 1 (in Stage 0).
+We will put all the previous site content there before technical architecture begins:
+Such as screenshots, stripped markdown from html, full html with proper folder conventions like `previous-site/<slug>/index.html`, and `sitemap-legacy.xml`.
 
 14. If the CMS context seems incomplete. create a file project-docs\client-review\gate-5-cms-requirements/list.md and do not proceed to the cms schema and content untill this is fixed.
 
@@ -65,4 +65,13 @@ if you think its worth taking a note of the requirement.
 create a folder client-requirements/ and put it there.
 
 22. Make sure we have a explict good system of the deployment to the github (html variation files) and vercel (next.js) with email sending integration.
+
+23. Add options for GSAP animations: `disabled`, `low`, `medium`, `high`, `max`, and `ultra`.
+- If `disabled`: do not load the GSAP skills and do not install or import the GSAP library in the Next.js site.
+- `low` & `medium`: subtle micro-interactions or standard modern agency motion.
+- `high`, `max`, and `ultra`: research docs and examples from internet and add comprehensive reference guide with production-ready Next.js code examples (`references/gsap-animation-tiers.md`).
+
+24. Add a common Node.js script (`skills/create-nww-website/scripts/site-fetch/index.js`) for fetching a website completely.
+Use the same script for fetching examples (references) and previous site (migration).
+The script fetches at least each and every page type with `content.md`, `index.html`, and `screenshot.png`.
 

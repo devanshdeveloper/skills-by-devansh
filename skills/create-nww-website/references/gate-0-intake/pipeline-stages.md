@@ -52,20 +52,20 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 - **Goal:** Execute the start-up activation protocol from [client-questionnaire.md](client-questionnaire.md):
   1. Ask the user in the beginning whether they want client milestone approval emails dispatched at each stage.
   2. Inspect `client-context/client-answers.md` (or prefill from user prompt notes) to compile the intake brief.
-  3. If site migration (`build_origin: migration`), create `previous-site/` folder to archive previous site content after the new site is built (screenshots, stripped markdown, full HTML).
+  3. If site migration (`build_origin: migration`), crawl and archive the existing website into `previous-site/` BEFORE Gate 1 (crawling all routes, screenshots, stripped markdown, full HTML, and `sitemap-legacy.xml`). Execute: `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --mode migration`. This capture must occur in Stage 0 so that existing routes, redirects, copywriting, and media are documented before technical planning begins.
   4. Generate root `.env.example` with credential placeholders for any external connection (SEO tools, client email sending).
 - **Inputs:** User prompt, `client-context/` files, or interactive questionnaire responses.
-- **Outputs:** `client-context/client-answers.md`, `.env.example`, and `previous-site/` (if migration).
+- **Outputs:** `client-context/client-answers.md`, `.env.example`, and `previous-site/` (if migration, crawled before Gate 1).
 - **Gate 0:** Human reviews and confirms the intake summary and CMS mode selection (`none` or `cms`). The agent records human sign-off in `project-docs/router-state.md` (`Gate 0: Intake Confirmed`).
 
 ### Stage 1: Tech Stack Specification
-- **Goal:** Author `project-docs/client-review/gate-1-tech-stack/tech-stack.md` defining the stack, pre-filling defaults and asking only about deviations. Stack is Next.js App Router, Tailwind CSS, JavaScript-only (`.js`, `.jsx`), `pnpm`, container standalone output, Lucide icons, GSAP, and image mode `pre-optimized`.
-- **Inputs:** `client-context/client-answers.md`.
+- **Goal:** Author `project-docs/client-review/gate-1-tech-stack/tech-stack.md` defining the stack, pre-filling defaults and asking only about deviations. Stack is Next.js App Router, Tailwind CSS, JavaScript-only (`.js`, `.jsx`), `pnpm`, container standalone output, Lucide icons, GSAP (omitted if `motion: disabled`), and image mode `pre-optimized`.
+- **Inputs:** `client-context/client-answers.md` and `previous-site/` (if migration).
 - **Outputs:** `project-docs/client-review/gate-1-tech-stack/tech-stack.md` and initial `project-docs/router-state.md`.
 - **Gate 1:** Internal developer confirms stack choices and framework parameters.
 
 ### Stage 2: Design Theory & Variations
-- **Goal:** Author design principles in `project-docs/client-review/gate-2-design-theory/design-theory.md`, fetch reference sites into `project-docs/design-references/`, build $N$ original landing page variation previews in `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` using **HTML + Tailwind CSS + jQuery** (to save future tokens), pass similarity audit distance rules (`_checks/similarity-audit.md`), and compile review hub at `project-docs/client-review/gate-2-design-theory/index.html`.
+- **Goal:** Author design principles in `project-docs/client-review/gate-2-design-theory/design-theory.md`, fetch reference sites into `project-docs/design-references/` via `node skills/create-nww-website/scripts/site-fetch/index.js --brief client-context/client-answers.md --out project-docs/design-references --mode references`, build $N$ original landing page variation previews in `project-docs/client-review/gate-2-design-theory/<variation-slug>/index.html` using **HTML + Tailwind CSS + jQuery** (to save future tokens), pass similarity audit distance rules (`_checks/similarity-audit.md`), and compile review hub at `project-docs/client-review/gate-2-design-theory/index.html`.
 - **Client Presentation & Public Deployment:** Gate 2 variations are sent to the client. We do NOT include the "copy the prompt" or "Copy My Decision" prompt sections. We ALWAYS require a live public deployment (e.g. GitHub Pages via workflow) to forward to the client; localhost deployment URLs are strictly forbidden for client forwarding.
 - **Inputs:** `client-context/client-answers.md`.
 - **Outputs:** `project-docs/client-review/gate-2-design-theory/design-theory.md`, `project-docs/design-references/`, variation HTML files, `_checks/similarity-audit.md`, and review hub (`project-docs/client-review/gate-2-design-theory/index.html`).
@@ -74,12 +74,12 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 ### Stage 3: Page List & Sitemap
 - **Goal:** Author `project-docs/client-review/gate-3-page-list/page-list.md`. Map every URL route, title, primary purpose, visual anchors, and shared component candidates.
 - **Rules:** Do NOT generate `page-design-notes.md` (file generation deleted). Do NOT create any additional unstated markdown files.
-- **Inputs:** `client-context/client-answers.md`, approved design theory.
+- **Inputs:** `client-context/client-answers.md`, approved design theory, and `previous-site/` (if migration, for legacy route inventory and redirect planning).
 - **Outputs:** `project-docs/client-review/gate-3-page-list/page-list.md`.
 - **Gate 3:** Client / lead developer confirms the sitemap, URL route hierarchy, and page inventory.
 
 ### Stage 4: SEO Strategy
-- **Goal:** **Ask the client for any tool connections** (Google Search Console, Ahrefs, SEMrush, Google Analytics, PageSpeed API) before proceeding. Pre-load approved SEO skills, run Tool Availability Check per [references/seo/seo-tool-library.md](seo/seo-tool-library.md), and author `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md` covering keyword targets, JSON-LD schemas, sitemap, robots, and 301 redirects.
+- **Goal:** **Ask the client for any tool connections** (Google Search Console, Ahrefs, SEMrush, Google Analytics, PageSpeed API) before proceeding. Pre-load approved SEO skills, run Tool Availability Check per [seo-tool-library.md](../gate-4-seo-strategy/seo-tool-library.md), and author `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md` covering keyword targets, JSON-LD schemas, sitemap, robots, and 301 redirects.
   ```bash
   DISABLE_TELEMETRY=1 npx skills add https://github.com/coreyhaines31/marketingskills --skill seo-audit
   DISABLE_TELEMETRY=1 npx skills add https://github.com/coreyhaines31/marketingskills --skill ai-seo
@@ -102,8 +102,10 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 - **Gate 5:** Client / lead developer reviews and approves the unified page specifications (layout, copy, asset slots) and CMS data models/seeds. Progress is recorded in `project-docs/router-state.md` (`Gate 5: Page Specifications & CMS Schema Approved`).
 
 ### Stage 6: Codebase Scaffolding, Foundation Build & Landing Page Showcase
-- **Goal:** Pre-load approved GSAP animation skills, generate master QA checklist, build production foundation shell, scaffold all application routes, create `site/.env.example`, and **fully construct the Landing Page (`site/app/page.js` + `_components/`) for client showcase**.
-- **Specialized Skills Pre-Load:** Pre-load approved GSAP animation suite:
+- **Goal:** Pre-load approved GSAP animation skills (unless `motion: disabled`), generate master QA checklist, build production foundation shell, scaffold all application routes, create `site/.env.example`, and **fully construct the Landing Page (`site/app/page.js` + `_components/`) for client showcase**.
+- **Motion Tiering & Skills Pre-Load:** Consult [gsap-animation-tiers.md](../gate-6-scaffolding/gsap-animation-tiers.md).
+  - If `motion: disabled`: Do **NOT** load GSAP skills and do **NOT** install `gsap` or `@gsap/react` in `site/package.json`.
+  - If `motion: low | medium | high | max | ultra`: Pre-load approved GSAP animation suite:
   ```bash
   DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-core
   DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-scrolltrigger
@@ -121,7 +123,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
   5. **Media & Tooling:** Run asset optimizer (`assets-source/` to `site/public/assets/`), write `site/assets-optimize.config.md`, scaffold `site/AGENTS.md` + 4 scoped AGENTS.md, and add check scripts (`pnpm check:all`).
   6. **CMS & Credits:** Wire CMS client data layer (`site/lib/cms/`) if CMS active; generate `site/app/credits/page.js` if stock images used.
   7. **Route Mapping:** Scaffold thin routes and section components with `data-section="<id>"` markers, decoupled `site/content/`, and emit `site/site.manifest.json`.
-  8. **Landing Page Showcase Construction:** Fully implement, style, and animate the Landing Page (`site/app/page.js` + `site/app/_components/`) with verbatim copy and subtle GSAP motion.
+  8. **Landing Page Showcase Construction:** Fully implement, style, and animate the Landing Page (`site/app/page.js` + `site/app/_components/`) with verbatim copy and motion adhering to the selected motion tier (`disabled`, `low`, `medium`, `high`, `max`, `ultra`) per [gsap-animation-tiers.md](../gate-6-scaffolding/gsap-animation-tiers.md).
 - **Verification:** Run `node skills/create-nww-website/scripts/client-review/verify-nextjs.mjs .` and execute `pnpm build` in `site/` to ensure zero compilation or route errors.
 - **Gate 6:** Client reviews the live interactive Landing Page showcase and approves codebase foundation. Progress is recorded in `project-docs/router-state.md` (`Gate 6: Scaffolding, Foundation & Landing Page Approved`).
 
@@ -177,9 +179,9 @@ Every client website project created through this pipeline must strictly follow 
 │   ├── branding/                         # Client logos (SVG/PNG), brand guidelines, color palettes
 │   ├── uploads/                          # Client-provided images, team headshots, PDFs, brochures
 │   └── notes/                            # Raw notes, transcripts, or initial requirements from client
-├── previous-site/                        # [Stage 0 - If Migration] Old website archive & migration data
+├── previous-site/                        # [Stage 0 - If Migration] Old website archive & migration data (crawled before Gate 1)
 │   ├── sitemap-legacy.xml                # Crawled URLs from existing website for 301 redirects
-│   ├── content-export/                   # Scraped or exported legacy blog posts, pages, and metadata
+│   ├── <slug>/                           # Per-page snapshot (<slug>/index.html, content.md, screenshot.png)
 │   └── media/                            # Downloaded legacy media assets for optimization
 ├── client-requirements/                  # [Optional] Recorded client requirement notes during in-place revisions
 │   └── client-revision-notes.md          # Client revision feedback notes (revisions applied directly in-place)
