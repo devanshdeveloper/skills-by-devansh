@@ -13,6 +13,7 @@
  *   --stage=<0-8>        Stage number (auto-detected from router-state.md if omitted)
  *   --batch=<1-8>        Gate 0 batch number or slug (1-7 for milestone confirmations, 8 for open questions)
  *   --questions          On-demand flag to draft or send email with the 20 open questions from open-questions.md
+ *   --open               Automatically open the local HTML email dispatcher portal in default browser
  *   --gate=<name>        Gate identifier (auto-detected if omitted)
  *   --to=<email>         Client email address (parsed from batch answers or prompt)
  *   --client=<name>      Client name (parsed from batch-01 answers or prompt)
@@ -377,6 +378,53 @@ Next Web Works
   };
 }
 
+function writeMailtoPortal(projRoot, recipient, subject, bodyText) {
+  const mailtoUrl = `mailto:${encodeURIComponent(recipient || '')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+  const outDir = path.join(projRoot, 'client-context');
+  if (!fs.existsSync(outDir)) {
+    try { fs.mkdirSync(outDir, { recursive: true }); } catch (e) {}
+  }
+  const htmlPath = path.join(outDir, 'send-email.html');
+  const escapeHtml = str => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Send Email: ${escapeHtml(subject)}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 760px; margin: 40px auto; padding: 24px; background: #0f172a; color: #f8fafc; line-height: 1.6; }
+    .card { background: #1e293b; border-radius: 12px; padding: 28px; border: 1px solid #334155; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); }
+    h1 { margin-top: 0; font-size: 22px; color: #38bdf8; }
+    .btn { display: inline-block; background: #0284c7; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: 600; margin-top: 12px; margin-bottom: 24px; cursor: pointer; transition: background 0.2s; }
+    .btn:hover { background: #0369a1; }
+    .meta { background: #0f172a; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; border: 1px solid #334155; font-size: 14px; }
+    .copy-box { background: #0f172a; padding: 16px; border-radius: 8px; border: 1px solid #334155; white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; margin: 12px 0; max-height: 380px; overflow-y: auto; color: #cbd5e1; }
+    .copy-btn { background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; }
+    .copy-btn:hover { background: #475569; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Milestone Email Dispatcher</h1>
+    <div class="meta">
+      <div><strong>To:</strong> ${escapeHtml(recipient || '[Recipient Email Needed]')}</div>
+      <div style="margin-top: 6px;"><strong>Subject:</strong> ${escapeHtml(subject)}</div>
+    </div>
+    <a class="btn" href="${mailtoUrl}">Open in Desktop Mail App (Outlook / Mail)</a>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h3 style="margin: 0; color: #94a3b8; font-size: 14px;">Webmail Quick Copy (Gmail / Outlook Web):</h3>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('body-text').innerText); this.innerText='Copied to Clipboard!'; setTimeout(() => this.innerText='Copy Email Body', 2000);">Copy Email Body</button>
+    </div>
+    <div id="body-text" class="copy-box">${escapeHtml(bodyText)}</div>
+  </div>
+</body>
+</html>`;
+
+  fs.writeFileSync(htmlPath, html, 'utf-8');
+  return htmlPath;
+}
+
 async function promptUser(question) {
   const rl = readline.createInterface({
     input: process.stdin,
@@ -487,12 +535,27 @@ async function run() {
   console.log(draft.text);
   console.log(`-----------------------------------------------------------------`);
 
-  // Generate mailto link
+  // Generate mailto link and local HTML portal
   const mailtoUrl = `mailto:${encodeURIComponent(recipient || '')}?subject=${encodeURIComponent(draft.subject)}&body=${encodeURIComponent(draft.text)}`;
+  const htmlPortalPath = writeMailtoPortal(projectRoot, recipient, draft.subject, draft.text);
+  const fileUrl = `file:///${htmlPortalPath.replace(/\\/g, '/')}`;
+
+  if (flags.open) {
+    try {
+      if (process.platform === 'win32') {
+        require('node:child_process').exec(`powershell -command "Start-Process '${htmlPortalPath}'"`);
+      } else if (process.platform === 'darwin') {
+        require('node:child_process').exec(`open "${htmlPortalPath}"`);
+      } else {
+        require('node:child_process').exec(`xdg-open "${htmlPortalPath}"`);
+      }
+    } catch (e) {}
+  }
 
   if (flags['dry-run']) {
     console.log('\n[Dry-Run Mode Active] Email was NOT sent.');
-    console.log(`Clickable Mailto Link (opens default mail app):\n${mailtoUrl}\n`);
+    console.log(`Clickable Dispatcher Portal (opens in browser with 1-click mail button):\n${fileUrl}`);
+    console.log(`Direct Mailto URI:\n${mailtoUrl}\n`);
     process.exit(0);
   }
 
@@ -516,7 +579,8 @@ async function run() {
 
   if (!approved) {
     console.log('\nEmail sending aborted by user. Zero emails dispatched.');
-    console.log(`Clickable Mailto Link to send manually:\n${mailtoUrl}\n`);
+    console.log(`Clickable Dispatcher Portal:\n${fileUrl}`);
+    console.log(`Direct Mailto URI:\n${mailtoUrl}\n`);
     process.exit(0);
   }
 
@@ -529,11 +593,13 @@ async function run() {
       recordNotificationInRouterState(stage, template.gate, recipient, draft.subject);
     } catch (err) {
       console.error(`✗ Failed to send via Resend: ${err.message}`);
-      console.log(`Fallback Mailto Link:\n${mailtoUrl}\n`);
+      console.log(`Fallback Dispatcher Portal:\n${fileUrl}`);
+      console.log(`Fallback Mailto URI:\n${mailtoUrl}\n`);
     }
   } else {
     console.log(`✓ Approval confirmed!`);
-    console.log(`Use this direct Mailto Link to dispatch via your desktop mail app:\n${mailtoUrl}\n`);
+    console.log(`Open Dispatcher Portal (recommended):\n${fileUrl}`);
+    console.log(`Direct Mailto URI:\n${mailtoUrl}\n`);
     if (recipient) {
       recordNotificationInRouterState(stage, template.gate, recipient, draft.subject);
     }

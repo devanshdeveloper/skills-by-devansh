@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.7] - 2026-10-25
+
+### Added
+- **HTML Email Dispatcher Portal & Browser Launcher (`--open`)**: Engineered `writeMailtoPortal()` in `scripts/client-notify/index.js` to generate a dedicated local HTML dispatcher (`client-context/send-email.html`). Solves chat webview CSP blocking of `mailto:` protocol handlers and URL length truncation by providing a clickable `file:///` link that opens directly in Chrome/Edge with a 1-click desktop mail app button and one-click clipboard copy for webmail (Gmail/Outlook Web). Added `--open` flag to automatically launch the portal.
+
 ## [1.9.6] - 2026-10-25
 
 ### Added
