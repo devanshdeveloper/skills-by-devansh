@@ -13,8 +13,8 @@
  *   --stage=<0-8>        Stage number (auto-detected from router-state.md if omitted)
  *   --batch=<1-8>        Gate 0 batch number or slug (1-7 for milestone confirmations, 8 for open questions)
  *   --questions          On-demand flag to draft or send email with the 20 open questions from open-questions.md
- *   --open               Automatically open the local HTML email dispatcher portal in default browser
- *   --gate=<name>        Gate identifier (auto-detected if omitted)
+ *   --open               Automatically open the local HTML email dispatcher in browser (Default: true in mailto mode)
+ *   --no-open            Disable automatic browser launch
  *   --to=<email>         Client email address (parsed from batch answers or prompt)
  *   --client=<name>      Client name (parsed from batch-01 answers or prompt)
  *   --link=<url>         Review URL (auto-detected from GitHub Pages / local portal)
@@ -540,7 +540,18 @@ async function run() {
   const htmlPortalPath = writeMailtoPortal(projectRoot, recipient, draft.subject, draft.text);
   const fileUrl = `file:///${htmlPortalPath.replace(/\\/g, '/')}`;
 
-  if (flags.open) {
+  // Check available provider
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const resendFrom = process.env.RESEND_FROM || 'updates@nextwebworks.in';
+
+  let sendMethod = 'mailto';
+  if (resendApiKey && recipient) {
+    sendMethod = 'resend';
+  }
+
+  // Automatic browser launch for desktop mail mode (Method 2)
+  const shouldOpenBrowser = flags['no-open'] ? false : (Boolean(flags.open) || sendMethod === 'mailto');
+  if (shouldOpenBrowser && (!flags['dry-run'] || flags.open)) {
     try {
       if (process.platform === 'win32') {
         require('node:child_process').exec(`powershell -command "Start-Process '${htmlPortalPath}'"`);
@@ -549,6 +560,7 @@ async function run() {
       } else {
         require('node:child_process').exec(`xdg-open "${htmlPortalPath}"`);
       }
+      console.log(`\n✓ Automatically opened email dispatcher in your default browser.`);
     } catch (e) {}
   }
 
@@ -557,15 +569,6 @@ async function run() {
     console.log(`Clickable Dispatcher Portal (opens in browser with 1-click mail button):\n${fileUrl}`);
     console.log(`Direct Mailto URI:\n${mailtoUrl}\n`);
     process.exit(0);
-  }
-
-  // Check available provider
-  const resendApiKey = process.env.RESEND_API_KEY;
-  const resendFrom = process.env.RESEND_FROM || 'updates@nextwebworks.in';
-
-  let sendMethod = 'mailto';
-  if (resendApiKey && recipient) {
-    sendMethod = 'resend';
   }
 
   console.log(`\nDelivery Method: ${sendMethod === 'resend' ? 'Direct API (Resend)' : 'Desktop Mail Client (mailto link)'}`);

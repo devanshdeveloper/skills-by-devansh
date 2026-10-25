@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.8] - 2026-10-25
+
+### Changed
+- **Default Automatic Browser Launch in Mailto Mode (Method 2)**: Updated `scripts/client-notify/index.js` to automatically launch the email dispatcher portal in the user's default browser whenever mailto mode is active (Method 2), eliminating manual link clicking in sandboxed IDE chat windows. Added `--no-open` to opt out.
+
 ## [1.9.7] - 2026-10-25
 
 ### Added
