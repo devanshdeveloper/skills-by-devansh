@@ -71,10 +71,12 @@ When an agent executes the `create-nww-website` or `nww` pipeline to develop a w
 │   ├── branding/                         # Brand logos, color guides, visual assets
 │   ├── uploads/                          # Client-provided images, headshots, brochures
 │   └── notes/                            # Raw notes, transcripts, or initial requirements
-├── previous-site/                        # [If Migration - Crawled Before Gate 1] Legacy site archive
-│   ├── sitemap-legacy.xml                # Crawled URLs from existing website for 301 redirects
-│   ├── <slug>/                           # Per-page snapshot (<slug>/index.html, content.md, screenshot.png)
-│   └── media/                            # Legacy media assets
+├── previous-site/                        # [If Migration - Crawled Before Gate 1] Full working offline mirror of legacy site
+│   ├── index.html                        # Root homepage (functional offline mirror; works as it is when opened)
+│   ├── sitemap.xml                       # Discovered legacy route index
+│   ├── manifest.json                     # Complete inventory of legacy routes and harvested assets
+│   ├── <path>/index.html                 # Per-page working snapshot (<path>/index.html, content.md, screenshot.png)
+│   └── <source-path>/...                 # All assets (images, stylesheets, scripts, fonts, PDFs) in source locations
 ├── client-requirements/                  # [Optional] Recorded client requirement notes during in-place revisions
 │   └── client-revision-notes.md          # Client revision feedback notes (revisions applied directly in-place)
 ├── project-docs/                         # Project pipeline management & tracking

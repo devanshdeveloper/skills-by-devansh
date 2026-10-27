@@ -15,10 +15,12 @@ Before presenting questions, the agent executes the Pre-Gate 1 Legacy Site Crawl
 node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --mode migration
 ```
 
-This crawler creates:
-- `previous-site/manifest.json`: Complete inventory of all legacy URLs, status codes, and meta descriptions.
-- `previous-site/sitemap-legacy.xml`: Legacy route index.
-- `previous-site/<slug>/index.html`, `content.md`, and `screenshot.png`.
+This crawler creates a full working offline mirror in `previous-site/`:
+- `previous-site/index.html`: Fully functional homepage that works as it is when opened in a browser.
+- `previous-site/sitemap.xml`: Complete legacy route XML sitemap.
+- `previous-site/manifest.json`: Complete inventory of all legacy URLs, status codes, and harvested assets.
+- `previous-site/<path>/index.html`, `content.md`, and `screenshot.png`: Per-page mirrors and markdown summaries.
+- `previous-site/<source-path>/...`: All legacy assets placed directly where they were in the sources.
 
 The agent reads `previous-site/manifest.json` and begins the turn with an executive audit:
 *"Crawled legacy website at [URL]. Discovered [N] total routes and [X] media assets. Let's decide which content to carry forward, which pages to retire, and how to preserve your SEO rankings."*

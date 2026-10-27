@@ -12,13 +12,13 @@ Visual assets are the foundation of modern, award-winning web design. Websites f
 
 Before presenting this batch, the agent executes an **Asset Resource Audit**:
 1. **Old Website Scan (`previous-site/`):**
-   - If a legacy site crawl was executed, inspect all downloaded images, logos, icons, diagrams, and PDF files.
-   - Catalog total image count, file types (`.png`, `.jpg`, `.svg`, `.webp`), and dimensions.
+   - If a legacy site crawl was executed, inspect all harvested assets preserved in their source paths across `previous-site/` (or read `previous-site/manifest.json`).
+   - Catalog total image count, file types (`.png`, `.jpg`, `.svg`, `.webp`), dimensions, and source locations. The previous site is a complete offline mirror with assets located in their original source paths.
 2. **Local Repository & Context Files:**
    - Check `client-context/assets/`, `client-context/raw/`, and `public/` for client-uploaded files.
 3. **Present Discovered Resources to Client:**
    - Begin this turn by reporting exact discovered resources:
-     *"We completed the asset audit. Discovered: [N] legacy site images, [X] client logos in `client-context/`. Let's establish which assets we reuse, which we request for each product/project, and which we source or generate."*
+     *"We completed the asset audit. Discovered: [N] legacy site images, [X] client logos across `previous-site/` and `client-context/`. Let's establish which assets we reuse, which we request for each product/project, and which we source or generate."*
 
 ---
 

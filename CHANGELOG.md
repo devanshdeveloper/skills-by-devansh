@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-10-27
+
+### Added
+- **Complete Offline Mirror & Source Asset Preservation (`scripts/site-fetch/index.js`)**: Upgraded the universal website fetcher for Stage 0 legacy migrations to create a fully functioning offline website mirror in `previous-site/`:
+  - Homepage written directly to `previous-site/index.html` with all asset references and internal links relativized, enabling direct local offline browsing (`file://` or static web server) out of the box.
+  - Subpages mapped to natural route directories (`previous-site/<path>/index.html`) alongside `content.md` and `screenshot.png`.
+  - All visual and downloadable assets (images, stylesheets, scripts, web fonts, vector SVGs, and downloadable PDFs) harvested and placed directly in their original source paths without flattening into a separate `media/` directory.
+  - Pure-JavaScript image header parser extracting dimensions for PNG, JPEG, GIF, WebP, and SVG buffers to classify image quality (`high-res` vs `needs-replacement` for the 1200px retina threshold) for Gate 0 Batch 4 asset manifests.
+  - Standard `sitemap.xml` generated at `previous-site/sitemap.xml` indexing discovered legacy URLs.
+  - Complete catalog of legacy routes and harvested assets recorded into `previous-site/manifest.json`.
+
+### Changed
+- **Gate 0 Intake & Architecture Alignments**: Updated `SKILL.md`, `references/gate-0-intake/` runbooks, questionnaire guides (Batch 04 and Batch 06), and `docs/ARCHITECTURE.md` to reflect the full working offline mirror in `previous-site/` with source-located assets and standard `sitemap.xml`.
+
 ## [1.9.9] - 2026-10-25
 
 ### Added

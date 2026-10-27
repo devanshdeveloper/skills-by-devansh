@@ -1,23 +1,26 @@
 #!/usr/bin/env node
 
 /**
- * Universal Website Fetcher & Page-Type Capture Engine
+ * Universal Website Fetcher & Offline Mirror Engine
  *
- * Fetches, crawls, and archives complete websites for:
- * 1. Stage 0 Site Migration: Crawls legacy site before Gate 1 into `previous-site/<slug>/`
- *    with `index.html`, `content.md`, `screenshot.png`, and `sitemap-legacy.xml`.
+ * Fetches, crawls, and mirrors websites for:
+ * 1. Stage 0 Site Migration: Crawls legacy site before Gate 1 into `previous-site/`
+ *    as a full working offline mirror:
+ *    - Root `previous-site/index.html` (works as it is when opened in a browser).
+ *    - Subpages in `previous-site/<path>/index.html` with `content.md` and `screenshot.png`.
+ *    - All assets (images, stylesheets, scripts, fonts, icons, PDFs) placed in their original source paths.
+ *    - Relativized asset references and links so the site works offline out-of-the-box.
+ *    - Complete route and asset catalog in `previous-site/manifest.json` for Gate 0 Batch 4 and Stage 4 301 redirects.
+ *    - Zero `legacy.xml` or separate `media/` folder.
  * 2. Stage 2 Design References: Captures benchmark examples into `project-docs/design-references/<domain>/<slug>/`
  *    and compiles `sources.md`.
  *
  * Usage:
- *   # Migrate previous website (discovers and captures each page type):
+ *   # Migrate previous website into full working mirror:
  *   node skills/create-nww-website/scripts/site-fetch/index.js --url https://legacy.com --out previous-site --mode migration
  *
  *   # Capture design reference examples from batch-02-branding-motion/answers.md:
  *   node skills/create-nww-website/scripts/site-fetch/index.js --brief client-context/answers/batch-02-branding-motion/answers.md --out project-docs/design-references --mode references
- *
- *   # Standalone site crawl:
- *   node skills/create-nww-website/scripts/site-fetch/index.js --url https://example.com --out captured-site/ --max-pages 15
  */
 
 'use strict';
@@ -28,7 +31,7 @@ const https = require('node:https');
 const http = require('node:http');
 const { URL } = require('node:url');
 
-// Resolve Playwright from project cwd, local node_modules, companion packages, or npx cache
+// Resolve Playwright Chromium
 let chromium;
 const candidatePaths = [
   'playwright',
@@ -65,22 +68,24 @@ if (!chromium) {
 
 function printHelp() {
   console.log(`
-Universal Website Fetcher (skills-by-devansh)
+Universal Website Fetcher & Offline Mirror Engine (skills-by-devansh)
 
 Usage:
   node site-fetch/index.js [options]
 
 Options:
   --url <url>           Target website URL to crawl and capture.
-  --out <dir>           Output directory (e.g. 'previous-site' or 'project-docs/design-references').
+  --out <dir>           Output directory (default: 'previous-site').
   --mode <type>         Operation mode: 'migration' (default for --url) or 'references' (for --brief).
-  --brief <file>        Path to batch answers file (e.g. client-context/answers/batch-02-branding-motion/answers.md) to parse liked reference sites.
-  --max-pages <number>  Max unique page types to capture per site (default: 15).
-  --timeout <ms>        Navigation timeout in milliseconds (default: 20000).
+  --brief <file>        Path to batch answers file to parse liked reference sites.
+  --max-pages <number>  Max unique page types to capture (default: 15).
+  --max-assets <number> Max total assets to download during migration (default: 200).
+  --skip-assets         Skip downloading media assets (harvests HTML/text only).
+  --timeout <ms>        Navigation timeout in milliseconds (default: 25000).
   --help                Show this help message.
 
 Examples:
-  # Capture previous site for migration before Gate 1:
+  # Capture previous site as full working offline mirror before Gate 1:
   node site-fetch/index.js --url https://old-site.com --out previous-site --mode migration
 
   # Fetch all design references from intake brief:
@@ -88,7 +93,7 @@ Examples:
 `);
 }
 
-// Simple HTTP/HTTPS GET helper
+// Simple HTTP/HTTPS GET text helper
 function fetchText(targetUrl, timeoutMs = 10000) {
   return new Promise((resolve, reject) => {
     try {
@@ -119,6 +124,119 @@ function fetchText(targetUrl, timeoutMs = 10000) {
       reject(e);
     }
   });
+}
+
+// HTTP/HTTPS GET binary buffer helper
+function fetchBuffer(targetUrl, timeoutMs = 15000) {
+  return new Promise((resolve, reject) => {
+    try {
+      const parsed = new URL(targetUrl);
+      const client = parsed.protocol === 'https:' ? https : http;
+      const req = client.get(targetUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': '*/*'
+        },
+        timeout: timeoutMs
+      }, (res) => {
+        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+          const redirectUrl = new URL(res.headers.location, targetUrl).href;
+          return resolve(fetchBuffer(redirectUrl, timeoutMs));
+        }
+        if (res.statusCode < 200 || res.statusCode >= 300) {
+          return reject(new Error(`HTTP ${res.statusCode} ${res.statusMessage}`));
+        }
+        const chunks = [];
+        res.on('data', chunk => chunks.push(chunk));
+        res.on('end', () => resolve({ buffer: Buffer.concat(chunks), contentType: res.headers['content-type'] || '' }));
+      });
+      req.on('error', reject);
+      req.on('timeout', () => { req.destroy(); reject(new Error('Buffer download timeout')); });
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
+// Lightweight pure-JS image dimension reader from buffer headers
+function getImageDimensionsFromBuffer(buffer) {
+  if (!buffer || buffer.length < 24) return null;
+  try {
+    // 1. PNG: 89 50 4E 47 0D 0A 1A 0A
+    if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47) {
+      const width = buffer.readUInt32BE(16);
+      const height = buffer.readUInt32BE(20);
+      return { width, height, format: 'png' };
+    }
+    // 2. GIF: GIF87a or GIF89a
+    if (buffer[0] === 0x47 && buffer[1] === 0x49 && buffer[2] === 0x46) {
+      const width = buffer.readUInt16LE(6);
+      const height = buffer.readUInt16LE(8);
+      return { width, height, format: 'gif' };
+    }
+    // 3. WebP: RIFF ... WEBP
+    if (buffer.toString('ascii', 0, 4) === 'RIFF' && buffer.toString('ascii', 8, 12) === 'WEBP') {
+      const type = buffer.toString('ascii', 12, 16);
+      if (type === 'VP8 ' && buffer.length >= 30) {
+        const width = buffer.readUInt16LE(26) & 0x3fff;
+        const height = buffer.readUInt16LE(28) & 0x3fff;
+        return { width, height, format: 'webp' };
+      }
+      if (type === 'VP8L' && buffer.length >= 25) {
+        const b0 = buffer[21], b1 = buffer[22], b2 = buffer[23], b3 = buffer[24];
+        const width = 1 + (((b1 & 0x3f) << 8) | b0);
+        const height = 1 + (((b3 & 0x0f) << 10) | (b2 << 2) | ((b1 & 0xc0) >> 6));
+        return { width, height, format: 'webp' };
+      }
+      if (type === 'VP8X' && buffer.length >= 30) {
+        const width = 1 + buffer.readUIntLE(24, 3);
+        const height = 1 + buffer.readUIntLE(27, 3);
+        return { width, height, format: 'webp' };
+      }
+    }
+    // 4. JPEG: FF D8
+    if (buffer[0] === 0xFF && buffer[1] === 0xD8) {
+      let offset = 2;
+      while (offset < buffer.length - 8) {
+        if (buffer[offset] !== 0xFF) { offset++; continue; }
+        const marker = buffer[offset + 1];
+        if (marker === 0xC0 || marker === 0xC1 || marker === 0xC2) {
+          const height = buffer.readUInt16BE(offset + 5);
+          const width = buffer.readUInt16BE(offset + 7);
+          return { width, height, format: 'jpeg' };
+        }
+        const len = buffer.readUInt16BE(offset + 2);
+        offset += 2 + len;
+      }
+    }
+    // 5. SVG
+    const snippet = buffer.toString('utf-8', 0, Math.min(2048, buffer.length));
+    if (snippet.includes('<svg')) {
+      const vbMatch = snippet.match(/viewBox\s*=\s*["']\s*[\d.-]+\s+[\d.-]+\s+([\d.-]+)\s+([\d.-]+)\s*["']/i);
+      if (vbMatch) {
+        return { width: Math.round(parseFloat(vbMatch[1])), height: Math.round(parseFloat(vbMatch[2])), format: 'svg' };
+      }
+      const wMatch = snippet.match(/width\s*=\s*["'](\d+)(?:px)?["']/i);
+      const hMatch = snippet.match(/height\s*=\s*["'](\d+)(?:px)?["']/i);
+      if (wMatch && hMatch) {
+        return { width: parseInt(wMatch[1], 10), height: parseInt(hMatch[1], 10), format: 'svg' };
+      }
+      return { width: null, height: null, format: 'svg' };
+    }
+  } catch {}
+  return null;
+}
+
+// Generate standard sitemap.xml for legacy site routes
+function generateSitemapXml(urls, outputPath) {
+  const xmlItems = urls.map(u => `  <url>\n    <loc>${u}</loc>\n    <changefreq>monthly</changefreq>\n  </url>`).join('\n');
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${xmlItems}\n</urlset>\n`;
+  fs.writeFileSync(outputPath, xml, 'utf-8');
+}
+
+// Clean URL string helper
+function cleanUrlString(parsedUrl) {
+  return `${parsedUrl.protocol}//${parsedUrl.host}${parsedUrl.pathname.replace(/\/+$/, '') || '/'}`;
 }
 
 // Discover URLs from sitemap.xml or robots.txt
@@ -165,18 +283,20 @@ function extractXmlUrls(xmlContent, origin, urlSet) {
   }
 }
 
-function cleanUrlString(parsedUrl) {
-  return `${parsedUrl.protocol}//${parsedUrl.host}${parsedUrl.pathname.replace(/\/+$/, '') || '/'}`;
-}
-
-function urlToSlug(urlString, baseUrl) {
+// Convert URL pathname to clean slug and local relative HTML file path
+function urlToPageMapping(urlString, baseUrl) {
   try {
     const u = new URL(urlString);
-    const p = u.pathname.replace(/^\/+|\/+$/g, '');
-    if (!p) return 'home';
-    return p.toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '') || 'page';
+    const cleanPath = u.pathname.replace(/^\/+|\/+$/g, '');
+    if (!cleanPath) {
+      return { slug: 'home', relHtmlPath: 'index.html', dirPath: '' };
+    }
+    const slug = cleanPath.toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '') || 'page';
+    // Subpages become <slug>/index.html so opening <slug>/index.html works cleanly in a directory structure
+    const relHtmlPath = path.posix.join(cleanPath, 'index.html');
+    return { slug, relHtmlPath, dirPath: cleanPath };
   } catch {
-    return 'page';
+    return { slug: 'page', relHtmlPath: 'page/index.html', dirPath: 'page' };
   }
 }
 
@@ -184,10 +304,10 @@ function urlToSlug(urlString, baseUrl) {
 function clusterAndSamplePageTypes(urlList, baseUrl, maxPages = 15) {
   const baseParsed = new URL(baseUrl);
   const homeUrl = cleanUrlString(baseParsed);
-  const selected = new Map(); // slug -> url
+  const selected = new Map(); // slug -> item
 
-  // Always include Home
-  selected.set('home', homeUrl);
+  const homeMapping = urlToPageMapping(homeUrl, baseUrl);
+  selected.set(homeMapping.slug, { ...homeMapping, url: homeUrl });
 
   const patternBuckets = new Map();
 
@@ -201,59 +321,43 @@ function clusterAndSamplePageTypes(urlList, baseUrl, maxPages = 15) {
       const segments = u.pathname.replace(/^\/+|\/+$/g, '').split('/').filter(Boolean);
       if (segments.length === 0) continue;
 
-      // Classify page type pattern
-      let patternKey;
-      if (segments.length === 1) {
-        // Top-level static page: /about, /contact, /services, /pricing, etc.
-        patternKey = `static:${segments[0]}`;
-      } else {
-        // Multi-segment dynamic collection: /blog/:slug, /products/:slug, etc.
-        patternKey = `collection:${segments[0]}`;
-      }
-
-      if (!patternBuckets.has(patternKey)) {
-        patternBuckets.set(patternKey, []);
-      }
+      let patternKey = segments.length === 1 ? `static:${segments[0]}` : `collection:${segments[0]}`;
+      if (!patternBuckets.has(patternKey)) patternBuckets.set(patternKey, []);
       patternBuckets.get(patternKey).push(clean);
     } catch {}
   }
 
-  // 1. First prioritize all top-level static pages (About, Services, Contact, Pricing, etc.)
+  // 1. Prioritize top-level static pages (About, Services, Contact, Pricing, etc.)
   for (const [key, urls] of patternBuckets.entries()) {
     if (key.startsWith('static:') && selected.size < maxPages) {
-      const u = urls[0];
-      const slug = urlToSlug(u, baseUrl);
-      if (!selected.has(slug)) {
-        selected.set(slug, u);
-      }
+      const mapping = urlToPageMapping(urls[0], baseUrl);
+      if (!selected.has(mapping.slug)) selected.set(mapping.slug, { ...mapping, url: urls[0] });
     }
   }
 
-  // 2. Then sample 1-2 representative items from each collection pattern (e.g. 1 blog post, 1 product)
+  // 2. Sample representative items from collections (e.g. 1 blog post, 1 product)
   for (const [key, urls] of patternBuckets.entries()) {
     if (key.startsWith('collection:') && selected.size < maxPages) {
       const sampleCount = Math.min(2, urls.length);
       for (let i = 0; i < sampleCount && selected.size < maxPages; i++) {
-        const u = urls[i];
-        let slug = urlToSlug(u, baseUrl);
-        if (selected.has(slug)) slug = `${slug}-${i + 1}`;
-        selected.set(slug, u);
+        const mapping = urlToPageMapping(urls[i], baseUrl);
+        let slugKey = mapping.slug;
+        if (selected.has(slugKey)) slugKey = `${slugKey}-${i + 1}`;
+        selected.set(slugKey, { ...mapping, slug: slugKey, url: urls[i] });
       }
     }
   }
 
-  // 3. If still under limit, fill with remaining items
-  for (const [key, urls] of patternBuckets.entries()) {
+  // 3. Fill remaining quota
+  for (const [, urls] of patternBuckets.entries()) {
     for (const u of urls) {
       if (selected.size >= maxPages) break;
-      const slug = urlToSlug(u, baseUrl);
-      if (!selected.has(slug)) {
-        selected.set(slug, u);
-      }
+      const mapping = urlToPageMapping(u, baseUrl);
+      if (!selected.has(mapping.slug)) selected.set(mapping.slug, { ...mapping, url: u });
     }
   }
 
-  return Array.from(selected.entries()).map(([slug, url]) => ({ slug, url }));
+  return Array.from(selected.values());
 }
 
 // Discover internal links from rendered DOM
@@ -267,7 +371,7 @@ async function extractInternalLinksFromPage(page, baseUrl) {
         .filter(href => {
           try {
             const u = new URL(href);
-            return u.origin === orig && !u.pathname.match(/\.(pdf|zip|png|jpg|jpeg|svg|webp|mp4)$/i);
+            return u.origin === orig && !u.pathname.match(/\.(pdf|zip|png|jpg|jpeg|svg|webp|mp4|css|js)$/i);
           } catch {
             return false;
           }
@@ -279,9 +383,169 @@ async function extractInternalLinksFromPage(page, baseUrl) {
   }
 }
 
-// Capture a single page: index.html, content.md, screenshot.png, capture.json
-async function capturePageArtifacts(browser, pageUrl, slug, targetDir, timeoutMs = 20000) {
+// Extract all visual and downloadable asset references directly from the rendered DOM
+async function extractAssetsFromPageDom(page, pageUrl, baseUrl) {
+  try {
+    return await page.evaluate((context) => {
+      const assets = [];
+      const baseOrigin = new URL(context.baseUrl).origin;
+
+      // 1. <img> tags (including lazy, data-src, and srcset)
+      document.querySelectorAll('img').forEach((img) => {
+        const src = img.currentSrc || img.src || img.getAttribute('data-src') || img.getAttribute('data-original');
+        if (!src || src.startsWith('data:')) return;
+        assets.push({
+          url: src,
+          alt: img.alt || '',
+          naturalWidth: img.naturalWidth || 0,
+          naturalHeight: img.naturalHeight || 0,
+          type: 'image',
+          tagName: 'img'
+        });
+
+        // Parse srcset candidates
+        const srcset = img.getAttribute('srcset') || img.getAttribute('data-srcset');
+        if (srcset) {
+          srcset.split(',').forEach((part) => {
+            const candidateUrl = part.trim().split(/\s+/)[0];
+            if (candidateUrl && !candidateUrl.startsWith('data:')) {
+              assets.push({ url: candidateUrl, alt: img.alt || '', naturalWidth: 0, naturalHeight: 0, type: 'image', tagName: 'srcset' });
+            }
+          });
+        }
+      });
+
+      // 2. <picture><source> elements
+      document.querySelectorAll('picture source').forEach((srcEl) => {
+        const srcset = srcEl.getAttribute('srcset');
+        if (srcset) {
+          srcset.split(',').forEach((part) => {
+            const candidateUrl = part.trim().split(/\s+/)[0];
+            if (candidateUrl && !candidateUrl.startsWith('data:')) {
+              assets.push({ url: candidateUrl, alt: '', naturalWidth: 0, naturalHeight: 0, type: 'image', tagName: 'picture-source' });
+            }
+          });
+        }
+      });
+
+      // 3. Stylesheets & Favicons & Meta Images
+      document.querySelectorAll('link[rel*="stylesheet"], link[rel*="icon"]').forEach((link) => {
+        if (link.href && !link.href.startsWith('data:')) {
+          assets.push({ url: link.href, alt: '', naturalWidth: 0, naturalHeight: 0, type: link.rel.includes('stylesheet') ? 'stylesheet' : 'icon', tagName: 'link' });
+        }
+      });
+
+      document.querySelectorAll('meta[property*="image"], meta[name*="image"]').forEach((meta) => {
+        const content = meta.getAttribute('content');
+        if (content && !content.startsWith('data:')) {
+          assets.push({ url: content, alt: '', naturalWidth: 0, naturalHeight: 0, type: 'image', tagName: 'meta-image' });
+        }
+      });
+
+      // 4. Scripts
+      document.querySelectorAll('script[src]').forEach((script) => {
+        if (script.src && !script.src.startsWith('data:')) {
+          assets.push({ url: script.src, alt: '', naturalWidth: 0, naturalHeight: 0, type: 'script', tagName: 'script' });
+        }
+      });
+
+      // 5. Downloadable documents (PDFs, docs) & SVG anchors
+      document.querySelectorAll('a[href]').forEach((a) => {
+        const href = a.href;
+        if (!href) return;
+        if (/\.(pdf|docx?|xlsx?|pptx?)$/i.test(href)) {
+          assets.push({ url: href, alt: a.innerText.trim(), naturalWidth: 0, naturalHeight: 0, type: 'document', tagName: 'a-doc' });
+        } else if (/\.svg$/i.test(href)) {
+          assets.push({ url: href, alt: a.innerText.trim(), naturalWidth: 0, naturalHeight: 0, type: 'image', tagName: 'a-svg' });
+        }
+      });
+
+      // 6. Background images in inline styles
+      document.querySelectorAll('[style*="background"]').forEach((el) => {
+        const style = el.getAttribute('style') || '';
+        const match = style.match(/url\(['"]?(.*?)['"]?\)/i);
+        if (match && match[1] && !match[1].startsWith('data:')) {
+          assets.push({ url: match[1], alt: '', naturalWidth: 0, naturalHeight: 0, type: 'image', tagName: 'bg-style' });
+        }
+      });
+
+      return assets;
+    }, { baseUrl, pageUrl });
+  } catch {
+    return [];
+  }
+}
+
+// Map any asset URL to its source-mirrored destination path relative to outDir
+function resolveAssetSourceRelativePath(assetUrl, baseOrigin) {
+  try {
+    const u = new URL(assetUrl);
+    let p = decodeURIComponent(u.pathname);
+    // Remove query params or hash
+    p = p.replace(/^\/+/, '');
+    if (!p) p = 'index-asset';
+
+    // If on same origin or subdomains of same root: place directly at source pathname
+    const isSameHost = u.origin === baseOrigin || u.hostname.endsWith(new URL(baseOrigin).hostname);
+    if (isSameHost) {
+      return p;
+    }
+
+    // If external CDN/third-party: mirror under original hostname directory
+    return path.posix.join('_cdn', u.hostname, p);
+  } catch {
+    return path.posix.join('assets', path.basename(assetUrl).split('?')[0] || 'asset.bin');
+  }
+}
+
+// Convert absolute URLs and root-relative URLs in rendered HTML to relative paths so index.html works offline
+function relativizeHtmlForOfflineMirror(html, pageRelHtmlPath, assetMap, baseOrigin) {
+  let updated = html;
+
+  // Remove existing <base> tag to avoid breaking local file:// resolution
+  updated = updated.replace(/<base\s+[^>]*>/gi, '');
+
+  const pageDepth = pageRelHtmlPath === 'index.html' ? 0 : pageRelHtmlPath.split('/').length - 1;
+  const prefix = pageDepth === 0 ? './' : '../'.repeat(pageDepth);
+
+  // Replace harvested asset URLs with their local relative path
+  for (const [rawUrl, localRelPath] of assetMap.entries()) {
+    const relativeTarget = prefix + localRelPath.replace(/^\/+/, '');
+    // Replace verbatim URL occurrences
+    const escapedUrl = rawUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    updated = updated.replace(new RegExp(escapedUrl, 'g'), relativeTarget);
+
+    // Also replace root-relative variant of same-origin URLs
+    try {
+      const u = new URL(rawUrl);
+      if (u.origin === baseOrigin) {
+        const rootRel = u.pathname;
+        if (rootRel && rootRel !== '/') {
+          const escapedRootRel = rootRel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          // Match inside attribute quotes
+          updated = updated.replace(new RegExp(`(["'])${escapedRootRel}(["'\\?])`, 'g'), `$1${relativeTarget}$2`);
+        }
+      }
+    } catch {}
+  }
+
+  // Relativize remaining root-relative href and src attributes pointing to internal paths
+  updated = updated.replace(/(href|src)=["']\/([^"'#?]+)(["'#?])/gi, (match, attr, rootPath, closer) => {
+    // If it's already an external scheme, ignore
+    if (rootPath.startsWith('//') || rootPath.startsWith('http')) return match;
+    const rel = prefix + rootPath;
+    return `${attr}="${rel}${closer}`;
+  });
+
+  return updated;
+}
+
+// Capture a single page and return its extracted markdown, screenshot, and raw HTML
+async function capturePageArtifacts(browser, pageUrl, slug, pageRelHtmlPath, outDir, timeoutMs = 25000) {
+  const fullPageHtmlPath = path.join(outDir, pageRelHtmlPath);
+  const targetDir = path.dirname(fullPageHtmlPath);
   fs.mkdirSync(targetDir, { recursive: true });
+
   console.log(`\n  -> Capturing [${slug}] (${pageUrl})`);
 
   const context = await browser.newContext({
@@ -289,6 +553,28 @@ async function capturePageArtifacts(browser, pageUrl, slug, targetDir, timeoutMs
     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
   });
   const page = await context.newPage();
+
+  // Buffer all successful network responses as candidates
+  const networkBuffers = new Map();
+  page.on('response', async (res) => {
+    try {
+      const resUrl = res.url();
+      if (!resUrl.startsWith('http')) return;
+      const status = res.status();
+      if (status >= 200 && status < 300) {
+        const ct = (res.headers()['content-type'] || '').toLowerCase();
+        const isAsset = ct.includes('image') || ct.includes('javascript') || ct.includes('css') ||
+                        ct.includes('font') || ct.includes('pdf') || ct.includes('svg') ||
+                        /\.(png|jpe?g|svg|webp|gif|css|js|woff2?|ttf|eot|pdf|ico)$/i.test(resUrl.split('?')[0]);
+        if (isAsset && !networkBuffers.has(resUrl)) {
+          const body = await res.body().catch(() => null);
+          if (body && body.length > 0) {
+            networkBuffers.set(resUrl, { buffer: body, contentType: ct, url: resUrl });
+          }
+        }
+      }
+    } catch {}
+  });
 
   try {
     try {
@@ -300,28 +586,23 @@ async function capturePageArtifacts(browser, pageUrl, slug, targetDir, timeoutMs
     await page.waitForTimeout(1500);
     try { await page.evaluate(() => document.fonts.ready); } catch {}
 
-    // Scroll to bottom to trigger lazy-loaded sections and images
+    // Scroll through page to trigger lazy loaded images and animations
     try {
       const scrollHeight = await page.evaluate(() => document.documentElement.scrollHeight);
       const steps = Math.min(16, Math.ceil(scrollHeight / 700));
       for (let i = 0; i < steps; i++) {
         await page.mouse.wheel(0, 700);
-        await page.waitForTimeout(200);
+        await page.waitForTimeout(150);
       }
       await page.evaluate(() => window.scrollTo(0, 0));
-      await page.waitForTimeout(800);
+      await page.waitForTimeout(600);
     } catch {}
 
     const renderedHtml = await page.content();
     const pageTitle = await page.title();
     const finalUrl = page.url();
 
-    // 1. Write index.html
-    const htmlPath = path.join(targetDir, 'index.html');
-    fs.writeFileSync(htmlPath, renderedHtml, 'utf-8');
-    const htmlSize = fs.statSync(htmlPath).size;
-
-    // 2. Extract clean verbatim Markdown
+    // 1. Extract clean verbatim Markdown
     const markdownBody = await page.evaluate(() => {
       const clone = document.body.cloneNode(true);
       const toRemove = [
@@ -374,66 +655,190 @@ async function capturePageArtifacts(browser, pageUrl, slug, targetDir, timeoutMs
       return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
     });
 
+    // Write content.md
     const mdHeader = `# ${pageTitle || slug}\n\n**Source URL:** ${finalUrl}\n**Captured Date:** ${new Date().toISOString().split('T')[0]}\n**Page Slug:** \`${slug}\`\n\n---\n\n`;
     const mdPath = path.join(targetDir, 'content.md');
     fs.writeFileSync(mdPath, mdHeader + markdownBody + '\n', 'utf-8');
-    const mdSize = fs.statSync(mdPath).size;
 
-    // 3. Capture screenshot.png
+    // 2. Capture screenshot.png
     const screenshotPath = path.join(targetDir, 'screenshot.png');
     await page.screenshot({ path: screenshotPath, fullPage: true });
-    const ssSize = fs.statSync(screenshotPath).size;
 
-    // 4. Extract any internal links on page to help discovery
-    const pageInternalLinks = await extractInternalLinksFromPage(page, pageUrl);
+    // 3. Extract DOM assets and internal links
+    const domAssets = await extractAssetsFromPageDom(page, pageUrl, pageUrl);
+    const internalLinks = await extractInternalLinksFromPage(page, pageUrl);
 
-    // 5. Write capture.json
-    const record = {
+    console.log(`     ✓ content.md saved (${fs.statSync(mdPath).size} bytes)`);
+    console.log(`     ✓ screenshot.png captured (${fs.statSync(screenshotPath).size} bytes)`);
+    console.log(`     ✓ Identified ${domAssets.length} asset slot(s) on page`);
+
+    return {
       slug,
-      requestedUrl: pageUrl,
+      pageUrl,
       finalUrl,
       pageTitle,
-      capturedAt: new Date().toISOString(),
-      viewport: { width: 1440, height: 900, fullPage: true },
-      files: {
-        html: 'index.html',
-        htmlSizeBytes: htmlSize,
-        markdown: 'content.md',
-        markdownSizeBytes: mdSize,
-        screenshot: 'screenshot.png',
-        screenshotSizeBytes: ssSize
-      },
+      pageRelHtmlPath,
+      targetDir,
+      renderedHtml,
+      domAssets,
+      internalLinks,
+      networkBuffers,
       status: 'success'
     };
-    fs.writeFileSync(path.join(targetDir, 'capture.json'), JSON.stringify(record, null, 2) + '\n', 'utf-8');
-
-    console.log(`     ✓ index.html: ${htmlSize} bytes`);
-    console.log(`     ✓ content.md: ${mdSize} bytes`);
-    console.log(`     ✓ screenshot.png: ${ssSize} bytes`);
-
-    return { record, internalLinks: pageInternalLinks };
   } catch (err) {
     console.error(`     ✗ Failed to capture ${pageUrl}: ${err.message}`);
-    const failRecord = {
+    return {
       slug,
-      requestedUrl: pageUrl,
-      capturedAt: new Date().toISOString(),
+      pageUrl,
+      pageRelHtmlPath,
+      targetDir,
       status: 'error',
-      error: err.message
+      error: err.message,
+      domAssets: [],
+      internalLinks: [],
+      networkBuffers: new Map()
     };
-    fs.writeFileSync(path.join(targetDir, 'capture.json'), JSON.stringify(failRecord, null, 2) + '\n', 'utf-8');
-    return { record: failRecord, internalLinks: [] };
   } finally {
     await page.close();
     await context.close();
   }
 }
 
-// Generate sitemap-legacy.xml for migrations
-function generateSitemapLegacyXml(urls, outputPath) {
-  const xmlItems = urls.map(u => `  <url>\n    <loc>${u}</loc>\n    <changefreq>monthly</changefreq>\n  </url>`).join('\n');
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${xmlItems}\n</urlset>\n`;
-  fs.writeFileSync(outputPath, xml, 'utf-8');
+// Download and save legacy assets directly in their original source paths inside previous-site/
+async function harvestAndPlaceAssets({ allDomAssets, allNetworkBuffers, baseOrigin, outDir, maxAssets = 200 }) {
+  console.log(`\n[Harvesting] Processing all page assets into source paths inside ${outDir}/...`);
+
+  // Deduplicate discovered URLs
+  const assetMap = new Map(); // rawUrl -> { url, localRelPath, alt, naturalWidth, naturalHeight, type }
+  for (const item of allDomAssets) {
+    try {
+      const u = new URL(item.url, baseOrigin).href;
+      // Skip tracking and telemetry
+      if (/google-analytics|googletagmanager|facebook\.com\/tr|doubleclick|clarity\.ms/i.test(u)) continue;
+      if (!assetMap.has(u)) {
+        const localRelPath = resolveAssetSourceRelativePath(u, baseOrigin);
+        assetMap.set(u, {
+          url: u,
+          localRelPath,
+          alt: item.alt || '',
+          naturalWidth: item.naturalWidth || 0,
+          naturalHeight: item.naturalHeight || 0,
+          type: item.type || 'image',
+          foundOnPages: [item.pageSlug || 'home']
+        });
+      } else {
+        const existing = assetMap.get(u);
+        if (item.naturalWidth > existing.naturalWidth) existing.naturalWidth = item.naturalWidth;
+        if (item.naturalHeight > existing.naturalHeight) existing.naturalHeight = item.naturalHeight;
+        if (item.alt && !existing.alt) existing.alt = item.alt;
+        if (item.pageSlug && !existing.foundOnPages.includes(item.pageSlug)) existing.foundOnPages.push(item.pageSlug);
+      }
+    } catch {}
+  }
+
+  // Also include any intercepted network buffers not explicitly found in DOM (e.g. fonts, background images, CSS)
+  for (const [netUrl, item] of allNetworkBuffers.entries()) {
+    try {
+      const u = new URL(netUrl, baseOrigin).href;
+      if (/google-analytics|googletagmanager|facebook\.com\/tr|doubleclick|clarity\.ms/i.test(u)) continue;
+      if (!assetMap.has(u)) {
+        const localRelPath = resolveAssetSourceRelativePath(u, baseOrigin);
+        assetMap.set(u, {
+          url: u,
+          localRelPath,
+          alt: '',
+          naturalWidth: 0,
+          naturalHeight: 0,
+          type: item.contentType.includes('image') ? 'image' : (item.contentType.includes('css') ? 'stylesheet' : 'asset'),
+          foundOnPages: ['global']
+        });
+      }
+    } catch {}
+  }
+
+  const assetList = Array.from(assetMap.values()).slice(0, maxAssets);
+  console.log(`  Identified ${assetList.length} unique asset file(s) to place into source locations.`);
+
+  const catalog = [];
+  let assetCounter = 1;
+  const writtenUrlMap = new Map(); // rawUrl -> localRelPath
+
+  for (const asset of assetList) {
+    const fullDiskPath = path.join(outDir, asset.localRelPath);
+    fs.mkdirSync(path.dirname(fullDiskPath), { recursive: true });
+
+    let buffer = null;
+    let contentType = '';
+
+    // Check if intercepted in network buffer
+    if (allNetworkBuffers.has(asset.url)) {
+      const cached = allNetworkBuffers.get(asset.url);
+      buffer = cached.buffer;
+      contentType = cached.contentType;
+    } else {
+      // Download directly
+      try {
+        const res = await fetchBuffer(asset.url, 12000);
+        buffer = res.buffer;
+        contentType = res.contentType;
+      } catch (err) {
+        // Silently skip unresolvable external 404s
+      }
+    }
+
+    if (!buffer || buffer.length === 0) continue;
+
+    try {
+      fs.writeFileSync(fullDiskPath, buffer);
+      writtenUrlMap.set(asset.url, asset.localRelPath);
+    } catch (writeErr) {
+      continue;
+    }
+
+    // Determine dimensions
+    let dims = { width: asset.naturalWidth, height: asset.naturalHeight };
+    if (!dims.width || !dims.height) {
+      const headerDims = getImageDimensionsFromBuffer(buffer);
+      if (headerDims) dims = headerDims;
+    }
+
+    const isSvg = asset.url.endsWith('.svg') || (contentType && contentType.includes('svg'));
+    const isPdf = asset.url.endsWith('.pdf') || (contentType && contentType.includes('pdf'));
+    const isDoc = isPdf || /\.(docx?|xlsx?)$/i.test(asset.url);
+
+    let qualityStatus = 'high-res';
+    let dimensionStr = '';
+
+    if (isSvg) {
+      qualityStatus = 'vector';
+      dimensionStr = 'vector';
+    } else if (isDoc) {
+      qualityStatus = 'document';
+      dimensionStr = 'document';
+    } else if (dims.width && dims.height) {
+      dimensionStr = `${dims.width}x${dims.height}`;
+      qualityStatus = dims.width >= 1200 ? 'high-res' : 'needs-replacement';
+    } else {
+      dimensionStr = 'unspecified';
+      qualityStatus = 'needs-replacement';
+    }
+
+    const id = `leg-${String(assetCounter++).padStart(2, '0')}`;
+    catalog.push({
+      id,
+      url: asset.url,
+      path: asset.localRelPath,
+      sizeBytes: buffer.length,
+      dimensions: dims.width && dims.height ? { width: dims.width, height: dims.height } : null,
+      dimensionStr,
+      qualityStatus,
+      alt: asset.alt,
+      foundOnPages: asset.foundOnPages
+    });
+  }
+
+  console.log(`  ✓ Successfully wrote ${catalog.length} asset(s) to source locations in ${outDir}/`);
+  return { catalog, writtenUrlMap };
 }
 
 // Parse references from batch-02-branding-motion answers (Liked References)
@@ -465,24 +870,29 @@ function parseReferencesFromBrief(answersPath) {
   return refs;
 }
 
-// Main crawling orchestrator
-async function crawlSite({ targetUrl, outDir, mode = 'migration', maxPages = 15, timeoutMs = 20000 }) {
+// Main crawling orchestrator for migration mode
+async function crawlSite({ targetUrl, outDir, mode = 'migration', maxPages = 15, maxAssets = 200, skipAssets = false, timeoutMs = 25000 }) {
   if (!chromium) {
     console.error('Playwright Chromium is required for full-page rendering and screenshots.');
     console.error('Install via: npx --yes playwright install chromium');
     process.exit(1);
   }
 
-  console.log(`\nStarting Universal Site Fetcher...`);
-  console.log(`  Target URL: ${targetUrl}`);
+  console.log(`\n=================================================================`);
+  console.log(`  UNIVERSAL SITE FETCHER & OFFLINE MIRROR ENGINE`);
+  console.log(`  Target:     ${targetUrl}`);
   console.log(`  Output Dir: ${outDir}`);
   console.log(`  Mode:       ${mode}`);
   console.log(`  Max Pages:  ${maxPages}`);
+  console.log(`=================================================================`);
 
   fs.mkdirSync(outDir, { recursive: true });
 
+  const parsedBase = new URL(targetUrl);
+  const baseOrigin = parsedBase.origin;
+
   // 1. Discover URLs from sitemap / robots
-  console.log(`\n[Phase 1] Probing sitemaps and robots.txt...`);
+  console.log(`\n[Phase 1] Discovering sitemaps and route inventory...`);
   const sitemapUrls = await discoverSitemapUrls(targetUrl);
   console.log(`  Discovered ${sitemapUrls.length} URL(s) from XML sitemaps.`);
 
@@ -508,38 +918,95 @@ async function crawlSite({ targetUrl, outDir, mode = 'migration', maxPages = 15,
   const allDiscovered = Array.from(new Set([cleanUrlString(new URL(targetUrl)), ...sitemapUrls, ...homeLinks]));
   const pagesToCapture = clusterAndSamplePageTypes(allDiscovered, targetUrl, maxPages);
 
-  console.log(`\n[Phase 3] Identified ${pagesToCapture.length} distinct page type(s) to capture:`);
-  pagesToCapture.forEach(p => console.log(`  • [${p.slug}] -> ${p.url}`));
+  console.log(`\n[Phase 3] Identified ${pagesToCapture.length} distinct page type(s) to mirror:`);
+  pagesToCapture.forEach(p => console.log(`  • [${p.slug}] -> ${p.url} => ${p.relHtmlPath}`));
 
-  // 3. Capture each page type
-  console.log(`\n[Phase 4] Capturing artifacts (index.html, content.md, screenshot.png)...`);
-  const results = [];
+  // 3. Capture each page: DOM, content.md, screenshot.png
+  console.log(`\n[Phase 4] Capturing pages, DOM structures, and screenshots...`);
+  const capturedPages = [];
+  const allDomAssets = [];
+  const mergedNetworkBuffers = new Map();
+
   for (const item of pagesToCapture) {
-    const pageDir = path.join(outDir, item.slug);
-    const { record } = await capturePageArtifacts(browser, item.url, item.slug, pageDir, timeoutMs);
-    results.push(record);
+    const result = await capturePageArtifacts(browser, item.url, item.slug, item.relHtmlPath, outDir, timeoutMs);
+    capturedPages.push(result);
+
+    if (result.status === 'success') {
+      result.domAssets.forEach(a => allDomAssets.push({ ...a, pageSlug: item.slug }));
+      for (const [k, v] of result.networkBuffers.entries()) {
+        if (!mergedNetworkBuffers.has(k)) mergedNetworkBuffers.set(k, v);
+      }
+    }
   }
 
   await browser.close();
 
-  // 4. Generate post-crawl indexes
-  if (mode === 'migration') {
-    const sitemapLegacyPath = path.join(outDir, 'sitemap-legacy.xml');
-    generateSitemapLegacyXml(allDiscovered, sitemapLegacyPath);
-    console.log(`\n✓ Generated ${sitemapLegacyPath} (${allDiscovered.length} legacy URLs recorded for 301 redirects)`);
-
-    const manifestPath = path.join(outDir, 'manifest.json');
-    fs.writeFileSync(manifestPath, JSON.stringify({
-      targetUrl,
-      crawledAt: new Date().toISOString(),
-      totalPagesDiscovered: allDiscovered.length,
-      pageTypesCaptured: results.length,
-      pages: results
-    }, null, 2) + '\n', 'utf-8');
-    console.log(`✓ Generated ${manifestPath}`);
+  // 4. Harvest assets into their source paths
+  let catalog = [];
+  let writtenUrlMap = new Map();
+  if (!skipAssets) {
+    console.log(`\n[Phase 5] Mirroring assets into original source paths...`);
+    const harvestResult = await harvestAndPlaceAssets({
+      allDomAssets,
+      allNetworkBuffers: mergedNetworkBuffers,
+      baseOrigin,
+      outDir,
+      maxAssets
+    });
+    catalog = harvestResult.catalog;
+    writtenUrlMap = harvestResult.writtenUrlMap;
   }
 
-  console.log(`\n✓ Site fetch completed successfully. Artifacts saved to: ${outDir}\n`);
+  // 5. Relativize HTML for each page so opening index.html works offline out-of-the-box
+  console.log(`\n[Phase 6] Writing offline-ready HTML pages...`);
+  for (const page of capturedPages) {
+    if (page.status !== 'success' || !page.renderedHtml) continue;
+    const relativizedHtml = relativizeHtmlForOfflineMirror(page.renderedHtml, page.pageRelHtmlPath, writtenUrlMap, baseOrigin);
+    const targetHtmlFile = path.join(outDir, page.pageRelHtmlPath);
+    fs.mkdirSync(path.dirname(targetHtmlFile), { recursive: true });
+    fs.writeFileSync(targetHtmlFile, relativizedHtml, 'utf-8');
+    console.log(`  ✓ Written ${page.pageRelHtmlPath} (${fs.statSync(targetHtmlFile).size} bytes)`);
+  }
+
+  // 6. Generate sitemap.xml and manifest.json
+  const sitemapPath = path.join(outDir, 'sitemap.xml');
+  generateSitemapXml(allDiscovered, sitemapPath);
+  console.log(`✓ Generated ${sitemapPath} (${allDiscovered.length} discovered URLs)`);
+
+  const manifestPath = path.join(outDir, 'manifest.json');
+  const imageAssets = catalog.filter(a => a.qualityStatus === 'high-res' || a.qualityStatus === 'needs-replacement');
+  const vectorAssets = catalog.filter(a => a.qualityStatus === 'vector');
+  const docAssets = catalog.filter(a => a.qualityStatus === 'document');
+  const highResAssets = catalog.filter(a => a.qualityStatus === 'high-res');
+
+  const manifestData = {
+    targetUrl,
+    crawledAt: new Date().toISOString(),
+    totalPagesDiscovered: allDiscovered.length,
+    pageTypesCaptured: capturedPages.filter(p => p.status === 'success').length,
+    routes: allDiscovered,
+    pages: capturedPages.map(p => ({
+      slug: p.slug,
+      url: p.pageUrl,
+      htmlFile: p.pageRelHtmlPath,
+      title: p.pageTitle || p.slug,
+      status: p.status
+    })),
+    assets: catalog,
+    stats: {
+      totalAssetsHarvested: catalog.length,
+      imagesCount: imageAssets.length,
+      vectorsCount: vectorAssets.length,
+      documentsCount: docAssets.length,
+      highResCount: highResAssets.length,
+      needsReplacementCount: imageAssets.length - highResAssets.length
+    }
+  };
+
+  fs.writeFileSync(manifestPath, JSON.stringify(manifestData, null, 2) + '\n', 'utf-8');
+  console.log(`\n✓ Generated ${manifestPath}`);
+  console.log(`\n✓ Site mirror completed successfully!`);
+  console.log(`  You can open ${path.join(outDir, 'index.html')} directly in any browser to view the previous site offline.\n`);
 }
 
 // Orchestrator for references mode
@@ -565,7 +1032,6 @@ async function crawlReferences({ briefPath, outDir, maxPages = 3, timeoutMs = 20
     const siteDir = path.join(outDir, ref.domain);
     console.log(`\nProcessing reference [${ref.name}] (${ref.cleanUrl})...`);
 
-    // 1. Discover sitemap URLs and homepage links for this reference site
     const sitemapUrls = await discoverSitemapUrls(ref.cleanUrl);
 
     const probeContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -589,8 +1055,8 @@ async function crawlReferences({ briefPath, outDir, maxPages = 3, timeoutMs = 20
     const siteRecords = [];
     for (const item of pagesToCapture) {
       const pageDir = path.join(siteDir, item.slug);
-      const { record } = await capturePageArtifacts(browser, item.url, item.slug, pageDir, timeoutMs);
-      siteRecords.push(record);
+      const res = await capturePageArtifacts(browser, item.url, item.slug, path.posix.join(ref.domain, item.slug, 'index.html'), outDir, timeoutMs);
+      siteRecords.push(res);
     }
     allResults.push({ ref, records: siteRecords });
   }
@@ -652,7 +1118,9 @@ async function main() {
   let mode = '';
   let briefPath = '';
   let maxPages = 15;
-  let timeoutMs = 20000;
+  let maxAssets = 200;
+  let skipAssets = false;
+  let timeoutMs = 25000;
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--url' && args[i + 1]) targetUrl = args[++i];
@@ -660,20 +1128,20 @@ async function main() {
     else if (args[i] === '--mode' && args[i + 1]) mode = args[++i];
     else if (args[i] === '--brief' && args[i + 1]) briefPath = args[++i];
     else if (args[i] === '--max-pages' && args[i + 1]) maxPages = parseInt(args[++i], 10);
+    else if (args[i] === '--max-assets' && args[i + 1]) maxAssets = parseInt(args[++i], 10);
+    else if (args[i] === '--skip-assets') skipAssets = true;
     else if (args[i] === '--timeout' && args[i + 1]) timeoutMs = parseInt(args[++i], 10);
   }
 
-  // Automatic mode inference if unspecified
   if (briefPath) {
     mode = mode || 'references';
     outDir = outDir || path.join(process.cwd(), 'project-docs', 'design-references');
     await crawlReferences({ briefPath: path.resolve(briefPath), outDir: path.resolve(outDir), maxPages, timeoutMs });
   } else if (targetUrl) {
     mode = mode || 'migration';
-    outDir = outDir || (mode === 'migration' ? path.join(process.cwd(), 'previous-site') : path.join(process.cwd(), 'captured-site'));
-    await crawlSite({ targetUrl, outDir: path.resolve(outDir), mode, maxPages, timeoutMs });
+    outDir = outDir || path.join(process.cwd(), 'previous-site');
+    await crawlSite({ targetUrl, outDir: path.resolve(outDir), mode, maxPages, maxAssets, skipAssets, timeoutMs });
   } else {
-    // Default fallback: check if brief exists in client-context/answers/batch-02-branding-motion/answers.md
     const defaultBrief = path.join(process.cwd(), 'client-context', 'answers', 'batch-02-branding-motion', 'answers.md');
     if (fs.existsSync(defaultBrief)) {
       console.log(`No arguments supplied. Found intake brief at ${defaultBrief}. Running references mode...`);
@@ -693,4 +1161,13 @@ if (require.main === module) {
   });
 }
 
-module.exports = { crawlSite, crawlReferences, clusterAndSamplePageTypes, discoverSitemapUrls };
+module.exports = {
+  crawlSite,
+  crawlReferences,
+  clusterAndSamplePageTypes,
+  discoverSitemapUrls,
+  generateSitemapXml,
+  getImageDimensionsFromBuffer,
+  resolveAssetSourceRelativePath,
+  relativizeHtmlForOfflineMirror
+};

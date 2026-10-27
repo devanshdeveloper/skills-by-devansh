@@ -44,7 +44,7 @@ graph TD
 2. **Source 2: Legacy Website Crawl (`previous-site/`):**
    - If `build_origin == migration` or a legacy URL is provided, crawl the old site before Gate 1:
      `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --mode migration`
-   - Audit crawled routes (`manifest.json`), media files, and legacy sitemap.
+   - Audit crawled routes and harvested visual assets in `manifest.json`, `sitemap.xml`, and `previous-site/` source locations.
    - Present discovered resources to the client for disposition in Batch 04 and Batch 06.
 3. **Source 3: Client Raw Files & Uploaded Assets:**
    - Inspect `client-context/assets/`, `client-context/raw/`, and `public/` for logos, diagrams, or product photos.

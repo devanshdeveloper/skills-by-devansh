@@ -37,12 +37,14 @@ Execute the companion `site-fetch` utility:
 node skills/create-nww-website/scripts/site-fetch/index.js --url "https://example.com" --out previous-site --mode migration
 ```
 
-The crawler captures:
-- `manifest.json`: Full page catalog, HTTP status codes, titles, and meta descriptions.
-- `sitemap-legacy.xml`: Legacy route index.
-- `<slug>/index.html`: Complete raw HTML markup.
-- `<slug>/content.md`: Clean, readability-extracted Markdown content.
-- `<slug>/screenshot.png`: High-resolution full-page visual capture.
+The crawler captures a full working offline mirror in `previous-site/`:
+- `index.html`: Fully functional offline homepage (works as it is when opened directly in a browser).
+- `sitemap.xml`: Complete legacy route XML sitemap.
+- `manifest.json`: Full page catalog, legacy routes, and harvested asset inventory with dimensions and quality status.
+- `<path>/index.html`: Per-page functional offline markup.
+- `<path>/content.md`: Clean, readability-extracted Markdown content.
+- `<path>/screenshot.png`: High-resolution full-page visual capture.
+- `<source-path>/...`: All visual and downloadable assets placed directly where they were in the sources.
 
 ---
 
