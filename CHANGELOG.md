@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.1] - 2026-10-27
+
+### Fixed
+- **Gate Reference Runbooks Renaming (`references/gate-*/runbook.md`)**: Renamed all 9 internal gate reference guides under `skills/create-nww-website/references/gate-*/` from `SKILL.md` to `runbook.md`. Fixes `npx skills` CLI discovering internal stage documentation as malformed skills and emitting frontmatter warnings during user installation or updates.
+- **Canonical Tree & Documentation Synchronization**: Aligned table and tree references in `skills/create-nww-website/SKILL.md` and `docs/ARCHITECTURE.md` to point to `runbook.md`.
+
 ## [1.10.0] - 2026-10-27
 
 ### Added

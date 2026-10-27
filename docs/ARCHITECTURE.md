@@ -20,15 +20,15 @@ skills-by-devansh/
 │   │   ├── assets/                     # Standalone templates & client review assets
 │   │   │   └── client-review-template.html
 │   │   ├── references/                 # Modular gate reference specifications (zero loose files in root)
-│   │   │   ├── gate-0-intake/          # Stage 0: SKILL.md, client-questionnaire.md, pipeline-stages.md
-│   │   │   ├── gate-1-tech-stack/      # Stage 1: SKILL.md
-│   │   │   ├── gate-2-design-theory/   # Stage 2: SKILL.md, design-variations.md
-│   │   │   ├── gate-3-page-list/       # Stage 3: SKILL.md
-│   │   │   ├── gate-4-seo-strategy/    # Stage 4: SKILL.md, seo-tool-library.md, seo-tool-registry.json
-│   │   │   ├── gate-5-page-specs/      # Stage 5: SKILL.md, cms-architecture.md, stock-image-sourcing.md, cms/
-│   │   │   ├── gate-6-scaffolding/     # Stage 6: SKILL.md, gsap-animation-tiers.md, code-conventions.md, asset-optimization.md, page-checklist.md
-│   │   │   ├── gate-7-sub-pages/       # Stage 7: SKILL.md
-│   │   │   └── gate-8-final-verification/ # Stage 8: SKILL.md
+│   │   │   ├── gate-0-intake/          # Stage 0: runbook.md, client-questionnaire.md, pipeline-stages.md
+│   │   │   ├── gate-1-tech-stack/      # Stage 1: runbook.md
+│   │   │   ├── gate-2-design-theory/   # Stage 2: runbook.md, design-variations.md
+│   │   │   ├── gate-3-page-list/       # Stage 3: runbook.md
+│   │   │   ├── gate-4-seo-strategy/    # Stage 4: runbook.md, seo-tool-library.md, seo-tool-registry.json
+│   │   │   ├── gate-5-page-specs/      # Stage 5: runbook.md, cms-architecture.md, stock-image-sourcing.md, cms/
+│   │   │   ├── gate-6-scaffolding/     # Stage 6: runbook.md, gsap-animation-tiers.md, code-conventions.md, asset-optimization.md, page-checklist.md
+│   │   │   ├── gate-7-sub-pages/       # Stage 7: runbook.md
+│   │   │   └── gate-8-final-verification/ # Stage 8: runbook.md
 │   │   └── scripts/                    # Embedded CLI helper tools
 │   │       ├── assets-optimizer/       # Sharp/ffmpeg image/video pipeline
 │   │       ├── stock-fetch/            # Stock image provenance & fetch
