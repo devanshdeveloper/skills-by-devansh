@@ -37,6 +37,8 @@ This crawler creates a full working offline mirror in `previous-site/`:
 
 > **Chrome Offline Preview:** The mirrored HTML includes preloader suppression, CORS hardening, and error guards for direct `file://` double-clicking in Chrome. If local browser extensions or security policies interfere, run the built-in local preview server:
 > `node skills/create-nww-website/scripts/site-fetch/index.js --serve previous-site`
+>
+> **Automatic Clean Re-Crawl:** If `previous-site/` already exists, `site-fetch` automatically deletes the existing directory before crawling to guarantee an untainted, fresh snapshot.
 
 ### Git Ignore Instructions (`.gitignore`)
 Because `previous-site/` contains complete offline HTML pages, scripts, stylesheets, and original media assets (often dozens to hundreds of megabytes), **it must never be committed to the project's git repository**.

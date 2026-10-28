@@ -90,6 +90,8 @@ Options:
   --max-assets <number> Max total assets to download during migration (default: 200).
   --skip-assets         Skip downloading media assets (harvests HTML/text only).
   --add-to-gitignore    Append output directory (e.g. previous-site/) to root .gitignore.
+  --clean               Delete output directory before crawling if it already exists (default: true).
+  --no-clean            Do not delete existing output directory before crawling.
   --serve <dir>         Launch zero-dependency local HTTP preview server for captured site (e.g. --serve previous-site).
   --port <number>       Port for local preview server (default: 3000).
   --timeout <ms>        Navigation timeout in milliseconds (default: 25000).
@@ -1263,12 +1265,27 @@ function checkAndAdviseGitignore(outDir, autoAppend = false) {
 }
 
 // Main crawling orchestrator for migration mode
-async function crawlSite({ targetUrl, outDir, mode = 'migration', limitMode = 'max-sampled', selectedPages = [], maxPages = 15, maxAssets = 200, skipAssets = false, addToGitignore = false, timeoutMs = 25000 }) {
+async function crawlSite({ targetUrl, outDir, mode = 'migration', limitMode = 'max-sampled', selectedPages = [], maxPages = 15, maxAssets = 200, skipAssets = false, addToGitignore = false, cleanExisting = true, timeoutMs = 25000 }) {
   if (!chromium) {
     console.error('Playwright Chromium is required for full-page rendering and screenshots.');
     console.error('Install via: npx --yes playwright install chromium');
     process.exit(1);
   }
+
+  const resolvedOut = path.resolve(outDir);
+  const cwd = process.cwd();
+  const rootDir = path.parse(resolvedOut).root;
+
+  // Clean wipe output directory if it already exists to guarantee zero stale files
+  if (cleanExisting && fs.existsSync(resolvedOut)) {
+    if (resolvedOut !== cwd && resolvedOut !== rootDir) {
+      console.log(`\n[Clean Start] Existing '${path.basename(resolvedOut)}' directory detected. Deleting previous files for fresh crawl...`);
+      fs.rmSync(resolvedOut, { recursive: true, force: true });
+      console.log(`  ✓ Successfully deleted existing '${path.basename(resolvedOut)}' directory.`);
+    }
+  }
+
+  fs.mkdirSync(resolvedOut, { recursive: true });
 
   console.log(`\n=================================================================`);
   console.log(`  UNIVERSAL SITE FETCHER & OFFLINE MIRROR ENGINE`);
@@ -1281,8 +1298,6 @@ async function crawlSite({ targetUrl, outDir, mode = 'migration', limitMode = 'm
     console.log(`  Selected:    ${selectedPages.join(', ')}`);
   }
   console.log(`=================================================================`);
-
-  fs.mkdirSync(outDir, { recursive: true });
 
   const parsedBase = new URL(targetUrl);
   const baseOrigin = parsedBase.origin;
@@ -1411,7 +1426,7 @@ async function crawlSite({ targetUrl, outDir, mode = 'migration', limitMode = 'm
 }
 
 // Orchestrator for references mode
-async function crawlReferences({ briefPath, outDir, maxPages = 3, timeoutMs = 20000 }) {
+async function crawlReferences({ briefPath, outDir, maxPages = 3, cleanExisting = true, timeoutMs = 20000 }) {
   if (!chromium) {
     console.error('Playwright Chromium is required. Run: npx --yes playwright install chromium');
     process.exit(1);
@@ -1431,6 +1446,11 @@ async function crawlReferences({ briefPath, outDir, maxPages = 3, timeoutMs = 20
 
   for (const ref of refs) {
     const siteDir = path.join(outDir, ref.domain);
+    if (cleanExisting && fs.existsSync(siteDir)) {
+      console.log(`\n[Clean Start] Existing reference folder for '${ref.domain}' detected. Removing stale captures...`);
+      fs.rmSync(siteDir, { recursive: true, force: true });
+    }
+    fs.mkdirSync(siteDir, { recursive: true });
     console.log(`\nProcessing reference [${ref.name}] (${ref.cleanUrl})...`);
 
     const sitemapUrls = await discoverSitemapUrls(ref.cleanUrl);
@@ -1594,6 +1614,7 @@ async function main() {
   let maxAssets = 200;
   let skipAssets = false;
   let addToGitignore = false;
+  let cleanExisting = true;
   let timeoutMs = 25000;
   let serveDir = '';
   let port = 3000;
@@ -1614,6 +1635,8 @@ async function main() {
     else if (args[i] === '--max-assets' && args[i + 1]) maxAssets = parseInt(args[++i], 10);
     else if (args[i] === '--skip-assets') skipAssets = true;
     else if (args[i] === '--add-to-gitignore') addToGitignore = true;
+    else if (args[i] === '--clean') cleanExisting = true;
+    else if (args[i] === '--no-clean') cleanExisting = false;
     else if (args[i] === '--serve' && args[i + 1]) serveDir = args[++i];
     else if (args[i] === '--port' && args[i + 1]) port = parseInt(args[++i], 10);
     else if (args[i] === '--timeout' && args[i + 1]) timeoutMs = parseInt(args[++i], 10);
@@ -1627,17 +1650,17 @@ async function main() {
   if (briefPath) {
     mode = mode || 'references';
     outDir = outDir || path.join(process.cwd(), 'project-docs', 'design-references');
-    await crawlReferences({ briefPath: path.resolve(briefPath), outDir: path.resolve(outDir), maxPages, timeoutMs });
+    await crawlReferences({ briefPath: path.resolve(briefPath), outDir: path.resolve(outDir), maxPages, cleanExisting, timeoutMs });
   } else if (targetUrl) {
     mode = mode || 'migration';
     outDir = outDir || path.join(process.cwd(), 'previous-site');
-    await crawlSite({ targetUrl, outDir: path.resolve(outDir), mode, limitMode, selectedPages, maxPages, maxAssets, skipAssets, addToGitignore, timeoutMs });
+    await crawlSite({ targetUrl, outDir: path.resolve(outDir), mode, limitMode, selectedPages, maxPages, maxAssets, skipAssets, addToGitignore, cleanExisting, timeoutMs });
   } else {
     const defaultBrief = path.join(process.cwd(), 'client-context', 'answers', 'batch-02-branding-motion', 'answers.md');
     if (fs.existsSync(defaultBrief)) {
       console.log(`No arguments supplied. Found intake brief at ${defaultBrief}. Running references mode...`);
       const defaultOut = path.join(process.cwd(), 'project-docs', 'design-references');
-      await crawlReferences({ briefPath: defaultBrief, outDir: defaultOut, maxPages, timeoutMs });
+      await crawlReferences({ briefPath: defaultBrief, outDir: defaultOut, maxPages, cleanExisting, timeoutMs });
     } else {
       printHelp();
       process.exit(1);

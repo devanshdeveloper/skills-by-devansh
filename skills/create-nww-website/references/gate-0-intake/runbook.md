@@ -70,6 +70,8 @@ The crawler captures a full working offline mirror in `previous-site/`:
 
 > **Chrome Offline Preview:** The mirrored HTML includes preloader suppression, CORS hardening, and error guards for direct `file://` double-clicking in Chrome. If local browser extensions or security policies interfere, run the built-in local preview server:
 > `node skills/create-nww-website/scripts/site-fetch/index.js --serve previous-site`
+>
+> **Clean Start Guarantee:** If `previous-site/` already exists from a prior crawl, the crawler automatically deletes the existing folder before crawling to prevent stale files or obsolete assets from contaminating the new inventory.
 
 ### Git Hygiene: Adding `previous-site/` to `.gitignore`
 

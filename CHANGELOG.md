@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.7] - 2026-10-28
+
+### Added
+- **Automatic Existing Folder Cleanup (`scripts/site-fetch/index.js`)**:
+  - Implemented automatic deletion of `previous-site/` (or target output directory) if it already exists before initiating a site migration crawl, guaranteeing a fresh, untainted mirror with zero stale files from prior runs or different limit modes.
+  - Added safety guard to prevent accidental deletion of current working directory or disk root.
+  - Added CLI flags `--clean` (default: true) and `--no-clean` to configure directory cleanup behavior.
+  - Documented clean crawl guarantee across `skills/create-nww-website/SKILL.md`, `references/gate-0-intake/runbook.md`, and `references/gate-0-intake/batch-06-legacy-site-migration/questionnaire.md`.
+
 ## [1.10.6] - 2026-10-28
 
 ### Fixed
