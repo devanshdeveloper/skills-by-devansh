@@ -44,6 +44,7 @@ graph TD
 2. **Source 2: Legacy Website Crawl (`previous-site/`):**
    - If `build_origin == migration` or a legacy URL is provided, crawl the old site before Gate 1 using the client's chosen limit mode (`--limit-mode max-sampled|no-limits|max-any|homepage|selected`):
      `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode max-sampled`
+   - Ensure `previous-site/` is added to the project's root `.gitignore` so legacy crawl assets remain local.
    - Audit crawled routes and harvested visual assets in `manifest.json`, `sitemap.xml`, and `previous-site/` source locations.
    - Present discovered resources to the client for disposition in Batch 04 and Batch 06.
 3. **Source 3: Client Raw Files & Uploaded Assets:**
@@ -278,7 +279,7 @@ Before clearing Gate 0 and advancing to Stage 1 Tech Stack:
 - [ ] Questionnaire answers captured across modular batch answer files in `client-context/answers/batch-*/answers.md`.
 - [ ] Visual asset inventory compiled in `client-context/asset-manifest.md` (legacy assets audited, per-entity assets logged, missing items flagged).
 - [ ] Stock photography decisions recorded (authorized/not, provider priority, count ceiling).
-- [ ] If migration, legacy site crawled into `previous-site/` and content carry-forward choices documented in `client-context/answers/batch-06-legacy-site-migration/answers.md`.
+- [ ] If migration, legacy site crawled into `previous-site/`, `previous-site/` added to root `.gitignore`, and content carry-forward choices documented in `client-context/answers/batch-06-legacy-site-migration/answers.md`.
 - [ ] Root `.env.example` created with credential placeholders for external connections.
 - [ ] Client milestone email preference confirmed.
 - [ ] `client-context/open-questions.md` created with at least 20 targeted open questions for continuous client discovery.

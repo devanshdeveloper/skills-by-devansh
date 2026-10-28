@@ -93,6 +93,23 @@ Execute the official generator non-interactively using verified flags matching d
 pnpm create next-app@latest site --js --tailwind --app --eslint --import-alias "@/*" --disable-git --use-pnpm
 ```
 - **Mandatory Flag `--disable-git`:** Prevents creating a nested git repository within the parent workspace.
+- **Root `.gitignore` Configuration:** Verify or create `.gitignore` at the project root so that legacy site mirrors, vendor dependencies, and environment files are strictly ignored by git:
+  ```gitignore
+  # Legacy site offline mirror & harvested assets (Stage 0 migration)
+  previous-site/
+
+  # Dependencies & framework builds
+  node_modules/
+  .next/
+  site/node_modules/
+  site/.next/
+
+  # Environment secrets
+  .env*
+  !.env.example
+  site/.env*
+  !site/.env.example
+  ```
 - **Project Name & Slug Synchronization:** Immediately update `site/package.json` so that `"name": "<project-slug>"` matches the confirmed technical project slug from `client-context/answers/batch-01-core-identity/answers.md` (Batch 01 Q1b).
 - **Vercel Project Setup:** When linking or deploying to Vercel for client reviews, use this confirmed project slug (`vercel link --project <project-slug>`). Localhost forwarding is strictly forbidden for client review milestones.
 - **Dependency Boundary:** No third-party packages beyond the official generator and the approved tech stack may be installed.

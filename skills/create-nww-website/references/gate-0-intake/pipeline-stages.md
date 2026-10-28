@@ -52,7 +52,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 - **Goal:** Execute the start-up activation protocol from [client-questionnaire.md](client-questionnaire.md):
   1. Ask the user in the beginning whether they want client milestone approval emails dispatched at each stage.
   2. Inspect `client-context/answers/` (or prefill from user prompt notes) to compile the intake brief, confirming the **Technical Project Name / Vercel Slug** for downstream naming (variations, `package.json`, Vercel project linkage).
-  3. If site migration (`build_origin: migration`), crawl and archive the existing website into `previous-site/` BEFORE Gate 1 as a full working offline mirror using the client's chosen limit mode (`--limit-mode max-sampled|no-limits|max-any|homepage|selected`). Execute: `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode max-sampled`. This capture must occur in Stage 0 so that existing routes, redirects, copywriting, and media are documented before technical planning begins. Viewable directly in Chrome via `previous-site/index.html` or `--serve previous-site`.
+  3. If site migration (`build_origin: migration`), crawl and archive the existing website into `previous-site/` BEFORE Gate 1 as a full working offline mirror using the client's chosen limit mode (`--limit-mode max-sampled|no-limits|max-any|homepage|selected`). Execute: `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode max-sampled`. Ensure `previous-site/` is added to root `.gitignore` to keep crawled media and offline snapshots untracked. This capture must occur in Stage 0 so that existing routes, redirects, copywriting, and media are documented before technical planning begins. Viewable directly in Chrome via `previous-site/index.html` or `--serve previous-site`.
   4. Execute visual asset audit, legacy asset harvesting, and per-entity asset intake to compile `client-context/asset-manifest.md`.
   5. Generate root `.env.example` with credential placeholders for external connections (SEO tools, client email sending).
   6. When Gate 0 is ready for takeoff, generate `client-context/open-questions.md` containing at least 20 targeted, granular open questions for continuous client discovery.
@@ -176,6 +176,7 @@ Every client website project created through this pipeline must strictly follow 
 
 ```text
 <client-project-root>/
+├── .gitignore                            # Root repository ignore rules (includes previous-site/, .env*, node_modules/)
 ├── .env.example                          # [Stage 0] Root environment template (SEO tools, Resend email keys)
 ├── client-context/                       # [Stage 0] Dedicated repository for all raw client inputs & assets
 │   ├── answers/                          # Modular batch discovery & intake answers
@@ -191,10 +192,12 @@ Every client website project created through this pipeline must strictly follow 
 │   ├── branding/                         # Client logos (SVG/PNG), brand guidelines, color palettes
 │   ├── uploads/                          # Client-provided images, team headshots, PDFs, brochures
 │   └── notes/                            # Raw notes, transcripts, or initial requirements from client
-├── previous-site/                        # [Stage 0 - If Migration] Old website archive & migration data (crawled before Gate 1)
-│   ├── sitemap-legacy.xml                # Crawled URLs from existing website for 301 redirects
-│   ├── <slug>/                           # Per-page snapshot (<slug>/index.html, content.md, screenshot.png)
-│   └── media/                            # Downloaded legacy media assets for optimization
+├── previous-site/                        # [Stage 0 - If Migration] Full working offline mirror of legacy site (gitignored)
+│   ├── index.html                        # Root homepage (functional offline mirror; works as it is when opened)
+│   ├── sitemap.xml                       # Complete legacy route index for 301 redirects
+│   ├── manifest.json                     # Complete inventory of legacy routes and harvested assets
+│   ├── <path>/index.html                 # Per-page working snapshot (<path>/index.html, content.md, screenshot.png)
+│   └── <source-path>/...                 # All assets (images, stylesheets, scripts, fonts, PDFs) in source locations
 ├── client-requirements/                  # [Optional] Recorded client requirement notes during in-place revisions
 │   └── client-revision-notes.md          # Client revision feedback notes (revisions applied directly in-place)
 ├── project-docs/                         # Project pipeline management & tracking

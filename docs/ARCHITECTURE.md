@@ -63,6 +63,7 @@ When an agent executes the `create-nww-website` or `nww` pipeline to develop a w
 
 ```text
 <client-project-root>/
+├── .gitignore                            # Root repository ignore rules (includes previous-site/, .env*, node_modules/)
 ├── .env.example                          # Root environment template (SEO tools, Resend email keys)
 ├── client-context/                       # All raw client inputs, brand assets, discovery questionnaires
 │   ├── answers/                          # Modular batch discovery & intake answers (batch-01 to batch-07)
@@ -71,7 +72,7 @@ When an agent executes the `create-nww-website` or `nww` pipeline to develop a w
 │   ├── branding/                         # Brand logos, color guides, visual assets
 │   ├── uploads/                          # Client-provided images, headshots, brochures
 │   └── notes/                            # Raw notes, transcripts, or initial requirements
-├── previous-site/                        # [If Migration - Crawled Before Gate 1] Full working offline mirror of legacy site
+├── previous-site/                        # [If Migration - Crawled Before Gate 1] Full working offline mirror (gitignored)
 │   ├── index.html                        # Root homepage (functional offline mirror; works as it is when opened)
 │   ├── sitemap.xml                       # Discovered legacy route index
 │   ├── manifest.json                     # Complete inventory of legacy routes and harvested assets
@@ -114,12 +115,12 @@ When an agent executes the `create-nww-website` or `nww` pipeline to develop a w
     ├── postcss.config.js
     ├── site.manifest.json                # Project build manifest and page status registry
     ├── public/                           # Self-hosted variable fonts, optimized WebP/AVIF images, SVGs
-    ├── app/                              # Next.js App Router (layout.js, globals.css, thin page.js <= 80 lines)
-    │   ├── page.js                       # Stage 6 Home / Landing Page Showcase (< 80 lines)
-    │   ├── _components/                  # Section components (< 250 lines, // section: <id>)
+    ├── app/                              # Next.js App Router (layout.js, globals.css, thin page.js)
+    │   ├── page.js                       # Stage 6 Home / Landing Page Showcase 
+    │   ├── _components/                  # Section components ( // section: <id>)
     │   └── <sub-page-slug>/              # Stage 7 sub-pages built sequentially
     ├── components/                       # Global shared components defined in layout-system.md
-    └── lib/                              # Shared helper utilities (< 500 lines: cms, utils, seo, animations)
+    └── lib/                              # Shared helper utilities (cms, utils, seo, animations)
 ```
 
 ---

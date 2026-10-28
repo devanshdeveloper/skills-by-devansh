@@ -89,6 +89,7 @@ Options:
   --no-limits           Shortcut alias for --limit-mode no-limits.
   --max-assets <number> Max total assets to download during migration (default: 200).
   --skip-assets         Skip downloading media assets (harvests HTML/text only).
+  --add-to-gitignore    Append output directory (e.g. previous-site/) to root .gitignore.
   --serve <dir>         Launch zero-dependency local HTTP preview server for captured site (e.g. --serve previous-site).
   --port <number>       Port for local preview server (default: 3000).
   --timeout <ms>        Navigation timeout in milliseconds (default: 25000).
@@ -1027,8 +1028,55 @@ function parseReferencesFromBrief(answersPath) {
   return refs;
 }
 
+// Advisory helper to verify or add output directory to .gitignore
+function checkAndAdviseGitignore(outDir, autoAppend = false) {
+  try {
+    const resolvedOut = path.resolve(outDir);
+    const targetDirName = path.basename(resolvedOut);
+    const candidatePaths = [
+      path.join(process.cwd(), '.gitignore'),
+      path.join(path.dirname(resolvedOut), '.gitignore')
+    ];
+    let gitignorePath = null;
+    for (const p of candidatePaths) {
+      if (fs.existsSync(p)) {
+        gitignorePath = p;
+        break;
+      }
+    }
+
+    const relGitignore = gitignorePath ? path.relative(process.cwd(), gitignorePath) || '.gitignore' : '.gitignore';
+
+    if (gitignorePath) {
+      const content = fs.readFileSync(gitignorePath, 'utf-8');
+      const lines = content.split(/\r?\n/);
+      const isIgnored = lines.some(function(l) {
+        const trimmed = l.trim();
+        return trimmed === targetDirName || trimmed === `${targetDirName}/` || trimmed === `/${targetDirName}/` || trimmed === `/${targetDirName}`;
+      });
+
+      if (!isIgnored) {
+        if (autoAppend) {
+          const appendText = (content.endsWith('\n') ? '' : '\n') + `\n# Legacy site offline mirror & harvested assets\n${targetDirName}/\n`;
+          fs.appendFileSync(gitignorePath, appendText, 'utf-8');
+          console.log(`  ✓ [Git Hygiene] Automatically added '${targetDirName}/' to ${relGitignore}`);
+        } else {
+          console.log(`  • [Git Hygiene] Advice: Add '${targetDirName}/' to ${relGitignore} to prevent committing large legacy assets.`);
+        }
+      } else {
+        console.log(`  ✓ [Git Hygiene] Confirmed: '${targetDirName}/' is ignored in ${relGitignore}`);
+      }
+    } else {
+      console.log(`  • [Git Hygiene] Advice: Create a .gitignore and add '${targetDirName}/' to keep large scraped assets out of git.`);
+    }
+    console.log('');
+  } catch {
+    // Non-fatal advisory check
+  }
+}
+
 // Main crawling orchestrator for migration mode
-async function crawlSite({ targetUrl, outDir, mode = 'migration', limitMode = 'max-sampled', selectedPages = [], maxPages = 15, maxAssets = 200, skipAssets = false, timeoutMs = 25000 }) {
+async function crawlSite({ targetUrl, outDir, mode = 'migration', limitMode = 'max-sampled', selectedPages = [], maxPages = 15, maxAssets = 200, skipAssets = false, addToGitignore = false, timeoutMs = 25000 }) {
   if (!chromium) {
     console.error('Playwright Chromium is required for full-page rendering and screenshots.');
     console.error('Install via: npx --yes playwright install chromium');
@@ -1172,6 +1220,7 @@ async function crawlSite({ targetUrl, outDir, mode = 'migration', limitMode = 'm
   console.log(`  To view the mirrored site:`);
   console.log(`  • Open directly in Chrome: ${path.join(outDir, 'index.html')}`);
   console.log(`  • Or launch local preview server: node skills/create-nww-website/scripts/site-fetch/index.js --serve ${outDir}\n`);
+  checkAndAdviseGitignore(outDir, addToGitignore);
 }
 
 // Orchestrator for references mode
@@ -1357,6 +1406,7 @@ async function main() {
   let maxPages = 15;
   let maxAssets = 200;
   let skipAssets = false;
+  let addToGitignore = false;
   let timeoutMs = 25000;
   let serveDir = '';
   let port = 3000;
@@ -1376,6 +1426,7 @@ async function main() {
     else if (args[i] === '--max-pages' && args[i + 1]) maxPages = parseInt(args[++i], 10);
     else if (args[i] === '--max-assets' && args[i + 1]) maxAssets = parseInt(args[++i], 10);
     else if (args[i] === '--skip-assets') skipAssets = true;
+    else if (args[i] === '--add-to-gitignore') addToGitignore = true;
     else if (args[i] === '--serve' && args[i + 1]) serveDir = args[++i];
     else if (args[i] === '--port' && args[i + 1]) port = parseInt(args[++i], 10);
     else if (args[i] === '--timeout' && args[i + 1]) timeoutMs = parseInt(args[++i], 10);
@@ -1393,7 +1444,7 @@ async function main() {
   } else if (targetUrl) {
     mode = mode || 'migration';
     outDir = outDir || path.join(process.cwd(), 'previous-site');
-    await crawlSite({ targetUrl, outDir: path.resolve(outDir), mode, limitMode, selectedPages, maxPages, maxAssets, skipAssets, timeoutMs });
+    await crawlSite({ targetUrl, outDir: path.resolve(outDir), mode, limitMode, selectedPages, maxPages, maxAssets, skipAssets, addToGitignore, timeoutMs });
   } else {
     const defaultBrief = path.join(process.cwd(), 'client-context', 'answers', 'batch-02-branding-motion', 'answers.md');
     if (fs.existsSync(defaultBrief)) {

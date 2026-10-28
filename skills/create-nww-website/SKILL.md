@@ -78,6 +78,11 @@ Please parse this into `client-context/answers/batch-*/answers.md` and `client-c
 3. **Site Migration & Environment Setup:**
    - If user indicates a site migration (`build_origin: migration`), crawl and archive the previous website into `previous-site/` BEFORE Gate 1 as a full working offline mirror (`previous-site/index.html`, `sitemap.xml`, `<path>/index.html`, `content.md`, `screenshot.png`, `manifest.json`, with all assets placed in their source locations so opening `index.html` works as it is). Fetching the previous site must be completed in Stage 0 so that existing routes, redirects, copywriting, and media assets are preserved before technical planning begins.
    - Run the universal site fetcher using the user-selected crawling limit (`max-sampled`, `no-limits`, `max-any`, `homepage`, or `selected`): `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode max-sampled` (viewable directly via `previous-site/index.html` or `--serve previous-site`).
+   - **Git Ignore Instructions (`.gitignore`):** Add `previous-site/` to `.gitignore` at the project root immediately. Crawled offline mirrors contain full HTML documents, stylesheets, client-side scripts, and original media assets that bloat git history. Keeping `previous-site/` in `.gitignore` ensures all legacy assets remain available locally for Stage 0 asset harvesting and Stage 4 301 redirect mapping without being committed to git:
+     ```gitignore
+     # Legacy website offline mirror & harvested assets
+     previous-site/
+     ```
    - In the project root folder, generate a `.env.example` file with credential placeholders for external connections (e.g. SEO tools, client email sending).
 4. **Absolute Restrictions Before Presenting Batch 1:**
    - **ZERO** preliminary file searches, directory listings, or repository scans.
@@ -145,6 +150,7 @@ All client projects developed through this pipeline strictly adhere to the follo
 
 ```text
 <client-project-root>/
+├── .gitignore                            # Root repository ignore rules (includes previous-site/, .env*, node_modules/)
 ├── .env.example                          # [Stage 0] Root environment template (SEO tools, Resend email keys)
 ├── client-context/                       # [Stage 0] Dedicated repository for all raw client inputs & assets
 │   ├── answers/                          # Confirmed modular intake batch answers
@@ -160,7 +166,7 @@ All client projects developed through this pipeline strictly adhere to the follo
 │   ├── branding/                         # Client logos (SVG/PNG), brand guidelines, color palettes
 │   ├── uploads/                          # Client-provided images, team headshots, PDFs, brochures
 │   └── notes/                            # Raw notes, transcripts, or initial requirements from client
-├── previous-site/                        # [Stage 0 - If Migration] Full working offline mirror of legacy site
+├── previous-site/                        # [Stage 0 - If Migration] Full working offline mirror (gitignored)
 │   ├── index.html                        # Root homepage (functional offline mirror; works as it is when opened)
 │   ├── sitemap.xml                       # Discovered legacy route index
 │   ├── manifest.json                     # Complete inventory of legacy routes and harvested assets
@@ -221,21 +227,21 @@ All client projects developed through this pipeline strictly adhere to the follo
     │   ├── images/                       # Optimized WebP/AVIF images (via assets-optimizer)
     │   └── icons/                        # Optimized SVGs (via SVGO)
     ├── app/                              # Next.js App Router
-    │   ├── layout.js                     # Root layout (< 80 lines)
+    │   ├── layout.js                     # Root layout 
     │   ├── globals.css                   # Tailwind tokens, CSS variables, typography reset
-    │   ├── page.js                       # [Stage 6] Home / Landing Page Showcase (< 80 lines)
-    │   ├── _components/                  # Section components (< 250 lines, // section: <id>)
+    │   ├── page.js                       # [Stage 6] Home / Landing Page Showcase 
+    │   ├── _components/                  # Section components ( // section: <id>)
     │   ├── <sub-page-slug>/              # [Stage 7] Sub-pages built sequentially (page.js + _components/)
-    │   │   ├── page.js                   # (< 80 lines)
-    │   │   └── _components/              # (< 250 lines)
+    │   │   ├── page.js                   # 
+    │   │   └── _components/              # 
     │   └── api/                          # Backend route handlers (revalidation webhooks, contact)
     ├── components/                       # Global shared components defined in layout-system.md
     │   ├── Header.jsx
     │   ├── Footer.jsx
     │   ├── Navigation.jsx
     │   ├── MobileMenu.jsx
-    │   └── ui/                           # UI primitives (< 250 lines each: Button, Card, Badge, Modal)
-    └── lib/                              # Shared helper utilities (< 500 lines each: cms, utils, seo, animations)
+    │   └── ui/                           # UI primitives (Button, Card, Badge, Modal)
+    └── lib/                              # Shared helper utilities (cms, utils, seo, animations)
 ```
 
 ---

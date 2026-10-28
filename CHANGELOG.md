@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.3] - 2026-10-28
+
+### Added
+- **Root `.gitignore` Instructions for Legacy Site Mirror (`previous-site/`)**:
+  - Added explicit instructions, code blocks, and completion checklist items across `skills/create-nww-website/SKILL.md`, `references/gate-0-intake/runbook.md`, `references/gate-0-intake/client-questionnaire.md`, `references/gate-0-intake/pipeline-stages.md`, `references/gate-0-intake/batch-06-legacy-site-migration/questionnaire.md`, and `references/gate-6-scaffolding/runbook.md` requiring `previous-site/` to be added to the project's root `.gitignore`.
+  - Added `previous-site/` to authoring repository `.gitignore` to prevent local testing scrapes from being tracked.
+  - Updated Canonical Project Architecture in `docs/ARCHITECTURE.md` to reflect `.gitignore` rules and gitignored `previous-site/` status.
+  - Added `--add-to-gitignore` option and automated git hygiene inspection in `skills/create-nww-website/scripts/site-fetch/index.js` alerting users if the scraped folder is not ignored.
+
 ## [1.10.2] - 2026-10-28
 
 ### Added

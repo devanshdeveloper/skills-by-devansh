@@ -62,6 +62,19 @@ The crawler captures a full working offline mirror in `previous-site/`:
 > **Chrome Offline Preview:** The mirrored HTML includes preloader suppression, CORS hardening, and error guards for direct `file://` double-clicking in Chrome. If local browser extensions or security policies interfere, run the built-in local preview server:
 > `node skills/create-nww-website/scripts/site-fetch/index.js --serve previous-site`
 
+### Git Hygiene: Adding `previous-site/` to `.gitignore`
+
+The crawled legacy mirror contains full HTML files, vendor scripts, stylesheets, and original media assets (often dozens to hundreds of megabytes). **Never commit `previous-site/` into git version control.**
+
+Add `previous-site/` to the project's root `.gitignore` file immediately after crawling:
+
+```gitignore
+# Legacy website offline mirror & harvested assets (local reference only)
+previous-site/
+```
+
+If the root `.gitignore` does not yet exist, create it and verify with `git status` that `previous-site/` is ignored before continuing to Gate 1.
+
 ---
 
 ## Asset Harvesting & Generation System (Batch 04)
@@ -122,6 +135,7 @@ Before requesting Gate 0 approval, verify that all required assets exist:
 - [ ] `project-docs/client-brief.md`: Structured project brief synthesizing goals, target audience, and brand voice.
 - [ ] `project-docs/router-state.md`: Initialized stage tracker (`stage: 0`, `gate_0: pending`).
 - [ ] `previous-site/`: Crawled legacy site assets (if migration).
+- [ ] `.gitignore`: Contains `previous-site/` rule so legacy crawl files and media remain untracked.
 - [ ] `.env.example`: Configured environment variable contract in root and `site/`.
 
 ---
