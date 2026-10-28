@@ -11,11 +11,18 @@ Guide for AI agents to scaffold, configure, and develop modern Next.js web appli
 
 ## Quick Start
 
-### 1. Install
+### 1. Install & Update (Hard Pull Latest Skills)
 
 ```bash
-DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nextjs-website
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nextjs-website -y
 ```
+
+> **New Chat / Session Rule:** If starting in a **new chat** or continuing in a fresh session, always **hard pull / update** the latest skills to ensure you have the latest scaffolding conventions:
+> ```bash
+> DISABLE_TELEMETRY=1 npx skills update create-nextjs-website -y
+> # Or hard re-fetch directly from GitHub:
+> DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nextjs-website -y
+> ```
 
 Or run without installing (one-shot):
 
@@ -23,11 +30,11 @@ Or run without installing (one-shot):
 DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@create-nextjs-website
 ```
 
-> **Tip (Windows PowerShell):** Use `$env:DISABLE_TELEMETRY="1"; npx skills ...`
+> **Tip (Windows PowerShell):** Use `$env:DISABLE_TELEMETRY="1"; npx skills update create-nextjs-website -y`
 
 ### 2. Starter Prompt
 
-Copy and paste into your AI assistant (Antigravity, Cursor, Claude Code, or Codex CLI):
+Copy and paste into your AI assistant (Antigravity, Cursor, Claude Code, or Codex CLI) (if starting in a new chat, run the hard pull update command above first):
 
 ````markdown
 Activate the create-nextjs-website skill and scaffold a new project in the current directory.
@@ -54,7 +61,8 @@ Please scaffold the Next.js App Router project, configure layout and metadata, a
 
 ## Steps
 
-1. **Pre-flight & Environment Check**:
+1. **Pre-flight & Environment Check (New Chat Rule)**:
+   - If starting in a new chat, verify or hard pull the latest skill release: `DISABLE_TELEMETRY=1 npx skills update create-nextjs-website -y`.
    - Inspect the target directory to confirm it is empty or safe for project initialization.
    - Verify Node.js (`>=20.9.0`) and npm availability.
 

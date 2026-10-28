@@ -22,6 +22,7 @@ Authoring and distribution repository for `skills-by-devansh`, a collection of A
 ## Exact Commands
 Execute only verbatim commands matching what exists in this repository:
 - **List / Discover Skills locally**: `DISABLE_TELEMETRY=1 npx skills add . --list`
+- **Hard Pull / Update Skills from Remote**: `DISABLE_TELEMETRY=1 npx skills update -y` (or `DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh -y`)
 - **Test Skill Prompt output**: `DISABLE_TELEMETRY=1 npx skills use . --skill <skill-name>`
 - **Scaffold New Skill Template**: `npx skills init <skill-name>` (inside `skills/`)
 - **Syntax Check Node Scripts**: `node --check <path-to-script.js>`

@@ -27,6 +27,18 @@ Preview skills without installing:
 DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --list
 ```
 
+### Updating & New Chat Sessions (Hard Pull Latest Skills)
+
+Whenever you open a **new chat session** with your AI assistant or want to refresh installed skills to the latest releases and runbooks:
+
+```bash
+# Update/hard pull all skills to latest versions:
+DISABLE_TELEMETRY=1 npx skills update -y
+
+# Or re-fetch directly from GitHub:
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh -y
+```
+
 ---
 
 ## Skill: `create-nww-website`

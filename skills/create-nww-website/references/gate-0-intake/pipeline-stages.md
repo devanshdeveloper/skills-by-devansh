@@ -50,6 +50,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 
 ### Stage 0: Intake Check
 - **Goal:** Execute the start-up activation protocol from [client-questionnaire.md](client-questionnaire.md):
+  0. If starting in a new chat session, verify or hard pull the latest skills: `DISABLE_TELEMETRY=1 npx skills update create-nww-website -y`.
   1. Ask the user in the beginning whether they want client milestone approval emails dispatched at each stage.
   2. Inspect `client-context/answers/` (or prefill from user prompt notes) to compile the intake brief, confirming the **Technical Project Name / Vercel Slug** for downstream naming (variations, `package.json`, Vercel project linkage).
   3. If site migration (`build_origin: migration`), crawl and archive the existing website into `previous-site/` BEFORE Gate 1 as a full working offline mirror using the client's chosen limit mode (`--limit-mode max-sampled|no-limits|max-any|homepage|selected`). Execute: `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode max-sampled`. Ensure `previous-site/` is added to root `.gitignore` to keep crawled media and offline snapshots untracked. This capture must occur in Stage 0 so that existing routes, redirects, copywriting, and media are documented before technical planning begins. Viewable directly in Chrome via `previous-site/index.html` or `--serve previous-site`.

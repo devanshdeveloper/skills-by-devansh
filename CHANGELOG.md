@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.4] - 2026-10-28
+
+### Added
+- **New Chat Session Protocol & Hard Pull Instructions**:
+  - Added explicit instructions across all entry-point skills (`skills/create-nww-website/SKILL.md`, `skills/nww/SKILL.md`, `skills/create-nextjs-website/SKILL.md`, `README.md`, `AGENTS.md`) and Gate 0 intake references (`references/gate-0-intake/runbook.md`, `client-questionnaire.md`, `pipeline-stages.md`) requiring agents and users to hard pull the latest skills whenever starting in a new chat session.
+  - Documented update commands: `DISABLE_TELEMETRY=1 npx skills update -y` and `DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh -y` to eliminate stale cached skill runbooks and ensure all recent features (5 crawl limits, Chrome offline hardening, `.gitignore` rules) are active.
+
 ## [1.10.3] - 2026-10-28
 
 ### Added

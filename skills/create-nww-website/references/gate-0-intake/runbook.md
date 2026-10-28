@@ -4,6 +4,14 @@
 
 Stage 0 is the foundation of the 9-stage human-gated website development lifecycle. In this stage, the agent ingests client requirements across multiple sources (brief notes, legacy crawl, uploaded assets, and interactive turns), establishes project scope, confirms the **Technical Project Name / Vercel Slug**, executes a comprehensive visual asset audit and harvesting pipeline, configures the environment contract (`.env.example`), and drafts the foundational project brief before proceeding to technical architecture in Stage 1.
 
+> **New Chat / Fresh Session Rule (Hard Pull Latest Skills):**  
+> If starting in a **new chat session**, always hard pull the latest skills to ensure the agent operates with the newest gate runbooks, crawl limit options, and companion scripts:
+> ```bash
+> DISABLE_TELEMETRY=1 npx skills update create-nww-website -y
+> # Or hard re-fetch directly from GitHub:
+> DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nww-website -y
+> ```
+
 ```mermaid
 graph TD
     A[Client Inputs: Brief / Crawl / Assets / Turns] --> B[Intake Questionnaire & Confirmation Checkpoints]

@@ -37,6 +37,10 @@ graph TD
 
 ### The 4 Input Sources & Confirmation Rules
 
+0. **New Chat / Fresh Session Rule (Hard Pull Latest Skills):**
+   - If starting in a **new chat session**, verify or hard pull the latest skills before initiating intake:
+     `DISABLE_TELEMETRY=1 npx skills update create-nww-website -y` (or `DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nww-website -y`).
+
 1. **Source 1: Pasted Brief / User Prompt Notes:**
    - If the user provides a brief or notes in their opening prompt, extract all known answers into memory.
    - Present an ingestion recap: *"Successfully parsed [N] answers from your notes."*

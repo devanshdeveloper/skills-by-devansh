@@ -11,11 +11,18 @@ This skill orchestrates the end-to-end creation of production-grade Next.js App 
 
 ## Quick Start
 
-### 1. Install
+### 1. Install & Update (Hard Pull Latest Skills)
 
 ```bash
-DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nww-website
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nww-website -y
 ```
+
+> **New Chat / Session Rule:** If starting in a **new chat** or continuing a project in a fresh session, always **hard pull / update** the latest skills to ensure you have the newest gate runbooks, crawler limit options, and bugfixes:
+> ```bash
+> DISABLE_TELEMETRY=1 npx skills update create-nww-website -y
+> # Or hard re-fetch directly from GitHub:
+> DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nww-website -y
+> ```
 
 Or run without installing (one-shot):
 
@@ -23,11 +30,11 @@ Or run without installing (one-shot):
 DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@create-nww-website
 ```
 
-> **Tip (Windows PowerShell):** Use `$env:DISABLE_TELEMETRY="1"; npx skills ...`
+> **Tip (Windows PowerShell):** Use `$env:DISABLE_TELEMETRY="1"; npx skills update create-nww-website -y`
 
 ### 2. Starter Prompt
 
-Copy and paste into your AI assistant (Antigravity, Cursor, Claude Code, or Codex CLI) to fast-track Gate 0:
+Copy and paste into your AI assistant (Antigravity, Cursor, Claude Code, or Codex CLI) to fast-track Gate 0 (if starting in a new chat, run the hard pull update command above first):
 
 ````markdown
 Activate the create-nww-website skill. Here is our project brief to initialize Stage 0 Intake:
@@ -68,6 +75,14 @@ Please parse this into `client-context/answers/batch-*/answers.md` and `client-c
 
 **ON ACTIVATION, IMMEDIATELY EXECUTE THIS START-UP PROTOCOL BEFORE ANY OTHER WORK:**
 
+0. **New Chat / Fresh Session Rule (Hard Pull Latest Skills):**
+   - If this is a **new chat**, new session, or starting a new project, verify or hard pull the latest version of the skills from GitHub before initiating the pipeline:
+     ```bash
+     DISABLE_TELEMETRY=1 npx skills update create-nww-website -y
+     # Or re-fetch directly from GitHub:
+     DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nww-website -y
+     ```
+   - Verify local skill discovery: `DISABLE_TELEMETRY=1 npx skills add . --list`.
 1. **Client Milestone Email Question:**
    - Ask the user at the start: *"Would you like client milestone approval emails prepared and dispatched at each stage?"* Record the preference.
 2. **First Action:** Check if the intake answers directory `client-context/answers/` already exists (single read-only check; inspect `client-context/answers/batch-01-core-identity/answers.md`).
