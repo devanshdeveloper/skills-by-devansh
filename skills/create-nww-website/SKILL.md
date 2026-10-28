@@ -5,6 +5,9 @@ description: Orchestrates end-to-end creation of Next.js websites with optional 
 
 # Create NWW Website
 
+> [!IMPORTANT]
+> **Do Not Edit Skill Files:** Skill files (`SKILL.md`, `references/**`, `scripts/**`) are immutable runbooks. Never edit or overwrite skill files directly during project execution. If you need changes, improvements, or custom workflow behavior, **request changes with a prompt** instead.
+
 This skill orchestrates the end-to-end creation of production-grade Next.js App Router websites with optional Next Web Website (NWW) CMS integration. It enforces a disciplined 9-stage human-gated workflow (Stages 0 through 8) ensuring structural rigor, taste-driven aesthetic polish, and technical quality.
 
 ---
@@ -99,7 +102,8 @@ Please parse this into `client-context/answers/batch-*/answers.md` and `client-c
      previous-site/
      ```
    - In the project root folder, generate a `.env.example` file with credential placeholders for external connections (e.g. SEO tools, client email sending).
-4. **Absolute Restrictions Before Presenting Batch 1:**
+4. **Absolute Restrictions & Skill Immutability:**
+   - **DO NOT EDIT SKILL FILES:** Skill files (`SKILL.md`, `references/**`, `scripts/**`) are immutable runbooks. Never edit skill files directly; instead, request changes with a prompt.
    - **ZERO** preliminary file searches, directory listings, or repository scans.
    - **ZERO** project scaffolding, bash commands, package installations, or code edits.
    - **ZERO** planning artifact creation before answers are collected.

@@ -5,6 +5,9 @@ description: Fast shortcut alias to start the NWW website pipeline. Use when the
 
 # NWW Shortcut Alias
 
+> [!IMPORTANT]
+> **Do Not Edit Skill Files:** Skill files are immutable runbooks. Never edit skill files directly; instead, request changes with a prompt.
+
 This skill is a lightweight alias for `create-nww-website`.
 
 ---
@@ -62,6 +65,7 @@ nww
 1. **Activate Entry Skill:**
    - Immediately activate and delegate execution to the [create-nww-website](../create-nww-website/SKILL.md) skill.
 
-2. **Mandatory Start-Up Rule:**
+2. **Mandatory Start-Up Rule & Skill Immutability:**
+   - Skill files are immutable runbooks: never edit skill files directly; instead, request changes with a prompt.
    - Adhere strictly to the activation protocol defined in `create-nww-website`: always begin with the read-only brief check (`client-context/answers/`) and immediately present Batch 01 of the intake questionnaire.
    - Do not perform any preliminary file reading, repository scanning, planning, command execution, or code generation before the intake questionnaire is presented.

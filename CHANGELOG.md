@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.5] - 2026-10-28
+
+### Added
+- **Skill File Immutability Discipline (Prompt-Driven Modifications)**:
+  - Added strict instructions across all entry skills (`skills/create-nww-website/SKILL.md`, `skills/nww/SKILL.md`, `skills/create-nextjs-website/SKILL.md`), stage runbooks (`references/gate-0-intake/runbook.md`), rules (`AGENTS.md`, `.agents/rules/safety-discipline.md`, `.agents/rules/skill-authoring.md`), and documentation (`README.md`, `docs/ARCHITECTURE.md`) prohibiting AI agents and users from directly editing skill files (`SKILL.md`, `references/**`, `scripts/**`).
+  - Enforced that all skill enhancements, workflow modifications, and bugfixes must be requested via prompt instead of modifying skill files directly.
+
 ## [1.10.4] - 2026-10-28
 
 ### Added

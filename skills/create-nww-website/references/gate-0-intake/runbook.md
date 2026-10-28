@@ -11,6 +11,7 @@ Stage 0 is the foundation of the 9-stage human-gated website development lifecyc
 > # Or hard re-fetch directly from GitHub:
 > DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill create-nww-website -y
 > ```
+> **Do Not Edit Skill Files:** Skill files are immutable runbooks. Never edit skill files directly; instead, request changes with a prompt.
 
 ```mermaid
 graph TD

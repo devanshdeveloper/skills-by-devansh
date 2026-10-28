@@ -39,6 +39,10 @@ DISABLE_TELEMETRY=1 npx skills update -y
 DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh -y
 ```
 
+### Skill Immutability: Do Not Edit Skill Files
+
+Skill files (`SKILL.md`, stage runbooks, companion scripts) are immutable runbooks designed for AI agents and developers. **Do not edit installed skill files directly.** If you need enhancements, custom workflows, or bugfixes, **request changes with a prompt** instead.
+
 ---
 
 ## Skill: `create-nww-website`

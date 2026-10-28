@@ -134,6 +134,7 @@ Skills in this repository conform to the skills.sh decentralized distribution st
    - `description`: Third-person synopsis describing *what* the skill does and *when* the agent should invoke it.
 3. **Decentralized Distribution**: Anyone installs skills via `npx skills add devanshdeveloper/skills-by-devansh --skill <skill-name>`.
 4. **Local Discovery & Testing**: Tested via `DISABLE_TELEMETRY=1 npx skills add . --list` and `DISABLE_TELEMETRY=1 npx skills use . --skill <name>`.
+5. **Skill Immutability**: Skill files (`SKILL.md`, `references/**`, `scripts/**`) are immutable runbooks. Agents executing tasks must never edit skill files directly; instead, changes or enhancements must be requested with a prompt.
 
 ---
 

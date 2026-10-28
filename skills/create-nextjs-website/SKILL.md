@@ -5,6 +5,9 @@ description: Scaffold modern Next.js web applications with App Router, TypeScrip
 
 # create-nextjs-website
 
+> [!IMPORTANT]
+> **Do Not Edit Skill Files:** Skill files are immutable runbooks. Never edit skill files directly; instead, request changes with a prompt.
+
 Guide for AI agents to scaffold, configure, and develop modern Next.js web applications.
 
 ---
@@ -61,7 +64,8 @@ Please scaffold the Next.js App Router project, configure layout and metadata, a
 
 ## Steps
 
-1. **Pre-flight & Environment Check (New Chat Rule)**:
+1. **Pre-flight & Environment Check (New Chat Rule & Skill Immutability)**:
+   - **Do not edit skill files directly**: Skill files are immutable runbooks. Instead, request changes with a prompt.
    - If starting in a new chat, verify or hard pull the latest skill release: `DISABLE_TELEMETRY=1 npx skills update create-nextjs-website -y`.
    - Inspect the target directory to confirm it is empty or safe for project initialization.
    - Verify Node.js (`>=20.9.0`) and npm availability.

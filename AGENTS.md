@@ -45,6 +45,7 @@ Execute only verbatim commands matching what exists in this repository:
 - **Mirror existing patterns**: Match established structure (YAML frontmatter, section headers, modular references).
 - **Report before implementing**: Present findings, risks, and proposed file lists; wait for confirmation before altering files.
 - **Keep changes scoped**: Modify only files directly requested. Never modify files in `context/`.
+- **Do not edit skill files during project tasks**: Skill files are immutable runbooks. Never edit skill files during project tasks or workflow runs; instead, request changes with a prompt.
 
 ## Editing Rules (Non-Negotiable)
 - Use ONLY IDE editor tools (`write_to_file`, `replace_file_content`, `multi_replace_file_content`).
@@ -55,6 +56,7 @@ Execute only verbatim commands matching what exists in this repository:
 - Modifying environment files or exposing credentials (`PIXABAY_API_KEY`, `PEXELS_API_KEY`, etc.).
 - Running destructive commands: `rm -rf`, `git reset --hard`, `git clean`, `git push --force`.
 - Touching git-ignored authoring scratch notes in `context/`.
+- Editing skill files directly instead of requesting changes with a prompt.
 
 ## Verification Definition
 Never declare success without concrete evidence:
