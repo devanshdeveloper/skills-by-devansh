@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.6] - 2026-10-28
+
+### Fixed
+- **Prevent External Redirection to Live Website from Offline Mirror (`scripts/site-fetch/index.js`)**:
+  - Engineered `resolveUrlToLocal()` in `relativizeHtmlForOfflineMirror` to intercept and relativize all same-site absolute URLs (e.g. `https://example.com/about`, `https://www.example.com/about/`, `//example.com/services`) into local relative paths (`./about/index.html`, `../about/index.html`).
+  - Fixed root homepage navigation (`/`, `https://example.com`, `https://example.com/`) across header logos and nav items to properly target local `index.html`.
+  - Added attribute rewrites for `href`, `action`, `data-href`, `data-url`, `data-link`, and `srcset`.
+  - Stripped `<meta http-equiv="refresh">` tags to prevent instant meta refresh redirects to the live site.
+  - Injected runtime browser redirection guards in `<head>` overriding `window.location.assign` and `window.location.replace` and attaching a capture-phase link click interceptor ensuring dynamic clicks stay within the local mirror.
+  - Updated `urlToPageMapping` to normalize `.html`, `.php`, and `.asp` extensions into clean route directory paths.
+
 ## [1.10.5] - 2026-10-28
 
 ### Added

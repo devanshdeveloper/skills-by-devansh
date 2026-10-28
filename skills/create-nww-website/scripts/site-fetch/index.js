@@ -307,7 +307,7 @@ function extractXmlUrls(xmlContent, origin, urlSet) {
 function urlToPageMapping(urlString, baseUrl) {
   try {
     const u = new URL(urlString);
-    const cleanPath = u.pathname.replace(/^\/+|\/+$/g, '');
+    const cleanPath = u.pathname.replace(/^\/+|\/+$/g, '').replace(/\.(html?|php|asp|aspx)$/i, '');
     if (!cleanPath) {
       return { slug: 'home', relHtmlPath: 'index.html', dirPath: '' };
     }
@@ -616,59 +616,246 @@ function resolveAssetSourceRelativePath(assetUrl, baseOrigin) {
 function relativizeHtmlForOfflineMirror(html, pageRelHtmlPath, assetMap, baseOrigin) {
   let updated = html;
 
-  // 1. Remove existing <base> tags and restrictive Content-Security-Policy headers that break local file:// loading in Chrome
+  // 1. Remove existing <base> tags, meta refresh tags, and restrictive Content-Security-Policy headers that break local browsing
   updated = updated.replace(/<base\s+[^>]*>/gi, '');
   updated = updated.replace(/<meta\s+[^>]*http-equiv=["']?Content-Security-Policy["']?[^>]*>/gi, '');
+  updated = updated.replace(/<meta\s+[^>]*http-equiv=["']?refresh["']?[^>]*>/gi, '');
 
   const pageDepth = pageRelHtmlPath === 'index.html' ? 0 : pageRelHtmlPath.split('/').length - 1;
   const prefix = pageDepth === 0 ? './' : '../'.repeat(pageDepth);
 
-  // 2. Replace harvested asset URLs with their local relative path
+  // Extract naked hostname for legacy domain recognition (e.g. "example.com" from "https://www.example.com")
+  let nakedHost = '';
+  try {
+    nakedHost = new URL(baseOrigin).hostname.toLowerCase().replace(/^www\./, '');
+  } catch {}
+
+  // Helper function to convert any internal URL (absolute or root-relative) pointing to the legacy domain into a local relative link
+  function resolveUrlToLocal(rawVal) {
+    if (!rawVal || typeof rawVal !== 'string') return rawVal;
+    const trimmed = rawVal.trim();
+
+    // Preserve special URI schemes and anchor-only hashes
+    if (
+      trimmed === '#' ||
+      trimmed.startsWith('#') ||
+      trimmed.startsWith('mailto:') ||
+      trimmed.startsWith('tel:') ||
+      trimmed.startsWith('javascript:') ||
+      trimmed.startsWith('data:')
+    ) {
+      return trimmed;
+    }
+
+    // Direct match against harvested assetMap
+    if (assetMap.has(trimmed)) {
+      return prefix + assetMap.get(trimmed).replace(/^\/+/, '');
+    }
+
+    let urlObj = null;
+    let isSameSite = false;
+
+    if (trimmed.startsWith('/') && !trimmed.startsWith('//')) {
+      // Root-relative URL (e.g. "/", "/about", "/services/transit")
+      try {
+        urlObj = new URL(trimmed, baseOrigin);
+        isSameSite = true;
+      } catch {
+        return trimmed;
+      }
+    } else if (/^https?:\/\//i.test(trimmed) || trimmed.startsWith('//')) {
+      // Absolute or protocol-relative URL
+      try {
+        const full = trimmed.startsWith('//') ? ('https:' + trimmed) : trimmed;
+        urlObj = new URL(full);
+        const host = urlObj.hostname.toLowerCase().replace(/^www\./, '');
+        if (nakedHost && (host === nakedHost || host.endsWith('.' + nakedHost))) {
+          isSameSite = true;
+        }
+      } catch {
+        return trimmed;
+      }
+    } else if (!trimmed.includes(':') && !trimmed.startsWith('//')) {
+      // Local relative link (e.g. "about", "./about", "../services")
+      const cleanRelative = trimmed.split('?')[0].split('#')[0].replace(/\/+$/, '');
+      const search = trimmed.includes('?') ? '?' + trimmed.split('?')[1].split('#')[0] : '';
+      const hash = trimmed.includes('#') ? '#' + trimmed.split('#')[1] : '';
+
+      if (cleanRelative === '' || cleanRelative === '.' || cleanRelative === './') {
+        return `${prefix}index.html${search}${hash}`;
+      }
+
+      // If it doesn't have a file extension, format as local route <path>/index.html
+      const lastSegment = cleanRelative.split('/').pop();
+      if (!lastSegment.includes('.')) {
+        return `${cleanRelative}/index.html${search}${hash}`;
+      }
+      return trimmed;
+    }
+
+    if (!isSameSite || !urlObj) {
+      return trimmed; // External URL (e.g. social media, external partners)
+    }
+
+    // Check if the parsed URL or pathname matches an asset in assetMap
+    if (assetMap.has(urlObj.href)) {
+      return prefix + assetMap.get(urlObj.href).replace(/^\/+/, '');
+    }
+    if (assetMap.has(urlObj.pathname)) {
+      return prefix + assetMap.get(urlObj.pathname).replace(/^\/+/, '');
+    }
+
+    // Map to local page HTML
+    const pathname = urlObj.pathname;
+    const search = urlObj.search || '';
+    const hash = urlObj.hash || '';
+    const cleanPath = pathname.replace(/^\/+|\/+$/g, '').replace(/\.(html?|php|asp|aspx)$/i, '');
+
+    if (!cleanPath) {
+      // Homepage link (e.g. https://example.com, https://example.com/, /)
+      return `${prefix}index.html${search}${hash}`;
+    }
+
+    // If it points to an asset with an extension (e.g. .pdf, .zip, .mp4)
+    if (/\.[a-zA-Z0-9]{2,5}$/.test(pathname) && !/\.(html?|php|asp|aspx)$/i.test(pathname)) {
+      return `${prefix}${cleanPath}${search}${hash}`;
+    }
+
+    // Internal subpage route (e.g. /about -> ./about/index.html or ../about/index.html)
+    return `${prefix}${cleanPath}/index.html${search}${hash}`;
+  }
+
+  // 2. Replace harvested asset URLs directly across the whole document
   for (const [rawUrl, localRelPath] of assetMap.entries()) {
     const relativeTarget = prefix + localRelPath.replace(/^\/+/, '');
-    // Replace verbatim URL occurrences
     const escapedUrl = rawUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     updated = updated.replace(new RegExp(escapedUrl, 'g'), relativeTarget);
 
-    // Also replace root-relative variant of same-origin URLs
     try {
       const u = new URL(rawUrl);
       if (u.origin === baseOrigin) {
         const rootRel = u.pathname;
         if (rootRel && rootRel !== '/') {
           const escapedRootRel = rootRel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-          // Match inside attribute quotes
-          updated = updated.replace(new RegExp(`(["'])${escapedRootRel}(["'\\?])`, 'g'), `$1${relativeTarget}$2`);
+          updated = updated.replace(new RegExp(`(["'])${escapedRootRel}(["'\\?#])`, 'g'), `$1${relativeTarget}$2`);
         }
       }
     } catch {}
   }
 
-  // 3. Relativize remaining root-relative href and src attributes pointing to internal paths
-  updated = updated.replace(/(href|src)=["']\/([^"'#?]+)(["'#?])/gi, (match, attr, rootPath, closer) => {
-    // If it's already an external scheme, ignore
-    if (rootPath.startsWith('//') || rootPath.startsWith('http')) return match;
-    const rel = prefix + rootPath;
-    return `${attr}="${rel}${closer}`;
+  // 3. Rewrite all link, action, and navigation attributes (href, action, data-href, data-url, data-link)
+  updated = updated.replace(/\b(href|action|data-href|data-url|data-link)=["']([^"']*)["']/gi, (match, attrName, attrVal) => {
+    const resolved = resolveUrlToLocal(attrVal);
+    return `${attrName}="${resolved}"`;
   });
 
-  // 4. Ensure internal navigation links point to <path>/index.html for seamless direct file:// browsing in Chrome
-  updated = updated.replace(/href=["'](\.\/|\.\.\/)?([a-zA-Z0-9_\-\/]+)\/?(["'#?])/gi, (match, relPrefix, pathPart, closer) => {
-    // Skip if pointing to file with an extension, hash link, or mailto/tel
-    if (pathPart.includes('.') || pathPart.startsWith('#') || pathPart.startsWith('mailto:') || pathPart.startsWith('tel:')) return match;
-    const p = (relPrefix || '') + pathPart.replace(/\/+$/, '') + '/index.html';
-    return `href="${p}${closer}`;
+  // 4. Rewrite srcset attributes for responsive images
+  updated = updated.replace(/\bsrcset=["']([^"']+)["']/gi, (match, srcsetContent) => {
+    const parts = srcsetContent.split(',').map(part => {
+      const trimmedPart = part.trim();
+      const spaceIdx = trimmedPart.indexOf(' ');
+      if (spaceIdx === -1) {
+        return resolveUrlToLocal(trimmedPart);
+      }
+      const urlPart = trimmedPart.slice(0, spaceIdx);
+      const descriptor = trimmedPart.slice(spaceIdx);
+      return resolveUrlToLocal(urlPart) + descriptor;
+    });
+    return `srcset="${parts.join(', ')}"`;
   });
 
-  // 5. Neutralize type="module" on local scripts to prevent Chrome's origin 'null' CORS block from aborting page execution
+  // 5. Neutralize type="module" on local scripts to prevent Chrome's origin 'null' CORS block
   updated = updated.replace(/<script\s+([^>]*?)type=["']module["']([^>]*?)>/gi, '<script $1data-offline-module=""$2>');
 
-  // 6. Inject offline hardening shim (suppresses runtime crashes on file:// and ensures body/html visibility if preloader hangs)
+  // 6. Inject offline hardening shim (suppresses runtime crashes on file://, blocks programmatic redirects, intercepts dynamic clicks)
   const offlineShim = `
   <script>
     /* Offline Mirror Guard: Suppress file:// CORS and framework hydration crashes in Chrome */
     window.onerror = function() { return true; };
     window.onunhandledrejection = function(e) { if (e && e.preventDefault) e.preventDefault(); };
+
+    (function() {
+      var legacyHost = "${nakedHost}";
+      var localPrefix = "${prefix}";
+
+      // 1. Guard against programmatic JavaScript redirection away from the offline mirror
+      try {
+        var origAssign = window.location.assign ? window.location.assign.bind(window.location) : null;
+        var origReplace = window.location.replace ? window.location.replace.bind(window.location) : null;
+        if (origAssign) {
+          window.location.assign = function(target) {
+            if (typeof target === 'string' && (target.indexOf(legacyHost) !== -1 || target.startsWith('/'))) {
+              console.warn('[Offline Guard] Blocked programmatic redirect to live site:', target);
+              return;
+            }
+            origAssign(target);
+          };
+        }
+        if (origReplace) {
+          window.location.replace = function(target) {
+            if (typeof target === 'string' && (target.indexOf(legacyHost) !== -1 || target.startsWith('/'))) {
+              console.warn('[Offline Guard] Blocked programmatic replace to live site:', target);
+              return;
+            }
+            origReplace(target);
+          };
+        }
+      } catch(e) {}
+
+      // 2. Intercept click events on links to guarantee no click navigates to the live website
+      document.addEventListener('click', function(e) {
+        var anchor = e.target && e.target.closest ? e.target.closest('a') : null;
+        if (!anchor) return;
+        var href = anchor.getAttribute('href');
+        if (!href) return;
+
+        if (
+          href.startsWith('#') ||
+          href.startsWith('mailto:') ||
+          href.startsWith('tel:') ||
+          href.startsWith('javascript:')
+        ) {
+          return;
+        }
+
+        var isLegacy = false;
+        var pathname = '';
+        var search = '';
+        var hash = '';
+
+        if (legacyHost && href.indexOf(legacyHost) !== -1) {
+          isLegacy = true;
+          try {
+            var u = new URL(href.startsWith('//') ? ('https:' + href) : href);
+            pathname = u.pathname;
+            search = u.search || '';
+            hash = u.hash || '';
+          } catch(err) {
+            isLegacy = false;
+          }
+        } else if (href.startsWith('/') && !href.startsWith('//')) {
+          isLegacy = true;
+          try {
+            var u = new URL(href, window.location.href);
+            pathname = u.pathname;
+            search = u.search || '';
+            hash = u.hash || '';
+          } catch(err) {
+            isLegacy = false;
+          }
+        }
+
+        if (isLegacy) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          var clean = pathname.replace(/^\\/+|\\/+$/g, '').replace(/\\.(html?|php|asp|aspx)$/i, '');
+          var dest = clean ? (localPrefix + clean + '/index.html' + search + hash) : (localPrefix + 'index.html' + search + hash);
+          console.log('[Offline Guard] Intercepted link to live website. Navigating locally to:', dest);
+          window.location.href = dest;
+        }
+      }, true); // Use capture phase so it runs BEFORE any third-party framework or tracking scripts!
+    })();
   </script>
   <style id="antigravity-offline-reset">
     /* Force page visibility and dismiss blocking preloaders in local Chrome offline browsing */
