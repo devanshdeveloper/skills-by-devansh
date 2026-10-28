@@ -77,19 +77,38 @@ Options:
   --url <url>           Target website URL to crawl and capture.
   --out <dir>           Output directory (default: 'previous-site').
   --mode <type>         Operation mode: 'migration' (default for --url) or 'references' (for --brief).
-  --brief <file>        Path to batch answers file to parse liked reference sites.
-  --max-pages <number>  Max unique page types to capture (default: 15).
+  --limit-mode <mode>   Crawling limit strategy:
+                          • max-sampled   : Max 15 pages [at least one per page type] (Default)
+                          • no-limits     : No limits [crawls all discovered pages]
+                          • max-any       : Max 15 pages [any pages in discovery order]
+                          • homepage      : Only homepage [1 page only]
+                          • selected      : Selected pages only (provide via --pages)
+  --pages <list>        Comma-separated list of routes/URLs for 'selected' mode (e.g. "/,/about,/pricing").
+  --max-pages <number>  Max pages to capture for max-sampled / max-any (default: 15).
+  --only-homepage       Shortcut alias for --limit-mode homepage.
+  --no-limits           Shortcut alias for --limit-mode no-limits.
   --max-assets <number> Max total assets to download during migration (default: 200).
   --skip-assets         Skip downloading media assets (harvests HTML/text only).
+  --serve <dir>         Launch zero-dependency local HTTP preview server for captured site (e.g. --serve previous-site).
+  --port <number>       Port for local preview server (default: 3000).
   --timeout <ms>        Navigation timeout in milliseconds (default: 25000).
   --help                Show this help message.
 
 Examples:
-  # Capture previous site as full working offline mirror before Gate 1:
-  node site-fetch/index.js --url https://old-site.com --out previous-site --mode migration
+  # Capture previous site (max 15 pages sampled by page type - Default):
+  node site-fetch/index.js --url https://old-site.com --out previous-site
 
-  # Fetch all design references from intake brief:
-  node site-fetch/index.js --brief client-context/answers/batch-02-branding-motion/answers.md --out project-docs/design-references --mode references
+  # Capture entire site with no page limits:
+  node site-fetch/index.js --url https://old-site.com --out previous-site --limit-mode no-limits
+
+  # Capture only homepage:
+  node site-fetch/index.js --url https://old-site.com --out previous-site --only-homepage
+
+  # Capture specific selected pages:
+  node site-fetch/index.js --url https://old-site.com --out previous-site --limit-mode selected --pages "/,/about,/services,/contact"
+
+  # Preview captured site on local HTTP server:
+  node site-fetch/index.js --serve previous-site
 `);
 }
 
@@ -360,6 +379,100 @@ function clusterAndSamplePageTypes(urlList, baseUrl, maxPages = 15) {
   return Array.from(selected.values());
 }
 
+// Select pages to crawl based on the user-specified limit mode
+function selectPagesToCapture(urlList, baseUrl, options = {}) {
+  const limitMode = (options.limitMode || 'max-sampled').toLowerCase();
+  const maxPages = options.maxPages !== undefined ? options.maxPages : 15;
+  const selectedPages = options.selectedPages || [];
+
+  const baseParsed = new URL(baseUrl);
+  const homeUrl = cleanUrlString(baseParsed);
+  const homeMapping = urlToPageMapping(homeUrl, baseUrl);
+
+  // 1. Limit Mode: only homepage
+  if (limitMode === 'homepage' || limitMode === 'only-homepage' || limitMode === 'home') {
+    return [{ ...homeMapping, url: homeUrl }];
+  }
+
+  // 2. Limit Mode: selected pages
+  if (limitMode === 'selected' || limitMode === 'selected-pages') {
+    let rawList = [];
+    if (typeof selectedPages === 'string') {
+      rawList = selectedPages.split(/[\s,]+/).filter(Boolean);
+    } else if (Array.isArray(selectedPages)) {
+      rawList = selectedPages.filter(Boolean);
+    }
+
+    const pages = new Map();
+    // Always include home as the root anchor
+    pages.set(homeMapping.slug, { ...homeMapping, url: homeUrl });
+
+    for (const item of rawList) {
+      try {
+        let fullUrl = item.startsWith('http') ? item : new URL(item.replace(/^\/+/, ''), baseParsed.origin + '/').href;
+        const u = new URL(fullUrl);
+        if (u.origin === baseParsed.origin) {
+          const clean = cleanUrlString(u);
+          const mapping = urlToPageMapping(clean, baseUrl);
+          if (!pages.has(mapping.slug)) {
+            pages.set(mapping.slug, { ...mapping, url: clean });
+          }
+        }
+      } catch {}
+    }
+    return Array.from(pages.values());
+  }
+
+  // 3. Limit Mode: no limits (crawl all discovered pages)
+  if (limitMode === 'no-limits' || limitMode === 'unlimited' || limitMode === 'all') {
+    const pages = new Map();
+    pages.set(homeMapping.slug, { ...homeMapping, url: homeUrl });
+
+    for (const raw of urlList) {
+      try {
+        const u = new URL(raw);
+        if (u.origin !== baseParsed.origin) continue;
+        const clean = cleanUrlString(u);
+        if (clean === homeUrl) continue;
+        const mapping = urlToPageMapping(clean, baseUrl);
+        let slugKey = mapping.slug;
+        let counter = 1;
+        while (pages.has(slugKey) && pages.get(slugKey).url !== clean) {
+          slugKey = `${mapping.slug}-${counter++}`;
+        }
+        if (!pages.has(slugKey)) {
+          pages.set(slugKey, { ...mapping, slug: slugKey, url: clean });
+        }
+      } catch {}
+    }
+    return Array.from(pages.values());
+  }
+
+  // 4. Limit Mode: max 15 pages [any pages] (discovery order / FIFO without clustering)
+  if (limitMode === 'max-any' || limitMode === 'any' || limitMode === 'fifo') {
+    const pages = new Map();
+    pages.set(homeMapping.slug, { ...homeMapping, url: homeUrl });
+
+    for (const raw of urlList) {
+      if (pages.size >= maxPages) break;
+      try {
+        const u = new URL(raw);
+        if (u.origin !== baseParsed.origin) continue;
+        const clean = cleanUrlString(u);
+        if (clean === homeUrl) continue;
+        const mapping = urlToPageMapping(clean, baseUrl);
+        if (!pages.has(mapping.slug)) {
+          pages.set(mapping.slug, { ...mapping, url: clean });
+        }
+      } catch {}
+    }
+    return Array.from(pages.values());
+  }
+
+  // 5. Limit Mode: max 15 pages [at least one per page type] (Default: intelligent clustering)
+  return clusterAndSamplePageTypes(urlList, baseUrl, maxPages);
+}
+
 // Discover internal links from rendered DOM
 async function extractInternalLinksFromPage(page, baseUrl) {
   try {
@@ -502,13 +615,14 @@ function resolveAssetSourceRelativePath(assetUrl, baseOrigin) {
 function relativizeHtmlForOfflineMirror(html, pageRelHtmlPath, assetMap, baseOrigin) {
   let updated = html;
 
-  // Remove existing <base> tag to avoid breaking local file:// resolution
+  // 1. Remove existing <base> tags and restrictive Content-Security-Policy headers that break local file:// loading in Chrome
   updated = updated.replace(/<base\s+[^>]*>/gi, '');
+  updated = updated.replace(/<meta\s+[^>]*http-equiv=["']?Content-Security-Policy["']?[^>]*>/gi, '');
 
   const pageDepth = pageRelHtmlPath === 'index.html' ? 0 : pageRelHtmlPath.split('/').length - 1;
   const prefix = pageDepth === 0 ? './' : '../'.repeat(pageDepth);
 
-  // Replace harvested asset URLs with their local relative path
+  // 2. Replace harvested asset URLs with their local relative path
   for (const [rawUrl, localRelPath] of assetMap.entries()) {
     const relativeTarget = prefix + localRelPath.replace(/^\/+/, '');
     // Replace verbatim URL occurrences
@@ -529,13 +643,56 @@ function relativizeHtmlForOfflineMirror(html, pageRelHtmlPath, assetMap, baseOri
     } catch {}
   }
 
-  // Relativize remaining root-relative href and src attributes pointing to internal paths
+  // 3. Relativize remaining root-relative href and src attributes pointing to internal paths
   updated = updated.replace(/(href|src)=["']\/([^"'#?]+)(["'#?])/gi, (match, attr, rootPath, closer) => {
     // If it's already an external scheme, ignore
     if (rootPath.startsWith('//') || rootPath.startsWith('http')) return match;
     const rel = prefix + rootPath;
     return `${attr}="${rel}${closer}`;
   });
+
+  // 4. Ensure internal navigation links point to <path>/index.html for seamless direct file:// browsing in Chrome
+  updated = updated.replace(/href=["'](\.\/|\.\.\/)?([a-zA-Z0-9_\-\/]+)\/?(["'#?])/gi, (match, relPrefix, pathPart, closer) => {
+    // Skip if pointing to file with an extension, hash link, or mailto/tel
+    if (pathPart.includes('.') || pathPart.startsWith('#') || pathPart.startsWith('mailto:') || pathPart.startsWith('tel:')) return match;
+    const p = (relPrefix || '') + pathPart.replace(/\/+$/, '') + '/index.html';
+    return `href="${p}${closer}`;
+  });
+
+  // 5. Neutralize type="module" on local scripts to prevent Chrome's origin 'null' CORS block from aborting page execution
+  updated = updated.replace(/<script\s+([^>]*?)type=["']module["']([^>]*?)>/gi, '<script $1data-offline-module=""$2>');
+
+  // 6. Inject offline hardening shim (suppresses runtime crashes on file:// and ensures body/html visibility if preloader hangs)
+  const offlineShim = `
+  <script>
+    /* Offline Mirror Guard: Suppress file:// CORS and framework hydration crashes in Chrome */
+    window.onerror = function() { return true; };
+    window.onunhandledrejection = function(e) { if (e && e.preventDefault) e.preventDefault(); };
+  </script>
+  <style id="antigravity-offline-reset">
+    /* Force page visibility and dismiss blocking preloaders in local Chrome offline browsing */
+    html, body {
+      visibility: visible !important;
+      opacity: 1 !important;
+      display: block !important;
+    }
+    #preloader, .preloader, [class*="preloader"], [id*="preloader"],
+    [class*="loading-screen"], [id*="loading-screen"], [class*="loader-wrapper"],
+    .page-loader, #page-loader {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+  </style>`;
+
+  if (updated.includes('</head>')) {
+    updated = updated.replace('</head>', `${offlineShim}\n</head>`);
+  } else if (updated.includes('<body')) {
+    updated = updated.replace('<body', `${offlineShim}\n<body`);
+  } else {
+    updated = `${offlineShim}\n${updated}`;
+  }
 
   return updated;
 }
@@ -871,7 +1028,7 @@ function parseReferencesFromBrief(answersPath) {
 }
 
 // Main crawling orchestrator for migration mode
-async function crawlSite({ targetUrl, outDir, mode = 'migration', maxPages = 15, maxAssets = 200, skipAssets = false, timeoutMs = 25000 }) {
+async function crawlSite({ targetUrl, outDir, mode = 'migration', limitMode = 'max-sampled', selectedPages = [], maxPages = 15, maxAssets = 200, skipAssets = false, timeoutMs = 25000 }) {
   if (!chromium) {
     console.error('Playwright Chromium is required for full-page rendering and screenshots.');
     console.error('Install via: npx --yes playwright install chromium');
@@ -880,10 +1037,14 @@ async function crawlSite({ targetUrl, outDir, mode = 'migration', maxPages = 15,
 
   console.log(`\n=================================================================`);
   console.log(`  UNIVERSAL SITE FETCHER & OFFLINE MIRROR ENGINE`);
-  console.log(`  Target:     ${targetUrl}`);
-  console.log(`  Output Dir: ${outDir}`);
-  console.log(`  Mode:       ${mode}`);
-  console.log(`  Max Pages:  ${maxPages}`);
+  console.log(`  Target:      ${targetUrl}`);
+  console.log(`  Output Dir:  ${outDir}`);
+  console.log(`  Mode:        ${mode}`);
+  console.log(`  Limit Mode:  ${limitMode}`);
+  console.log(`  Max Pages:   ${limitMode === 'no-limits' ? 'Unlimited' : maxPages}`);
+  if (limitMode === 'selected' && selectedPages.length > 0) {
+    console.log(`  Selected:    ${selectedPages.join(', ')}`);
+  }
   console.log(`=================================================================`);
 
   fs.mkdirSync(outDir, { recursive: true });
@@ -914,11 +1075,11 @@ async function crawlSite({ targetUrl, outDir, mode = 'migration', maxPages = 15,
     await homeContext.close();
   }
 
-  // Combine and sample by page type
+  // Combine and sample by requested limit mode
   const allDiscovered = Array.from(new Set([cleanUrlString(new URL(targetUrl)), ...sitemapUrls, ...homeLinks]));
-  const pagesToCapture = clusterAndSamplePageTypes(allDiscovered, targetUrl, maxPages);
+  const pagesToCapture = selectPagesToCapture(allDiscovered, targetUrl, { limitMode, maxPages, selectedPages });
 
-  console.log(`\n[Phase 3] Identified ${pagesToCapture.length} distinct page type(s) to mirror:`);
+  console.log(`\n[Phase 3] Limit mode: '${limitMode}' — Identified ${pagesToCapture.length} page(s) to mirror:`);
   pagesToCapture.forEach(p => console.log(`  • [${p.slug}] -> ${p.url} => ${p.relHtmlPath}`));
 
   // 3. Capture each page: DOM, content.md, screenshot.png
@@ -982,8 +1143,10 @@ async function crawlSite({ targetUrl, outDir, mode = 'migration', maxPages = 15,
   const manifestData = {
     targetUrl,
     crawledAt: new Date().toISOString(),
+    limitMode,
+    selectedPages: limitMode === 'selected' ? selectedPages : undefined,
     totalPagesDiscovered: allDiscovered.length,
-    pageTypesCaptured: capturedPages.filter(p => p.status === 'success').length,
+    pagesCaptured: capturedPages.filter(p => p.status === 'success').length,
     routes: allDiscovered,
     pages: capturedPages.map(p => ({
       slug: p.slug,
@@ -1006,7 +1169,9 @@ async function crawlSite({ targetUrl, outDir, mode = 'migration', maxPages = 15,
   fs.writeFileSync(manifestPath, JSON.stringify(manifestData, null, 2) + '\n', 'utf-8');
   console.log(`\n✓ Generated ${manifestPath}`);
   console.log(`\n✓ Site mirror completed successfully!`);
-  console.log(`  You can open ${path.join(outDir, 'index.html')} directly in any browser to view the previous site offline.\n`);
+  console.log(`  To view the mirrored site:`);
+  console.log(`  • Open directly in Chrome: ${path.join(outDir, 'index.html')}`);
+  console.log(`  • Or launch local preview server: node skills/create-nww-website/scripts/site-fetch/index.js --serve ${outDir}\n`);
 }
 
 // Orchestrator for references mode
@@ -1106,6 +1271,76 @@ ${rows}
   console.log(`\n✓ sources.md compiled at ${path.join(outDir, 'sources.md')}`);
 }
 
+// Lightweight zero-dependency HTTP preview server for offline mirror viewing in Chrome
+function startPreviewServer(serveDir, port = 3000, shouldOpen = true) {
+  const resolvedDir = path.resolve(serveDir);
+  if (!fs.existsSync(resolvedDir)) {
+    console.error(`Error: Directory '${serveDir}' does not exist.`);
+    process.exit(1);
+  }
+
+  const MIME_TYPES = {
+    '.html': 'text/html; charset=utf-8',
+    '.css': 'text/css; charset=utf-8',
+    '.js': 'application/javascript; charset=utf-8',
+    '.json': 'application/json; charset=utf-8',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.gif': 'image/gif',
+    '.svg': 'image/svg+xml',
+    '.webp': 'image/webp',
+    '.ico': 'image/x-icon',
+    '.pdf': 'application/pdf',
+    '.woff': 'font/woff',
+    '.woff2': 'font/woff2',
+    '.ttf': 'font/ttf',
+    '.xml': 'application/xml; charset=utf-8'
+  };
+
+  const server = http.createServer((req, res) => {
+    let reqPath = decodeURIComponent(new URL(req.url, `http://localhost:${port}`).pathname);
+    if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
+
+    let filePath = path.join(resolvedDir, reqPath);
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+      filePath = path.join(filePath, 'index.html');
+    }
+
+    if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(`<h1>404 Not Found</h1><p>The file <code>${reqPath}</code> was not found in <code>${serveDir}</code>.</p>`);
+      return;
+    }
+
+    const ext = path.extname(filePath).toLowerCase();
+    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+    res.writeHead(200, {
+      'Content-Type': contentType,
+      'Access-Control-Allow-Origin': '*'
+    });
+    fs.createReadStream(filePath).pipe(res);
+  });
+
+  server.listen(port, () => {
+    const url = `http://localhost:${port}`;
+    console.log(`\n=================================================================`);
+    console.log(`  OFFLINE MIRROR PREVIEW SERVER ACTIVE`);
+    console.log(`  Serving:   ${resolvedDir}`);
+    console.log(`  Local URL: ${url}`);
+    console.log(`  Press Ctrl+C to stop.`);
+    console.log(`=================================================================\n`);
+
+    if (shouldOpen) {
+      const { exec } = require('node:child_process');
+      const startCmd = process.platform === 'win32' ? `start "" "${url}"` : (process.platform === 'darwin' ? `open "${url}"` : `xdg-open "${url}"`);
+      exec(startCmd, () => {});
+    }
+  });
+
+  return server;
+}
+
 async function main() {
   const args = process.argv.slice(2);
   if (args.includes('--help') || args.includes('-h')) {
@@ -1116,21 +1351,39 @@ async function main() {
   let targetUrl = '';
   let outDir = '';
   let mode = '';
+  let limitMode = 'max-sampled';
+  let selectedPages = [];
   let briefPath = '';
   let maxPages = 15;
   let maxAssets = 200;
   let skipAssets = false;
   let timeoutMs = 25000;
+  let serveDir = '';
+  let port = 3000;
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--url' && args[i + 1]) targetUrl = args[++i];
     else if (args[i] === '--out' && args[i + 1]) outDir = args[++i];
     else if (args[i] === '--mode' && args[i + 1]) mode = args[++i];
+    else if (args[i] === '--limit-mode' && args[i + 1]) limitMode = args[++i];
+    else if (args[i] === '--pages' && args[i + 1]) {
+      limitMode = 'selected';
+      selectedPages = args[++i].split(/[\s,]+/).filter(Boolean);
+    }
+    else if (args[i] === '--only-homepage') limitMode = 'homepage';
+    else if (args[i] === '--no-limits') limitMode = 'no-limits';
     else if (args[i] === '--brief' && args[i + 1]) briefPath = args[++i];
     else if (args[i] === '--max-pages' && args[i + 1]) maxPages = parseInt(args[++i], 10);
     else if (args[i] === '--max-assets' && args[i + 1]) maxAssets = parseInt(args[++i], 10);
     else if (args[i] === '--skip-assets') skipAssets = true;
+    else if (args[i] === '--serve' && args[i + 1]) serveDir = args[++i];
+    else if (args[i] === '--port' && args[i + 1]) port = parseInt(args[++i], 10);
     else if (args[i] === '--timeout' && args[i + 1]) timeoutMs = parseInt(args[++i], 10);
+  }
+
+  if (serveDir) {
+    startPreviewServer(serveDir, port, true);
+    return;
   }
 
   if (briefPath) {
@@ -1140,7 +1393,7 @@ async function main() {
   } else if (targetUrl) {
     mode = mode || 'migration';
     outDir = outDir || path.join(process.cwd(), 'previous-site');
-    await crawlSite({ targetUrl, outDir: path.resolve(outDir), mode, maxPages, maxAssets, skipAssets, timeoutMs });
+    await crawlSite({ targetUrl, outDir: path.resolve(outDir), mode, limitMode, selectedPages, maxPages, maxAssets, skipAssets, timeoutMs });
   } else {
     const defaultBrief = path.join(process.cwd(), 'client-context', 'answers', 'batch-02-branding-motion', 'answers.md');
     if (fs.existsSync(defaultBrief)) {
@@ -1164,9 +1417,11 @@ if (require.main === module) {
 module.exports = {
   crawlSite,
   crawlReferences,
+  selectPagesToCapture,
   clusterAndSamplePageTypes,
   discoverSitemapUrls,
   generateSitemapXml,
+  startPreviewServer,
   getImageDimensionsFromBuffer,
   resolveAssetSourceRelativePath,
   relativizeHtmlForOfflineMirror

@@ -32,9 +32,22 @@ In Batch 01, the agent confirms the **Technical Project Name / Slug** (e.g. `min
 
 If the project involves redesigning, replacing, or migrating an existing website, the legacy site **MUST** be archived and cataloged **before Gate 1**. This ensures URL structures, metadata, copy, and existing page layouts are preserved for 301 redirect mapping (Stage 4) and content migration (Stage 5).
 
-Execute the companion `site-fetch` utility:
+Execute the companion `site-fetch` utility with the appropriate limit mode:
 ```bash
-node skills/create-nww-website/scripts/site-fetch/index.js --url "https://example.com" --out previous-site --mode migration
+# 1. Max 15 pages [at least one per page type] (Default):
+node skills/create-nww-website/scripts/site-fetch/index.js --url "https://example.com" --out previous-site --limit-mode max-sampled --max-pages 15
+
+# 2. No limits (crawls all discovered pages):
+node skills/create-nww-website/scripts/site-fetch/index.js --url "https://example.com" --out previous-site --limit-mode no-limits
+
+# 3. Max 15 pages [any pages in discovery order]:
+node skills/create-nww-website/scripts/site-fetch/index.js --url "https://example.com" --out previous-site --limit-mode max-any --max-pages 15
+
+# 4. Only homepage:
+node skills/create-nww-website/scripts/site-fetch/index.js --url "https://example.com" --out previous-site --limit-mode homepage
+
+# 5. Selected pages only:
+node skills/create-nww-website/scripts/site-fetch/index.js --url "https://example.com" --out previous-site --limit-mode selected --pages "/,/about,/services,/pricing"
 ```
 
 The crawler captures a full working offline mirror in `previous-site/`:
@@ -45,6 +58,9 @@ The crawler captures a full working offline mirror in `previous-site/`:
 - `<path>/content.md`: Clean, readability-extracted Markdown content.
 - `<path>/screenshot.png`: High-resolution full-page visual capture.
 - `<source-path>/...`: All visual and downloadable assets placed directly where they were in the sources.
+
+> **Chrome Offline Preview:** The mirrored HTML includes preloader suppression, CORS hardening, and error guards for direct `file://` double-clicking in Chrome. If local browser extensions or security policies interfere, run the built-in local preview server:
+> `node skills/create-nww-website/scripts/site-fetch/index.js --serve previous-site`
 
 ---
 

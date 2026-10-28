@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.2] - 2026-10-28
+
+### Added
+- **User-Configurable Site Crawling Limits (`scripts/site-fetch/index.js`)**: Engineered `selectPagesToCapture()` implementing 5 distinct user-selectable crawling strategies for Stage 0 migration:
+  - `no-limits`: Crawls and archives every discovered internal page on the site.
+  - `max-any`: Crawls up to 15 pages in order of discovery (FIFO / straightforward).
+  - `max-sampled` *(Default)*: Intelligent clustered sampling (homepage, core static pages, 1–2 items per collection, then fill).
+  - `homepage`: Archives solely the root homepage (`/`).
+  - `selected`: Crawls only the specific routes or URLs provided by the user (via `--pages`).
+- **Offline HTML Display Hardening for Chrome**: Fixed blank screen and preloader blocking when opening `previous-site/index.html` directly in Chrome on `file://`:
+  - Injected an offline display reset into `<head>` enforcing `html, body { visibility: visible !important; opacity: 1 !important; }` and permanently suppressing preloader overlays (`#preloader`, `.loading-screen`).
+  - Injected window error and unhandled rejection guards to prevent SPA client-side hydration crashes on `file://` origin `null`.
+  - Stripped restrictive Content-Security-Policy meta tags.
+  - Relativized internal route links to `<path>/index.html` for direct local navigation.
+  - Neutralized `type="module"` on local scripts to prevent Chrome's `file://` CORS security policy from failing.
+- **Built-in Zero-Dependency Preview Server (`--serve`)**: Added zero-dependency static HTTP preview server (`--serve <dir> [--port <n>]`) using Node.js built-in `http` module, with automatic browser launching.
+- **Intake Question Q25 [Legacy Site Crawling Scope]**: Added explicit crawl scope selection to `references/gate-0-intake/batch-06-legacy-site-migration/questionnaire.md`, `runbook.md`, `client-questionnaire.md`, and `pipeline-stages.md`.
+
 ## [1.10.1] - 2026-10-27
 
 ### Fixed

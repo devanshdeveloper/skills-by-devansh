@@ -77,7 +77,7 @@ Please parse this into `client-context/answers/batch-*/answers.md` and `client-c
    - **If no answers exist:** **IMMEDIATELY output Batch 01 (Questions Q1a to Q8)** of the intake questionnaire.
 3. **Site Migration & Environment Setup:**
    - If user indicates a site migration (`build_origin: migration`), crawl and archive the previous website into `previous-site/` BEFORE Gate 1 as a full working offline mirror (`previous-site/index.html`, `sitemap.xml`, `<path>/index.html`, `content.md`, `screenshot.png`, `manifest.json`, with all assets placed in their source locations so opening `index.html` works as it is). Fetching the previous site must be completed in Stage 0 so that existing routes, redirects, copywriting, and media assets are preserved before technical planning begins.
-   - Run the universal site fetcher: `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --mode migration`
+   - Run the universal site fetcher using the user-selected crawling limit (`max-sampled`, `no-limits`, `max-any`, `homepage`, or `selected`): `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode max-sampled` (viewable directly via `previous-site/index.html` or `--serve previous-site`).
    - In the project root folder, generate a `.env.example` file with credential placeholders for external connections (e.g. SEO tools, client email sending).
 4. **Absolute Restrictions Before Presenting Batch 1:**
    - **ZERO** preliminary file searches, directory listings, or repository scans.

@@ -15,12 +15,28 @@ Before presenting questions, the agent executes the Pre-Gate 1 Legacy Site Crawl
 node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --mode migration
 ```
 
+### Crawling Scope & Limit Modes
+The fetcher supports 5 user-configurable limit strategies:
+1. **`max-sampled` (Default):** Max 15 pages [at least one per page type] — Clusters top-level static pages, sample items per collection, and fills up to 15 pages.
+   `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode max-sampled --max-pages 15`
+2. **`no-limits`:** No limits — Crawls and archives every discovered internal page on the website.
+   `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode no-limits`
+3. **`max-any`:** Max 15 pages [any pages] — Fast crawl of the first 15 pages in straightforward discovery order.
+   `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode max-any --max-pages 15`
+4. **`homepage`:** Only homepage — Crawls solely the root landing page (`/`).
+   `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode homepage`
+5. **`selected`:** Selected pages — Crawls only the specific routes/URLs specified by the user.
+   `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode selected --pages "/,/about,/services,/pricing"`
+
 This crawler creates a full working offline mirror in `previous-site/`:
 - `previous-site/index.html`: Fully functional homepage that works as it is when opened in a browser.
 - `previous-site/sitemap.xml`: Complete legacy route XML sitemap.
 - `previous-site/manifest.json`: Complete inventory of all legacy URLs, status codes, and harvested assets.
 - `previous-site/<path>/index.html`, `content.md`, and `screenshot.png`: Per-page mirrors and markdown summaries.
 - `previous-site/<source-path>/...`: All legacy assets placed directly where they were in the sources.
+
+> **Chrome Offline Preview:** The mirrored HTML includes preloader suppression, CORS hardening, and error guards for direct `file://` double-clicking in Chrome. If local browser extensions or security policies interfere, run the built-in local preview server:
+> `node skills/create-nww-website/scripts/site-fetch/index.js --serve previous-site`
 
 The agent reads `previous-site/manifest.json` and begins the turn with an executive audit:
 *"Crawled legacy website at [URL]. Discovered [N] total routes and [X] media assets. Let's decide which content to carry forward, which pages to retire, and how to preserve your SEO rankings."*

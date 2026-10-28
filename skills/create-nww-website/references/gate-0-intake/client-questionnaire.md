@@ -42,8 +42,8 @@ graph TD
    - Present an ingestion recap: *"Successfully parsed [N] answers from your notes."*
    - Never re-ask questions already clearly answered. Present ONLY the first batch containing unanswered questions.
 2. **Source 2: Legacy Website Crawl (`previous-site/`):**
-   - If `build_origin == migration` or a legacy URL is provided, crawl the old site before Gate 1:
-     `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --mode migration`
+   - If `build_origin == migration` or a legacy URL is provided, crawl the old site before Gate 1 using the client's chosen limit mode (`--limit-mode max-sampled|no-limits|max-any|homepage|selected`):
+     `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode max-sampled`
    - Audit crawled routes and harvested visual assets in `manifest.json`, `sitemap.xml`, and `previous-site/` source locations.
    - Present discovered resources to the client for disposition in Batch 04 and Batch 06.
 3. **Source 3: Client Raw Files & Uploaded Assets:**
