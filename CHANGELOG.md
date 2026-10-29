@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.8] - 2026-10-29
+
+### Changed
+- **Modular Refactoring of Universal Site Fetcher (`scripts/site-fetch/index.js`)**:
+  - Refactored the monolithic 1,689-line crawler into a clean coordinator with single-purpose modules under `skills/create-nww-website/scripts/site-fetch/lib/` (`browser.js`, `http.js`, `routes.js`, `capture.js`, `assets.js`, `relativize.js`, `manifest.js`, `preview.js`), reducing the main file to 362 lines with 100% behavior parity.
+  - Added CLI flag aliases `--target` (for `--url`) and `--references` (for `--brief` / `--mode references`).
+  - Replaced manual HTTP stream fetchers with Node's native `fetch` and `AbortSignal.timeout` for text and binary downloads.
+
+### Fixed
+- **Companion Script Export (`scripts/site-fetch/index.js`)**:
+  - Exported `parseReferencesFromBrief` in `module.exports` to resolve the import in `skills/create-nww-website/scripts/reference-capture/index.js`.
+
+
 ## [1.10.7] - 2026-10-28
 
 ### Added
