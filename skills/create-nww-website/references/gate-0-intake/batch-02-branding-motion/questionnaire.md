@@ -57,7 +57,7 @@ Before presenting this batch, inspect existing inputs:
 - **Required:** Yes
 - **Default:** None (Must be provided; e.g. `https://stripe.com`, `https://linear.app`)
 - **Downstream Consumers:** 
-  - Automated crawl via `node skills/create-nww-website/scripts/site-fetch/index.js --brief client-context/answers/batch-02-branding-motion/answers.md --out project-docs/design-references --mode references`
+  - Automated crawl via `node skills/create-nww-website/scripts/reference-capture/index.js`
   - Stage 2 `design-theory.md` Principles Extraction
   - Stage 5 Page Specs IA benchmarks
 

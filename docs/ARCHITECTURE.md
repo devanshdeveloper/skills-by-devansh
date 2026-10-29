@@ -144,8 +144,8 @@ Skills may contain companion CLI utilities inside `scripts/`:
 - **`assets-optimizer`**: A Node.js utility utilizing `sharp` and `ffmpeg` to process, optimize, resize, and produce WebP assets and manifests.
 - **`stock-fetch`**: A Node.js utility connecting to Pixabay, Pexels, and Unsplash APIs to search, download, and log provenance for images.
 - **`client-review`**: A Node.js utility that automatically scans modular concept review directories and generates/updates client review hubs and portals.
-- **`site-fetch`**: A unified Node.js crawler for both Stage 0 previous site migrations and Stage 2 design references. Probes sitemaps, discovers internal navigation links, clusters page types up to `--max-pages`, and captures rendered DOM (`<slug>/index.html`), stripped markdown (`<slug>/content.md`), full-page screenshots (`<slug>/screenshot.png`), and `sitemap-legacy.xml`.
-- **`reference-capture`**: A backwards-compatible CLI wrapper delegating directly to `site-fetch` for Stage 2 design reference discovery and capture.
+- **`site-fetch`**: A Node.js crawler for Stage 0 previous site migrations. Probes sitemaps, discovers internal navigation links, clusters page types up to `--max-pages`, downloads assets into original source paths, relativizes links, and generates a full offline working mirror (`previous-site/index.html`, `<slug>/index.html`, `content.md`, `screenshot.png`, `manifest.json`, and `sitemap.xml`).
+- **`reference-capture`**: A standalone Node.js utility for Stage 2 design references. Reads intake brief Q12, captures multi-page benchmark snapshots (`<domain>/<slug>/`), and compiles `sources.md`.
 - **`client-notify`**: A Node.js utility providing stage-by-stage client email drafting, Resend/SendGrid/SMTP dispatch upon explicit user approval, clickable `mailto:` links, and automated logging in `router-state.md`.
 - **`structure-audit`**: A Node.js utility auditing project documentation across all 12 stages, enforcing strict line limits and section comments, and compiling `project-docs/structure-audit.md`.
 

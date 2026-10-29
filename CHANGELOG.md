@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.9] - 2026-10-29
+
+### Added
+- **Phase-Driven Logging & Structured Phase Reports (`site-fetch`)**:
+  - Engineered clean, structured boxed summary report cards for each of the 6 crawling and mirroring phases (Route Discovery, Page Selection, Page Capture, Asset Harvesting, Offline Hardening, and Catalog Generation).
+  - Added Agentic AI execution and progress reporting directives to `SKILL.md` and `references/gate-0-intake/runbook.md`.
+  - Introduced clean phase modules `lib/discovery.js`, `lib/harvest.js`, and `lib/hardening.js` with backward-compatible re-exports in `routes.js`, `assets.js`, and `relativize.js`.
+
+### Fixed
+- **Subpage Offline Image & Asset Rendering (`site-fetch`)**:
+  - Fixed domain/origin asymmetry between naked domain and `www` hostnames (`isSameSiteUrl`, `getNakedHost`), resolving 0-sitemap and 0-internal-link discovery issues.
+  - Implemented recursive XML sitemap index parsing (resolving sub-sitemaps like `page-sitemap.xml` up to depth 2) while filtering out `.xml`/feed URLs from page capture queues.
+  - Introduced priority-tiered asset harvesting (`Tier 1: CSS/JS/fonts` -> `Tier 2: Primary img.src/backgrounds` -> `Tier 3: Responsive crops`) to ensure subpages never exhaust asset quotas before primary imagery is saved.
+  - Updated `relativizeHtmlForOfflineMirror` to rewrite `src`, `data-src`, `data-lazy-src`, `data-original`, and `poster` attributes.
+  - Converted native `loading="lazy"` to `loading="eager"` in offline HTML to guarantee instant local rendering without scroll requirements.
+  - Implemented CSS `@font-face` and background `url(...)` relativization inside downloaded `.css` stylesheets, eliminating local `file://` CORS font blocks.
+  - Increased default `maxAssets` from 200 to 1,000 for sampled mode, and defaulting to `Infinity` for `--limit-mode no-limits`.
+
 ## [1.10.8] - 2026-10-29
 
 ### Changed

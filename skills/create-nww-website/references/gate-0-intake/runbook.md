@@ -72,6 +72,14 @@ The crawler captures a full working offline mirror in `previous-site/`:
 > `node skills/create-nww-website/scripts/site-fetch/index.js --serve previous-site`
 >
 > **Clean Start Guarantee:** If `previous-site/` already exists from a prior crawl, the crawler automatically deletes the existing folder before crawling to prevent stale files or obsolete assets from contaminating the new inventory.
+>
+> **Agentic Execution & Phase Reporting:** The AI agent executing `site-fetch` must proactively report back to the user upon the completion of each phase:
+> 1. **Phase 1 (Route Discovery):** Report total sitemap routes and internal navigation links found.
+> 2. **Phase 2 (Page Selection):** Report limit mode strategy and roster of selected pages.
+> 3. **Phase 3 (Page Capture):** Report captured pages count, asset slots detected, and network buffer status.
+> 4. **Phase 4 (Asset Harvesting):** Report unique assets placed, high-resolution media tally, and relativized CSS files.
+> 5. **Phase 5 (Offline Hardening):** Report offline HTML files written and active hardening safeguards.
+> 6. **Phase 6 (Catalog & Preview):** Report manifest generation and provide instant local preview server command/URL (`--serve`).
 
 ### Git Hygiene: Adding `previous-site/` to `.gitignore`
 

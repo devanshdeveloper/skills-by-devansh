@@ -30,6 +30,7 @@ yarn-error.log*
 
 # Local context & scratch notes
 context/
+scratch/
 .stock-cache/
 previous-site/
 

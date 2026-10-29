@@ -9,8 +9,8 @@ The deliverable is saved to `project-docs/client-review/gate-2-design-theory/des
 ## Prerequisites & Taste Skill Activation
 
 When entering Stage 2:
-1. **Live-Fetch & Capture Reference Sites (Key Page Types via site-fetch):**
-   - For every liked reference URL in `client-context/answers/batch-02-branding-motion/answers.md`, discover sitemap URLs, navigate internal links, cluster representative page types up to `--max-pages`, and capture snapshots directly into `project-docs/design-references/<domain>/<slug>/` using `node skills/create-nww-website/scripts/site-fetch/index.js --brief client-context/answers/batch-02-branding-motion/answers.md --out project-docs/design-references --mode references` (or companion wrapper `node skills/create-nww-website/scripts/reference-capture/index.js`).
+1. **Live-Fetch & Capture Reference Sites (Key Page Types):**
+   - For every liked reference URL in `client-context/answers/batch-02-branding-motion/answers.md`, discover sitemap URLs, navigate internal links, cluster representative page types up to `--max-pages`, and capture snapshots directly into `project-docs/design-references/<domain>/<slug>/` using companion script `node skills/create-nww-website/scripts/reference-capture/index.js`.
    - Produce four standard artifacts per page type:
      - `index.html`: Rendered DOM post-hydration saved verbatim (external assets not mirrored).
      - `content.md`: Verbatim stripped text preserving headings, paragraphs, and links (zero paraphrasing or summarizing).

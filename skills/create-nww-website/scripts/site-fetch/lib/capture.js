@@ -9,51 +9,135 @@ async function extractAssetsFromPageDom(page, pageUrl, baseUrl) {
     return await page.evaluate(({ pageUrl, baseUrl }) => {
       const assets = [];
 
-      // 1. <img> tags and srcsets
+      // 1. <img> tags and srcsets (prioritizing real images over lazy placeholders)
       document.querySelectorAll('img').forEach((img) => {
-        const src = img.currentSrc || img.src || img.getAttribute('data-src') || img.getAttribute('data-original');
-        if (src && !src.startsWith('data:')) {
-          assets.push({ url: src, alt: img.alt || '', naturalWidth: img.naturalWidth || 0, naturalHeight: img.naturalHeight || 0, type: 'image', tagName: 'img' });
+        let src = img.currentSrc || img.getAttribute('src');
+        if (!src || src.startsWith('data:')) {
+          src = img.getAttribute('data-src') ||
+                img.getAttribute('data-lazy-src') ||
+                img.getAttribute('data-original') ||
+                img.getAttribute('data-orig-src') ||
+                img.getAttribute('nitro-lazy-src') ||
+                img.src;
         }
-        const srcset = img.getAttribute('srcset') || img.getAttribute('data-srcset');
+        if (src && !src.startsWith('data:')) {
+          assets.push({
+            url: src,
+            alt: img.alt || '',
+            naturalWidth: img.naturalWidth || 0,
+            naturalHeight: img.naturalHeight || 0,
+            type: 'image',
+            tagName: 'img',
+            priority: 2
+          });
+        }
+        const srcset = img.getAttribute('srcset') ||
+                       img.getAttribute('data-srcset') ||
+                       img.getAttribute('data-lazy-srcset');
         if (srcset) {
           srcset.split(',').forEach((part) => {
             const u = part.trim().split(/\s+/)[0];
-            if (u && !u.startsWith('data:')) assets.push({ url: u, alt: img.alt || '', naturalWidth: 0, naturalHeight: 0, type: 'image', tagName: 'srcset' });
+            if (u && !u.startsWith('data:')) {
+              assets.push({
+                url: u,
+                alt: img.alt || '',
+                naturalWidth: 0,
+                naturalHeight: 0,
+                type: 'image',
+                tagName: 'srcset',
+                priority: 3
+              });
+            }
           });
         }
       });
 
       // 2. <picture><source> elements
       document.querySelectorAll('picture source').forEach((srcEl) => {
-        const srcset = srcEl.getAttribute('srcset');
+        const srcset = srcEl.getAttribute('srcset') || srcEl.getAttribute('data-srcset');
         if (srcset) {
           srcset.split(',').forEach((part) => {
             const u = part.trim().split(/\s+/)[0];
-            if (u && !u.startsWith('data:')) assets.push({ url: u, alt: '', naturalWidth: 0, naturalHeight: 0, type: 'image', tagName: 'picture-source' });
+            if (u && !u.startsWith('data:')) {
+              assets.push({
+                url: u,
+                alt: '',
+                naturalWidth: 0,
+                naturalHeight: 0,
+                type: 'image',
+                tagName: 'picture-source',
+                priority: 2
+              });
+            }
           });
         }
       });
 
       // 3. Stylesheets, favicons, meta images, and scripts
       document.querySelectorAll('link[rel*="stylesheet"], link[rel*="icon"]').forEach((l) => {
-        if (l.href && !l.href.startsWith('data:')) assets.push({ url: l.href, alt: '', naturalWidth: 0, naturalHeight: 0, type: l.rel.includes('stylesheet') ? 'stylesheet' : 'icon', tagName: 'link' });
+        if (l.href && !l.href.startsWith('data:')) {
+          assets.push({
+            url: l.href,
+            alt: '',
+            naturalWidth: 0,
+            naturalHeight: 0,
+            type: l.rel.includes('stylesheet') ? 'stylesheet' : 'icon',
+            tagName: 'link',
+            priority: 1
+          });
+        }
       });
       document.querySelectorAll('meta[property*="image"], meta[name*="image"]').forEach((m) => {
         const c = m.getAttribute('content');
-        if (c && !c.startsWith('data:')) assets.push({ url: c, alt: '', naturalWidth: 0, naturalHeight: 0, type: 'image', tagName: 'meta-image' });
+        if (c && !c.startsWith('data:')) {
+          assets.push({
+            url: c,
+            alt: '',
+            naturalWidth: 0,
+            naturalHeight: 0,
+            type: 'image',
+            tagName: 'meta-image',
+            priority: 2
+          });
+        }
       });
       document.querySelectorAll('script[src]').forEach((s) => {
-        if (s.src && !s.src.startsWith('data:')) assets.push({ url: s.src, alt: '', naturalWidth: 0, naturalHeight: 0, type: 'script', tagName: 'script' });
+        if (s.src && !s.src.startsWith('data:')) {
+          assets.push({
+            url: s.src,
+            alt: '',
+            naturalWidth: 0,
+            naturalHeight: 0,
+            type: 'script',
+            tagName: 'script',
+            priority: 1
+          });
+        }
       });
 
       // 4. Downloadable documents & SVG links
       document.querySelectorAll('a[href]').forEach((a) => {
         if (!a.href) return;
         if (/\.(pdf|docx?|xlsx?|pptx?)$/i.test(a.href)) {
-          assets.push({ url: a.href, alt: a.innerText.trim(), naturalWidth: 0, naturalHeight: 0, type: 'document', tagName: 'a-doc' });
+          assets.push({
+            url: a.href,
+            alt: a.innerText.trim(),
+            naturalWidth: 0,
+            naturalHeight: 0,
+            type: 'document',
+            tagName: 'a-doc',
+            priority: 2
+          });
         } else if (/\.svg$/i.test(a.href)) {
-          assets.push({ url: a.href, alt: a.innerText.trim(), naturalWidth: 0, naturalHeight: 0, type: 'image', tagName: 'a-svg' });
+          assets.push({
+            url: a.href,
+            alt: a.innerText.trim(),
+            naturalWidth: 0,
+            naturalHeight: 0,
+            type: 'image',
+            tagName: 'a-svg',
+            priority: 2
+          });
         }
       });
 
@@ -61,7 +145,15 @@ async function extractAssetsFromPageDom(page, pageUrl, baseUrl) {
       document.querySelectorAll('[style*="background"]').forEach((el) => {
         const m = (el.getAttribute('style') || '').match(/url\(['"]?(.*?)['"]?\)/i);
         if (m && m[1] && !m[1].startsWith('data:')) {
-          assets.push({ url: m[1], alt: '', naturalWidth: 0, naturalHeight: 0, type: 'image', tagName: 'bg-style' });
+          assets.push({
+            url: m[1],
+            alt: '',
+            naturalWidth: 0,
+            naturalHeight: 0,
+            type: 'image',
+            tagName: 'bg-style',
+            priority: 2
+          });
         }
       });
 
@@ -123,6 +215,21 @@ async function capturePageArtifacts(browser, pageUrl, slug, pageRelHtmlPath, out
       }
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.waitForTimeout(600);
+
+      // Promote lazy image attributes to real src in DOM for offline persistence
+      await page.evaluate(() => {
+        document.querySelectorAll('img').forEach((img) => {
+          const currentSrc = img.getAttribute('src');
+          const realSrc = img.getAttribute('data-src') ||
+                          img.getAttribute('data-lazy-src') ||
+                          img.getAttribute('data-original') ||
+                          img.getAttribute('nitro-lazy-src') ||
+                          img.currentSrc;
+          if (realSrc && (!currentSrc || currentSrc.startsWith('data:'))) {
+            img.setAttribute('src', realSrc);
+          }
+        });
+      });
     } catch {}
 
     const renderedHtml = await page.content();
