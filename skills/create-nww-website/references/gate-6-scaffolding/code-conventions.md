@@ -2,63 +2,41 @@
 
 This document establishes the architecture, directory structure, coding standards, and file limits for the Next.js App Router codebase built under `site/`.
 
+## Table of Contents
+- [Core Technology Stack & Convention Discovery](#core-technology-stack--convention-discovery)
+- [Scaffolding & Dependency Governance](#scaffolding--dependency-governance)
+- [File Structure & Granular Line Limits](#file-structure--granular-line-limits)
+- [Component Boundaries: Server vs. Client](#component-boundaries-server-vs-client)
+- [Canonical Directory Structure (`site/`)](#canonical-directory-structure-site)
+- [Scoped AGENTS.md Hierarchy](#scoped-agentsmd-hierarchy)
+- [Automated Script Checks & Gate Verification](#automated-script-checks--gate-verification)
+
 ---
 
 ## Core Technology Stack & Convention Discovery
 
-The website stack is centered on Next.js App Router and Tailwind CSS. The programming language (JavaScript or TypeScript), package manager, folder structure, and naming conventions must be **discovered from project files and documentation at run time**, never hard-coded.
+The website stack is centered on Next.js App Router and Tailwind CSS. The programming language (JavaScript or TypeScript), package manager, folder structure, and naming conventions are **discovered from project files and documentation at run time** using the 5-step detection procedure in [runbook.md](runbook.md#3-runtime-convention-discovery-procedure).
 
-### Runtime Convention Discovery Procedure
-Before scaffolding or writing code in `site/`:
-1. **Document Inspection:** Read `project-docs/tech-stack.md` and `project-docs/code-conventions.md` if present.
-2. **Lockfile Detection:** Check project root for:
-   - `pnpm-lock.yaml` -> `pnpm`
-   - `package-lock.json` -> `npm`
-   - `yarn.lock` -> `yarn`
-   - `bun.lockb` / `bun.lock` -> `bun`
-   - *Conflict Guard:* If multiple conflicting lockfiles exist in the root, **HALT and ask the human** to resolve the ambiguity.
-3. **Language Detection:** Check for `tsconfig.json`. If present -> TypeScript (`.ts`, `.tsx`); otherwise -> JavaScript (`.js`, `.jsx`).
-4. **Intake Fallback:** If no existing project files or lockfiles exist, consult intake questionnaire Batch 7 (Q43e) and apply the user's default stack: Next.js App Router, Tailwind CSS, JavaScript, `pnpm`, root `app/`, `@/*`.
-5. **Report Output:** Print a concise Convention Discovery Report before scaffolding:
-   ```
-   --- NWW Convention Discovery Report ---
-   Package Manager: pnpm (detected from pnpm-lock.yaml)
-   Language: JavaScript (no tsconfig.json found; project default applied)
-   App Directory: site/app/ (root app mode)
-   Import Alias: @/*
-   Styling: Tailwind CSS
-   Pre-Launch Guard: Active (noindex + banner enabled)
-   ---------------------------------------
-   ```
+### Discovered Stack Mapping Matrix
+| Property | Discovered From | Supported Options | Default / Fallback |
+| :--- | :--- | :--- | :--- |
+| **Package Manager** | Lockfiles (`pnpm-lock.yaml`, `package-lock.json`, `yarn.lock`, `bun.lockb`) | `pnpm`, `npm`, `yarn`, `bun` | `pnpm` |
+| **Language** | `tsconfig.json` presence | TypeScript (`.ts`, `.tsx`), JavaScript (`.js`, `.jsx`) | JavaScript (`.js`, `.jsx`) |
+| **App Directory** | Root `app/` vs `src/app/` | Root `site/app/` | `site/app/` |
+| **Import Alias** | Root `package.json` or `jsconfig.json` | `@/*` | `@/*` |
+| **Styling** | Confirmed brief | Tailwind CSS (Pure utility classes in JSX) | Tailwind CSS |
 
 ---
 
 ## Scaffolding & Dependency Governance
 
-Scaffold the Next.js application inside `site/` at Stage 6 after Gate 5 page specifications are approved, using verified flags:
+Scaffold the Next.js application inside `site/` at Stage 6 after Gate 5 page specifications are approved, following the verified execution procedure in [runbook.md](runbook.md#4-scaffolding--foundation-execution-protocol).
 
-### 0. GSAP Animation Skills Pre-Load & Motion Tier Guard
-Before running the generator or producing code in `site/`, verify the client's chosen motion tier from `client-context/answers/batch-02-branding-motion/answers.md` against [gsap-animation-tiers.md](gsap-animation-tiers.md):
-- If `motion: disabled`: Do **NOT** load GSAP skills and do **NOT** install `gsap` or `@gsap/react` in `site/package.json`.
-- If `motion: low | medium | high | max | ultra`: Pre-load the approved GSAP animation suite:
-```bash
-DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-core
-DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-scrolltrigger
-DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-performance
-DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-timeline
-```
-
-### 1. Environment Check
-- Verify Node.js availability (`node -v` >= 18.18.0). If Node is missing or package installation fails, stop and report to the user.
-
-### 2. Verified Generator Command
-Execute the official generator with flags matching discovered conventions:
-```bash
-# Example for discovered JavaScript + pnpm stack:
-pnpm create next-app@latest site --js --tailwind --app --eslint --import-alias "@/*" --disable-git --use-pnpm
-```
-- **Mandatory Flag `--disable-git`:** Skips git initialization inside `site/` to prevent creating a nested git repository within the parent workspace.
-- **Dependency Boundary:** No packages may be installed beyond the official generator output and the approved brief. Never silently add packages.
+### Governance Rules:
+1. **Environment Requirement:** Node.js version must satisfy `node -v` >= 18.18.0.
+2. **Mandatory `--disable-git` Flag:** Skips git initialization inside `site/` to prevent creating a nested git repository within the parent workspace.
+3. **Dependency Boundary:** No packages may be installed beyond the official generator output and the approved brief. Never silently add third-party dependencies.
+4. **Motion Dependencies:** Install GSAP packages (`gsap`, `@gsap/react`, `lenis/react`) only when the confirmed motion tier requires them per [gsap-animation-tiers.md](gsap-animation-tiers.md). Never install motion dependencies if `motion: disabled`.
 
 ---
 
@@ -75,11 +53,10 @@ pnpm create next-app@latest site --js --tailwind --app --eslint --import-alias "
 - Zero images, SVGs, or assets may be copied or hotlinked from reference websites.
 
 ### 3. Pre-Launch Guard (`noindex` + Preview Banner)
-- Controlled by `NEXT_PUBLIC_PREVIEW_GUARD="true"` in `site/.env.local` (active by default).
-- Generates `robots: { index: false, follow: false }` metadata in root `app/layout.js` and dynamic `/robots.txt` disallowing all crawlers.
+To protect unlaunched sites from being indexed by search engines or mistaken for live production:
+- Root `app/layout.js` exports `robots: { index: false, follow: false }` and `site/app/robots.js` serves `Disallow: /` when `NEXT_PUBLIC_PREVIEW_GUARD="true"`.
 - Renders `<PreviewBanner />` at the top of the viewport.
-- Writes deactivation reminder to `project-docs/launch-checklist.md`.
-- *Boundary:* Instructs compliant search engines not to index; does not provide user authentication or prevent unauthorized network access.
+- Operational configuration and deactivation checklist items are governed by [runbook.md](runbook.md#6-pre-launch-guard-noindex--preview-banner).
 
 ---
 
@@ -125,28 +102,13 @@ To preserve readability, modularity, and assist AI agent maintenance:
      ```
 3. **Utility, Config & Content Files:**
    - Maximum **500 lines**. Content exceeding 500 lines must be split into section-based objects.
-4. **Repeating Cards & Component Styling (@apply Rule):**
-   - When components repeat across a section or across pages (such as feature cards, service grids, metric counters, team members, or testimonial cards):
-     - Do **NOT** copy-paste lengthy 30-token Tailwind class strings onto every repeated JSX element.
-     - Instead, define the card component class in `site/app/globals.css` using Tailwind's **`@apply`** directive within `@layer components`:
-       ```css
-       @layer components {
-         .feature-card {
-           @apply relative bg-card border border-border/60 rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:border-primary/50 hover:-translate-y-1;
-         }
-         .feature-card-icon {
-           @apply w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4;
-         }
-         .feature-card-title {
-           @apply text-xl font-semibold tracking-tight text-foreground mb-2;
-         }
-         .feature-card-desc {
-           @apply text-sm text-muted-foreground leading-relaxed;
-         }
-       }
-       ```
-     - In your section component (`_components/*.js`), consume the semantic class: `<div className="feature-card">`.
-     - This keeps section components concise and readable, easily respecting the strict **<= 250 line limit**, while maintaining consistency with tokens.
+4. **Tailwind-Only Styling & Repeating Elements:**
+   - All styling in the Next.js `site/` codebase must use **Tailwind CSS utility classes directly in JSX**.
+   - **Prohibited:** Custom CSS files (e.g. `tokens.css`), CSS modules (`*.module.css`), styled-jsx, CSS-in-JS, Sass/Less, and agent-authored CSS rules in `globals.css` (including `@apply` classes).
+   - **Prohibited:** Agent-authored inline style props (`style={{...}}`) in JSX components. (CSS `<style>` blocks and inline styling are permitted ONLY in HTML outputs such as Gate 2 variations and review portals).
+   - **Repeating Components (Cards, Grids, Tiles):**
+     - Rather than creating `@apply` classes in `globals.css` or repeating long class strings manually, extract repeating cards into small, focused React sub-components within the same file or `_components/` (e.g., `function FeatureCard({ title, desc, icon }) { return <div className="relative bg-card border border-border/60 rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:border-primary/50 hover:-translate-y-1">...</div> }`), or map data over clean JSX elements with standard utility classes.
+     - This maintains pure Tailwind utility discipline in JSX, keeps section components modular and readable, and easily respects the strict **<= 250 line limit**.
 
 ---
 
@@ -198,7 +160,7 @@ site/
 │   └── ResponsiveImage.js       # Pre-optimized responsive image component
 ├── lib/
 │   ├── AGENTS.md                # Scoped agent guide for utilities
-│   ├── cms/                     # CMS data access layer (client.js, revalidation.js)
+│   ├── cms/                     # CMS data access layer (copied directly from references/gate-6-scaffolding/cms-kit/)
 │   ├── motion.js                # Exported GSAP & CSS motion tokens
 │   └── utils.js                 # Helper utilities (cn, formatting)
 ├── content/

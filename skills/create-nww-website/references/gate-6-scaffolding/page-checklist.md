@@ -6,12 +6,19 @@ The output is saved to `project-docs/page-checklist.md`. (Do NOT generate `theor
 
 During Stage 7 sub-page builds, per-page QA execution results are logged to `page-specs/<slug>/checklist-state.md` and recorded in `site/build-log.md`. The master checklist file itself remains a clean static template.
 
+## Table of Contents
+- [Taste Verification Pass (Stage 6 Prerequisite)](#taste-verification-pass-stage-6-prerequisite)
+- [Master Checklist Structure (`project-docs/page-checklist.md`)](#master-checklist-structure-project-docspage-checklistmd)
+- [Foundation Shell Checklist](#foundation-shell-checklist)
+- [Per-Page Build Execution Logging (Stage 7)](#per-page-build-execution-logging-stage-7)
+- [Final Production Verification Pass (Stage 8)](#final-production-verification-pass-stage-8)
+
 ---
 
 ## Taste Verification Pass (Stage 6 Prerequisite)
 
 Before compiling the checklist in Stage 6:
-1. **Taste Skill Check:** Verify if `frontend-design` is available per [design-theory.md](../gate-2-design-theory/SKILL.md) or apply built-in taste rules.
+1. **Taste Skill Check:** Verify if `frontend-design` is available per [runbook.md](../gate-2-design-theory/runbook.md) or apply built-in taste rules.
 2. **In-Place Quality Adjustments:** Cross-examine design theory and page specifications against taste standards:
    - Identify generic defaults (warm-cream defaults, unearned fade-and-slide-up animations across multiple sections).
    - Revise theories and specs directly in-place to ensure distinctive styling justified by client references.
@@ -63,7 +70,7 @@ Before compiling the checklist in Stage 6:
   - [ ] Meta description <= 155 characters with CTA.
   - [ ] Canonical URL is absolute and self-referencing.
   - [ ] Exactly ONE `<h1>` on the page; headings follow strict H1 -> H2 -> H3 nesting.
-  - [ ] JSON-LD schema injected via `<script type="application/ld+json">`.
+  - [ ] JSON-LD schema injected via `<Schema schema={...} />` (`@/components/seo/Schema`).
   - [ ] OG image configured (1200x630).
 - [ ] **Accessibility (WCAG AA):**
   - [ ] All text meets 4.5:1 contrast against its background (3:1 for large text).
@@ -116,12 +123,3 @@ When building page `<slug>` in Stage 7:
 3. If an item fails, fix the code immediately and record what was changed.
 4. Present `checklist-state.md` to the user at **Gate 7b (Binary QA Sign-Off)**.
 5. Append final verification summary to `site/build-log.md`.
-
----
-
-## Stage 6 QA Integration Checklist
-
-- [ ] Master checklist template authored at `project-docs/page-checklist.md`.
-- [ ] Per-page checks include binary pass/fail criteria for structure, taste, SEO, motion, and assets.
-- [ ] In-place revisions verified (zero `theory-revisions.md` or unneeded markdown files generated).
-- [ ] User approves checklist criteria alongside Stage 6 Foundation and Landing Page showcase.

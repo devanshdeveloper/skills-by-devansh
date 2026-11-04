@@ -4,6 +4,14 @@
 **Stage:** Stage 0 Intake Check (Gate 0)  
 **Deliverable:** Recorded into `client-context/answers/batch-04-asset-harvesting-generation/answers.md` and `client-context/asset-manifest.md`  
 
+## Table of Contents
+- [1. Overview & Multi-Source Asset Audit Protocol](#1-overview--multi-source-asset-audit-protocol)
+- [2. Part A: Previous Website Asset Harvesting](#2-part-a-previous-website-asset-harvesting)
+- [3. Part B: Per-Entity Asset Collection](#3-part-b-per-entity-asset-collection)
+- [4. Part C: Imagery Strategy & Generation Discipline](#4-part-c-imagery-strategy--generation-discipline)
+- [5. Asset Manifest Output Specification](#5-asset-manifest-output-specification)
+- [6. Confirmation Stage 0.4](#6-confirmation-stage-04)
+
 ---
 
 ## 1. Overview & Multi-Source Asset Audit Protocol

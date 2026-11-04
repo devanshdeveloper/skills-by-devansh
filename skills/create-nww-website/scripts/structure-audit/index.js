@@ -52,6 +52,7 @@ function auditProjectDocs() {
     { stage: 6, name: 'Site Environment Template', file: 'site/.env.example', min: 10, optional: true },
     { stage: 6, name: 'Site Manifest', file: 'site/site.manifest.json', min: 50, optional: true },
     { stage: 6, name: 'Page Build Checklist', file: 'project-docs/page-checklist.md', min: 100 },
+    { stage: 8, name: 'Additional Features Manifest', file: ['project-docs/client-review/gate-8-additional-features/features-manifest.md'], min: 50, optional: true },
     { stage: 'Router', name: 'Pipeline Router State', file: 'project-docs/router-state.md', min: 100 }
   ];
 
@@ -183,11 +184,19 @@ ${codeSection}
 - **Next Actions:** Refer to \`project-docs/router-state.md\` for current gate approval requirements.
 `;
 
+  const gate9Dir = path.join(projectRoot, 'project-docs', 'client-review', 'gate-9-final-verification');
+  fs.mkdirSync(gate9Dir, { recursive: true });
+  const gate9AuditPath = path.join(gate9Dir, 'structure-audit.md');
+  fs.writeFileSync(gate9AuditPath, auditContent, 'utf-8');
+  console.log(`✓ Audit report written to: ${path.relative(projectRoot, gate9AuditPath)}`);
+
+  // Backward compatibility: also sync to legacy gate-8 directory if present
   const gate8Dir = path.join(projectRoot, 'project-docs', 'client-review', 'gate-8-final-verification');
-  fs.mkdirSync(gate8Dir, { recursive: true });
-  const gate8AuditPath = path.join(gate8Dir, 'structure-audit.md');
-  fs.writeFileSync(gate8AuditPath, auditContent, 'utf-8');
-  console.log(`✓ Audit report written to: ${path.relative(projectRoot, gate8AuditPath)}`);
+  if (fs.existsSync(gate8Dir)) {
+    const gate8AuditPath = path.join(gate8Dir, 'structure-audit.md');
+    fs.writeFileSync(gate8AuditPath, auditContent, 'utf-8');
+    console.log(`✓ Audit report legacy copy written to: ${path.relative(projectRoot, gate8AuditPath)}`);
+  }
 
   const auditPath = path.join(projDocs, 'structure-audit.md');
   fs.writeFileSync(auditPath, auditContent, 'utf-8');

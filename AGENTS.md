@@ -46,6 +46,7 @@ Execute only verbatim commands matching what exists in this repository:
 - **Report before implementing**: Present findings, risks, and proposed file lists; wait for confirmation before altering files.
 - **Keep changes scoped**: Modify only files directly requested. Never modify files in `context/`.
 - **Do not edit skill files during project tasks**: Skill files are immutable runbooks. Never edit skill files during project tasks or workflow runs; instead, request changes with a prompt.
+- **Gate containment invariant**: Zero loose markdown files outside gates. Every reference file in `skills/<skill>/references/` and every deliverable under `project-docs/client-review/` must reside strictly inside its designated gate directory (`gate-0-intake/` through `gate-9-final-verification/`). Loose markdown files outside gates are strictly prohibited.
 
 ## Editing Rules (Non-Negotiable)
 - Use ONLY IDE editor tools (`write_to_file`, `replace_file_content`, `multi_replace_file_content`).
@@ -57,6 +58,7 @@ Execute only verbatim commands matching what exists in this repository:
 - Running destructive commands: `rm -rf`, `git reset --hard`, `git clean`, `git push --force`.
 - Touching git-ignored authoring scratch notes in `context/`.
 - Editing skill files directly instead of requesting changes with a prompt.
+- Creating loose markdown files directly under `references/` or outside designated gate directories.
 
 ## Verification Definition
 Never declare success without concrete evidence:

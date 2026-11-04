@@ -2,6 +2,16 @@
 
 This reference specifies the 6-tier motion architecture for client websites built with `create-nww-website` and `nww`. It defines rules for conditional skill loading, Next.js App Router dependency isolation, and provides production-ready code examples for high, max, and ultra creative tiers.
 
+## Table of Contents
+- [1. The 6-Tier Motion Matrix](#1-the-6-tier-motion-matrix)
+- [2. Next.js App Router Architecture Rules](#2-nextjs-app-router-architecture-rules)
+- [3. Tier 0: `disabled` Guidelines](#3-tier-0-disabled-guidelines)
+- [4. Tier 1 (`low`) & Tier 2 (`medium`) Guidelines](#4-tier-1-low--tier-2-medium-guidelines)
+- [5. Tier 3: `high` (Awwwards Marketing Tier)](#5-tier-3-high-awwwards-marketing-tier)
+- [6. Tier 4: `max` (Immersive Narrative & 3D Physics Tier)](#6-tier-4-max-immersive-narrative--3d-physics-tier)
+- [7. Tier 5: `ultra` (Awwwards SOTD / Experiential WebGL Tier)](#7-tier-5-ultra-awwwards-sotd--experiential-webgl-tier)
+- [8. Verification & Performance Checklist](#8-verification--performance-checklist)
+
 ---
 
 ## 1. The 6-Tier Motion Matrix
@@ -151,6 +161,7 @@ When the client chooses `disabled`:
 'use client';
 
 import { useRef } from 'react';
+import Image from 'next/image';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -213,9 +224,12 @@ export default function HorizontalShowcase({ projects }) {
             className="w-[80vw] md:w-[45vw] lg:w-[35vw] flex-shrink-0 rounded-2xl bg-neutral-900 border border-neutral-800 p-6 flex flex-col justify-between"
           >
             <div className="relative aspect-video overflow-hidden rounded-xl bg-neutral-800">
-              <div
-                className="panel-image absolute inset-0 bg-cover bg-center will-change-transform"
-                style={{ backgroundImage: `url(${proj.image})` }}
+              <Image
+                src={proj.image}
+                alt={proj.title}
+                fill
+                sizes="(max-width: 768px) 80vw, 45vw"
+                className="panel-image object-cover object-center will-change-transform"
               />
             </div>
             <div className="mt-6">
@@ -399,6 +413,7 @@ export default function StackingCardSection({ cards }) {
       const cardElements = gsap.utils.toArray('.stack-card');
 
       cardElements.forEach((card, i) => {
+        gsap.set(card, { zIndex: i + 10 });
         if (i === cardElements.length - 1) return; // Last card stays visible
 
         ScrollTrigger.create({
@@ -430,7 +445,6 @@ export default function StackingCardSection({ cards }) {
         <div
           key={idx}
           className="stack-card mb-12 h-[75vh] w-full rounded-3xl border border-neutral-700 bg-neutral-900/90 backdrop-blur-xl p-10 flex flex-col justify-between shadow-2xl will-change-transform"
-          style={{ zIndex: idx + 10 }}
         >
           <div className="flex justify-between items-start">
             <span className="font-mono text-sm text-emerald-400">0{idx + 1} / Phase</span>

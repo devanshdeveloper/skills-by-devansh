@@ -1,5 +1,11 @@
 # Batch 08: Rolling Discovery & Refinement Open Questions (20 Unanswered Questions Batch)
 
+## Table of Contents
+- [Focus & Scope](#focus--scope)
+- [Strict Guardrail: Zero Already-Answered Questions](#strict-guardrail-zero-already-answered-questions)
+- [Client Notification & On-Demand Email Dispatch](#client-notification--on-demand-email-dispatch)
+- [Rolling Refinement & Codebase Action Loop](#rolling-refinement--codebase-action-loop)
+
 ## Focus & Scope
 
 This questionnaire batch organizes the **20 rolling open questions** into a single, comprehensive batch for the client. It is initialized at Gate 0 takeoff and serves as a continuous, asynchronous discovery queue throughout the entire project lifecycle.

@@ -4,6 +4,11 @@ Stage 3 builds the complete sitemap, route hierarchy, and navigation structure. 
 
 Do NOT generate `page-design-notes.md`. Do not create any additional markdown files.
 
+## Table of Contents
+- [Deliverable Structure (`project-docs/client-review/gate-3-page-list/page-list.md`)](#deliverable-structure-project-docsclient-reviewgate-3-page-listpage-listmd)
+- [Tracking and Preservation Rules](#tracking-and-preservation-rules)
+- [Gate 3 Review Checklist](#gate-3-review-checklist)
+
 ---
 
 ## Deliverable Structure (`project-docs/client-review/gate-3-page-list/page-list.md`)
@@ -129,5 +134,6 @@ Before presenting to the user for Gate 3 sign-off:
 - [ ] Every core, secondary, dynamic, utility, and compliance page is cataloged.
 - [ ] Routes follow Next.js App Router kebab-case conventions.
 - [ ] Dynamic pages specify data source (`cms` or `site/data`) and expected entry count.
+- [ ] **Gate 3 Halt:** Present `page-list.md`; await sitemap approval before Stage 4.
 - [ ] User approves `project-docs/client-review/gate-3-page-list/page-list.md` before initiating Stage 4 (SEO Strategy).
 - [ ] Zero unstated markdown files were generated (no `page-design-notes.md`).

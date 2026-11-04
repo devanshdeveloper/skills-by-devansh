@@ -23,7 +23,7 @@ All NWW client websites strictly follow this standard modern stack:
 |---|---|---|
 | **Framework** | Next.js App Router (React 19) | Server Components by default; `'use client'` only for interactive islands |
 | **Language** | Modern JavaScript (`.js`, `.jsx`) | Strict ES modules, standard syntax, zero compile bloat |
-| **Styling** | Tailwind CSS v3 | Configured with design tokens (`globals.css` + CSS variables) |
+| **Styling** | Tailwind CSS | Pure utility classes in JSX; zero custom CSS stylesheets or `@apply` classes |
 | **Package Manager** | `pnpm` (strictly enforced) | Zero `npm` or `yarn` lockfiles permitted |
 | **Icons** | Lucide React | Feathered, modern SVG icons with tree-shaking |
 | **Motion** | GSAP 3 + `@gsap/react` | Configured according to confirmed motion tier (or omitted if `disabled`) |
@@ -67,8 +67,12 @@ Before requesting Gate 1 sign-off:
 
 1. Present `tech-stack.md` to the internal lead developer or stakeholder.
 2. Confirm framework versions, deployment target (Vercel), and motion tier.
-3. Halt execution until explicit approval is granted.
-4. Update `project-docs/router-state.md` upon approval.
+3. Validate against binary criteria:
+   - [ ] Stack parameters match client brief and project defaults.
+   - [ ] Motion tier correctly aligns with client preference.
+   - [ ] Tailwind utility class constraint in JSX is locked.
+4. **Gate 1 Halt:** Present `tech-stack.md`; await developer sign-off before Stage 2.
+5. Update `project-docs/router-state.md` upon explicit approval.
 
 ---
 

@@ -4,6 +4,11 @@
 **Stage:** Stage 0 Intake Check (Gate 0)  
 **Deliverable:** Recorded into `client-context/answers/batch-01-core-identity/answers.md`  
 
+## Table of Contents
+- [1. Input Sources & Ingestion Protocol](#1-input-sources--ingestion-protocol)
+- [2. Questions](#2-questions)
+- [3. Confirmation Stage 0.1](#3-confirmation-stage-01)
+
 ---
 
 ## 1. Input Sources & Ingestion Protocol

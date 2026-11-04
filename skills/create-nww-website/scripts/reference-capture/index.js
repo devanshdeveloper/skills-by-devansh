@@ -23,7 +23,7 @@ const { capturePageArtifacts } = require('../site-fetch/lib/capture');
 function parseReferencesFromBrief(answersPath) {
   if (!fs.existsSync(answersPath)) return [];
   const text = fs.readFileSync(answersPath, 'utf-8');
-  const q12Match = text.match(/Liked References \(Q12\):([\s\S]*?)(?:##|- \*\*Disliked|\n\n##)/i);
+  const q12Match = text.match(/(?:Liked References \(Q12\)|Liked References & Principles)[:\*]*([\s\S]*?)(?:##|- \*\*Disliked|\n\n##|- \*\*Reference Anti-Patterns)/i);
   if (!q12Match) return [];
 
   const refs = [];
@@ -36,7 +36,7 @@ function parseReferencesFromBrief(answersPath) {
     const domain = u.hostname.replace(/^www\./i, '').toLowerCase();
     const cleanUrl = `${u.protocol}//${u.hostname}${u.pathname}`;
 
-    const nameMatch = line.match(/\d+\.\s*([^:]+):/i);
+    const nameMatch = line.match(/\d+\.\s*([^:\(—\-]+)/i);
     const name = nameMatch ? nameMatch[1].trim() : domain;
 
     refs.push({ name, requestedUrl: rawUrl, cleanUrl, domain });

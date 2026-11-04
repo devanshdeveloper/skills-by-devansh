@@ -4,6 +4,11 @@
 **Stage:** Stage 0 Intake Check (Gate 0)  
 **Deliverable:** Recorded into `client-context/answers/batch-02-branding-motion/answers.md`  
 
+## Table of Contents
+- [1. Input Sources & Ingestion Protocol](#1-input-sources--ingestion-protocol)
+- [2. Questions](#2-questions)
+- [3. Confirmation Stage 0.2](#3-confirmation-stage-02)
+
 ---
 
 ## 1. Input Sources & Ingestion Protocol
@@ -106,7 +111,7 @@ Before presenting this batch, inspect existing inputs:
 - **Allowed Options:** `disabled`, `low`, `medium`, `high`, `max`, `ultra`
 - **Required:** Yes
 - **Default:** `medium`
-- **Downstream Consumers:** Stage 1 Tech Stack dependencies, Stage 2 Gate 2 variation scripts, Stage 6 `lib/motion.js`, [gsap-animation-tiers.md](../gate-6-scaffolding/gsap-animation-tiers.md)
+- **Downstream Consumers:** Stage 1 Tech Stack dependencies, Stage 2 Gate 2 variation scripts, Stage 6 `lib/motion.js`, [gsap-animation-tiers.md](../../gate-6-scaffolding/gsap-animation-tiers.md)
 
 ---
 

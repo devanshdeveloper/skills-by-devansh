@@ -1,5 +1,15 @@
 # Codebase Scaffolding, Foundation Build & Landing Page Showcase (Stage 6)
 
+## Table of Contents
+- [1. Role & Responsibilities](#1-role--responsibilities)
+- [2. Location & Containment Boundary](#2-location--containment-boundary)
+- [3. Runtime Convention Discovery Procedure](#3-runtime-convention-discovery-procedure)
+- [4. Scaffolding & Foundation Execution Protocol](#4-scaffolding--foundation-execution-protocol)
+- [5. Output Mapping from Stage 5 page.md](#5-output-mapping-from-stage-5-pagemd)
+- [6. Pre-Launch Guard (noindex + Preview Banner)](#6-pre-launch-guard-noindex--preview-banner)
+- [7. Full Landing Page Construction for Client Showcase](#7-full-landing-page-construction-for-client-showcase)
+- [8. Scaffolding Verification & Gate 6 Sign-Off](#8-scaffolding-verification--gate-6-sign-off)
+
 Stage 6 initializes the Next.js App Router application in `site/`, generates the master QA checklist, builds the production foundation shell, scaffolds all application routes from approved Stage 5 `page.md` specifications, and **fully constructs the Landing Page (`site/app/page.js` + `_components/`) for client showcase**.
 
 ---
@@ -7,28 +17,15 @@ Stage 6 initializes the Next.js App Router application in `site/`, generates the
 ## 1. Role & Responsibilities
 
 Stage 6 is the foundational engineering and initial showcase stage:
-1. **CMS Blocking Guard:** Verify zero unresolved items exist in `project-docs/client-review/gate-5-cms-requirements/list.md`. If any CMS requirements remain incomplete, **HALT EXECUTION** and do not proceed to scaffolding.
-2. **Pre-scaffolding GSAP Standards:** Pre-loads approved GSAP animation skills.
-3. **Master QA Checklist Generation:** Emits `project-docs/page-checklist.md` defining binary pass/fail acceptance criteria (revisions are applied in-place; do NOT generate `theory-revisions.md`).
-4. **Codebase Initialization & File Size Discipline:** Scaffolds Next.js App Router in `site/` with verified conventions without nested git tracking. Any generated file must not limit the file size of the scaffolding site; code should be as small as possible while preserving all features of the page.
-5. **Site Env Template:** Generates `site/.env.example` with all variables needed by the Next.js site.
-6. **Production Foundation Shell:**
-   - Injects design tokens into `site/app/globals.css` and `site/styles/tokens.css`.
-   - Assembles global shell: `Nav.js`, `Footer.js`, root layout `site/app/layout.js`, and `site/components/ResponsiveImage.js`.
-   - Exports dual GSAP & CSS motion tokens to `site/lib/motion.js`.
-   - Runs the asset optimizer (`scripts/assets-optimizer/index.js`), outputting WebP variants to `site/public/assets/` and writing `site/assets-optimize.config.md`.
-   - Adds 3 check scripts (`check-structure.mjs`, `check-assets.mjs`, `make-placeholders.mjs`) and wires `pnpm check:all`.
-   - Scaffolds `site/AGENTS.md` and 4 scoped AGENTS.md files (`app/`, `components/`, `lib/`, `content/`).
-   - Wires CMS data access layer (`site/lib/cms/`) if `cms: cms`.
-   - Generates `/credits` page (`site/app/credits/page.js`) if stock imagery was sourced.
-7. **Route & Component Scaffolding:** Scaffolds all App Router routes and section components with `// section: <id>` and `data-section="<id>"` markers, decoupling content into `site/content/`, and emitting `site/site.manifest.json`.
-8. **Full Landing Page Construction for Client Showcase:**
-   - Implements thin `site/app/page.js` (<= 80 lines).
-   - Fully codes and styles all home section components in `site/app/_components/` (<= 250 lines).
-   - Wires authentic verbatim copy from `site/content/home.js`.
-   - Connects optimized media assets via `ResponsiveImage.js`.
-   - Applies tasteful, subtle GSAP motion wrapped in `useGSAP` with container scopes and unmount cleanup.
-9. **Gate 6 Client Showcase:** Presents the fully functional, interactive Landing Page to the client along with passing build diagnostics (`pnpm build`).
+1. **CMS Blocking Guard:** Verify that all 28 questions in `project-docs/client-review/gate-5-cms-requirements/open-questions.md` are resolved in `cms-implementation-rules.md`.
+2. **Pre-scaffolding GSAP Standards:** Pre-load approved GSAP animation skills per [gsap-animation-tiers.md](gsap-animation-tiers.md).
+3. **Master QA Checklist:** Emit `project-docs/page-checklist.md` per [page-checklist.md](page-checklist.md).
+4. **Codebase Scaffolding & Env:** Initialize `site/` with verified conventions without nested git tracking and generate `site/.env.example`.
+5. **Production Foundation Shell:** Inject theme tokens into `site/app/globals.css`, assemble global shell (`Nav.js`, `Footer.js`, root `layout.js`, `ResponsiveImage.js`), and export motion tokens to `site/lib/motion.js`.
+6. **Asset Optimization & Scoped Agents:** Run asset optimizer per [asset-optimization.md](asset-optimization.md), generate scoped AGENTS.md files, and wire verification check scripts per [code-conventions.md](code-conventions.md).
+7. **Conditional Integrations:** Wire CMS client layer (`site/lib/cms/`) from `references/gate-6-scaffolding/cms-kit/`, blog routes per [cms-kit.md](cms-kit.md), and `/credits` page if stock imagery was sourced.
+8. **Route Scaffolding & Landing Showcase:** Scaffold all App Router routes from Stage 5 `page.md` specs and construct the fully functional Landing Page (`site/app/page.js` + `_components/`) for client showcase.
+9. **Gate 6 Sign-Off:** Verify production build (`pnpm build`) and present the live showcase for client approval.
 
 ---
 
@@ -37,6 +34,7 @@ Stage 6 is the foundational engineering and initial showcase stage:
 - **Target Folder:** `site/` strictly at the project root.
 - **Safety Precondition:** If `site/` already exists and is not empty, **HALT EXECUTION IMMEDIATELY** and ask the user how to proceed. Never overwrite or re-initialize an existing codebase.
 - **Containment Scope:** All codebase writes are confined exclusively to `site/`. Planning docs update `project-docs/page-checklist.md`, `project-docs/router-state.md`, and `project-docs/launch-checklist.md`.
+- **Gate Containment Invariant:** Zero loose markdown files outside gates. All planning deliverables under `project-docs/client-review/` and all skill reference documents must strictly live inside their designated gate folders (`gate-0-intake/` through `gate-9-final-verification/`). Creating loose markdown files directly under `references/` or loose in `project-docs/` is strictly prohibited.
 
 ---
 
@@ -69,7 +67,7 @@ Before scaffolding or generating code in `site/`:
 ## 4. Scaffolding & Foundation Execution Protocol
 
 ### Step 0: Motion Tier Check & Skills Pre-Load
-Before scaffolding or writing code in `site/`, verify that zero unresolved items exist in `project-docs/client-review/gate-5-cms-requirements/list.md`. Check the client's selected animation tier from `client-context/answers/batch-02-branding-motion/answers.md` against [gsap-animation-tiers.md](gsap-animation-tiers.md):
+Before scaffolding or writing code in `site/`, verify that all questions in `project-docs/client-review/gate-5-cms-requirements/open-questions.md` are resolved in `cms-implementation-rules.md`. Check the client's selected animation tier from `client-context/answers/batch-02-branding-motion/answers.md` against [gsap-animation-tiers.md](gsap-animation-tiers.md):
 
 - **If `motion: disabled`:**
   - Do **NOT** execute the skill load commands.
@@ -116,6 +114,7 @@ pnpm create next-app@latest site --js --tailwind --app --eslint --import-alias "
 - **File Size & Token Efficiency:** Generated files in `site/` must be as small as possible without limiting the features or functionality of the page.
 - **Site Environment Template:** Create `site/.env.example` documenting all required variables:
   ```env
+  SITE_NAME="Your Brand Name"
   SERVER_URL="https://cms.example.com"
   CMS_SITE_KEY="your-cms-site-key"
   REVALIDATE_SECRET="your-revalidate-secret"
@@ -129,31 +128,29 @@ Generate the master QA acceptance checklist before building pages:
 - **In-Place Revisions Rule:** Do NOT generate `project-docs/theory-revisions.md`. When revisions are requested, edit existing deliverable files in-place. If requirement notes are needed, place them in `client-requirements/`.
 
 ### Step 3: Wire Design Tokens & Foundation Shell
-- Extract semantic tokens from `project-docs/client-review/gate-2-design-theory/design-theory.md` (colors, typography scale, container widths, radii) and wire them into `site/app/globals.css` and `site/styles/tokens.css`.
-- **Repeating Card Component Styling (@apply Rule):** When porting repeating card designs (feature grids, metrics, testimonials) from Gate 2 HTML variations, define component classes in `site/app/globals.css` using Tailwind's **`@apply`** directive within `@layer components` (e.g. `.feature-card { @apply bg-card border border-border rounded-2xl p-6 transition-all; }`). This keeps JSX section components clean and within the <=250 line limit.
+- Extract semantic tokens from `project-docs/client-review/gate-2-design-theory/design-theory.md` (colors, typography scale, container widths, radii) and wire theme variables into `site/app/globals.css`.
+- **Tailwind-Only Styling Rule:** All styling across `site/` strictly uses pure **Tailwind utility classes directly in JSX**; extract repeating elements into small React sub-components per [code-conventions.md](code-conventions.md#strict-file--line-limits).
 - Export motion tokens into `site/lib/motion.js`: if `motion: disabled`, export pure CSS/Tailwind transitions; if motion is active, export dual GSAP easing equations and CSS transitions per [gsap-animation-tiers.md](gsap-animation-tiers.md).
 - Promote shared navigation header (`Nav.js`) and footer (`Footer.js`) to `site/components/`.
-- Install `site/components/ResponsiveImage.js` for zero-CLS server-rendered image loading with LQIP blur placeholders.
+- Install `site/components/ResponsiveImage.js` for zero-CLS server-rendered image loading with LQIP blur placeholders per [asset-optimization.md](asset-optimization.md).
+- Install `site/components/seo/Schema.js` for safe, XSS-escaped Schema.org JSON-LD structured data injection across pages.
 - Wire `Nav` and `Footer` into root layout `site/app/layout.js`.
 
 ### Step 4: Asset Optimization, Scoped AGENTS.md & Check Scripts
-- Run the asset optimizer from `assets-source/` to `site/public/assets/`, writing configuration to `site/assets-optimize.config.md`:
+- Run the asset optimizer from `assets-source/` to `site/public/assets/`, writing configuration to `site/assets-optimize.config.md` per [asset-optimization.md](asset-optimization.md):
   ```bash
   node skills/create-nww-website/scripts/assets-optimizer/index.js --input ../assets-source --output public/assets --image-format webp --quality 75 --max-size 61440 --strict-max-size 102400 --concurrency 4 --responsive --manifest-dir public/assets
   ```
-- Scaffold `site/AGENTS.md` (<=150 lines) and 4 scoped AGENTS.md files: `site/app/AGENTS.md`, `site/components/AGENTS.md`, `site/lib/AGENTS.md`, and `site/content/AGENTS.md`.
-- Create check scripts in `site/scripts/`: `check-structure.mjs`, `check-assets.mjs`, `make-placeholders.mjs`. Wire into `site/package.json`:
-  ```json
-  "scripts": {
-    "check:structure": "node scripts/check-structure.mjs",
-    "check:assets": "node scripts/check-assets.mjs",
-    "check:all": "pnpm check:structure && pnpm check:assets && pnpm lint && pnpm build"
-  }
-  ```
+- Scaffold `site/AGENTS.md` (<=150 lines) and 4 scoped AGENTS.md files (`app/`, `components/`, `lib/`, `content/`) per [code-conventions.md](code-conventions.md#scoped-agentsmd-hierarchy).
+- Create verification scripts in `site/scripts/` (`check-structure.mjs`, `check-assets.mjs`, `make-placeholders.mjs`) and wire into `site/package.json` scripts (`check:structure`, `check:assets`, `check:all`) per [code-conventions.md](code-conventions.md#automated-verification-scripts--package-commands).
 
 ### Step 5: CMS Client Layer & Stock Credits (Conditional)
-- If `cms: cms`: Wire data access layer in `site/lib/cms/` (`revalidation.js`, `blog.js`, `forms.js`) and on-demand ISR route `POST /api/revalidate`.
-- If stock imagery was sourced: Generate `site/app/credits/page.js` from `project-docs/stock-provenance.json`, link in `Footer.js`, and ensure Unsplash images carry `referrerPolicy="no-referrer-when-downgrade"`.
+- **If `cms: cms`:**
+  1. Copy the class-based library directory `skills/create-nww-website/references/gate-6-scaffolding/cms-kit/` directly into `site/lib/cms/`.
+  2. Implement the on-demand ISR webhook route handler in `site/app/api/revalidate/route.js` per [../cms/rulebook.md](../cms/rulebook.md#4-the-on-demand-isr-webhook-apirevalidate).
+  3. Wire dynamic blog routes (`site/app/blog/page.js` and `site/app/blog/[slug]/page.js`) using the class-based kit (`Blog.readOne`, `Blog.paginate`, `Blog.generateMetadata`, `Blog.generateJSONLD`) per [../gate-6-scaffolding/cms-kit.md](cms-kit.md).
+  4. For any other active dynamic modules (Services, Projects/Portfolio, Testimonials, FAQs, Features, Case Studies, Policies), import data access helpers from `@/lib/cms` following the Verified Route Catalog in [../cms/rulebook.md](../cms/rulebook.md#6-verified-multi-module-route-catalog-websitemodules).
+- **If stock imagery was sourced:** Generate `site/app/credits/page.js` from `project-docs/stock-provenance.json`, link in `Footer.js`, and ensure Unsplash images carry `referrerPolicy="no-referrer-when-downgrade"`.
 
 ---
 
@@ -200,57 +197,7 @@ To protect unlaunched sites from being indexed by search engines or mistaken for
 
 ---
 
-## 7. Site Manifest Specification (`site/site.manifest.json`)
-
-Stage 6 emits a compact machine-readable manifest at the root of `site/`:
-
-```json
-{
-  "$schema": "https://agentskills.io/schemas/site-manifest-v1.json",
-  "generator": "create-nww-website",
-  "mode": "scaffolded",
-  "generatedAt": "2026-10-23T12:00:00Z",
-  "sourceVariation": "Variation 1: The Modernist Architect",
-  "sourcePageSpecs": "page-specs/<slug>/page.md",
-  "conventions": {
-    "packageManager": "pnpm",
-    "language": "javascript",
-    "appDir": "site/app",
-    "importAlias": "@/*",
-    "tokensFile": "site/app/globals.css"
-  },
-  "preLaunchGuard": {
-    "enabled": true,
-    "envVar": "NEXT_PUBLIC_PREVIEW_GUARD",
-    "checklist": "project-docs/launch-checklist.md"
-  },
-  "pages": [
-    {
-      "slug": "home",
-      "route": "/",
-      "status": "fully_built",
-      "pageSpec": "page-specs/home/page.md",
-      "pageFile": "site/app/page.js",
-      "contentFile": "site/content/home.js",
-      "sections": [
-        {
-          "id": "home-s1-hero",
-          "name": "Hero",
-          "componentFile": "site/app/_components/HeroSection.js",
-          "contentKey": "hero",
-          "marker": "data-section=\"home-s1-hero\""
-        }
-      ]
-    }
-  ]
-}
-```
-
-*Token Savings:* Downstream stages read this manifest (~50 lines) to locate exact files, avoiding recursive file tree scanning and saving up to 80% input tokens.
-
----
-
-## 8. Full Landing Page Construction for Client Showcase
+## 7. Full Landing Page Construction for Client Showcase
 
 Stage 6 does not stop at structural scaffolding; it immediately builds out the **Landing Page (Home route: `site/app/page.js`) as the flagship interactive showcase**:
 1. **Thin Home Page Server Component:** `site/app/page.js` (<= 80 lines) exports metadata and renders Home section components in blueprint order.
@@ -261,7 +208,7 @@ Stage 6 does not stop at structural scaffolding; it immediately builds out the *
 
 ---
 
-## 9. Scaffolding Verification & Gate 6 Sign-Off
+## 8. Scaffolding Verification & Gate 6 Sign-Off
 
 ### Automated Consistency Audit
 Run companion script `scripts/client-review/verify-nextjs.mjs`:
@@ -282,7 +229,7 @@ pnpm build
 Build must compile with zero errors.
 
 ### Gate 6 Review Checklist
-- [ ] Precondition satisfied: Zero unresolved CMS requirements in `gate-5-cms-requirements/list.md`.
+- [ ] Precondition satisfied: Zero unresolved CMS questions; all codified in `gate-5-cms-requirements/cms-implementation-rules.md`.
 - [ ] Approved GSAP animation skills pre-loaded (or skipped if `motion: disabled`).
 - [ ] Next.js App Router codebase initialized in `site/` without nested git repo.
 - [ ] `site/.env.example` generated.
@@ -292,10 +239,12 @@ Build must compile with zero errors.
 - [ ] Asset optimizer executed; `assets-optimize.config.md` persisted.
 - [ ] Scoped AGENTS.md files and check scripts operational (`pnpm check:all` passes).
 - [ ] Route structure matches all pages in `page-list.md`.
+- [ ] Blog routes (if CMS active) implement static guarantees and Core Web Vitals per [../cms/blog.md](../cms/blog.md).
 - [ ] **Landing Page (`site/app/page.js` + `_components/`) fully constructed, styled, animated, and showcase-ready.**
 - [ ] Pre-launch guard enabled in `site/.env.local` and root layout.
 - [ ] `site/site.manifest.json` emitted and validated via `verify-nextjs.mjs`.
 - [ ] `pnpm build` compiles cleanly with zero errors.
+- [ ] **Gate 6 Halt:** Present live Landing Page showcase; await scaffolding & showcase approval before Stage 7.
 - [ ] `project-docs/router-state.md` updated to `Gate 6: Scaffolding, Foundation & Landing Page Approved`.
 
 ### Gate 6 Presentation & Downstream Handover

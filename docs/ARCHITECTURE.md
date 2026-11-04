@@ -28,7 +28,8 @@ skills-by-devansh/
 │   │   │   ├── gate-5-page-specs/      # Stage 5: runbook.md, cms-architecture.md, stock-image-sourcing.md, cms/
 │   │   │   ├── gate-6-scaffolding/     # Stage 6: runbook.md, gsap-animation-tiers.md, code-conventions.md, asset-optimization.md, page-checklist.md
 │   │   │   ├── gate-7-sub-pages/       # Stage 7: runbook.md
-│   │   │   └── gate-8-final-verification/ # Stage 8: runbook.md
+│   │   │   ├── gate-8-additional-features/ # Stage 8: rulebook.md, site/features/nww-analytics/
+│   │   │   └── gate-9-final-verification/  # Stage 9: runbook.md
 │   │   └── scripts/                    # Embedded CLI helper tools
 │   │       ├── assets-optimizer/       # Sharp/ffmpeg image/video pipeline
 │   │       ├── stock-fetch/            # Stock image provenance & fetch
@@ -105,8 +106,10 @@ When an agent executes the `create-nww-website` or `nww` pipeline to develop a w
 │       ├── gate-5-cms-requirements/      # [If CMS Enabled] Blocking checklist (list.md) & read-only query (prompt.md)
 │       ├── gate-5-cms-schema/            # [If CMS Enabled] Collection schemas & models (cms-schema.md)
 │       ├── gate-5-cms-content/           # [If CMS Enabled] Authentic JSON seed content
-│       └── gate-8-final-verification/
-│           └── structure-audit.md        # Stage 8 deliverables compliance & code limits audit
+│       ├── gate-8-additional-features/
+│       │   └── features-manifest.md      # Stage 8 modular feature integrations manifest
+│       └── gate-9-final-verification/
+│           └── structure-audit.md        # Stage 9 deliverables compliance & code limits audit
 └── site/                                 # Production Next.js App Router codebase
     ├── .env.example                      # Site environment template (Next.js variables, CMS API tokens)
     ├── package.json                      # Next.js App Router, Tailwind CSS, Lucide icons, GSAP

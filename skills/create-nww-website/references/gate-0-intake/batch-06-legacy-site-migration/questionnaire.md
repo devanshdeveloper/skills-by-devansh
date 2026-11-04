@@ -4,6 +4,12 @@
 **Stage:** Stage 0 Intake Check (Gate 0)  
 **Deliverable:** Recorded into `client-context/answers/batch-06-legacy-site-migration/answers.md` and referenced in Stage 4 `seo-strategy.md`  
 
+## Table of Contents
+- [1. Input Sources & Pre-Gate 1 Crawl Protocol](#1-input-sources--pre-gate-1-crawl-protocol)
+- [2. Questions](#2-questions)
+- [3. Output Specification](#3-output-specification)
+- [4. Confirmation Stage 0.6](#4-confirmation-stage-06)
+
 ---
 
 ## 1. Input Sources & Pre-Gate 1 Crawl Protocol

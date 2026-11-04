@@ -2,6 +2,13 @@
 
 Image and media optimization is executed during Stage 6 Foundation Build. Source assets collected in `assets-source/` are transformed into lightweight, responsive WebP variants, indexed in a manifest, and rendered using a zero-CLS Server Component.
 
+## Table of Contents
+- [Directory & File Conventions](#directory--file-conventions)
+- [Running the Asset Optimizer](#running-the-asset-optimizer)
+- [Manifest Schema (`site/public/assets/manifest.json`)](#manifest-schema-sitepublicassetsmanifestjson)
+- [Native Component: `site/components/ResponsiveImage.js`](#native-component-sitecomponentsresponsiveimagejs)
+- [Byte Budgets & Verification](#byte-budgets--verification)
+
 ---
 
 ## Directory & File Conventions

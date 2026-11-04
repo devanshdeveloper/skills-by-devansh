@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.10] - 2026-11-04
+
+### Added
+- **Exhaustive Website Module Catalog & Architecture (`references/cms/`)**:
+  - Implemented class-based CMS kit helpers in `references/gate-6-scaffolding/site/lib/cms-kit/` for all website modules: `Tool`, `ToolCategory`, `CaseStudy`, `Feature`, `Job`, `Event`, `Plan`, `Gallery`, `Article`, `Industry`, `Portfolio`, `Policy`, `Tag`, `UserEvent`, and `Lead`.
+  - Created standalone CLI seeders with validation in `references/cms/seeders/` (`tool/`, `tool-category/`, `case-study/`, `job/`, `event/`, `plan/`, `gallery/`, `article/`, `industry/`, `portfolio/`, `policy/`, `tag/`).
+  - Authored standardized 4-section model runbooks for all website modules enforcing zero JSX in Server Component examples and binary QA checklists.
+- **Dedicated CMS Reference Module & Gate Containment (`references/cms/`)**:
+  - Structured shared CMS context across Stage 5 (`gate-5-page-specs-and-cms`) and Stage 6 (`gate-6-scaffolding`).
+  - Synchronized master rulebooks (`batch-03-building-seeds/rulebook.md`, `batch-04-pushing-seeds/rulebook.md`, `references/cms/rulebook.md`) and root `SKILL.md`.
+  - Strictly enforced gate containment invariant: zero loose markdown files outside designated gate directories.
+
 ## [1.10.9] - 2026-10-29
 
 ### Added

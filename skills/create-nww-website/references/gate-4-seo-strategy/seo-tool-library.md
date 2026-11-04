@@ -4,6 +4,13 @@ This guide establishes the structured tool registry and operational selection lo
 
 The machine-readable tool registry is maintained in [seo-tool-registry.json](seo-tool-registry.json).
 
+## Table of Contents
+- [1. Operating Principles & Ethical Guardrails](#1-operating-principles--ethical-guardrails)
+- [2. Upfront Tool-Availability Check Protocol](#2-upfront-tool-availability-check-protocol)
+- [3. Stage-by-Stage Tool Selection Guide](#3-stage-by-stage-tool-selection-guide)
+- [4. Structured Registry Specification (`seo-tool-registry.json`)](#4-structured-registry-specification-seo-tool-registryjson)
+- [5. Verification & Execution Guardrails](#5-verification--execution-guardrails)
+
 ---
 
 ## 1. Operating Principles & Ethical Guardrails

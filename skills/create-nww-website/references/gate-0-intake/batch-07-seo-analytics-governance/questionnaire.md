@@ -4,6 +4,11 @@
 **Stage:** Stage 0 Intake Check (Gate 0)  
 **Deliverable:** Recorded into `client-context/answers/batch-07-seo-analytics-governance/answers.md`  
 
+## Table of Contents
+- [1. Input Sources & Ingestion Protocol](#1-input-sources--ingestion-protocol)
+- [2. Questions](#2-questions)
+- [3. Confirmation Stage 0.7](#3-confirmation-stage-07)
+
 ---
 
 ## 1. Input Sources & Ingestion Protocol

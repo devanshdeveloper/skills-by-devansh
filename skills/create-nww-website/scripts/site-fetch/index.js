@@ -40,6 +40,16 @@ const {
 } = require('./lib/manifest');
 const { startPreviewServer } = require('./lib/preview');
 
+function printReportTable(title, rows) {
+  console.log(`\n┌────────────────────────────────────────────────────────┐`);
+  console.log(`│ ${title.padEnd(54)} │`);
+  console.log(`├─────────────────────────┬──────────────────────────────┤`);
+  for (const [label, val] of rows) {
+    console.log(`│ ${label.padEnd(23)} │ ${String(val).padEnd(28)} │`);
+  }
+  console.log(`└─────────────────────────┴──────────────────────────────┘`);
+}
+
 function safeCleanDirectory(targetDir) {
   const resolved = path.resolve(targetDir);
   const cwd = process.cwd();
@@ -96,13 +106,11 @@ async function crawlSite({
   const { homeLinks, allDiscovered } = await discoverSiteRoutes(browser, targetUrl, timeoutMs);
   console.log(`  • Probing homepage internal navigation... Found ${homeLinks.length} link(s).`);
 
-  console.log(`\n┌────────────────────────────────────────────────────────┐`);
-  console.log(`│ [Phase 1 Report] Route Discovery Complete             │`);
-  console.log(`├─────────────────────────┬──────────────────────────────┤`);
-  console.log(`│ XML Sitemap Routes      │ ${String(sitemapUrls.length).padEnd(28)} │`);
-  console.log(`│ Internal Navigation     │ ${String(homeLinks.length).padEnd(28)} │`);
-  console.log(`│ Total Unique Routes     │ ${String(allDiscovered.length).padEnd(28)} │`);
-  console.log(`└─────────────────────────┴──────────────────────────────┘`);
+  printReportTable('[Phase 1 Report] Route Discovery Complete', [
+    ['XML Sitemap Routes', sitemapUrls.length],
+    ['Internal Navigation', homeLinks.length],
+    ['Total Unique Routes', allDiscovered.length]
+  ]);
 
   // Phase 2: Page Selection & Strategy
   console.log(`\n=================================================================`);
@@ -111,13 +119,11 @@ async function crawlSite({
   const pagesToCapture = selectPagesToCapture(allDiscovered, targetUrl, { limitMode, maxPages, selectedPages });
   pagesToCapture.forEach(p => console.log(`  • [${p.slug}] -> ${p.url} => ${p.relHtmlPath}`));
 
-  console.log(`\n┌────────────────────────────────────────────────────────┐`);
-  console.log(`│ [Phase 2 Report] Page Selection Complete              │`);
-  console.log(`├─────────────────────────┬──────────────────────────────┤`);
-  console.log(`│ Strategy (Limit Mode)   │ ${String(limitMode).padEnd(28)} │`);
-  console.log(`│ Pages Targeted          │ ${String(pagesToCapture.length).padEnd(28)} │`);
-  console.log(`│ Max Quota               │ ${String(limitMode === 'no-limits' ? 'Unlimited' : maxPages).padEnd(28)} │`);
-  console.log(`└─────────────────────────┴──────────────────────────────┘`);
+  printReportTable('[Phase 2 Report] Page Selection Complete', [
+    ['Strategy (Limit Mode)', limitMode],
+    ['Pages Targeted', pagesToCapture.length],
+    ['Max Quota', limitMode === 'no-limits' ? 'Unlimited' : maxPages]
+  ]);
 
   // Phase 3: DOM, Content & Screenshot Capture
   console.log(`\n=================================================================`);
@@ -141,13 +147,11 @@ async function crawlSite({
   await browser.close();
 
   const successfulCaptures = capturedPages.filter(p => p.status === 'success').length;
-  console.log(`\n┌────────────────────────────────────────────────────────┐`);
-  console.log(`│ [Phase 3 Report] Page Capture Complete                │`);
-  console.log(`├─────────────────────────┬──────────────────────────────┤`);
-  console.log(`│ Pages Successfully Read │ ${String(`${successfulCaptures} / ${pagesToCapture.length}`).padEnd(28)} │`);
-  console.log(`│ Asset Slots Detected    │ ${String(allDomAssets.length).padEnd(28)} │`);
-  console.log(`│ Network Buffers Cached  │ ${String(mergedNetworkBuffers.size).padEnd(28)} │`);
-  console.log(`└─────────────────────────┴──────────────────────────────┘`);
+  printReportTable('[Phase 3 Report] Page Capture Complete', [
+    ['Pages Successfully Read', `${successfulCaptures} / ${pagesToCapture.length}`],
+    ['Asset Slots Detected', allDomAssets.length],
+    ['Network Buffers Cached', mergedNetworkBuffers.size]
+  ]);
 
   // Phase 4: Asset Harvesting & Source Placement
   let catalog = [];
@@ -171,14 +175,12 @@ async function crawlSite({
     const highResCount = catalog.filter(a => a.qualityStatus === 'high-res').length;
     const vectorCount = catalog.filter(a => a.qualityStatus === 'vector').length;
 
-    console.log(`\n┌────────────────────────────────────────────────────────┐`);
-    console.log(`│ [Phase 4 Report] Asset Harvesting Complete            │`);
-    console.log(`├─────────────────────────┬──────────────────────────────┤`);
-    console.log(`│ Assets Written to Disk  │ ${String(catalog.length).padEnd(28)} │`);
-    console.log(`│ High-Resolution Media   │ ${String(highResCount).padEnd(28)} │`);
-    console.log(`│ Vectors & Icons         │ ${String(vectorCount).padEnd(28)} │`);
-    console.log(`│ Stylesheets Relativized │ ${String(relativizedCssCount).padEnd(28)} │`);
-    console.log(`└─────────────────────────┴──────────────────────────────┘`);
+    printReportTable('[Phase 4 Report] Asset Harvesting Complete', [
+      ['Assets Written to Disk', catalog.length],
+      ['High-Resolution Media', highResCount],
+      ['Vectors & Icons', vectorCount],
+      ['Stylesheets Relativized', relativizedCssCount]
+    ]);
   }
 
   // Phase 5: Offline Hardening & HTML Relativization
@@ -196,12 +198,10 @@ async function crawlSite({
     console.log(`  ✓ Written ${page.pageRelHtmlPath} (${fs.statSync(targetHtmlFile).size} bytes)`);
   }
 
-  console.log(`\n┌────────────────────────────────────────────────────────┐`);
-  console.log(`│ [Phase 5 Report] Offline Hardening Complete           │`);
-  console.log(`├─────────────────────────┬──────────────────────────────┤`);
-  console.log(`│ Offline Pages Written   │ ${String(hardenedCount).padEnd(28)} │`);
-  console.log(`│ Hardening Protections   │ ${String('CSP Strip, Eager, Shim').padEnd(28)} │`);
-  console.log(`└─────────────────────────┴──────────────────────────────┘`);
+  printReportTable('[Phase 5 Report] Offline Hardening Complete', [
+    ['Offline Pages Written', hardenedCount],
+    ['Hardening Protections', 'CSP Strip, Eager, Shim']
+  ]);
 
   // Phase 6: Catalog & Sitemap Generation
   console.log(`\n=================================================================`);
@@ -215,12 +215,10 @@ async function crawlSite({
   generateManifest({ targetUrl, limitMode, selectedPages, allDiscovered, capturedPages, catalog, manifestPath });
   console.log(`  ✓ Generated ${manifestPath}`);
 
-  console.log(`\n┌────────────────────────────────────────────────────────┐`);
-  console.log(`│ [Phase 6 Report] Final Catalog Ready                  │`);
-  console.log(`├─────────────────────────┬──────────────────────────────┤`);
-  console.log(`│ Sitemap XML             │ ${String('sitemap.xml').padEnd(28)} │`);
-  console.log(`│ Site Manifest JSON      │ ${String('manifest.json').padEnd(28)} │`);
-  console.log(`└─────────────────────────┴──────────────────────────────┘`);
+  printReportTable('[Phase 6 Report] Final Catalog Ready', [
+    ['Sitemap XML', 'sitemap.xml'],
+    ['Site Manifest JSON', 'manifest.json']
+  ]);
 
   console.log(`\n=================================================================`);
   console.log(`✓ SITE MIRROR COMPLETED SUCCESSFULLY!`);

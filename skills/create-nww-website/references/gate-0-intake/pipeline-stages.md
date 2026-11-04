@@ -1,6 +1,22 @@
 # Pipeline Stages & State Machine
 
-The website creation workflow follows a strict 9-stage sequential pipeline with explicit human approval gates between stages. No stage may begin until the preceding stage has received explicit human approval.
+## Table of Contents
+- [State Machine & Tracking (`project-docs/router-state.md`)](#state-machine--tracking-project-docsrouter-statemd)
+  - [State Schema](#state-schema)
+- [The 10 Stages in Detail](#the-10-stages-in-detail)
+  - [Stage 0: Intake Check](#stage-0-intake-check)
+  - [Stage 1: Tech Stack Specification](#stage-1-tech-stack-specification)
+  - [Stage 2: Design Theory & Variations](#stage-2-design-theory--variations)
+  - [Stage 3: Page List & Sitemap](#stage-3-page-list--sitemap)
+  - [Stage 4: SEO Strategy](#stage-4-seo-strategy)
+  - [Stage 5: Page Specifications & CMS Schema](#stage-5-page-specs--cms-schema)
+  - [Stage 6: Codebase Scaffolding, Foundation Build & Landing Page Showcase](#stage-6-codebase-scaffolding-foundation-build--landing-page-showcase)
+  - [Stage 7: Sub-Page Build Loop (Per-Page Sub-Pipeline)](#stage-7-sub-page-build-loop-per-page-sub-pipeline)
+  - [Stage 8: Additional Features](#stage-8-additional-features)
+  - [Stage 9: Final Verification & Handover](#stage-9-final-verification--handover)
+- [Pipeline Transition Rules](#pipeline-transition-rules)
+
+The website creation workflow follows a strict 10-stage sequential pipeline with explicit human approval gates between stages. No stage may begin until the preceding stage has received explicit human approval.
 
 ---
 
@@ -15,8 +31,8 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 
 **Project Name:** [Project Name]  
 **CMS Mode:** [none | cms]  
-**Current Stage:** [0 through 8]  
-**Current Gate:** [Gate 0 through Gate 8b]  
+**Current Stage:** [0 through 9]  
+**Current Gate:** [Gate 0 through Gate 9b]  
 **Status:** [in_progress | awaiting_approval | approved | blocked]  
 **Webhook Status:** [pending | built-on-branch | deployed | verified]  
 **Last Updated:** [YYYY-MM-DD HH:MM]
@@ -31,7 +47,8 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 - [ ] Stage 5: Page Specifications & CMS Schema (Gate 5)
 - [ ] Stage 6: Codebase Scaffolding, Foundation Build & Landing Page Showcase (Gate 6)
 - [ ] Stage 7: Sub-Page Build Loop (Per-Page Gates 7a & 7b)
-- [ ] Stage 8: Final Verification & Handover (Gates 8a & 8b)
+- [ ] Stage 8: Additional Features (Gate 8)
+- [ ] Stage 9: Final Verification & Handover (Gates 9a & 9b)
 
 ## Per-Page Build Tracker
 
@@ -94,14 +111,14 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 ### Stage 5: Page Specifications & CMS Schema
 - **Goal:** Author comprehensive markdown specifications (`page-specs/<slug>/page.md`) unifying responsive layout blueprints, verbatim copywriting, media asset slots, and explicit benchmark cross-referencing to analogous pages captured from benchmark websites (`project-docs/design-references/<domain>/<slug>/` or `previous-site/<slug>/`). Define shared units in `page-specs/_shared/*.md`, multi-page components in `project-docs/client-review/gate-5-page-specs/layout-system.md` (containing ONLY one section: `## Shared Components`, aligned with benchmark header/footer patterns), and log sourced stock images in `project-docs/stock-provenance.json` (if stock is authorized).
 - **Single Mode Enforced:** Gate 5 operates strictly in ONE mode: **Markdown only**. Remove all Next.js and HTML preview modes in Gate 5.
-- **Incomplete CMS Context Protocol:** If CMS context seems incomplete, create `project-docs/client-review/gate-5-cms-requirements/list.md` and do NOT proceed to CMS schema or content until this is resolved. Hand over a strictly READ-ONLY prompt in `project-docs/client-review/gate-5-cms-requirements/prompt.md` for the user to paste into their CMS agentic IDE to fetch answers (no write prompts).
+- **The Two-File CMS Contract:** If CMS integration is active (`cms: cms`), Stage 5 strictly authors `project-docs/client-review/gate-5-cms-requirements/open-questions.md` containing 28 blocking questions covering endpoints, auth, schemas, and webhooks. All temporary investigation files (`list.md`, `prompt.md`, `cms-backend-requirements.md`) are deleted. All answers are codified into `project-docs/client-review/gate-5-cms-requirements/cms-implementation-rules.md`.
 - **Deliverables:**
   - `page-specs/<slug>/page.md` for every page in `page-list.md` (including `## 0. Reference Benchmark Mapping & Similar Page Alignment` and section layout reference anchors).
   - `page-specs/_shared/<component-slug>.md` (nav, footer, site settings) and `page-specs/_shared/brand-assets.md`.
   - `project-docs/client-review/gate-5-page-specs/layout-system.md` (contains ONLY section: `## Shared Components`).
   - `project-docs/stock-provenance.json` (if stock imagery is sourced).
-  - If `cms: cms` and requirements resolved: `project-docs/client-review/gate-5-cms-schema/cms-schema.md`, `project-docs/client-review/gate-5-cms-requirements/cms-backend-requirements.md`, `project-docs/client-review/gate-5-cms-content/blog-<slug>.json`, `index.md`.
-- **Banned Markdown Files:** Do NOT generate `project-docs/migration-inventory.md`, `project-docs/editor-handover-outline.md`, `project-docs/context-update.md`, `project-docs/cms-foundation-tasks.md`, or any unstated markdown files.
+  - If `cms: cms` and requirements resolved: `project-docs/client-review/gate-5-cms-requirements/open-questions.md`, `project-docs/client-review/gate-5-cms-requirements/cms-implementation-rules.md`, `project-docs/client-review/gate-5-cms-schema/cms-schema.md`, `project-docs/client-review/gate-5-cms-content/blog-<slug>.json`, `index.md`.
+- **Banned Markdown Files & Gate Containment:** Do NOT generate `project-docs/migration-inventory.md`, `project-docs/editor-handover-outline.md`, `project-docs/context-update.md`, `project-docs/cms-foundation-tasks.md`, or any unstated markdown files. Every generated markdown document must reside strictly inside its designated gate folder under `project-docs/client-review/`; loose markdown files outside gates are strictly forbidden.
 - **Gate 5:** Client / lead developer reviews and approves the unified page specifications (layout, copy, asset slots) and CMS data models/seeds. Progress is recorded in `project-docs/router-state.md` (`Gate 5: Page Specifications & CMS Schema Approved`).
 
 ### Stage 6: Codebase Scaffolding, Foundation Build & Landing Page Showcase
@@ -115,14 +132,14 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
   DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-performance
   DISABLE_TELEMETRY=1 npx skills add https://github.com/greensock/gsap-skills --skill gsap-timeline
   ```
-- **Blocking Guard:** Do NOT proceed to scaffolding if there are any unresolved CMS requirements in `project-docs/client-review/gate-5-cms-requirements/list.md`.
+- **Blocking Guard:** Do NOT proceed to scaffolding if there are any unresolved questions in `project-docs/client-review/gate-5-cms-requirements/open-questions.md` that have not been codified into `cms-implementation-rules.md`.
 - **Scaffolding File Size & Token Discipline:** Any generated file must not limit the file size of the scaffolding Next.js site; code should be as small as possible while preserving all features of the page (thin `page.js` <= 80 lines, section components <= 250 lines).
 - **Inputs:** Approved Stage 5 `page.md` files, `page-specs/_shared/*.md`, `project-docs/client-review/gate-5-page-specs/layout-system.md`, `project-docs/client-review/gate-1-tech-stack/tech-stack.md`, and CMS schema (if active).
 - **Execution & Deliverables:**
   1. **QA Artifacts:** Emit master static checklist `project-docs/page-checklist.md`. (Do NOT create `theory-revisions.md`; make revisions directly to existing files).
   2. **Codebase Scaffolding:** Execute `pnpm create next-app site --disable-git` matching runtime conventions.
-  3. **Site Env Template:** Generate `site/.env.example` with all variables needed by the scaffolding (`SERVER_URL`, `CMS_SITE_KEY`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_PREVIEW_GUARD`).
-  4. **Foundation Shell:** Wire theme tokens into `site/app/globals.css` and `site/styles/tokens.css`, export motion tokens to `site/lib/motion.js`, install `site/components/ResponsiveImage.js`, and assemble `Nav.js` and `Footer.js` into root `layout.js`.
+  3. **Site Env Template:** Generate `site/.env.example` with all variables needed by the scaffolding (`SITE_NAME`, `SERVER_URL`, `CMS_SITE_KEY`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_PREVIEW_GUARD`).
+  4. **Foundation Shell:** Wire theme tokens into `site/app/globals.css` (Tailwind root tokens and CSS variables in `:root`), export motion tokens to `site/lib/motion.js`, install `site/components/ResponsiveImage.js`, and assemble `Nav.js` and `Footer.js` into root `layout.js`. All component styling uses Tailwind utility classes in JSX.
   5. **Media & Tooling:** Run asset optimizer (`assets-source/` to `site/public/assets/`), write `site/assets-optimize.config.md`, scaffold `site/AGENTS.md` + 4 scoped AGENTS.md, and add check scripts (`pnpm check:all`).
   6. **CMS & Credits:** Wire CMS client data layer (`site/lib/cms/`) if CMS active; generate `site/app/credits/page.js` if stock images used.
   7. **Route Mapping:** Scaffold thin routes and section components with `data-section="<id>"` markers, decoupled `site/content/`, and emit `site/site.manifest.json`.
@@ -139,17 +156,26 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
   4. **Gate 7b (Binary QA Sign-Off):** Human verifies passing binary QA checks from `checklist-state.md` and gives final approval. Mark page completed in `project-docs/client-review/gate-3-page-list/page-list.md` (`- [x] Page Name`).
 - **Repeat** until all sub-pages in `page-list.md` are approved.
 
-### Stage 8: Final Verification & Handover
+### Stage 8: Additional Features
+- **Goal:** Integrate modular capabilities, analytics, and custom service extensions:
+  - Ingest requested features from `client-context/answers/` and project brief (e.g., `nww-analytics` visitor identity SDK, downloader microservice bridges, or custom widgets).
+  - Scaffold components and SDKs into `site/` (e.g. `VisitorProvider.jsx` in `site/components/`, root layout provider wrapping in `site/app/layout.js`, or `visitor-client-sdk.js` in `site/public/scripts/`).
+  - Configure environment variables (`NEXT_PUBLIC_NWW_API_BASE_URL`, `NEXT_PUBLIC_NWW_WEBSITE_ID`, etc.) in `site/.env.local` and credential templates in `.env.example`.
+  - Verify local integration and production build (`cd site && pnpm build && pnpm check:all`).
+  - Generate feature deliverable at `project-docs/client-review/gate-8-additional-features/features-manifest.md`.
+  - **Gate 8:** Human reviews the feature manifest and grants explicit approval to advance to Stage 9.
+
+### Stage 9: Final Verification & Handover
 - **Goal:** Execute full production audit and prepare handover:
-  - Run `node scripts/structure-audit/index.js` to audit all deliverables, verify documentation completeness, check strict line limits, and generate `project-docs/client-review/gate-8-final-verification/structure-audit.md`.
+  - Run `node scripts/structure-audit/index.js` to audit all deliverables, verify documentation completeness, check strict line limits, and generate `project-docs/client-review/gate-9-final-verification/structure-audit.md`.
   - Conduct Pre-Launch SEO Audit on production build (`pnpm build && pnpm start`): metadata, JSON-LD, 301 redirects, robots.txt, sitemap. Validate using companion utilities: `node skills/create-nww-website/scripts/seo/sitemap-robots-parser.js --url http://localhost:3000` and `node skills/create-nww-website/scripts/seo/pagespeed-check.js --url http://localhost:3000`.
   - Verify CMS checks (if CMS active): unpublished posts excluded, sanitizer strips malicious HTML, webhook responds within 5s, `REVALIDATE_SECRET` and `CMS_SITE_KEY` not leaked.
   - Verify stock audit: no provider API keys in site build or bundles; `/credits` page renders cleanly; Unsplash images include proper attribution; `stock-provenance.json` backed up with assets.
   - Deactivate pre-launch guard per `project-docs/launch-checklist.md` (`NEXT_PUBLIC_PREVIEW_GUARD="false"`).
   - Run `pnpm check:all`.
-  - **Gate 8a:** Human reviews and approves proposed cross-page or audit fixes before applying them to approved pages.
+  - **Gate 9a:** Human reviews and approves proposed cross-page or audit fixes before applying them to approved pages.
   - Apply fixes, re-verify production build, and assemble Client Handover (AGENTS.md notes, CMS admin guide, asset backup location in `assets-source/`).
-  - **Gate 8b (Deployment Sign-Off):** Human gives final deployment and handover sign-off. When deploying the Next.js site to Vercel, invoke the official Vercel deployment agent skill:
+  - **Gate 9b (Deployment Sign-Off):** Human gives final deployment and handover sign-off. When deploying the Next.js site to Vercel, invoke the official Vercel deployment agent skill:
     ```bash
     DISABLE_TELEMETRY=1 npx skills add https://github.com/vercel-labs/agent-skills --skill deploy-to-vercel
     ```
@@ -166,7 +192,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 5. **Always Public Deployments for Client:** All links sent to the client (Gate 2 variations via GitHub Pages, Next.js site via Vercel) MUST be public HTTPS deployments. Never forward localhost URLs to the client.
 6. **In-Place Revisions Discipline:** If a client requests revisions at any gate, do NOT create an extra markdown file (e.g. no `theory-revisions.md`). Make modifications directly to the existing deliverable document. If an important client requirement note needs to be recorded, create `client-requirements/` folder and place the note there.
 7. **Client Context Folder:** Store all client-provided materials, briefs, and inputs in `client-context/` (e.g. `client-context/answers/batch-[number]-[batch-name]/answers.md`, `client-context/asset-manifest.md`, and `client-context/open-questions.md`).
-8. **Client Review Gate Rule (Markdown is Internal):** No client-facing gate ever asks the client to open, read, or approve raw `.md` files. Every client review gate (Gates 0, 2, 3, 5, 6, 7a, 8b) presents HTML previews, live public URLs, or plain-language summaries. All `.md` files are strictly internal developer artifacts.
+8. **Client Review Gate Rule (Markdown is Internal):** No client-facing gate ever asks the client to open, read, or approve raw `.md` files. Every client review gate (Gates 0, 2, 3, 5, 6, 7a, 8, 9b) presents HTML previews, live public URLs, or plain-language summaries. All `.md` files are strictly internal developer artifacts.
 9. **Continuous Discovery Loop & Rolling Open Questions (`client-context/open-questions.md`):** At Gate 0 takeoff, generate `client-context/open-questions.md` with at least 20 targeted open questions across batches. Maintain this rolling queue: when answers arrive at any downstream stage (even after `site/` has been scaffolded and constructed), the agent immediately removes the answered question, logs the answer to the appropriate batch file, adds a new question to keep the queue at >= 20, and **immediately implements the answer in the live site code and component specs**.
 
 ---
@@ -229,16 +255,18 @@ Every client website project created through this pipeline must strictly follow 
 │       │   ├── layout-system.md          # Global shared components layout spec (ONLY ## Shared Components)
 │       │   ├── home.md                   # Verbatim copywriting, responsive layouts & media slots
 │       │   └── <page-slug>.md
-│       ├── gate-5-cms-requirements/      # [Stage 5 - If CMS Enabled] CMS gap checklist & query prompt
-│       │   ├── list.md                   # Blocking CMS checklist (must be resolved before Stage 6)
-│       │   └── prompt.md                 # Read-only query prompt to run in client CMS IDE
+│       ├── gate-5-cms-requirements/      # [Stage 5 - If CMS Enabled] The Two-File Working Contract
+│       │   ├── open-questions.md         # 28 blocking questions (must be resolved before Stage 6)
+│       │   └── cms-implementation-rules.md # Binding rules codified from answers
 │       ├── gate-5-cms-schema/            # [Stage 5 - If CMS Enabled] CMS collection schemas
 │       │   └── cms-schema.md             # Data schemas, field types, relationships, validation rules
 │       ├── gate-5-cms-content/           # [Stage 5 - If CMS Enabled] Seed content inventory & records
 │       │   ├── index.md                  # Seed content inventory and collection map
 │       │   └── <collection>-<slug>.json  # Authentic JSON seed records
-│       └── gate-8-final-verification/
-│           └── structure-audit.md        # [Stage 8] Automated deliverable compliance & code limits audit
+│       ├── gate-8-additional-features/
+│       │   └── features-manifest.md      # [Stage 8] Modular feature integrations manifest (e.g. nww-analytics)
+│       └── gate-9-final-verification/
+│           └── structure-audit.md        # [Stage 9] Automated deliverable compliance & code limits audit
 └── site/                                 # [Stage 6 Scaffolding & Stage 7 Sub-Page Construction]
     ├── .env.example                      # Site environment template (Next.js variables, CMS API tokens)
     ├── package.json                      # Next.js App Router, Tailwind CSS, Lucide icons, GSAP

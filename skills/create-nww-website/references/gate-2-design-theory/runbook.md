@@ -1,5 +1,13 @@
 # Design Theory & Visual System Specification
 
+## Table of Contents
+- [Prerequisites & Taste Skill Activation](#prerequisites--taste-skill-activation)
+- [Deliverable Structure (`project-docs/design-theory.md`)](#deliverable-structure-project-docsdesign-theorymd)
+- [Gate 2 Review Checklist & Client Delivery](#gate-2-review-checklist--client-delivery)
+  - [Principles extraction and anti-copy guardrail](#principles-extraction-and-anti-copy-guardrail)
+  - [Bundled review helpers](#bundled-review-helpers)
+  - [Public Deployment & Deliverable Standards](#public-deployment--deliverable-standards)
+
 Stage 2 establishes the aesthetic foundation of the website. Before any layouts or code are written, the design theory codifies the color palette, typography system, spatial tokens, dual motion tokens, voice & tone, and visual hierarchy.
 
 The deliverable is saved to `project-docs/client-review/gate-2-design-theory/design-theory.md`.
@@ -125,15 +133,16 @@ Keep reusable scripts and dependencies in the skill. Keep only site-specific rev
 - **Public Deployment Required**: The Gate 2 landing page variations and comparison hub will be sent directly to the client. A live public deployment (such as GitHub Pages via `.github/workflows/deploy-pages.yml` from `assets/client-review-pages.yml`) MUST always be used. **Forwarding localhost deployment links to the client is strictly forbidden.**
 - **No Prompt Copying Section**: The review package is client-facing; do NOT include "copy the prompt" or "Copy My Decision" buttons designed for pasting into an AI assistant.
 - **Technology Stack & Naming for Variations**: All Gate 2 landing page variation previews MUST be named using the technical project slug confirmed in Batch 01 (e.g. `project-docs/client-review/gate-2-design-theory/<project-slug>-v1/index.html`, `<project-slug>-v2/`, `<project-slug>-v3/`). Variations MUST be built using **HTML + Tailwind CSS + jQuery** to save future tokens, minimize complexity, and ensure lightweight interactivity.
-- **Repeating Cards Normal CSS Rule (Token Optimization)**: When generating variation HTML, if components such as cards, grid items, or list tiles repeat (e.g. 3–6 feature cards, service boxes), use **normal CSS** in a `<style>` block rather than repeating long inline Tailwind utility strings on every card. When ported downstream to Next.js `site/`, use Tailwind's **`@apply`** rule in `globals.css`.
+- **Repeating Cards Normal CSS Rule (Token Optimization)**: When generating variation HTML, if components such as cards, grid items, or list tiles repeat (e.g. 3–6 feature cards, service boxes), use **normal CSS** in a `<style>` block rather than repeating long inline Tailwind utility strings on every card. When ported downstream to the Next.js `site/` codebase, implement them using pure **Tailwind utility classes in JSX** (or reusable React sub-components); do NOT create custom CSS classes or use `@apply` in `globals.css`.
 
 Before presenting to the user for Gate 2 sign-off:
 - [ ] Reference benchmark sites captured into `project-docs/design-references/<domain>/<slug>/` (`index.html`, `content.md`, `screenshot.png`, `capture.json`) across representative page types as analysis inputs only.
 - [ ] Reference capture ledger compiled in `project-docs/design-references/sources.md` starting with mandatory third-party usage notice (zero fabricated images, zero copied assets).
 - [ ] Technical design theory authored to `project-docs/client-review/gate-2-design-theory/design-theory.md` (abstract principles, tokens, typography, motion, avoid list).
-- [ ] $N$ full-page landing page variation previews (default 3) compiled to `project-docs/client-review/gate-2-design-theory/<project-slug>-v[1..N]/index.html` (using confirmed project slug from Batch 01) built using **HTML + Tailwind CSS + jQuery** featuring distinct architectural personalities, normal CSS for repeating cards, and real client content per [design-variations.md](design-variations.md).
+- [ ] $N$ full-page landing page variation previews (default 3) compiled to `project-docs/client-review/gate-2-design-theory/<project-slug>-v[1..N]/index.html` (using confirmed project slug from Batch 01) built using **HTML + Tailwind CSS + jQuery** featuring distinct architectural personalities, normal CSS for repeating cards in HTML variations (converted to Tailwind utility classes in JSX downstream), and real client content per [design-variations.md](design-variations.md).
 - [ ] Pre-presentation similarity audit executed and report compiled to `project-docs/client-review/gate-2-design-theory/_checks/similarity-audit.md` confirming compliance with distance rules (zero shared classes/IDs, zero hotlinks, word overlap <= 5 words).
 - [ ] Static review generator script executed (`node skills/create-nww-website/scripts/client-review/index.js`) to generate Gate 2 comparison hub (`gate-2-design-theory/index.html`) without prompt copy boxes.
 - [ ] Public deployment live on GitHub Pages and verified accessible via HTTPS (no localhost links provided).
+- [ ] **Gate 2 Halt:** Deploy variations to public URL; await client variation selection before Stage 3.
 - [ ] `project-docs/router-state.md` updated to `Gate 2: Awaiting Client Decision Among Variations (via project-docs/client-review/gate-2-design-theory/index.html)`.
 - [ ] Client decision confirmed before Gate 2 approval and Stage 3 initiation. (If revisions requested, update files directly in-place; do not create separate revision files. Record requirement notes in `client-requirements/`).

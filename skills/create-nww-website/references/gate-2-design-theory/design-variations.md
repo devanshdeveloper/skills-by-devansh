@@ -4,6 +4,15 @@ This specification governs the generation, auditing, and presentation of landing
 
 The deliverable outputs are saved to `project-docs/client-review/gate-2-design-theory/`.
 
+## Table of Contents
+- [1. Gate 2 Execution Sequence](#1-gate-2-execution-sequence)
+- [2. Principles, Not Pixels (Anti-Copy Abstraction Barrier)](#2-principles-not-pixels-anti-copy-abstraction-barrier)
+- [3. The Variation Framework](#3-the-variation-framework)
+  - [The 9 Varying Dimensions](#the-9-varying-dimensions)
+- [4. Quantitative Similarity Audit Protocol](#4-quantitative-similarity-audit-protocol)
+- [5. Client Comparison Hub & Public Presentation Standards](#5-client-comparison-hub--public-presentation-standards)
+- [6. Audit Failure Recovery Protocol](#6-audit-failure-recovery-protocol)
+
 ---
 
 ## 1. Gate 2 Execution Sequence

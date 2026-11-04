@@ -1,5 +1,18 @@
 # Stage 0: Intake Check & Project Brief Runbook
 
+## Table of Contents
+- [Overview & Role in Pipeline](#overview--role-in-pipeline)
+- [Technical Project Name & Vercel Slug Propagation](#technical-project-name--vercel-slug-propagation)
+- [Pre-Gate 1 Legacy Website Archiving & Asset Salvage](#pre-gate-1-legacy-website-archiving--asset-salvage)
+  - [Git Hygiene: Adding `previous-site/` to `.gitignore`](#git-hygiene-adding-previous-site-to-gitignore)
+- [Asset Harvesting & Generation System (Batch 04)](#asset-harvesting--generation-system-batch-04)
+- [Questionnaire & Client Discovery Batches](#questionnaire--client-discovery-batches)
+- [Environment & CMS Mode Configuration](#environment--cms-mode-configuration)
+- [Deliverables Checklist for Gate 0](#deliverables-checklist-for-gate-0)
+- [Gate 0 Approval & Takeoff Protocol](#gate-0-approval--takeoff-protocol)
+- [Continuous Discovery Loop Across Downstream Stages & Live Code](#continuous-discovery-loop-across-downstream-stages--live-code)
+- [References](#references)
+
 ## Overview & Role in Pipeline
 
 Stage 0 is the foundation of the 9-stage human-gated website development lifecycle. In this stage, the agent ingests client requirements across multiple sources (brief notes, legacy crawl, uploaded assets, and interactive turns), establishes project scope, confirms the **Technical Project Name / Vercel Slug**, executes a comprehensive visual asset audit and harvesting pipeline, configures the environment contract (`.env.example`), and drafts the foundational project brief before proceeding to technical architecture in Stage 1.
@@ -130,17 +143,19 @@ Generate `site/.env.example` reflecting the confirmed CMS mode:
 ### Mode A: Markdown-Only (Zero External CMS)
 No CMS API keys required. All content is stored in local static Markdown files under `site/content/`.
 ```env
-NEXT_PUBLIC_SITE_URL=https://example.com
+SITE_NAME="Brand Name"
+NEXT_PUBLIC_SITE_URL="https://example.com"
 ```
 
 ### Mode B: API-Headless (NWW CMS Integration)
 Requires tenant verification and API keys:
 ```env
-NEXT_PUBLIC_SITE_URL=https://example.com
-NWW_CMS_API_URL=https://api.netwebworks.com
-NWW_TENANT_ID=tenant_abc123
-NWW_API_BEARER_TOKEN=bearer_secret_token
-REVALIDATION_SECRET=reval_token_xyz
+SITE_NAME="Brand Name"
+SERVER_URL="https://cms.example.com"
+CMS_SITE_KEY="your-cms-site-key"
+REVALIDATE_SECRET="your-revalidate-secret"
+NEXT_PUBLIC_SITE_URL="https://example.com"
+NEXT_PUBLIC_PREVIEW_GUARD="true"
 ```
 
 ---

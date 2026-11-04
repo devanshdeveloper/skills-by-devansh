@@ -4,6 +4,16 @@
 **Stage:** Stage 0 Intake Check (Gate 0)  
 **Deliverable:** Recorded into `client-context/answers/batch-05-type-specific-routing/answers.md`  
 
+## Table of Contents
+- [1. Dynamic Routing Protocol](#1-dynamic-routing-protocol)
+- [2. Section A: E-Commerce Websites](#2-section-a-e-commerce-websites)
+- [3. Section B: Portfolio & Creative Showcases](#3-section-b-portfolio--creative-showcases)
+- [4. Section C: Web Applications & SaaS Products](#4-section-c-web-applications--saas-products)
+- [5. Section D: Booking, Scheduling & Service Providers](#5-section-d-booking-scheduling--service-providers)
+- [6. Section E: Blog, News & Editorial Publications](#6-section-e-blog-news--editorial-publications)
+- [7. Section F: Corporate / Business Websites](#7-section-f-corporate--business-websites)
+- [8. Confirmation Stage 0.5](#8-confirmation-stage-05)
+
 ---
 
 ## 1. Dynamic Routing Protocol

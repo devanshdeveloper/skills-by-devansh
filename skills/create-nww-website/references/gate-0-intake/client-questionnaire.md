@@ -2,6 +2,15 @@
 
 **Read this reference when:** The skill is activated and needs to execute the intake interview, resume an existing brief, prefill from user notes, crawl a legacy website, harvest/generate visual assets, or compile modular batch answer files in `client-context/answers/batch-*/answers.md` and `client-context/asset-manifest.md` for Gate 0 approval.
 
+## Table of Contents
+- [1. Multi-Source Client Input Architecture & Confirmation Stages](#1-multi-source-client-input-architecture--confirmation-stages)
+- [2. Technical Project Name & Vercel Slug Propagation](#2-technical-project-name--vercel-slug-propagation)
+- [3. Pre-Gate 1 Legacy Website Archiving & Asset Salvage](#3-pre-gate-1-legacy-website-archiving--asset-salvage)
+- [4. Asset Harvesting, Inventory & Generation System (Batch 04)](#4-asset-harvesting-inventory--generation-system-batch-04)
+- [5. Pacing, Pushing & Anti-Fatigue Protocol](#5-pacing-pushing--anti-fatigue-protocol)
+- [6. The Modular Batch Questionnaires](#6-the-modular-batch-questionnaires)
+- [7. Gate 0 Sign-Off & Takeoff Checkpoint](#7-gate-0-sign-off--takeoff-checkpoint)
+
 ---
 
 ## 1. Multi-Source Client Input Architecture & Confirmation Stages

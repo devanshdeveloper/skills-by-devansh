@@ -1,0 +1,14 @@
+{
+  "name": "blog-seo-audit",
+  "version": "1.0.0",
+  "description": "Offline Blog SEO & Core Web Vitals static auditor for Next.js App Router websites",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "blog-seo-audit": "./index.js"
+  },
+  "scripts": {
+    "audit": "node index.js"
+  }
+}
+

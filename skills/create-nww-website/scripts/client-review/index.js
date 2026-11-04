@@ -154,7 +154,8 @@ function generateRootPortal(gatesStatus = {}) {
     { id: 'gate-3', name: 'Gate 3: Page List & Sitemap Scope', path: 'gate-3-page-list/page-list.md', desc: 'Route hierarchy, complete sitemap, and page inventory.' },
     { id: 'gate-4', name: 'Gate 4: SEO Strategy & Keyword Mapping', path: 'gate-4-seo-strategy/seo-strategy.md', desc: 'Metadata, keyword targeting, and structured data specifications.' },
     { id: 'gate-5', name: 'Gate 5: Page Specifications & CMS Schema', path: 'gate-5-page-specs/', desc: 'Responsive layout blueprints, copywriting, asset slots, and CMS schemas.' },
-    { id: 'gate-8', name: 'Gate 8: Final Verification & Audit', path: 'gate-8-final-verification/structure-audit.md', desc: 'Automated deliverable compliance audit and production sign-off.' }
+    { id: 'gate-8', name: 'Gate 8: Additional Features & Modular Integrations', path: 'gate-8-additional-features/features-manifest.md', desc: 'NWW visitor analytics, API integrations, and modular site capabilities.' },
+    { id: 'gate-9', name: 'Gate 9: Final Verification & Audit', path: 'gate-9-final-verification/structure-audit.md', desc: 'Automated deliverable compliance audit and production sign-off.' }
   ];
 
   const itemsHtml = gates.map(g => {
@@ -278,7 +279,8 @@ function run() {
     'gate-3': fs.existsSync(path.join(reviewBase, 'gate-3-page-list', 'page-list.md')),
     'gate-4': fs.existsSync(path.join(reviewBase, 'gate-4-seo-strategy', 'seo-strategy.md')),
     'gate-5': fs.existsSync(path.join(reviewBase, 'gate-5-page-specs')),
-    'gate-8': fs.existsSync(path.join(reviewBase, 'gate-8-final-verification', 'structure-audit.md'))
+    'gate-8': fs.existsSync(path.join(reviewBase, 'gate-8-additional-features', 'features-manifest.md')) || fs.existsSync(path.join(reviewBase, 'gate-8-additional-features')),
+    'gate-9': fs.existsSync(path.join(reviewBase, 'gate-9-final-verification', 'structure-audit.md')) || fs.existsSync(path.join(reviewBase, 'gate-8-final-verification', 'structure-audit.md'))
   };
 
   // Generate Root Review Portal

@@ -6,6 +6,16 @@ Stage 7 takes every remaining sub-page from `project-docs/page-list.md` (e.g. `a
 
 Pages are built strictly in the order listed in `project-docs/page-list.md`.
 
+## Table of Contents
+- [The Sub-Page Sub-Pipeline](#the-sub-page-sub-pipeline)
+- [Step-by-Step Implementation Protocol](#step-by-step-implementation-protocol)
+  - [Step 1: Ingest Specifications & Confirm](#step-1-ingest-specifications--confirm)
+  - [Step 2: Implement Thin Page & Section Components](#step-2-implement-thin-page--section-components)
+  - [Step 3: Self-Critique & Automated Diagnostics](#step-3-self-critique--automated-diagnostics)
+  - [Step 4: Gate 7a (Build Review)](#step-4-gate-7a-build-review)
+  - [Step 5: Gate 7b (Binary QA Sign-Off)](#step-5-gate-7b-binary-qa-sign-off)
+  - [Step 6: Mark Completed & Advance](#step-6-mark-completed--advance)
+
 ---
 
 ## The Sub-Page Sub-Pipeline
@@ -44,7 +54,7 @@ Before touching code for sub-page `<slug>`:
      ```
    - Render `data-section="<id>"` on the root tag.
    - Semantic landmarks (`<section id="...">`, `<header>`, `<footer>`, `<article>`).
-   - **Repeating Cards (@apply Rule):** For repeating card grids or service lists, consume Tailwind's `@apply` classes defined in `globals.css` (e.g. `className="service-card"`) rather than repetitive inline utility strings to keep component line counts comfortably under 250 lines.
+   - **Repeating Elements (Tailwind Utility Discipline):** For repeating card grids or service lists, extract repeating items into focused React sub-components or map data over clean JSX elements using pure Tailwind utility classes; do NOT define custom CSS classes or use `@apply` in `globals.css`.
    - If section requires client state or GSAP animation, isolate into `'use client'` component.
 3. **Copy Source Rule:**
    - All text must import from `site/content/<slug>.js`. Zero hardcoded copy in component JSX.
@@ -114,6 +124,7 @@ Present the built page to the user:
 - Any deviations from Layout Theory or Design Theory (and justification).
 - List of elements flagged with `data-placeholder="true"`.
 - User reviews visual structure and provides feedback or clears **Gate 7a**.
+- **Gate 7a Halt:** Present sub-page build preview; await approval.
 
 ### Step 5: Gate 7b (Binary QA Sign-Off)
 Present the completed `page-specs/<slug>/checklist-state.md` showing:
@@ -121,6 +132,7 @@ Present the completed `page-specs/<slug>/checklist-state.md` showing:
 - Tested responsive behavior across mobile, tablet, desktop.
 - Confirmed WCAG AA contrast, focus rings, and keyboard tab navigation.
 - Passing `pnpm check:all` result.
+- **Gate 7b Halt:** Run binary QA checklist; await QA sign-off before next sub-page.
 - User grants explicit approval for **Gate 7b**.
 
 ### Step 6: Mark Completed & Advance

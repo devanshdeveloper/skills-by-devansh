@@ -4,6 +4,14 @@ Stage 4 establishes the search engine optimization (SEO) architecture for the en
 
 The output deliverable is saved to `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md`.
 
+## Table of Contents
+- [Pre-Stage Skills & Tool Connection Check](#pre-stage-skills--tool-connection-check)
+  - [SEO Tool Library & Upfront Availability Audit](#seo-tool-library--upfront-availability-audit)
+- [Research Protocol](#research-protocol)
+- [Technical SEO Architecture](#technical-seo-architecture)
+- [Deliverable Structure (`project-docs/seo-strategy.md`)](#deliverable-structure-project-docsseo-strategymd)
+- [Gate 4 Review Checklist](#gate-4-review-checklist)
+
 ---
 
 ## Pre-Stage Skills & Tool Connection Check
@@ -48,6 +56,7 @@ Configure root metadata in `site/app/layout.js` covering every field supported b
 import { headers } from 'next/headers';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com';
+const siteName = process.env.SITE_NAME || 'Brand Name';
 
 /** @type {import('next').Metadata} */
 export const metadata = {
@@ -56,13 +65,13 @@ export const metadata = {
 
   // 2. Document Title (default, template, and absolute support)
   title: {
-    default: 'Brand Name — Modern Web Development Agency',
-    template: '%s | Brand Name',
+    default: `${siteName} — Modern Web Development Agency`,
+    template: `%s | ${siteName}`,
   },
 
   // 3. Page Description & Core Metadata
   description: 'High-performance Next.js websites and headless digital experiences engineered with structural rigor and taste-driven aesthetics.',
-  applicationName: 'Brand Name Agency',
+  applicationName: `${siteName} Agency`,
   generator: 'Next.js',
   referrer: 'origin-when-cross-origin',
   keywords: [
@@ -73,10 +82,10 @@ export const metadata = {
     'Enterprise Web Applications',
   ],
   authors: [
-    { name: 'Brand Strategy Team', url: `${siteUrl}/about` },
+    { name: `${siteName} Strategy Team`, url: `${siteUrl}/about` },
   ],
-  creator: 'Brand Agency Studio',
-  publisher: 'Brand Holdings LLC',
+  creator: `${siteName} Studio`,
+  publisher: `${siteName} Holdings LLC`,
 
   // 4. Format Detection (prevents unwanted iOS / mobile DOM link mutations)
   formatDetection: {
@@ -102,8 +111,8 @@ export const metadata = {
     type: 'website',
     locale: 'en_US',
     url: '/',
-    siteName: 'Brand Name',
-    title: 'Brand Name — High-Performance Web Development Agency',
+    siteName: siteName,
+    title: `${siteName} — High-Performance Web Development Agency`,
     description: 'High-performance Next.js websites and headless digital experiences engineered with structural rigor.',
     images: [
       {
@@ -111,7 +120,7 @@ export const metadata = {
         secureUrl: `${siteUrl}/assets/og-default.webp`,
         width: 1200,
         height: 630,
-        alt: 'Brand Name — Web Development Agency',
+        alt: `${siteName} — Web Development Agency`,
         type: 'image/webp',
       },
     ],
@@ -120,7 +129,7 @@ export const metadata = {
   // 7. Twitter / X Card Metadata
   twitter: {
     card: 'summary_large_image',
-    title: 'Brand Name — High-Performance Web Development Agency',
+    title: `${siteName} — High-Performance Web Development Agency`,
     description: 'High-performance Next.js websites and headless digital experiences.',
     site: '@BrandHandle',
     creator: '@BrandHandle',
@@ -164,7 +173,7 @@ export const metadata = {
   manifest: '/site.webmanifest',
   appleWebApp: {
     capable: true,
-    title: 'Brand Name',
+    title: siteName,
     statusBarStyle: 'default',
   },
 
@@ -256,20 +265,28 @@ export async function generateMetadata({ params }, parent) {
 
 ### 4. Structured Data (JSON-LD) Specification
 
-Embed schemas using `site/components/JsonLd.js`. Schema markup must strictly match visible page content with zero fabricated claims:
+Embed schemas using `site/components/seo/Schema.js`. Schema markup must strictly match visible page content with zero fabricated claims:
 
-#### Reusable Server Component (`site/components/JsonLd.js`)
+#### Reusable Server Component (`site/components/seo/Schema.js`)
 ```javascript
-// site/components/JsonLd.js
-export default function JsonLd({ schema }) {
-  if (!schema) return null;
+// site/components/seo/Schema.js
+export function Schema({ schema, jsonLd, data, ...rest }) {
+  const target = schema || jsonLd || data;
+  if (!target) return null;
+  const safeHtml = typeof target === 'object' && target.__html
+    ? target.__html
+    : JSON.stringify(target).replace(/</g, '\\u003c');
+
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: safeHtml }}
+      {...rest}
     />
   );
 }
+
+export default Schema;
 ```
 
 #### Core Schema Type Specifications
@@ -280,7 +297,7 @@ export default function JsonLd({ schema }) {
      '@context': 'https://schema.org',
      '@type': 'Organization',
      '@id': 'https://example.com/#organization',
-     name: 'Brand Name Agency',
+     name: process.env.SITE_NAME ? `${process.env.SITE_NAME} Agency` : 'Brand Name Agency',
      url: 'https://example.com',
      logo: {
        '@type': 'ImageObject',
@@ -322,7 +339,7 @@ export default function JsonLd({ schema }) {
      '@context': 'https://schema.org',
      '@type': 'ProfessionalService',
      '@id': 'https://example.com/#localbusiness',
-     name: 'Brand Name Agency',
+     name: process.env.SITE_NAME ? `${process.env.SITE_NAME} Agency` : 'Brand Name Agency',
      image: 'https://example.com/assets/office-exterior.webp',
      telephone: '+1-555-0199',
      email: 'hello@example.com',
@@ -360,7 +377,7 @@ export default function JsonLd({ schema }) {
      '@type': 'WebSite',
      '@id': 'https://example.com/#website',
      url: 'https://example.com',
-     name: 'Brand Name',
+     name: process.env.SITE_NAME || 'Brand Name',
      description: 'High-performance Next.js web agency.',
      publisher: {
        '@id': 'https://example.com/#organization',
@@ -415,6 +432,7 @@ export default function JsonLd({ schema }) {
        },
        publisher: {
          '@id': 'https://example.com/#organization',
+         name: process.env.SITE_NAME || 'Brand Name',
        },
        wordCount: post.wordCount || 1200,
        articleSection: post.category || 'Engineering',
@@ -677,4 +695,5 @@ Before presenting to the user for Gate 4 sign-off:
 - [ ] Exactly one `h1` planned per page.
 - [ ] JSON-LD schema types mapped to visible page content.
 - [ ] 301 redirect map planned for all existing legacy URLs (if migrating).
+- [ ] **Gate 4 Halt:** Present `seo-strategy.md`; await SEO strategy approval before Stage 5.
 - [ ] User approves `project-docs/seo-strategy.md` before initiating Stage 5 (Page Specifications).
