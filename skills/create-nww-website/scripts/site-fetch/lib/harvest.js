@@ -59,12 +59,48 @@ function resolveAssetSourceRelativePath(assetUrl, baseOrigin) {
   try {
     const u = new URL(assetUrl);
     let p = decodeURIComponent(u.pathname).replace(/^\/+/, '') || 'index-asset';
+    if (p.endsWith('/') || !p) {
+      p = path.posix.join(p, 'index-asset');
+    }
+    p = p.split('/').map(seg => seg.replace(/[<>:"|?*]/g, '_')).join('/');
     const hostA = (u.hostname || '').toLowerCase().replace(/^www\./, '');
     const hostB = (new URL(baseOrigin).hostname || '').toLowerCase().replace(/^www\./, '');
     const isSameHost = Boolean(hostA && hostB && (hostA === hostB || hostA.endsWith('.' + hostB) || hostB.endsWith('.' + hostA)));
-    return isSameHost ? p : path.posix.join('_cdn', u.hostname, p);
+    return isSameHost ? p : path.posix.join('_cdn', u.hostname.replace(/[<>:"|?*]/g, '_'), p);
   } catch {
-    return path.posix.join('assets', path.basename(assetUrl).split('?')[0] || 'asset.bin');
+    return path.posix.join('assets', (path.basename(assetUrl).split('?')[0] || 'asset.bin').replace(/[<>:"|?*]/g, '_'));
+  }
+}
+
+function ensureSafeDirectoryForFile(filePath, baseOutDir) {
+  const targetDir = path.dirname(filePath);
+  const rel = path.relative(baseOutDir, targetDir);
+  if (!rel || rel === '.' || rel.startsWith('..')) {
+    fs.mkdirSync(targetDir, { recursive: true });
+    return;
+  }
+
+  const parts = rel.split(/[\\/]/);
+  let curr = baseOutDir;
+
+  for (const part of parts) {
+    curr = path.join(curr, part);
+    if (fs.existsSync(curr)) {
+      const stat = fs.statSync(curr);
+      if (stat.isFile()) {
+        const renamed = `${curr}.file`;
+        try {
+          fs.renameSync(curr, renamed);
+        } catch {}
+        try {
+          fs.mkdirSync(curr, { recursive: true });
+        } catch {}
+      }
+    } else {
+      try {
+        fs.mkdirSync(curr, { recursive: true });
+      } catch {}
+    }
   }
 }
 
@@ -137,8 +173,7 @@ async function harvestAndPlaceAssets({ allDomAssets, allNetworkBuffers, baseOrig
   let assetCounter = 1;
 
   for (const asset of assetList) {
-    const fullDiskPath = path.join(outDir, asset.localRelPath);
-    fs.mkdirSync(path.dirname(fullDiskPath), { recursive: true });
+    let fullDiskPath = path.join(outDir, asset.localRelPath);
 
     let buffer = null;
     let contentType = '';
@@ -158,6 +193,10 @@ async function harvestAndPlaceAssets({ allDomAssets, allNetworkBuffers, baseOrig
     if (!buffer || buffer.length === 0) continue;
 
     try {
+      if (fs.existsSync(fullDiskPath) && fs.statSync(fullDiskPath).isDirectory()) {
+        fullDiskPath = path.join(fullDiskPath, 'index.asset');
+      }
+      ensureSafeDirectoryForFile(fullDiskPath, outDir);
       fs.writeFileSync(fullDiskPath, buffer);
       writtenUrlMap.set(asset.url, asset.localRelPath);
     } catch {
