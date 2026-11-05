@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.21] - 2026-11-05
+
+### Added
+- **CLI Argument Flexibility (`markdown-to-seed.js`)**:
+  - Enhanced argument parser in `markdown-to-seed.js` to support both `--flag=value` and space-separated `--flag value` syntax (e.g., `--src <path>`, `--model <name>`, `--out <dir>`).
+- **Technical Specification Filtering (`lib/markdown.js`)**:
+  - Implemented directory-level priority filtering in `lib/markdown.js`. When a subdirectory contains `content.md`, only `content.md` is compiled into the seed payload, strictly ignoring internal technical specifications (`architecture.md`, `spec.md`, `specs.md`, `plan.md`, `open-questions.md`, etc.).
+  - Verified compilation across 44 tools and blog articles with zero token burn.
+
 ## [1.10.20] - 2026-11-05
 
 ### Added

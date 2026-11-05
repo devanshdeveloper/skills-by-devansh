@@ -419,16 +419,36 @@ function buildSeedsFromMarkdownDirectory(sourceDir, outputDir, options = {}) {
 
   // Collect all content markdown files
   const mdFiles = [];
+  const ignoredFileNames = new Set([
+    'architecture.md',
+    'spec.md',
+    'specs.md',
+    'plan.md',
+    'open-questions.md',
+    'asset-manifest.md',
+    'answers.md',
+    'checklist-state.md',
+    'router-state.md',
+    'readme.md'
+  ]);
+
   function scan(dir) {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
+    const hasContentMd = entries.some(e => e.isFile() && e.name.toLowerCase() === 'content.md');
+
     for (const entry of entries) {
       const full = path.join(dir, entry.name);
       if (entry.isDirectory()) {
         scan(full);
-      } else if (entry.isFile() && (entry.name === 'content.md' || entry.name.endsWith('.md'))) {
-        // Skip scratch notes or open-questions
-        if (entry.name === 'open-questions.md' || entry.name === 'asset-manifest.md') continue;
-        mdFiles.push(full);
+      } else if (entry.isFile()) {
+        const lower = entry.name.toLowerCase();
+        if (hasContentMd) {
+          if (lower === 'content.md') {
+            mdFiles.push(full);
+          }
+        } else if (lower.endsWith('.md') && !ignoredFileNames.has(lower)) {
+          mdFiles.push(full);
+        }
       }
     }
   }

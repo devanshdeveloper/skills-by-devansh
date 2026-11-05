@@ -33,15 +33,35 @@ const {
 } = require('./lib/markdown');
 const { seedPostToCMS } = require('./lib/api');
 
-// Parse arguments
-const args = process.argv.slice(2);
-const positionalArgs = args.filter(a => !a.startsWith('--'));
-const flags = Object.fromEntries(
-  args.filter(a => a.startsWith('--')).map(a => {
-    const [k, ...v] = a.replace(/^--/, '').split('=');
-    return [k, v.join('=') || true];
-  })
-);
+// Parse arguments supporting both --flag=value and --flag value
+function parseCliArgs(argv) {
+  const flags = {};
+  const positionalArgs = [];
+
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i];
+    if (arg.startsWith('--')) {
+      if (arg.includes('=')) {
+        const [k, ...v] = arg.slice(2).split('=');
+        flags[k] = v.join('=');
+      } else {
+        const key = arg.slice(2);
+        const next = argv[i + 1];
+        if (next && !next.startsWith('--')) {
+          flags[key] = next;
+          i++;
+        } else {
+          flags[key] = true;
+        }
+      }
+    } else {
+      positionalArgs.push(arg);
+    }
+  }
+  return { flags, positionalArgs };
+}
+
+const { flags, positionalArgs } = parseCliArgs(process.argv.slice(2));
 
 if (flags.help) {
   console.log(`
@@ -220,3 +240,4 @@ module.exports = {
   convertMarkdownFileToSeedPayload,
   buildSeedsFromMarkdownDirectory
 };
+
