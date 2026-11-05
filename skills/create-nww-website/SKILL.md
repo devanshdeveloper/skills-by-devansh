@@ -6,9 +6,12 @@ description: Orchestrates end-to-end creation of Next.js websites with optional 
 # Create NWW Website
 
 > [!IMPORTANT]
-> **Do Not Edit Skill Files:** Skill files (`SKILL.md`, `references/**`, `scripts/**`) are immutable runbooks. Never edit or overwrite skill files directly during project execution. If workflow changes or enhancements are required, **request changes with a prompt** instead.
+> **Hard Rule — Zero External Project Context:**
+> DO NOT add any context from other projects. It misleads the AI Agent. Only use and add instructions. Skill files, templates, and reference runbooks must contain only instructions, syntax, and schema shapes—never specific brands, business domains, or project context from previous or external projects. All context must come strictly from the current project workspace, brief, or user input.
 >
-> **Project Identity Detection (Read Directory Name First):** Always inspect the current working directory name (`path.basename(process.cwd())`) to derive the project slug and default Brand Name in Title Case. Never introduce, assume, or hallucinate unrelated external projects (such as "Minit Charger" or sample brands). Anchor all branding and scope strictly to the current workspace.
+> **Project Identity Detection (Read Directory Name First):** Always inspect the current working directory name (`path.basename(process.cwd())`) to derive the project slug and default Brand Name in Title Case. Never introduce, assume, or hallucinate unrelated external projects. Anchor all branding and scope strictly to the current workspace.
+>
+> **Do Not Edit Skill Files:** Skill files (`SKILL.md`, `references/**`, `scripts/**`) are immutable runbooks. Never edit or overwrite skill files directly during project execution. If workflow changes or enhancements are required, **request changes with a prompt** instead.
 
 This skill orchestrates the end-to-end creation of production-grade Next.js App Router websites with optional Next Web Website (NWW) CMS integration. It enforces a disciplined 10-stage human-gated workflow (Stages 0 through 9) ensuring structural rigor, taste-driven aesthetic polish, and technical quality.
 

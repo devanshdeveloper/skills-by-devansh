@@ -41,6 +41,7 @@ Execute only verbatim commands matching what exists in this repository:
 - **Run Release (Dry Run)**: `node scripts/publish/release.mjs --dry-run`
 
 ## Workflow Discipline
+- **Zero external context rule**: DO NOT add any context from other projects. It misleads the AI Agent. Only use and add instructions. Never embed domain-specific project examples, fictional brand names, or external business copy into runbooks or skills. All context must come strictly from the current project workspace, brief, or user input.
 - **Read before modifying**: Read existing `SKILL.md` or scripts before proposing changes.
 - **Mirror existing patterns**: Match established structure (YAML frontmatter, section headers, modular references).
 - **Report before implementing**: Present findings, risks, and proposed file lists; wait for confirmation before altering files.
@@ -53,6 +54,7 @@ Execute only verbatim commands matching what exists in this repository:
 - NEVER use shell redirection (`>`, `>>`), heredocs (`<<EOF`), `sed -i`, `perl -pi`, `awk`, `tee`, or codemods to modify files.
 
 ## Forbidden Without Explicit Approval
+- Injecting or adding context, branding, or domain examples from external projects into skill files or runbooks.
 - Installing new dependencies or adding root `package.json` without approval.
 - Modifying environment files or exposing credentials (`PIXABAY_API_KEY`, `PEXELS_API_KEY`, etc.).
 - Running destructive commands: `rm -rf`, `git reset --hard`, `git clean`, `git push --force`.

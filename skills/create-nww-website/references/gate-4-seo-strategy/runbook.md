@@ -6,16 +6,9 @@ The master strategic deliverable is saved to `project-docs/client-review/gate-4-
 Modular production content is generated directly into `client-context/<model>/.../content.md` with co-located image assets.
 
 > [!IMPORTANT]
-> **Strict Purity Rule: Zero Next.js / React / JSX Code in Stage 4:**
-> Stage 4 is strictly an SEO strategy, keyword research, and content architecture stage. It is **strictly forbidden** to output Next.js code (`site/app/layout.js`, `generateMetadata`, `site/app/sitemap.js`, `site/app/robots.js`, React components, or JSX) during this stage.
-> 
-> All Next.js technical code implementations and SEO helpers (`generateMetadata`, `generateJSONLD`, `getSitemap`) are already provided in the modular CMS architecture ([references/cms/](../cms/rulebook.md)) and wired into `site/lib/cms-kit/` during **Stage 6 (Codebase Scaffolding)**.
-> 
-> In Stage 4, solve **only the SEO strategy and content authoring problems**.
-
----
-
-> [!IMPORTANT]
+> **Hard Rule — Zero External Project Context:**
+> DO NOT add any context from other projects. It misleads the AI Agent. Only use and add instructions. Never embed domain-specific project examples, sample brand names, or external business copy into runbooks or prompts. All context must come strictly from the current project workspace, brief, or user input. Runbooks contain only structural instructions and schema shapes.
+>
 > **Strict Purity Rule: Zero Next.js / React / JSX Code in Stage 4:**
 > Stage 4 is strictly an SEO strategy, keyword research, and content architecture stage. It is **strictly forbidden** to output Next.js code (`site/app/layout.js`, `generateMetadata`, `site/app/sitemap.js`, `site/app/robots.js`, React components, or JSX) during this stage.
 > 
@@ -138,9 +131,9 @@ client-context/
 ### Image Co-Location Invariant
 
 All visual assets associated with a piece of content (cover images, diagrams, icons, screenshots) **MUST** be placed directly inside that specific slug folder alongside `content.md`:
-- `client-context/blog/zero-login-tools/cover.webp`
-- `client-context/tool/pdf-tools/merge-pdf/icon.svg`
-- `client-context/tool/pdf-tools/merge-pdf/preview.webp`
+- `client-context/blog/<blog-slug>/cover.webp`
+- `client-context/tool/<tool-category-slug>/<tool-slug>/icon.svg`
+- `client-context/tool/<tool-category-slug>/<tool-slug>/preview.webp`
 
 **Never** store loose images in unrelated directories or detach images from their content markdown. When drafting `content.md`, reference local images via relative paths:
 ```markdown
@@ -151,89 +144,96 @@ coverImage: "./cover.webp"
 
 Every `content.md` file must open with rich YAML frontmatter providing all metadata required for SEO, structured data, and CMS seeders, followed by complete, production-ready markdown content (never placeholder stubs or arrays of code objects):
 
-#### Example: Blog Post (`client-context/blog/<blog-slug>/content.md`)
+#### Template: Blog / Article (`client-context/blog/<blog-slug>/content.md`)
 ```markdown
 ---
-title: "The Rise of Zero Login Tools: Why Privacy-First Utilities Are Winning"
-slug: "zero-login-tools-privacy-first"
-metaTitle: "Zero Login Tools: Why Privacy-First Utilities Are Winning (2026)"
-metaDescription: "Discover how zero-login, browser-native tools protect user data, eliminate sign-up friction, and outperform traditional SaaS utilities."
-primaryKeyword: "Zero Login Tools"
-searchIntent: "Informational"
+title: "<Article Title>"
+slug: "<article-slug>"
+metaTitle: "<Primary Keyword or Topic> | <Brand Name>" # <= 60 chars
+metaDescription: "<Action-oriented summary highlighting key value prop and subtle CTA>" # <= 155 chars
+primaryKeyword: "<Primary Target Keyword>"
+searchIntent: "<Informational | Commercial | Transactional | Navigational>"
 secondaryKeywords:
-  - "privacy first web utilities"
-  - "no registration online tools"
-  - "client side browser tools"
-canonicalUrl: "/blog/zero-login-tools-privacy-first"
+  - "<secondary-keyword-1>"
+  - "<secondary-keyword-2>"
+  - "<secondary-keyword-3>"
+canonicalUrl: "/blog/<article-slug>"
 schemaType: "BlogPosting"
-category: "Privacy & Tech"
-tags: ["Privacy", "Web Tools", "Open Source"]
+category: "<Category Name>"
+tags: ["<Tag1>", "<Tag2>"]
 author:
-  name: "Editorial Team"
-  role: "Technology Analyst"
-publishedAt: "2026-11-05"
+  name: "<Author Name or Editorial Team>"
+  role: "<Author Role or Title>"
+publishedAt: "YYYY-MM-DD"
 coverImage: "./cover.webp"
-coverImageAlt: "Conceptual graphic representing zero login client-side privacy tools"
+coverImageAlt: "<Descriptive alt text for the featured cover image>"
 ---
 
-# The Rise of Zero Login Tools: Why Privacy-First Utilities Are Winning
+# <Article Title>
 
-## Executive Summary
-In an era dominated by account walls and intrusive data harvesting, a new class of utilities is gaining massive organic adoption: zero-login web tools...
+## <Section 1: Topic Introduction & Core Context>
+<Detailed introductory narrative addressing user intent and subject matter derived strictly from project brief...>
 
-## The Friction of Mandatory Authentication
-Traditional web utilities force users through OAuth or email sign-up gates for simple operations...
+## <Section 2: In-Depth Exploration & Core Analysis>
+<Comprehensive technical, strategic, or practical breakdown structured with subheadings...>
 
-## How Client-Side Processing Protects User Privacy
-Using modern WebAssembly and browser APIs, sensitive operations happen directly on the client's device...
+### <Key Takeaway / Subtopic A>
+<Detailed explanatory copy...>
+
+### <Key Takeaway / Subtopic B>
+<Detailed explanatory copy...>
+
+## <Section 3: Practical Application / Guidelines>
+<Actionable steps, considerations, or structured guidelines...>
 
 ## Frequently Asked Questions
-### Are zero-login tools safe to use?
-Yes. Because processing occurs entirely within your browser sandboxed environment...
+### <Search Query / Question 1>
+<Clear, direct factual answer addressing search intent...>
+
+### <Search Query / Question 2>
+<Clear, direct factual answer addressing search intent...>
 ```
 
-#### Example: Interactive Tool (`client-context/tool/<tool-category-slug>/<tool-slug>/content.md`)
+#### Template: Interactive Tool (`client-context/tool/<tool-category-slug>/<tool-slug>/content.md`)
 ```markdown
 ---
-name: "JSON Formatter & Validator"
-slug: "json-formatter-validator"
-categorySlug: "developer-tools"
-metaTitle: "Free Online JSON Formatter & Validator | Zero Login"
-metaDescription: "Format, validate, and beautify JSON instantly in your browser with syntax highlighting. 100% private, client-side, zero login required."
-primaryKeyword: "JSON Formatter Online"
+name: "<Tool Name>"
+slug: "<tool-slug>"
+categorySlug: "<tool-category-slug>"
+metaTitle: "<Tool Name> — Free Online Utility | <Brand Name>" # <= 60 chars
+metaDescription: "<Direct summary of what the tool accomplishes, input/output types, and key benefits>" # <= 155 chars
+primaryKeyword: "<Primary Tool Keyword>"
 searchIntent: "Transactional"
 secondaryKeywords:
-  - "free json validator"
-  - "beautify json without login"
-  - "client side json parser"
-canonicalUrl: "/tool/developer-tools/json-formatter-validator"
+  - "<secondary-keyword-1>"
+  - "<secondary-keyword-2>"
+canonicalUrl: "/tool/<tool-category-slug>/<tool-slug>"
 schemaType: "SoftwareApplication"
-applicationCategory: "DeveloperApplication"
+applicationCategory: "<UtilityApplication | DeveloperApplication | BusinessApplication>"
 pricing: "Free"
 icon: "./icon.svg"
 previewImage: "./preview.webp"
-publishedAt: "2026-11-05"
+publishedAt: "YYYY-MM-DD"
 ---
 
-# Online JSON Formatter & Validator
+# <Tool Name>
 
 ## Tool Overview
-Format, parse, and validate JSON strings directly in your web browser. No accounts, no subscriptions, and zero server logging.
+<Concise description of the tool's purpose, what it calculates or generates, and visitor benefit...>
 
-## Key Features
-- **Client-Side Privacy:** Your JSON payload never leaves your device.
-- **Instant Validation:** Immediate inline syntax error diagnostics with line numbers.
-- **Tree View & Raw View:** Easily inspect deeply nested data structures.
+## Key Features & Capabilities
+- **<Feature 1 Name>:** <Description of specific utility feature...>
+- **<Feature 2 Name>:** <Description of specific utility feature...>
+- **<Feature 3 Name>:** <Description of privacy, performance, or export capability...>
 
 ## How to Use
-1. Paste your raw JSON into the input editor.
-2. Click **Format JSON** to beautify or **Minify** to compress.
-3. Copy the formatted output or download as `.json`.
+1. <Step 1: Input or configuration action>
+2. <Step 2: Processing or execution action>
+3. <Step 3: Output, download, or copy action>
 
-## Technical Specifications
-- Input Formats: Raw string, `.json` file upload.
-- Browser Compatibility: Chrome, Firefox, Safari, Edge (Chromium).
-- Processing Engine: Native WebAssembly JSON parser.
+## Technical & Input Specifications
+- Supported Formats: <Input/output file or data formats>
+- Execution Environment: <Client-side / Browser API / Serverless>
 ```
 
 ---

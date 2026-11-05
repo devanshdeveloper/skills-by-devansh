@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.15] - 2026-11-05
+
+### Changed
+- **Hard Rule — Zero External Project Context**:
+  - Enforced repository-wide hard rule in `AGENTS.md`, `SKILL.md`, and `references/gate-4-seo-strategy/runbook.md`: strictly DO NOT add any context from other projects. It misleads the AI Agent. Only use and add instructions and structural schema syntax.
+  - Prohibited injecting context, branding, or domain examples from external projects into skill files or runbooks.
+- **Purged Project Examples from Gate 4**:
+  - Completely removed all "Zero Login Tools", "JSON Formatter", and domain-specific copy examples from `references/gate-4-seo-strategy/runbook.md`.
+  - Converted all `content.md` templates to abstract, purely instructional schema templates with structural placeholders.
+
 ## [1.10.14] - 2026-11-05
 
 ### Changed
