@@ -32,7 +32,10 @@ const {
   resolveAssetSourceRelativePath,
   harvestAndPlaceAssets
 } = require('./lib/harvest');
-const { hardenAndRelativizeHtml } = require('./lib/hardening');
+const {
+  hardenAndRelativizeHtml,
+  relativizeHtmlForOfflineMirror
+} = require('./lib/hardening');
 const {
   generateSitemapXml,
   generateManifest,
