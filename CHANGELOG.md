@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.13] - 2026-11-05
+
+### Changed
+- **SEO Gate Purity & Scope Separation**:
+  - Enforced strict purity guardrail in `gate-4-seo-strategy/runbook.md`: zero Next.js, React, or JSX code during Stage 4. Stage 4 focuses exclusively on SEO problem-solving, keyword architecture, search intent, and production content authoring.
+  - Eliminated distracting Next.js code snippets from Stage 4; verified that all Next.js metadata helpers, JSON-LD generators, and sitemaps remain centrally located in the modular CMS architecture (`references/cms/` and `site/lib/cms-kit/`).
+  - Mandated upfront Tool Connection Check protocol in Stage 4: agents must explicitly query the client for available SEO tools (Google Search Console, GA4, Ahrefs, SEMrush, Screaming Frog exports, PageSpeed Insights) and record tool availability before analyzing keywords or authoring content.
+- **Modular SEO Content Directory Architecture (`client-context/`)**:
+  - Established modular directory conventions for authoring SEO content under `client-context/` matching active website models:
+    - `client-context/blog/<blog-slug>/content.md`
+    - `client-context/tool/<tool-category-slug>/<tool-slug>/content.md` (only when the `tool` model is used)
+    - `client-context/service/<service-slug>/content.md`
+    - `client-context/case-study/<case-study-slug>/content.md`
+    - `client-context/<model>/<slug>/content.md`
+  - Enforced image co-location invariant: visual assets (covers, screenshots, icons, diagrams) must reside directly within the slug folder alongside `content.md`.
+  - Added Early Content & SEO Preparation Protocol allowing Gate 4 to be invoked early from Stage 0 to prepare content and assets before design variations or page scaffolding.
+
 ## [1.10.12] - 2026-11-05
 
 ### Changed

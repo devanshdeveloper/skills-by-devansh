@@ -47,6 +47,9 @@ cp -r skills/create-nww-website/references/gate-6-scaffolding/cms-kit/* site/lib
 
 Standalone CLI utilities executed during **Stage 5 Batch 4** to validate and push seed JSON files from `project-docs/client-review/gate-5-cms-content/<model>/` into the live CMS database:
 
+> [!NOTE]
+> **Source Content Ingestion:** Initial draft content, articles, and tool specifications are authored in modular directories under `client-context/<model>/.../content.md` (e.g. `client-context/blog/<blog-slug>/content.md`, `client-context/tool/<category-slug>/<tool-slug>/content.md`) with co-located image assets during Stage 4 SEO Strategy or Stage 0 intake. These provide the source copy, frontmatter, and assets converted into seed records.
+
 ### Shared Seeder Engine
 - `seeders/lib/seeder-base.js` — Universal CLI runner providing argument parsing (`--dir`, `--file`, `--dry-run`, `--auto-slug`), `.env.local` resolution, and HTTP lifecycle methods.
 

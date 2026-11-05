@@ -134,6 +134,7 @@ Generate the master QA acceptance checklist before building pages:
 - Promote shared navigation header (`Nav.js`) and footer (`Footer.js`) to `site/components/`.
 - Install `site/components/ResponsiveImage.js` for zero-CLS server-rendered image loading with LQIP blur placeholders per [asset-optimization.md](asset-optimization.md).
 - Install `site/components/seo/Schema.js` for safe, XSS-escaped Schema.org JSON-LD structured data injection across pages.
+- Wire SEO metadata (`SEOHelper.generateMetadata`) and structured data (`SEOHelper.generateJSONLD`) from `site/lib/cms-kit/` per [cms/rulebook.md](../cms/rulebook.md).
 - Wire `Nav` and `Footer` into root layout `site/app/layout.js`.
 
 ### Step 4: Asset Optimization, Scoped AGENTS.md & Check Scripts

@@ -92,7 +92,7 @@ The workflow advances strictly one stage at a time. Every stage requires explici
 | **1** | **Tech Stack** | `project-docs/client-review/gate-1-tech-stack/tech-stack.md` | **Gate 1:** Tech stack sign-off (Developer Gate) | [gate-1-tech-stack/runbook.md](references/gate-1-tech-stack/runbook.md) |
 | **2** | **Design Theory & Variations** | `gate-2-design-theory/design-theory.md`, variation HTML previews, `index.html` review hub | **Gate 2:** Visual review & variation selection (via public URL) | [gate-2-design-theory/runbook.md](references/gate-2-design-theory/runbook.md) |
 | **3** | **Page List & Sitemap** | `project-docs/client-review/gate-3-page-list/page-list.md` | **Gate 3:** Sitemap & route structure sign-off | [gate-3-page-list/runbook.md](references/gate-3-page-list/runbook.md) |
-| **4** | **SEO Strategy** | `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md` | **Gate 4:** Keywords, JSON-LD, sitemap & redirects sign-off | [gate-4-seo-strategy/runbook.md](references/gate-4-seo-strategy/runbook.md) |
+| **4** | **SEO Strategy & Content** | `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md`, modular content in `client-context/<model>/.../content.md` with co-located images | **Gate 4:** Keywords, JSON-LD schemas, sitemap, redirects & content sign-off | [gate-4-seo-strategy/runbook.md](references/gate-4-seo-strategy/runbook.md) |
 | **5** | **Page Specs & CMS Schema** | `page-specs/<slug>/page.md`, `layout-system.md`, `gate-5-cms-requirements/` (`open-questions.md`, `cms-implementation-rules.md`), schemas & seeds | **Gate 5:** Markdown specifications & CMS schema sign-off | [gate-5-page-specs-and-cms/batch-01-page-spcs/rulebook.md](references/gate-5-page-specs-and-cms/batch-01-page-spcs/rulebook.md) |
 | **6** | **Scaffolding & Showcase** | Scaffold `site/`, `page-checklist.md`, **Landing Page showcase**, CMS blog integration (`references/cms/blog.md`) | **Gate 6:** Scaffolding, foundation & landing showcase sign-off | [gate-6-scaffolding/runbook.md](references/gate-6-scaffolding/runbook.md) |
 | **7** | **Sub-Page Build Loop** | Sequential sub-pages in `site/app/<route>/page.js` with per-page review & QA checklist | **Gate 7a:** Sub-page build review<br>**Gate 7b:** Binary QA sign-off | [gate-7-sub-pages/runbook.md](references/gate-7-sub-pages/runbook.md) |
@@ -109,6 +109,7 @@ The workflow advances strictly one stage at a time. Every stage requires explici
 4. **Public Deployments Only:** All client preview links (Gate 2 variations, Next.js site) must be public HTTPS deployments. Never forward localhost URLs to the client.
 5. **Continuous Discovery Loop:** Maintain at least 20 targeted questions in `client-context/open-questions.md`. When answers arrive downstream, update batch answers, replace the open question, and implement the answer directly into site code.
 6. **Milestone Notifications:** Run `node skills/create-nww-website/scripts/client-notify/index.js` at gate sign-offs to preview and dispatch milestone emails upon explicit user approval.
+7. **Early Content & SEO Preparation (Gate 4 Early Invocation):** If requested during intake (Stage 0), Stage 4 (SEO Strategy & Content) can be executed out of order to formulate keywords, search intent, and author complete content in `client-context/<model>/.../content.md` with co-located image assets before proceeding to design variations (Stage 2) or page specifications (Stage 5). Stage 4 strictly solves SEO strategy and content authoring; zero Next.js code is written in Stage 4.
 
 ---
 
@@ -118,10 +119,20 @@ The workflow advances strictly one stage at a time. Every stage requires explici
 <client-project-root>/
 ├── .gitignore                            # Root ignore rules (includes previous-site/, .env*, node_modules/)
 ├── .env.example                          # Stage 0 root environment template
-├── client-context/                       # Raw client inputs, brand assets, and discovery answers
+├── client-context/                       # Raw client inputs, brand assets, SEO content, and discovery answers
 │   ├── answers/batch-*/answers.md        # Modular batch answers (Batches 01 to 07)
 │   ├── asset-manifest.md                 # Visual asset inventory, provenance & status
-│   └── open-questions.md                 # Rolling queue of >= 20 open discovery questions
+│   ├── open-questions.md                 # Rolling queue of >= 20 open discovery questions
+│   ├── blog/<blog-slug>/                 # [Gate 4/Stage 0] Modular blog posts (content.md + co-located images)
+│   │   ├── content.md                    # Complete SEO-optimized article with frontmatter
+│   │   └── cover.webp                    # Co-located image assets
+│   ├── tool/<category-slug>/<tool-slug>/ # [Gate 4/Stage 0] Modular tool content (when tool model is enabled)
+│   │   ├── content.md                    # Complete tool copy, specs, SEO metadata
+│   │   ├── icon.svg                      # Co-located tool icon
+│   │   └── preview.webp                  # Co-located tool screenshot / preview
+│   └── <model>/<slug>/                   # Other active models (service, case-study, industry, policy)
+│       ├── content.md                    # Complete content with SEO frontmatter
+│       └── [co-located assets]           # Images alongside markdown
 ├── previous-site/                        # [If Migration] Full working offline mirror (crawled in Stage 0)
 ├── project-docs/                         # Project pipeline management & client deliverables
 │   ├── router-state.md                   # Live pipeline state, current stage & gate status

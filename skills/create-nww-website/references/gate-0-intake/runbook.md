@@ -200,6 +200,20 @@ Client discovery does not end at Gate 0:
 
 ---
 
+## Early Content & SEO Preparation Protocol
+
+If the client or user requests to formulate SEO keywords, search intent, and prepare production content (for blog posts, interactive tools, services, case studies) during Stage 0 before advancing through design theory:
+1. **Invoke Gate 4 Early:** Follow [gate-4-seo-strategy/runbook.md](../gate-4-seo-strategy/runbook.md).
+2. **Upfront Tool Check:** First ask if tool connections (GSC, GA4, Ahrefs, SEMrush) are available before generating content.
+3. **Modular Content Folders:** Generate complete markdown content directly into `client-context/<model>/.../content.md` matching active website models:
+   - `client-context/blog/<blog-slug>/content.md`
+   - `client-context/tool/<tool-category-slug>/<tool-slug>/content.md` (when tool model is used)
+   - `client-context/service/<service-slug>/content.md`
+4. **Co-Located Visual Assets:** Place companion images, screenshots, and icons directly in the same folder alongside `content.md`.
+5. **Pure SEO Scope:** Strictly prohibit writing Next.js code (`site/`) during this early content phase. Next.js code is handled during Stage 6 Scaffolding.
+
+---
+
 ## References
 
 - [Master Client Discovery Questionnaire](client-questionnaire.md) — Master intake index and routing guide.
