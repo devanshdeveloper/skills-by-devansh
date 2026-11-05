@@ -4,7 +4,7 @@ The master static QA verification checklist establishes binary pass/fail criteri
 
 The output is saved to `project-docs/page-checklist.md`. (Do NOT generate `theory-revisions.md`; make revisions directly to existing files in-place. If requirement notes are needed, store them in `client-requirements/`).
 
-During Stage 7 sub-page builds, per-page QA execution results are logged to `page-specs/<slug>/checklist-state.md` and recorded in `site/build-log.md`. The master checklist file itself remains a clean static template.
+During Stage 7 sub-page builds, per-page QA execution results are logged to `project-docs/client-review/gate-7-sub-pages/<slug>/checklist-state.md` and recorded in `site/build-log.md`. The master checklist file itself remains a clean static template.
 
 ## Table of Contents
 - [Taste Verification Pass (Stage 6 Prerequisite)](#taste-verification-pass-stage-6-prerequisite)
@@ -36,7 +36,7 @@ Before compiling the checklist in Stage 6:
 ## [Page Name] (`/route-slug`)
 
 - [ ] **Structure & Line Limits:** Thin page server component (`page.js`) is <= 80 lines; section components in route `_components/` are <= 250 lines; each section file opens with `// section: <id>`; no cross-route imports; no new components in `site/components/` unless reused across 2+ pages; no `'use client'` on `page.js`; `pnpm check:structure` passes.
-- [ ] **Layout Fidelity:** Section order, layout pattern, and section count match `page-specs/<slug>/page.md` exactly. Every section ID appears; no extra sections exist.
+- [ ] **Layout Fidelity:** Section order, layout pattern, and section count match route blueprint and content specifications. Every section ID appears; no extra sections exist.
 - [ ] **Next.js Stack & Components:** Route exists and compiles without console errors. `'use client'` appears only on leaf components requiring state or GSAP animations.
 - [ ] **Design Tokens:** Exact semantic hex tokens, modular type scale, and container widths from `design-theory.md` are used; zero hardcoded hex colors or arbitrary font values; tap targets >= 44x44px.
 - [ ] **Foundation Imports:** Shared shell components (`Nav`, `Footer`, `ResponsiveImage`) and motion tokens imported from Foundation without local redefinition.
@@ -52,12 +52,12 @@ Before compiling the checklist in Stage 6:
   - [ ] Tailwind transitions and GSAP transforms do not fight on the same element.
   - [ ] All section text present in initial server-rendered HTML (animations run post-hydration only).
 - [ ] **Copy & Placeholder Audit:**
-  - [ ] Copy matches `page-specs/<slug>/page.md` verbatim (letter for letter, punctuation for punctuation).
+  - [ ] Copy matches `client-context/` content markdown verbatim (letter for letter, punctuation for punctuation).
   - [ ] Copy imported from `site/content/<slug>.js`; zero hardcoded text strings in section components.
   - [ ] Every unconfirmed text block carries `data-placeholder="true"`.
   - [ ] Zero unapproved placeholders present (`[Insert X]`, `Lorem Ipsum`, `TODO`).
 - [ ] **Asset Implementation:**
-  - [ ] Every asset slot from `page-specs/<slug>/page.md` is rendered; zero missing slots.
+  - [ ] Every asset slot from content specifications is rendered; zero missing slots.
   - [ ] Rendered using `ResponsiveImage.js` with WebP srcset, sizes attribute, and explicit width/height.
   - [ ] Cumulative Layout Shift is zero (CLS = 0).
   - [ ] LCP image has `priority={true}` (or `fetchpriority="high"`).
@@ -65,7 +65,7 @@ Before compiling the checklist in Stage 6:
   - [ ] All images have descriptive, non-empty alt text.
   - [ ] Stock images (if used) carry proper provider attribution; Unsplash images include UTM parameters.
 - [ ] **SEO & Metadata:**
-  - [ ] Page exports static or dynamic `metadata` matching `page-specs/<slug>/page.md`.
+  - [ ] Page exports static or dynamic `metadata` matching `seo-strategy.md` or CMS reader.
   - [ ] Title contains target keyword and ends with brand name.
   - [ ] Meta description <= 155 characters with CTA.
   - [ ] Canonical URL is absolute and self-referencing.
@@ -118,7 +118,7 @@ Run across all built pages prior to Gate 8:
 ## Per-Page State Logging Protocol
 
 When building page `<slug>` in Stage 7:
-1. Copy the per-page checklist block into `page-specs/<slug>/checklist-state.md`.
+1. Copy the per-page checklist block into `project-docs/client-review/gate-7-sub-pages/<slug>/checklist-state.md`.
 2. As each check is verified, mark `- [x]`.
 3. If an item fails, fix the code immediately and record what was changed.
 4. Present `checklist-state.md` to the user at **Gate 7b (Binary QA Sign-Off)**.

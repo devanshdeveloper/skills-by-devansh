@@ -1,6 +1,6 @@
-# Stage 5 Batch 02: Asset Curation & Licensed Media Sourcing
+# Stage 5 Batch 01: Asset Curation & Licensed Media Sourcing
 
-This rulebook governs **Batch 2 of Stage 5**. In this batch, the agent curates and sources authentic media assets for all image and video slots defined in Batch 1 page specifications.
+This rulebook governs **Batch 1 of Stage 5**. In this batch, the agent curates and sources authentic media assets for all image and video slots defined across `client-context/<model>/.../content.md` and `project-docs/client-review/gate-3-page-list/page-list.md`.
 
 ## Table of Contents
 - [1. The Two-Source Rule](#1-the-two-source-rule)
@@ -8,14 +8,14 @@ This rulebook governs **Batch 2 of Stage 5**. In this batch, the agent curates a
 - [3. The 8-Tag Asset Slot Taxonomy](#3-the-8-tag-asset-slot-taxonomy)
 - [4. Sourcing CLI Runner (`stock-fetch`)](#4-sourcing-cli-runner-stock-fetch)
 - [5. Stock Provenance Manifest (`stock-provenance.json`)](#5-stock-provenance-manifest-stock-provenancejson)
-- [6. Batch 2 Completion Checklist](#6-batch-2-completion-checklist)
+- [6. Batch 1 Completion Checklist](#6-batch-1-completion-checklist)
 
 ---
 
 ## 1. The Two-Source Rule
 
 Every media asset utilized on the website must come strictly from one of two sources:
-1. **Client-Provided Assets:** Direct files provided in `client-context/assets/` or documented in `client-context/asset-manifest.md`. Client assets take absolute precedence over stock for every slot.
+1. **Client-Provided Assets:** Direct files provided in `client-context/assets/`, co-located in `client-context/<model>/.../`, or documented in `client-context/asset-manifest.md`. Client assets take absolute precedence over stock for every slot.
 2. **Licensed Stock Imagery:** Sourced from approved providers using valid agency API keys, downloaded locally to `assets-source/`, processed via the asset optimizer, and logged with provenance records.
 
 *Hard Exclusion:* Never hotlink images from arbitrary URLs, Google Search, Pinterest, or unapproved third-party sources.
@@ -38,7 +38,7 @@ If a provider key is absent, fall back to the next provider. If no keys are set,
 
 ## 3. The 8-Tag Asset Slot Taxonomy
 
-Every media slot in `page-specs/<slug>/page.md` must declare its structural role using this taxonomy:
+Every media slot across pages and content models must declare its structural role using this taxonomy:
 1. `hero-banner`: Full-width or split hero imagery (16:9 or 21:9).
 2. `feature-card`: Supporting visual for cards or feature grids (4:3 or 1:1).
 3. `editorial-inline`: In-article or narrative photo.
@@ -85,9 +85,9 @@ Whenever stock imagery is fetched, write or append provenance records to `projec
 
 ---
 
-## 6. Batch 2 Completion Checklist
+## 6. Batch 1 Completion Checklist
 
-Before proceeding to Batch 3 (Building Seeds), verify:
+Before proceeding to Batch 2 (Building Seeds), verify:
 - [ ] Client-provided assets from `client-context/asset-manifest.md` are prioritized for all matching slots.
 - [ ] Missing slots are populated via licensed stock from approved providers.
 - [ ] Downloaded assets are placed in `assets-source/` with high resolution.

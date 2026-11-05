@@ -1,6 +1,6 @@
-# Stage 5 Batch 03: Building CMS Content Seeds & Schema Mapping
+# Stage 5 Batch 02: Building CMS Content Seeds & Schema Mapping
 
-This rulebook governs **Batch 3 of Stage 5**. When CMS integration is active (`cms: cms`), the agent formalizes CMS schema mappings and authors production-grade seed content in `project-docs/client-review/gate-5-cms-content/`. All deliverables authored in this batch must strictly adhere to the payload schemas and validation rules enforced by the NWW CMS standalone seeders and companion CLI utilities.
+This rulebook governs **Batch 2 of Stage 5**. When CMS integration is active (`cms: cms`), the agent formalizes CMS schema mappings and authors production-grade seed content in `project-docs/client-review/gate-5-cms-content/`, sourcing copy and frontmatter directly from the modular content authored in `client-context/<model>/.../content.md` during Stage 4 SEO Strategy. All deliverables authored in this batch must strictly adhere to the payload schemas and validation rules enforced by the NWW CMS standalone seeders and companion CLI utilities.
 
 ## Table of Contents
 - [1. Resolving the 28 Open Questions](#1-resolving-the-28-open-questions)
@@ -21,7 +21,7 @@ This rulebook governs **Batch 3 of Stage 5**. When CMS integration is active (`c
   - [3.6 Content Master Index (`index.md`)](#36-content-master-index-indexmd)
 - [4. Schema Specification (`gate-5-cms-schema/cms-schema.md`)](#4-schema-specification-gate-5-cms-schemacms-schemamd)
 - [5. Preflight Seeder Dry-Run Validation](#5-preflight-seeder-dry-run-validation)
-- [6. Batch 3 Completion Checklist](#6-batch-3-completion-checklist)
+- [6. Batch 2 Completion Checklist](#6-batch-2-completion-checklist)
 
 ---
 
@@ -440,9 +440,9 @@ Ensure all preflight validations complete with **exit code 0** and zero `[FAIL]`
 
 ---
 
-## 6. Batch 3 Completion Checklist
+## 6. Batch 2 Completion Checklist
 
-Before proceeding to Batch 4 (Pushing Seeds & Gate 5 Sign-Off), verify:
+Before proceeding to Batch 3 (Pushing Seeds & Gate 5 Sign-Off), verify:
 - [ ] All 28 questions in `gate-5-cms-requirements/open-questions.md` are answered in `cms-implementation-rules.md`.
 - [ ] At least 3 complete blog post seed JSON files exist in `project-docs/client-review/gate-5-cms-content/blog/`.
 - [ ] If Projects active: At least 2 project seed JSON files exist in `project-docs/client-review/gate-5-cms-content/projects/`.

@@ -135,6 +135,7 @@ Generate the master QA acceptance checklist before building pages:
 - Install `site/components/ResponsiveImage.js` for zero-CLS server-rendered image loading with LQIP blur placeholders per [asset-optimization.md](asset-optimization.md).
 - Install `site/components/seo/Schema.js` for safe, XSS-escaped Schema.org JSON-LD structured data injection across pages.
 - Wire SEO metadata (`SEOHelper.generateMetadata`) and structured data (`SEOHelper.generateJSONLD`) from `site/lib/cms-kit/` per [cms/rulebook.md](../cms/rulebook.md).
+- Wire SEO metadata (`SEOHelper.generateMetadata`) and structured data (`SEOHelper.generateJSONLD`) from `site/lib/cms-kit/` per [cms/rulebook.md](../cms/rulebook.md).
 - Wire `Nav` and `Footer` into root layout `site/app/layout.js`.
 
 ### Step 4: Asset Optimization, Scoped AGENTS.md & Check Scripts
@@ -155,20 +156,20 @@ Generate the master QA acceptance checklist before building pages:
 
 ---
 
-## 5. Output Mapping from Stage 5 `page.md`
+## 5. Output Mapping from Content & SEO Specifications
 
-Stage 6 iterates through every `page-specs/<slug>/page.md` and maps its contents into the App Router structure:
+Stage 6 maps the route inventory from `project-docs/client-review/gate-3-page-list/page-list.md`, metadata from `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md`, and modular content from `client-context/<model>/.../content.md` into the App Router structure:
 
 1. **One Route per Slug:**
-   - Each page slug from `project-docs/page-list.md` maps 1:1 to an App Router route (`site/app/<route>/page.js`).
-   - Dynamic routes follow Next.js folder naming (e.g. `blog-[slug]` becomes `site/app/blog/[slug]/page.js`).
+   - Each page slug from `project-docs/client-review/gate-3-page-list/page-list.md` maps 1:1 to an App Router route (`site/app/<route>/page.js`).
+   - Dynamic routes follow Next.js folder naming (e.g. `blog-[slug]` becomes `site/app/blog/[slug]/page.js`, `tool-[category]-[slug]` becomes `site/app/tool/[category]/[slug]/page.js`).
 2. **Thin Page Server Components (`page.js`):**
    - Maximum **80 lines**.
    - Server Component by default; never place `'use client'` on `page.js`.
-   - Exports route `metadata` (title, description, canonical) from `page.md`.
-   - Renders section components in blueprint order.
+   - Exports route `metadata` (title, description, canonical) configured in Stage 4 SEO Strategy or dynamic CMS readers.
+   - Renders section components in sequential order.
 3. **One Component per Section ID:**
-   - Each section in `page.md` maps to a modular component in `site/app/<route>/_components/<SectionName>.js` (**<= 250 lines**).
+   - Modular section components live in `site/app/<route>/_components/<SectionName>.js` (**<= 250 lines**).
    - Every section component must open with the section comment and render `data-section="<id>"`:
      ```jsx
      // section: services-s1-hero
@@ -181,9 +182,9 @@ Stage 6 iterates through every `page-specs/<slug>/page.md` and maps its contents
      }
      ```
 4. **Decoupled Content Modules (`site/content/<slug>.js`):**
-   - Verbatim copy and marked placeholders (`data-placeholder="true"`) from `page.md` are isolated into dedicated content files (`site/content/<slug>.js`).
+   - Verbatim copy and marked placeholders (`data-placeholder="true"`) from `client-context/` content markdown are isolated into dedicated content files (`site/content/<slug>.js`).
    - Keeps section components purely structural.
-   - Shared text from `page-specs/_shared/*.md` maps to `site/content/shared/<name>.js`.
+   - Shared text maps to `site/content/shared/<name>.js`.
 
 ---
 
@@ -202,7 +203,7 @@ To protect unlaunched sites from being indexed by search engines or mistaken for
 
 Stage 6 does not stop at structural scaffolding; it immediately builds out the **Landing Page (Home route: `site/app/page.js`) as the flagship interactive showcase**:
 1. **Thin Home Page Server Component:** `site/app/page.js` (<= 80 lines) exports metadata and renders Home section components in blueprint order.
-2. **Polished Section Components:** Every section in `page-specs/home/page.md` is fully coded and styled in `site/app/_components/<SectionName>.js` (<= 250 lines).
+2. **Polished Section Components:** Every home section is fully coded and styled in `site/app/_components/<SectionName>.js` (<= 250 lines).
 3. **Copy & Media Wiring:** Fully wired to verbatim copy in `site/content/home.js` and optimized images rendered via `ResponsiveImage.js`.
 4. **Taste & Motion Discipline:** Animation strictly adhering to the selected motion tier (`disabled`, `low`, `medium`, `high`, `max`, `ultra`) per [gsap-animation-tiers.md](gsap-animation-tiers.md). If motion is active, wrap in `useGSAP` with container scopes, `gsap.matchMedia()` honoring `prefers-reduced-motion`, and at most ONE bold moment on the page.
 5. **Client Showcase Readiness:** The landing page is immediately previewable via local dev server (`pnpm dev`) or review portal for client inspection and sign-off.
@@ -218,7 +219,7 @@ node skills/create-nww-website/scripts/client-review/verify-nextjs.mjs .
 ```
 Asserts that:
 1. `site/site.manifest.json` exists and is valid.
-2. Every page in `page-list.md` and `page-specs/<slug>/page.md` has an App Router route and page file.
+2. Every page in `page-list.md` has an App Router route and page file.
 3. Every section ID from `page.md` has a corresponding component with `data-section="<id>"`.
 4. Pre-launch guard is active.
 

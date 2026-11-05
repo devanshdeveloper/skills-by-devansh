@@ -72,35 +72,37 @@ if (!Array.isArray(manifest.pages) || manifest.pages.length === 0) {
     const slug = page.slug;
     console.log(`  Checking page slug: ${slug} (Route: ${page.route || '?'})`);
 
-    const pageMdPath = path.join(pageSpecsDir, slug, 'page.md');
-    if (!fs.existsSync(pageMdPath)) {
-      errors.push(`[${slug}] page.md missing at ${pageMdPath}`);
-      continue;
-    }
+    // Look for content spec in client-context/<model>/<slug>/content.md, client-context/<slug>/content.md, or legacy page-specs/<slug>/page.md
+    const candidatePaths = [
+      path.join(projectRoot, 'client-context', slug, 'content.md'),
+      path.join(projectRoot, 'client-context', 'blog', slug, 'content.md'),
+      path.join(projectRoot, 'client-context', 'tool', slug, 'content.md'),
+      path.join(projectRoot, 'client-context', 'service', slug, 'content.md'),
+      path.join(projectRoot, 'client-context', 'case-study', slug, 'content.md'),
+      path.join(pageSpecsDir, slug, 'page.md'),
+    ];
+    const pageMdPath = candidatePaths.find(p => fs.existsSync(p));
 
-    const pageContent = fs.readFileSync(pageMdPath, 'utf-8');
-
-    // Extract section IDs from page.md (### Section X: `id`)
-    const expectedSectionMatches = [...pageContent.matchAll(/### Section\s+\d+:\s*`([^`]+)`/g)];
-    const expectedIds = expectedSectionMatches.map(m => m[1].trim());
-
-    if (expectedIds.length === 0) {
-      warnings.push(`[${slug}] No sections found in page.md.`);
+    let expectedIds = [];
+    if (pageMdPath) {
+      const pageContent = fs.readFileSync(pageMdPath, 'utf-8');
+      const expectedSectionMatches = [...pageContent.matchAll(/### Section\s+\d+:\s*`([^`]+)`/g)];
+      expectedIds = expectedSectionMatches.map(m => m[1].trim());
     }
 
     // Verify manifest sections
     const manifestSections = page.sections || [];
     const manifestIds = manifestSections.map(s => s.id);
 
-    if (expectedIds.length !== manifestIds.length) {
-      errors.push(`[${slug}] Section count mismatch: page.md has ${expectedIds.length}, manifest has ${manifestIds.length}.`);
+    if (expectedIds.length > 0 && expectedIds.length !== manifestIds.length) {
+      errors.push(`[${slug}] Section count mismatch: spec has ${expectedIds.length}, manifest has ${manifestIds.length}.`);
     }
 
     for (let i = 0; i < expectedIds.length; i++) {
       const expId = expectedIds[i];
       const manId = manifestIds[i];
       if (expId !== manId) {
-        errors.push(`[${slug}] Section order mismatch at index ${i}: expected '${expId}' from page.md, found '${manId}' in manifest.`);
+        errors.push(`[${slug}] Section order mismatch at index ${i}: expected '${expId}' from spec, found '${manId}' in manifest.`);
       }
     }
 

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.14] - 2026-11-05
+
+### Changed
+- **Consolidation of Page Specs into SEO Content & Stage 5 Streamlining**:
+  - Completely removed `batch-01-page-spcs` from Stage 5 (`references/gate-5-page-specs-and-cms/`) as page specifications, copywriting, section hierarchies, and asset slots are now authored directly alongside the SEO Strategy in `client-context/<model>/.../content.md`.
+  - Re-indexed Stage 5 into 3 streamlined batches:
+    - `batch-01-asset-curation`: Licensed media sourcing and client asset inventory.
+    - `batch-02-building-seeds`: Generating CMS content seeds and schema mappings from `client-context/` content.
+    - `batch-03-pushing-seeds`: Validating and pushing seed records to live CMS collections.
+  - Updated `SKILL.md`, `references/gate-6-scaffolding/runbook.md`, `references/gate-6-scaffolding/page-checklist.md`, and `references/gate-7-sub-pages/runbook.md` to map routes and copy directly from `client-context/<model>/.../content.md` and `gate-4-seo-strategy/seo-strategy.md`.
+  - Updated companion validator `scripts/client-review/verify-nextjs.mjs` to resolve content specifications from `client-context/` without requiring legacy `page-specs/` directories.
+
 ## [1.10.13] - 2026-11-05
 
 ### Changed

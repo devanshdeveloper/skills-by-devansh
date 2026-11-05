@@ -30,7 +30,7 @@ Ingest Specs -> Confirm -> Code Thin Page & Sections -> Self-Critique -> Gate 7a
 
 ### Step 1: Ingest Specifications & Confirm
 Before touching code for sub-page `<slug>`:
-1. Read `page-specs/<slug>/page.md` and `project-docs/layout-system.md` for section layout, verbatim copy, asset slots, and `## 0. Reference Benchmark Mapping & Similar Page Alignment`.
+1. Read `client-context/<model>/<slug>/content.md` (or `client-context/<slug>/content.md`) and `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md` for section layout, verbatim copy, asset slots, and metadata.
 2. Inspect the analogous captured reference sub-pages from `project-docs/design-references/<domain>/<slug>/` (`index.html`, `content.md`, `screenshot.png`) and (if site migration) `previous-site/<slug>/` to review authentic spatial rhythm, card density, and interactive states for this specific page type. (Note: Gate 6 does not require sub-page benchmarking as it focuses solely on the Landing Page / Home).
 3. Read `project-docs/page-checklist.md` for QA acceptance criteria.
 4. Read `site/AGENTS.md` and the scoped AGENTS.md for each folder the page touches.
@@ -44,7 +44,7 @@ Before touching code for sub-page `<slug>`:
 1. **Thin Page Server Component (`site/app/<route>/page.js`):**
    - Strict limit: **Maximum 80 lines**.
    - Server Component by default; never place `'use client'` on `page.js`.
-   - Export `metadata` or `generateMetadata` with titles, descriptions, and canonical URL from `page.md`.
+   - Export `metadata` or `generateMetadata` with titles, descriptions, and canonical URL from Stage 4 SEO Strategy or CMS readers.
    - Render section components in sequence.
 2. **Co-Located Section Components (`site/app/<route>/_components/`):**
    - Strict limit: **Maximum 250 lines** per file (hard limit 300).
@@ -114,7 +114,7 @@ Before presenting to the user:
    pnpm build
    ```
 2. Walk through every check in `project-docs/page-checklist.md` for this page.
-3. Initialize `page-specs/<slug>/checklist-state.md` and check off verified items.
+3. Initialize `project-docs/client-review/gate-7-sub-pages/<slug>/checklist-state.md` and check off verified items.
 4. If any check fails, fix the code immediately and record the resolution.
 
 ### Step 4: Gate 7a (Build Review)
@@ -127,7 +127,7 @@ Present the built page to the user:
 - **Gate 7a Halt:** Present sub-page build preview; await approval.
 
 ### Step 5: Gate 7b (Binary QA Sign-Off)
-Present the completed `page-specs/<slug>/checklist-state.md` showing:
+Present the completed `project-docs/client-review/gate-7-sub-pages/<slug>/checklist-state.md` showing:
 - Verified single `h1`, heading order, and metadata.
 - Tested responsive behavior across mobile, tablet, desktop.
 - Confirmed WCAG AA contrast, focus rings, and keyboard tab navigation.

@@ -1,6 +1,6 @@
-# Stage 5 Batch 04: Pushing Seeds & Gate 5 Sign-Off
+# Stage 5 Batch 03: Pushing Seeds & Gate 5 Sign-Off
 
-This rulebook governs **Batch 4 of Stage 5**. In this final batch of Stage 5, the agent validates, tests, and seeds content into the live NWW CMS backend using standalone seeder utilities, then presents the complete Stage 5 deliverable package for human Gate 5 sign-off.
+This rulebook governs **Batch 3 of Stage 5**. In this final batch of Stage 5, the agent validates, tests, and seeds content into the live NWW CMS backend using standalone seeder utilities, then presents the complete Stage 5 deliverable package for human Gate 5 sign-off.
 
 ## Table of Contents
 - [1. Seeder Execution Workflow](#1-seeder-execution-workflow)
@@ -97,16 +97,15 @@ If the live website or local dev server is operational, verify that on-demand IS
 Before presenting Gate 5 to the user for formal sign-off:
 
 ### Master Deliverables Checklist
-- [ ] **Batch 1 Complete:** All `page-specs/<slug>/page.md` authored with benchmark anchors and verbatim copy.
-- [ ] **Layout System:** `project-docs/client-review/gate-5-page-specs/layout-system.md` contains only `## Shared Components`.
-- [ ] **Batch 2 Complete:** Media slots populated via client assets or licensed stock; `project-docs/stock-provenance.json` logged.
-- [ ] **Batch 3 Complete:** Content seeds authored in `project-docs/client-review/gate-5-cms-content/`.
+- [ ] **SEO Content Complete:** All modular content authored in `client-context/<model>/.../content.md` with co-located image assets.
+- [ ] **Batch 1 Complete:** Media slots populated via client assets or licensed stock; `project-docs/stock-provenance.json` logged.
+- [ ] **Batch 2 Complete:** Content seeds authored in `project-docs/client-review/gate-5-cms-content/` from `client-context/` content.
 - [ ] **CMS Open Questions Resolved:** All 28 questions in `gate-5-cms-requirements/open-questions.md` codified into `cms-implementation-rules.md`.
-- [ ] **Batch 4 Complete:** Seeders executed successfully with zero fatal errors.
+- [ ] **Batch 3 Complete:** Seeders executed successfully with zero fatal errors.
 - [ ] **Gate Containment Verified:** Zero loose markdown files outside designated gate folders.
 - [ ] **Codebase Untouched:** `site/` contains zero premature code or scaffold files.
 
 ### Downstream Handover to Stage 6
-Present Gate 5 in plain language summarizing page specifications, verbatim copywriting highlights, asset provenance, and CMS seeded articles. Upon human approval:
+Present Gate 5 in plain language summarizing asset curation, CMS schemas, and seeded records. Upon human approval:
 - Advance to **Stage 6 (Codebase Scaffolding, Foundation Build & Landing Page Showcase)** to initialize `site/`, copy `references/gate-6-scaffolding/cms-kit/` to `site/lib/cms/`, wire global components, and construct the live showcase Landing Page.
 

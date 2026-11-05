@@ -8,8 +8,8 @@
   - [Stage 1: Tech Stack Specification](#stage-1-tech-stack-specification)
   - [Stage 2: Design Theory & Variations](#stage-2-design-theory--variations)
   - [Stage 3: Page List & Sitemap](#stage-3-page-list--sitemap)
-  - [Stage 4: SEO Strategy](#stage-4-seo-strategy)
-  - [Stage 5: Page Specifications & CMS Schema](#stage-5-page-specs--cms-schema)
+  - [Stage 4: SEO Strategy & Content Architecture](#stage-4-seo-strategy)
+  - [Stage 5: CMS Schema, Asset Curation & Seeds](#stage-5-cms-schema--asset-curation)
   - [Stage 6: Codebase Scaffolding, Foundation Build & Landing Page Showcase](#stage-6-codebase-scaffolding-foundation-build--landing-page-showcase)
   - [Stage 7: Sub-Page Build Loop (Per-Page Sub-Pipeline)](#stage-7-sub-page-build-loop-per-page-sub-pipeline)
   - [Stage 8: Additional Features](#stage-8-additional-features)
@@ -44,7 +44,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 - [ ] Stage 2: Design Theory & Variations (Gate 2)
 - [ ] Stage 3: Page List & Information Architecture (Gate 3)
 - [ ] Stage 4: SEO Strategy (Gate 4)
-- [ ] Stage 5: Page Specifications & CMS Schema (Gate 5)
+- [ ] Stage 5: CMS Schema, Asset Curation & Seeds (Gate 5)
 - [ ] Stage 6: Codebase Scaffolding, Foundation Build & Landing Page Showcase (Gate 6)
 - [ ] Stage 7: Sub-Page Build Loop (Per-Page Gates 7a & 7b)
 - [ ] Stage 8: Additional Features (Gate 8)
@@ -108,18 +108,15 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 - **Outputs:** `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md`.
 - **Gate 4:** Target keywords confirmed with the client in plain text; technical JSON-LD schemas, canonical rules, and redirect maps approved by the internal developer.
 
-### Stage 5: Page Specifications & CMS Schema
-- **Goal:** Author comprehensive markdown specifications (`page-specs/<slug>/page.md`) unifying responsive layout blueprints, verbatim copywriting, media asset slots, and explicit benchmark cross-referencing to analogous pages captured from benchmark websites (`project-docs/design-references/<domain>/<slug>/` or `previous-site/<slug>/`). Define shared units in `page-specs/_shared/*.md`, multi-page components in `project-docs/client-review/gate-5-page-specs/layout-system.md` (containing ONLY one section: `## Shared Components`, aligned with benchmark header/footer patterns), and log sourced stock images in `project-docs/stock-provenance.json` (if stock is authorized).
-- **Single Mode Enforced:** Gate 5 operates strictly in ONE mode: **Markdown only**. Remove all Next.js and HTML preview modes in Gate 5.
+### Stage 5: CMS Schema, Asset Curation & Seeds
+- **Goal:** Curate licensed and client media assets (`stock-provenance.json`), resolve CMS backend requirements (`gate-5-cms-requirements/`), formalize schemas (`gate-5-cms-schema/`), and generate production-grade seed content (`gate-5-cms-content/`) sourced from modular markdown content authored in `client-context/<model>/.../content.md` during Stage 4.
+- **Consolidation Note:** Page specifications and copywriting are consolidated directly into Stage 4 (SEO Strategy & Content) under `client-context/<model>/.../content.md` with co-located image assets. Stage 5 operates strictly on CMS architecture, asset curation, and database seeds.
 - **The Two-File CMS Contract:** If CMS integration is active (`cms: cms`), Stage 5 strictly authors `project-docs/client-review/gate-5-cms-requirements/open-questions.md` containing 28 blocking questions covering endpoints, auth, schemas, and webhooks. All temporary investigation files (`list.md`, `prompt.md`, `cms-backend-requirements.md`) are deleted. All answers are codified into `project-docs/client-review/gate-5-cms-requirements/cms-implementation-rules.md`.
 - **Deliverables:**
-  - `page-specs/<slug>/page.md` for every page in `page-list.md` (including `## 0. Reference Benchmark Mapping & Similar Page Alignment` and section layout reference anchors).
-  - `page-specs/_shared/<component-slug>.md` (nav, footer, site settings) and `page-specs/_shared/brand-assets.md`.
-  - `project-docs/client-review/gate-5-page-specs/layout-system.md` (contains ONLY section: `## Shared Components`).
   - `project-docs/stock-provenance.json` (if stock imagery is sourced).
-  - If `cms: cms` and requirements resolved: `project-docs/client-review/gate-5-cms-requirements/open-questions.md`, `project-docs/client-review/gate-5-cms-requirements/cms-implementation-rules.md`, `project-docs/client-review/gate-5-cms-schema/cms-schema.md`, `project-docs/client-review/gate-5-cms-content/blog-<slug>.json`, `index.md`.
+  - If `cms: cms` and requirements resolved: `project-docs/client-review/gate-5-cms-requirements/open-questions.md`, `project-docs/client-review/gate-5-cms-requirements/cms-implementation-rules.md`, `project-docs/client-review/gate-5-cms-schema/cms-schema.md`, `project-docs/client-review/gate-5-cms-content/<model>/`, `index.md`.
 - **Banned Markdown Files & Gate Containment:** Do NOT generate `project-docs/migration-inventory.md`, `project-docs/editor-handover-outline.md`, `project-docs/context-update.md`, `project-docs/cms-foundation-tasks.md`, or any unstated markdown files. Every generated markdown document must reside strictly inside its designated gate folder under `project-docs/client-review/`; loose markdown files outside gates are strictly forbidden.
-- **Gate 5:** Client / lead developer reviews and approves the unified page specifications (layout, copy, asset slots) and CMS data models/seeds. Progress is recorded in `project-docs/router-state.md` (`Gate 5: Page Specifications & CMS Schema Approved`).
+- **Gate 5:** Client / lead developer reviews and approves asset provenance, CMS data models, and database seeds. Progress is recorded in `project-docs/router-state.md` (`Gate 5: CMS Schema & Seeds Approved`).
 
 ### Stage 6: Codebase Scaffolding, Foundation Build & Landing Page Showcase
 - **Goal:** Pre-load approved GSAP animation skills (unless `motion: disabled`), generate master QA checklist, build production foundation shell, scaffold all application routes, create `site/.env.example`, and **fully construct the Landing Page (`site/app/page.js` + `_components/`) for client showcase**. (Note: Gate 6 does not require sub-page benchmarking as it focuses exclusively on the Landing Page / Home).
@@ -134,7 +131,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
   ```
 - **Blocking Guard:** Do NOT proceed to scaffolding if there are any unresolved questions in `project-docs/client-review/gate-5-cms-requirements/open-questions.md` that have not been codified into `cms-implementation-rules.md`.
 - **Scaffolding File Size & Token Discipline:** Any generated file must not limit the file size of the scaffolding Next.js site; code should be as small as possible while preserving all features of the page (thin `page.js` <= 80 lines, section components <= 250 lines).
-- **Inputs:** Approved Stage 5 `page.md` files, `page-specs/_shared/*.md`, `project-docs/client-review/gate-5-page-specs/layout-system.md`, `project-docs/client-review/gate-1-tech-stack/tech-stack.md`, and CMS schema (if active).
+- **Inputs:** Route inventory from `page-list.md`, metadata from `seo-strategy.md`, modular content from `client-context/<model>/.../`, `project-docs/client-review/gate-1-tech-stack/tech-stack.md`, and CMS schema (if active).
 - **Execution & Deliverables:**
   1. **QA Artifacts:** Emit master static checklist `project-docs/page-checklist.md`. (Do NOT create `theory-revisions.md`; make revisions directly to existing files).
   2. **Codebase Scaffolding:** Execute `pnpm create next-app site --disable-git` matching runtime conventions.

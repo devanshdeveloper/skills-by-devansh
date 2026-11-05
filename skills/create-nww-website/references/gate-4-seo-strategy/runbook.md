@@ -15,6 +15,16 @@ Modular production content is generated directly into `client-context/<model>/..
 
 ---
 
+> [!IMPORTANT]
+> **Strict Purity Rule: Zero Next.js / React / JSX Code in Stage 4:**
+> Stage 4 is strictly an SEO strategy, keyword research, and content architecture stage. It is **strictly forbidden** to output Next.js code (`site/app/layout.js`, `generateMetadata`, `site/app/sitemap.js`, `site/app/robots.js`, React components, or JSX) during this stage.
+> 
+> All Next.js technical code implementations and SEO helpers (`generateMetadata`, `generateJSONLD`, `getSitemap`) are already provided in the modular CMS architecture ([references/cms/](../cms/rulebook.md)) and wired into `site/lib/cms-kit/` during **Stage 6 (Codebase Scaffolding)**.
+> 
+> In Stage 4, solve **only the SEO strategy and content authoring problems**.
+
+---
+
 ## Table of Contents
 - [1. Mandatory Upfront Tool Connection Protocol](#1-mandatory-upfront-tool-connection-protocol)
 - [2. Early SEO & Content Intake Protocol (Invocation from Gate 0)](#2-early-seo--content-intake-protocol-invocation-from-gate-0)
@@ -75,6 +85,10 @@ When a project requires content or SEO strategy to be finalized **before** desig
 ## 3. Modular SEO Content Generation Architecture (`client-context/`)
 
 All long-form SEO copy, articles, tool guides, and service details are stored in modular directories under `client-context/`. Each piece of content is completely self-contained within its own slug folder.
+
+> [!NOTE]
+> **Consolidation of Page Specs with SEO Content:**
+> Because page copywriting, section hierarchies, keyword targeting, and media slots are authored here in Stage 4 alongside the SEO strategy (in `client-context/<model>/.../content.md` and `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md`), Stage 5 does not require a redundant page-specs batch. Stage 5 focuses directly on CMS schema resolution, asset curation, and live database seeding.
 
 ### Directory Hierarchy & Model Scoping
 
