@@ -157,7 +157,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 - **Goal:** Integrate modular capabilities, analytics, and custom service extensions:
   - Ingest requested features from `client-context/answers/` and project brief (e.g., `nww-analytics` visitor identity SDK, downloader microservice bridges, or custom widgets).
   - Scaffold components and SDKs into `site/` (e.g. `VisitorProvider.jsx` in `site/components/`, root layout provider wrapping in `site/app/layout.js`, or `visitor-client-sdk.js` in `site/public/scripts/`).
-  - Configure environment variables (`NEXT_PUBLIC_NWW_API_BASE_URL`, `NEXT_PUBLIC_NWW_WEBSITE_ID`, etc.) in `site/.env.local` and credential templates in `.env.example`.
+  - Configure environment variables (`NEXT_PUBLIC_NWW_API_BASE_URL` [default: `https://prod-server.nextwebworks.com`], `NEXT_PUBLIC_NWW_WEBSITE_ID`, etc.) in `site/.env.local` and credential templates in `.env.example`.
   - Verify local integration and production build (`cd site && pnpm build && pnpm check:all`).
   - Generate feature deliverable at `project-docs/client-review/gate-8-additional-features/features-manifest.md`.
   - **Gate 8:** Human reviews the feature manifest and grants explicit approval to advance to Stage 9.

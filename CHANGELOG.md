@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.19] - 2026-11-05
+
+### Changed
+- **NWW Analytics API Base URL Default (`https://prod-server.nextwebworks.com`)**:
+  - Aligned NWW Analytics & Visitor telemetry base URL (`NEXT_PUBLIC_NWW_API_BASE_URL`) to use `https://prod-server.nextwebworks.com` as the standard default.
+  - Standardized `.env.example` templates and documentation in `references/gate-8-additional-features/rulebook.md` with `NEXT_PUBLIC_NWW_API_BASE_URL="https://prod-server.nextwebworks.com"`.
+  - Updated `VisitorProvider.jsx` component specification and drop-in browser client SDK (`visitor-client-sdk.js`) to fallback safely to `https://prod-server.nextwebworks.com`.
+
 ## [1.10.18] - 2026-11-05
 
 ### Changed

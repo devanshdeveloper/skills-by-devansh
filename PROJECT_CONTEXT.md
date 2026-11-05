@@ -142,6 +142,7 @@ skills-by-devansh/
   - `CMS_TOKEN`: Bearer token for NWW CMS queries [read: `skills/create-nww-website/references/cms-architecture.md:73`].
   - `REVALIDATE_SECRET`: Shared secret for on-demand ISR webhook verification [read: `skills/create-nww-website/references/cms-architecture.md:153`].
   - `REVALIDATE_SECONDS`: Cache duration fallback interval for Next.js ISR [read: `skills/create-nww-website/references/cms-architecture.md:47`].
+  - `NEXT_PUBLIC_NWW_API_BASE_URL`: Base URL for NWW Analytics & Visitor telemetry (default: `https://prod-server.nextwebworks.com`) [read: `skills/create-nww-website/references/gate-8-additional-features/rulebook.md:109`].
   - `LOCALAPPDATA`: Windows path resolution for npm/Playwright cache [read: `skills/create-nww-website/scripts/reference-capture/index.js:34`].
 - **Services Used**:
   - `skills.sh`: Decentralized agent skill hosting and leaderboard registry [read: `README.md:44-49`].

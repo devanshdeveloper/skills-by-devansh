@@ -63,7 +63,7 @@ Modular feature modules reside in `skills/create-nww-website/references/gate-8-a
    - Generate `project-docs/client-review/gate-8-additional-features/features-manifest.md` documenting that zero additional features were required.
    - Request Gate 8 confirmation to proceed directly to Stage 9.
 3. If **NWW Analytics (`nww-analytics`)** or other features are enabled:
-   - Identify the website tenant ID (`NEXT_PUBLIC_NWW_WEBSITE_ID`) and API base URL (`NEXT_PUBLIC_NWW_API_BASE_URL`).
+   - Identify the website tenant ID (`NEXT_PUBLIC_NWW_WEBSITE_ID`) and API base URL (`NEXT_PUBLIC_NWW_API_BASE_URL`, default: `https://prod-server.nextwebworks.com`).
    - Consult `skills/create-nww-website/references/gate-8-additional-features/site/features/nww-analytics/implementation.md`.
 
 ---
@@ -106,7 +106,7 @@ Modular feature modules reside in `skills/create-nww-website/references/gate-8-a
 1. Update `site/.env.local`:
    ```env
    # NWW Analytics / Visitor Identity
-   NEXT_PUBLIC_NWW_API_BASE_URL="https://api.nextwebworks.in"
+   NEXT_PUBLIC_NWW_API_BASE_URL="https://prod-server.nextwebworks.com"
    NEXT_PUBLIC_NWW_WEBSITE_ID="[24-char-mongodb-website-id]"
 
    # Optional Downloader Microservice

@@ -297,7 +297,7 @@ Configure in `site/.env.local` and `site/.env.example`:
 
 | Variable Name | Exposure | Purpose |
 |---|---|---|
-| `NEXT_PUBLIC_NWW_API_BASE_URL` | Browser & Server | Base URL of the NWW API (e.g. `https://api.nextwebworks.in`). |
+| `NEXT_PUBLIC_NWW_API_BASE_URL` | Browser & Server | Base URL of the NWW API (default: `https://prod-server.nextwebworks.com`). |
 | `NEXT_PUBLIC_NWW_WEBSITE_ID` | Browser & Server | 24-character hexadecimal `Website` tenant ID assigned in NWW. |
 | `NEXT_PUBLIC_DOWNLOADER_URL` | Browser & Server | URL of the YouTube Downloader service (e.g. `https://dl.nextwebworks.in`). |
 | `DOWNLOADER_HMAC_SECRET` | **Server-Only (Private)** | Shared HMAC secret for server-to-server operations. Never expose to client. |
@@ -331,7 +331,7 @@ const VisitorContext = createContext({
 export function VisitorProvider({
   children,
   websiteId = process.env.NEXT_PUBLIC_NWW_WEBSITE_ID,
-  apiBaseUrl = process.env.NEXT_PUBLIC_NWW_API_BASE_URL,
+  apiBaseUrl = process.env.NEXT_PUBLIC_NWW_API_BASE_URL || "https://prod-server.nextwebworks.com",
 }) {
   const [visitorId, setVisitorId] = useState(null);
   const [accessToken, setAccessToken] = useState(null);

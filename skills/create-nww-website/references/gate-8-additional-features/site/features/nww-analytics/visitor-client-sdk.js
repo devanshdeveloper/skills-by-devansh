@@ -13,7 +13,7 @@
     class NWWVisitorSDK {
         constructor(config = {}) {
             this.websiteId = config.websiteId || window.NWW_WEBSITE_ID;
-            this.apiBaseUrl = (config.apiBaseUrl || window.NWW_API_BASE_URL || "").replace(/\/$/, "");
+            this.apiBaseUrl = (config.apiBaseUrl || window.NWW_API_BASE_URL || "https://prod-server.nextwebworks.com").replace(/\/$/, "");
             this.storageKey = `nww_device_${this.websiteId}`;
             this.tokenStorageKey = `nww_token_${this.websiteId}`;
 
