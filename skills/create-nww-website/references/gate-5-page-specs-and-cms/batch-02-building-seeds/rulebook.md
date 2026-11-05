@@ -4,7 +4,8 @@ This rulebook governs **Batch 2 of Stage 5**. When CMS integration is active (`c
 
 ## Table of Contents
 - [1. Resolving the 28 Open Questions](#1-resolving-the-28-open-questions)
-- [2. Mongoose Strict-Mode Rules & Seed Formatting](#2-mongoose-strict-mode-rules--seed-formatting)
+- [2. Automated Compilation from Stage 4 Markdown (`markdown-to-seed.js`)](#2-automated-compilation-from-stage-4-markdown-markdown-to-seedjs)
+- [3. Mongoose Strict-Mode Rules & Seed Formatting](#3-mongoose-strict-mode-rules--seed-formatting)
   - [2.1 The Critical Mongoose Strict-Mode Rule](#21-the-critical-mongoose-strict-mode-rule)
   - [2.2 Blog Model Schema & Field Specifications](#22-blog-model-schema--field-specifications)
   - [2.3 Canonical Blog Post Seed Payload Template](#23-canonical-blog-post-seed-payload-template)
@@ -34,7 +35,32 @@ Before authoring content seeds:
 
 ---
 
-## 2. Mongoose Strict-Mode Rules & Seed Formatting
+## 2. Automated Compilation from Stage 4 Markdown (`markdown-to-seed.js`)
+
+To prevent burning massive AI tokens, avoid JSON string escaping errors, and eliminate manual authoring of heavy JSON files for multi-thousand word articles, run the automated companion compiler:
+
+```bash
+# 1. Preview compilation without file writes
+node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js --dry-run
+
+# 2. Compile all client-context/ content into Mongoose-ready JSON seeds
+node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js
+
+# 3. (Optional) Compile and push directly to live CMS in one command
+node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js --seed
+```
+
+### Compiler Automation Features
+- **Zero Token Waste:** Converts heavy markdown articles to HTML and Mongoose JSON locally in milliseconds without invoking the LLM.
+- **YAML Frontmatter Mapping:** Automatically maps `title`, `slug`, `category`, `tags`, `author`, `publishedAt`, and SEO meta fields.
+- **Semantic HTML Rendering:** Converts markdown headings, paragraphs, lists, code blocks, blockquotes, and tables to clean HTML.
+- **Automatic FAQ Extraction:** If the markdown contains a `## Frequently Asked Questions` section, parses `### Question` items into the `faqs: [{ question, answer }]` array for Google FAQ Schema.
+- **Mongoose Strict-Mode Guard:** Automatically places taxonomies under `metadata: { category, tags }` and sets `"editTimeFields": true`.
+- **Manifest Output:** Automatically generates `manifest.json` indexing all converted seeds.
+
+---
+
+## 3. Mongoose Strict-Mode Rules & Seed Formatting
 
 Every content seed JSON must strictly adhere to the NWW backend model rules and route contracts defined in [../../cms/rulebook.md](../../cms/rulebook.md), [../../cms/blog.md](../../cms/blog.md), [../../cms/project.md](../../cms/project.md), [../../cms/contact-us.md](../../cms/contact-us.md), and [../../cms/page-config.md](../../cms/page-config.md).
 

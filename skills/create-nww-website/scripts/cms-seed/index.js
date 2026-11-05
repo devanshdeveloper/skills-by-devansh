@@ -28,6 +28,7 @@ const path = require('node:path');
 
 const { resolveEnvConfig } = require('./lib/env');
 const { validateAndFormatSeedPayload } = require('./lib/schema');
+const { buildSeedsFromMarkdownDirectory } = require('./lib/markdown');
 const {
   generateBlogSlug,
   seedPostToCMS,
@@ -52,6 +53,7 @@ Usage: node scripts/cms-seed/index.js [projectRoot] [options]
 Options:
   --dir=<path>         Path to seed JSON directory (default: project-docs/cms-seed)
   --file=<path>        Seed a specific single JSON file
+  --from-markdown      Compile SEO markdown from client-context/ into JSON seeds before seeding
   --auto-slug          Automatically resolve slug collisions using /api/blog/generate-slug
   --status=<status>    Override post status (e.g. --status=published or --status=draft)
   --env-file=<path>    Custom path to .env file with SERVER_URL and CMS_TOKEN
@@ -75,6 +77,26 @@ async function main() {
   const isDryRun = Boolean(flags['dry-run']);
   const autoSlug = Boolean(flags['auto-slug']);
   const statusOverride = typeof flags.status === 'string' ? flags.status : undefined;
+  const fromMarkdown = Boolean(flags['from-markdown']);
+
+  if (fromMarkdown) {
+    const mdSource = flags.src
+      ? path.resolve(flags.src)
+      : path.join(projectRoot, 'client-context');
+    const targetDir = flags.dir
+      ? path.resolve(flags.dir)
+      : path.join(projectRoot, 'project-docs', 'client-review', 'gate-5-cms-content', 'blog');
+
+    console.log(`\nCompiling SEO markdown from: ${path.relative(projectRoot, mdSource)}/`);
+    console.log(`Writing seed JSON deliverables to: ${path.relative(projectRoot, targetDir)}/`);
+    try {
+      const compiled = buildSeedsFromMarkdownDirectory(mdSource, targetDir, { status: statusOverride });
+      console.log(`✓ Compiled ${compiled.count} markdown file(s) into CMS JSON seeds.`);
+    } catch (err) {
+      console.error(`✗ Markdown compilation failed: ${err.message}`);
+      process.exit(1);
+    }
+  }
 
   console.log('=================================================================');
   console.log('  NWW CMS SEEDING ENGINE');

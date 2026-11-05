@@ -48,14 +48,17 @@ Ensure `SERVER_URL` and `CMS_TOKEN` are configured in the environment before liv
 Always execute a dry run before touching the remote CMS database:
 
 ```bash
-# Example for Blog Posts
-node skills/create-nww-website/references/cms/seeders/blog/insert.js \
+# Option A: Compile from Markdown and Dry-Run Validate in One Step
+node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js --dry-run
+
+# Option B: Run Seeder CLI Dry-Run on Pre-compiled Deliverables
+node skills/create-nww-website/scripts/cms-seed/index.js \
   --dir project-docs/client-review/gate-5-cms-content/blog \
   --dry-run
 
-# Example for Services
-node skills/create-nww-website/references/cms/seeders/service/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content/services \
+# Option C: Standalone Seeder Validation
+node skills/create-nww-website/references/cms/seeders/blog/insert.js \
+  --dir project-docs/client-review/gate-5-cms-content/blog \
   --dry-run
 ```
 

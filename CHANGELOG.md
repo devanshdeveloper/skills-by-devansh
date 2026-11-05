@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.20] - 2026-11-05
+
+### Added
+- **Automated Markdown-to-Seed Compiler (`markdown-to-seed.js`)**:
+  - Engineered zero-dependency compiler (`scripts/cms-seed/markdown-to-seed.js` and `scripts/cms-seed/lib/markdown.js`) that converts SEO markdown content (`client-context/<model>/.../content.md`) directly into Mongoose strict-mode JSON seeds.
+  - Automatically parses YAML frontmatter (`title`, `slug`, `category`, `tags`, `author`, `publishedAt`, `metaTitle`, `metaDescription`).
+  - Converts markdown bodies into semantic HTML rich text (`<h2>`, `<p>`, `<ul>`, `<ol>`, `<blockquote>`, `<table>`, `<code>`, `<pre>`).
+  - Automatically extracts structured Google FAQ schema pairs from `## Frequently Asked Questions` sections.
+  - Eliminates LLM token burn and JSON string escaping errors when processing multi-thousand word articles.
+  - Supports direct CMS seeding via `--seed` flag (`node scripts/cms-seed/markdown-to-seed.js --seed`).
+  - Added `--from-markdown` flag support directly to `scripts/cms-seed/index.js`.
+
 ## [1.10.19] - 2026-11-05
 
 ### Changed

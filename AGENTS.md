@@ -34,6 +34,8 @@ Execute only verbatim commands matching what exists in this repository:
 - **Run Client Milestone Notifier**: `node skills/create-nww-website/scripts/client-notify/index.js`
 - **Run Structure & Deliverables Auditor**: `node skills/create-nww-website/scripts/structure-audit/index.js`
 - **Run CMS Seeder**: `node skills/create-nww-website/scripts/cms-seed/index.js --help`
+- **Compile Markdown Content to CMS Seeds**: `node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js`
+- **Compile & Seed Directly to Live CMS**: `node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js --seed`
 - **Run PageSpeed Check**: `node skills/create-nww-website/scripts/seo/pagespeed-check.js --help`
 - **Run Robots & Sitemap Parser**: `node skills/create-nww-website/scripts/seo/sitemap-robots-parser.js --help`
 - **Run Security Scan**: `node scripts/publish/security-scan.mjs`
