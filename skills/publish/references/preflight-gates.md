@@ -46,7 +46,7 @@ This reference details the 10 automated preflight gates evaluated by `scripts/pu
 - **Objective:** Guarantee zero credentials, private keys, or high-entropy tokens are published to public git history.
 - **Rules:**
   - Evaluates working tree and git commit diffs using `scripts/publish/security-scan.mjs`.
-  - Checks for private keys, GitHub tokens, AWS keys, API keys (`PIXABAY_API_KEY`, `PEXELS_API_KEY`, `UNSPLASH_ACCESS_KEY`, `CMS_SITE_KEY`, `REVALIDATE_SECRET`), and generic token assignments.
+  - Checks for private keys, GitHub tokens, AWS keys, API keys (`PIXABAY_API_KEY`, `PEXELS_API_KEY`, `UNSPLASH_ACCESS_KEY`, `CMS_TOKEN`, `REVALIDATE_SECRET`), and generic token assignments.
 - **Failure Code:** `FAIL_G5_SECRET_DETECTED`
 - **Remediation:** Remove the sensitive token from the source code. If committed, consult [incident-response.md](incident-response.md) for credential rotation immediately.
 

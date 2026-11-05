@@ -12,7 +12,7 @@
 import process from 'node:process';
 
 const SERVER_URL = process.env.SERVER_URL ? process.env.SERVER_URL.replace(/\/+$/, '') : '';
-const CMS_SITE_KEY = process.env.CMS_SITE_KEY || process.env.CMS_TOKEN;
+const CMS_TOKEN = process.env.CMS_TOKEN;
 
 function parseArgs(argv) {
   const options = {
@@ -49,16 +49,16 @@ Options:
     process.exit(0);
   }
 
-  if (!SERVER_URL || !CMS_SITE_KEY) {
-    process.stderr.write('Error: SERVER_URL and CMS_SITE_KEY must be set in environment.\n');
+  if (!SERVER_URL || !CMS_TOKEN) {
+    process.stderr.write('Error: SERVER_URL and CMS_TOKEN must be set in environment.\n');
     process.exit(1);
   }
 
   const res = await fetch(`${SERVER_URL}/api/blog/delete-one/${opts.id}`, {
     method: 'DELETE',
     headers: {
-      Authorization: `Bearer ${CMS_SITE_KEY}`,
-      'x-site-key': CMS_SITE_KEY,
+      Authorization: `Bearer ${CMS_TOKEN}`,
+      'x-site-key': CMS_TOKEN,
     },
   });
 

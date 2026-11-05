@@ -54,7 +54,7 @@ skills-by-devansh/
 ## 4. Architecture and Data Flow
 - **Skill Engine Model**: Markdown runbooks with YAML frontmatter (`name`, `description`) parsed by `npx skills` CLI; decentralized distribution directly from GitHub repository [read: `docs/ARCHITECTURE.md:52-61`].
 - **Routing & Client/Server Boundaries (Target Sites)**: Next.js App Router (`site/app/<route>/page.js`) using React Server Components by default; thin page server components delegating interactive parts to scoped `_components/*.js` [read: `skills/create-nww-website/SKILL.md:86-95`].
-- **API & Data Access**: Target sites connect to Next Web Website (NWW) Headless CMS via Bearer token auth (`Authorization: Bearer ${CMS_SITE_KEY}`) fetching paginated articles (`/api/blog/paginate`) and individual posts (`/api/blog/read-one-by-slug/:slug`); leads submit to `/api/lead/submit` [read: `skills/create-nww-website/SKILL.md:127-131`, `references/cms-architecture.md:20-40`].
+- **API & Data Access**: Target sites connect to Next Web Website (NWW) Headless CMS via Bearer token auth (`Authorization: Bearer ${CMS_TOKEN}`) fetching paginated articles (`/api/blog/paginate`) and individual posts (`/api/blog/read-one-by-slug/:slug`); leads submit to `/api/lead/submit` [read: `skills/create-nww-website/SKILL.md:127-131`, `references/cms-architecture.md:20-40`].
 - **Cache & Revalidation Pipeline**: On-demand ISR using constant-time hashed Bearer authentication on `POST /api/revalidate`, invalidating broad tags via `revalidateTag(tagFor(resource))` with fallback `REVALIDATE_SECONDS=60` [read: `skills/create-nww-website/SKILL.md:132-136`].
 - **Rendering & Preview Pipelines**: Single-mode markdown page specifications in Stage 5 generating unified `page.md` blueprints; Stage 6 project scaffolding pre-loading 10 specialized architecture & GSAP skills and building the Next.js App Router codebase in `site/` with manifest `site/site.manifest.json` [read: `skills/create-nww-website/SKILL.md:88-132`].
 - **Media Optimization Pipeline**: Companion CLI uses `sharp` and `ffmpeg-static` to process source assets into WebP/AVIF format with responsive `srcset` and manifest output at CLS = 0 [read: `skills/create-nww-website/SKILL.md:143-150`].
@@ -139,7 +139,7 @@ skills-by-devansh/
   - `RESEND_API_KEY`: API token for client notification email delivery via Resend [read: `skills/create-nww-website/scripts/client-notify/index.js:379`].
   - `RESEND_FROM`: Configurable sender address for milestone emails [read: `skills/create-nww-website/scripts/client-notify/index.js:380`].
   - `SERVER_URL`: NWW CMS API base URL [read: `skills/create-nww-website/references/cms-architecture.md:72`].
-  - `CMS_SITE_KEY`: Bearer site identifier token for NWW CMS queries [read: `skills/create-nww-website/references/cms-architecture.md:73`].
+  - `CMS_TOKEN`: Bearer token for NWW CMS queries [read: `skills/create-nww-website/references/cms-architecture.md:73`].
   - `REVALIDATE_SECRET`: Shared secret for on-demand ISR webhook verification [read: `skills/create-nww-website/references/cms-architecture.md:153`].
   - `REVALIDATE_SECONDS`: Cache duration fallback interval for Next.js ISR [read: `skills/create-nww-website/references/cms-architecture.md:47`].
   - `LOCALAPPDATA`: Windows path resolution for npm/Playwright cache [read: `skills/create-nww-website/scripts/reference-capture/index.js:34`].

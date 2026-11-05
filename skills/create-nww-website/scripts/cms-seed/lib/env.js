@@ -6,12 +6,13 @@ const path = require('node:path');
  */
 function resolveEnvConfig(projRoot, customEnvPath) {
   let serverUrl = process.env.SERVER_URL;
-  let siteKey = process.env.CMS_SITE_KEY;
+  let cmsToken = process.env.CMS_TOKEN;
 
-  if (serverUrl && siteKey) {
+  if (serverUrl && cmsToken) {
     return {
       serverUrl: serverUrl.replace(/\/$/, ''),
-      siteKey
+      cmsToken,
+      siteKey: cmsToken
     };
   }
 
@@ -24,7 +25,7 @@ function resolveEnvConfig(projRoot, customEnvPath) {
   ].filter(Boolean);
 
   for (const envPath of candidatePaths) {
-    if (serverUrl && siteKey) break;
+    if (serverUrl && cmsToken) break;
     if (!fs.existsSync(envPath)) continue;
 
     try {
@@ -40,7 +41,7 @@ function resolveEnvConfig(projRoot, customEnvPath) {
             val = val.slice(1, -1);
           }
           if (key === 'SERVER_URL' && !serverUrl) serverUrl = val;
-          if (key === 'CMS_SITE_KEY' && !siteKey) siteKey = val;
+          if (key === 'CMS_TOKEN' && !cmsToken) cmsToken = val;
         }
       }
     } catch (_) {
@@ -50,7 +51,8 @@ function resolveEnvConfig(projRoot, customEnvPath) {
 
   return {
     serverUrl: (serverUrl || 'https://api.nextwebworks.in').replace(/\/$/, ''),
-    siteKey: siteKey || ''
+    cmsToken: cmsToken || '',
+    siteKey: cmsToken || ''
   };
 }
 

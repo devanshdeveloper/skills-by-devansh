@@ -86,7 +86,7 @@ Verify:
 ## Step 4: Security, CMS & Secret Hygiene Audit
 
 Conduct final security checks:
-1. **Zero Secret Leaks:** Verify that `CMS_SITE_KEY`, `REVALIDATE_SECRET`, `PIXABAY_API_KEY`, `PEXELS_API_KEY`, and `UNSPLASH_ACCESS_KEY` do not appear anywhere in client bundles, HTML outputs, or public git-tracked files.
+1. **Zero Secret Leaks:** Verify that `CMS_TOKEN`, `REVALIDATE_SECRET`, `PIXABAY_API_KEY`, `PEXELS_API_KEY`, and `UNSPLASH_ACCESS_KEY` do not appear anywhere in client bundles, HTML outputs, or public git-tracked files.
 2. **CMS Webhook Verification (if `cms: cms`):** Test `POST /api/revalidate` with bearer token to ensure instant tag purging within 5 seconds.
 3. **Stock Provenance & Credits:** Verify that `project-docs/stock-provenance.json` is complete, `/credits` page renders, and Unsplash images include proper photographer attribution.
 

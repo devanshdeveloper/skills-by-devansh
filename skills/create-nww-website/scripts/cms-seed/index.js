@@ -7,7 +7,7 @@
  * Uses the verified backend contract:
  *   - Create Route: POST /api/blog/create-one
  *   - Slug Generator Route: POST /api/blog/generate-slug
- *   - Auth: Bearer JWT token (CMS_SITE_KEY)
+ *   - Auth: Bearer JWT token (CMS_TOKEN)
  *   - Schema: Mongoose Blog model (metadata.category, metadata.tags, author sugar object)
  *
  * Usage:
@@ -18,7 +18,7 @@
  *   --file=<path>        Seed a specific JSON file instead of the whole directory
  *   --auto-slug          Automatically resolve slug conflicts via POST /api/blog/generate-slug
  *   --status=<status>    Override publication status ('published', 'draft', 'pending')
- *   --env-file=<path>    Custom path to .env file containing SERVER_URL and CMS_SITE_KEY
+ *   --env-file=<path>    Custom path to .env file containing SERVER_URL and CMS_TOKEN
  *   --dry-run            Validate payloads and preview without sending POST requests
  *   --help               Show this help message
  */
@@ -54,7 +54,7 @@ Options:
   --file=<path>        Seed a specific single JSON file
   --auto-slug          Automatically resolve slug collisions using /api/blog/generate-slug
   --status=<status>    Override post status (e.g. --status=published or --status=draft)
-  --env-file=<path>    Custom path to .env file with SERVER_URL and CMS_SITE_KEY
+  --env-file=<path>    Custom path to .env file with SERVER_URL and CMS_TOKEN
   --dry-run            Validate seed files without executing network writes
   --help               Show this help message
 `);
@@ -81,14 +81,14 @@ async function main() {
   console.log('=================================================================');
   console.log(`  Project Root: ${projectRoot}`);
   console.log(`  CMS Server:   ${envConfig.serverUrl}`);
-  console.log(`  Auth State:   ${envConfig.siteKey ? 'CMS_SITE_KEY Loaded' : 'MISSING CMS_SITE_KEY'}`);
+  console.log(`  Auth State:   ${(envConfig.cmsToken || envConfig.siteKey) ? 'CMS_TOKEN Loaded' : 'MISSING CMS_TOKEN'}`);
   console.log(`  Execution:    ${isDryRun ? 'DRY-RUN (No network writes)' : 'LIVE SEEDING'}`);
   if (autoSlug) console.log(`  Auto-Slug:    Enabled (/api/blog/generate-slug on 409 conflict)`);
   if (statusOverride) console.log(`  Status Force: ${statusOverride}`);
   console.log('-----------------------------------------------------------------');
 
-  if (!isDryRun && !envConfig.siteKey) {
-    console.error('\nERROR: CMS_SITE_KEY is missing. Please set CMS_SITE_KEY in your environment or site/.env.local, or use --dry-run.');
+  if (!isDryRun && !(envConfig.cmsToken || envConfig.siteKey)) {
+    console.error('\nERROR: CMS_TOKEN is missing. Please set CMS_TOKEN in your environment or site/.env.local, or use --dry-run.');
     process.exit(1);
   }
 

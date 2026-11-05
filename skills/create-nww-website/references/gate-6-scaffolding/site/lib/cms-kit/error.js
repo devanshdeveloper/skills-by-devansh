@@ -32,7 +32,7 @@ export class CMSError extends Error {
       .replace(/Bearer\s+[A-Za-z0-9_.-]+/gi, 'Bearer [REDACTED]')
       .replace(/x-site-key:\s*[A-Za-z0-9_.-]+/gi, 'x-site-key: [REDACTED]')
       .replace(/siteKey=[A-Za-z0-9_.-]+/gi, 'siteKey=[REDACTED]')
-      .replace(/(?:CMS_SITE_KEY|REVALIDATE_SECRET|CMS_TOKEN|CMS_API_KEY)=[^\s&]+/gi, '$1=[REDACTED]');
+      .replace(/(?:REVALIDATE_SECRET|CMS_TOKEN|CMS_API_KEY)=[^\s&]+/gi, '$1=[REDACTED]');
   }
 }
 

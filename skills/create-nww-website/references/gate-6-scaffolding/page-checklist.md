@@ -95,7 +95,7 @@ Run during Stage 6 Foundation Build:
 - [ ] `site/components/ResponsiveImage.js` implemented as native Server Component.
 - [ ] Every CMS fetch uses `cmsFetch`; no other file sets `next.tags` or `next.revalidate`.
 - [ ] Revalidation route (`site/app/api/revalidate/route.js`) responds 401 without secret, 400 for unknown resource, 200 on valid POST.
-- [ ] `SERVER_URL`, `CMS_SITE_KEY`, `REVALIDATE_SECRET` never leaked to client bundles.
+- [ ] `SERVER_URL`, `CMS_TOKEN`, `REVALIDATE_SECRET` never leaked to client bundles.
 - [ ] `pnpm check:all` passes cleanly.
 
 ---

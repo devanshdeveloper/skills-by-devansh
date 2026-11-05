@@ -116,7 +116,7 @@ pnpm create next-app@latest site --js --tailwind --app --eslint --import-alias "
   ```env
   SITE_NAME="Your Brand Name"
   SERVER_URL="https://cms.example.com"
-  CMS_SITE_KEY="your-cms-site-key"
+  CMS_TOKEN="your-cms-token"
   REVALIDATE_SECRET="your-revalidate-secret"
   NEXT_PUBLIC_SITE_URL="https://example.com"
   NEXT_PUBLIC_PREVIEW_GUARD="true"

@@ -51,7 +51,7 @@ interface WebsiteContactUsInquiry {
 ```
 
 ### Security Rule: Server-Side Execution Only
-Inquiries submitted via `POST /api/website-contact-us/create-one` require the `CMS_SITE_KEY` authorization header. Because `CMS_SITE_KEY` is a write-capable credential, **it must never be exposed to the browser bundle**. All submissions must execute through a **Next.js Server Action** or an internal API route (`site/app/api/contact/route.js`).
+Inquiries submitted via `POST /api/website-contact-us/create-one` require the `CMS_TOKEN` authorization header. Because `CMS_TOKEN` is a write-capable credential, **it must never be exposed to the browser bundle**. All submissions must execute through a **Next.js Server Action** or an internal API route (`site/app/api/contact/route.js`).
 
 ---
 
@@ -122,7 +122,7 @@ import { ContactUs } from '@/lib/cms';
 
 /**
  * Handles contact form submissions directly from Client Components.
- * Executes strictly on the server to protect CMS_SITE_KEY.
+ * Executes strictly on the server to protect CMS_TOKEN.
  *
  * @param {any} prevState
  * @param {FormData|object} formData
@@ -221,6 +221,6 @@ node skills/create-nww-website/references/cms/seeders/contact-us/delete.js \
 - [ ] **Static Guardrail:** `ensureStatic = 'navigation'` is exported from `contact/page.js`.
 - [ ] **Canonical URL:** `generateMetadata` exports `alternates.canonical` pointing to `/contact`.
 - [ ] **Structured Data:** Valid `ContactPage` JSON-LD rendered with `<` Unicode escaping (`\\u003c`).
-- [ ] **Server Action Protection:** Form submission calls `'use server'` action; `CMS_SITE_KEY` is never exposed in client bundles.
+- [ ] **Server Action Protection:** Form submission calls `'use server'` action; `CMS_TOKEN` is never exposed in client bundles.
 - [ ] **Validation:** All 5 fields (`firstName`, `lastName`, `email`, `phone`, `message`) validate before dispatch.
 - [ ] **Accessible UX:** Form inputs include explicit `<label>`, ARIA invalid states, and clear submission feedback messages.

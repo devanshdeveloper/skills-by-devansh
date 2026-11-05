@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.16] - 2026-11-05
+
+### Changed
+- **Standardized NWW CMS Authentication on `CMS_TOKEN`**:
+  - Replaced all legacy occurrences of `CMS_SITE_KEY` across runbooks, checklists, templates, seeder scripts, companion utilities, and preflight security scanners with `CMS_TOKEN`.
+  - Standardized `.env.example` templates and documentation to specify `CMS_TOKEN="your-cms-token"`.
+  - Updated `scripts/cms-seed/` CLI engine, `lib/env.js`, and `lib/api.js` to natively load and validate `CMS_TOKEN`.
+  - Updated seeder utilities (`delete.js`, `insert.js`, `update.js`, and `lib/seeder-base.js`) and CMS client kit (`content-helper.js`, `error.js`) to strictly read and sanitize `CMS_TOKEN`.
+  - Updated preflight security scanner (`scripts/publish/security-scan.mjs`) to detect and safeguard `CMS_TOKEN` literals.
+
 ## [1.10.15] - 2026-11-05
 
 ### Changed

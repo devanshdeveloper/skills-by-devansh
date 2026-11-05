@@ -39,7 +39,7 @@ Content seeding is executed using standalone model seeders located in `skills/cr
 | **Website Tags** | `skills/create-nww-website/references/cms/seeders/tag/insert.js` | `project-docs/client-review/gate-5-cms-content/tags/` |
 | **Forms / Leads** | `skills/create-nww-website/references/cms/seeders/form/submit.js` | `project-docs/client-review/gate-5-cms-content/forms/` |
 
-Ensure `SERVER_URL` and `CMS_SITE_KEY` are configured in the environment before live runs.
+Ensure `SERVER_URL` and `CMS_TOKEN` are configured in the environment before live runs.
 
 ---
 

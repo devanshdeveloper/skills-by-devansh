@@ -47,7 +47,7 @@ async function seedPostToCMS(rawPost, options = {}) {
   }
 
   if (!siteKey) {
-    throw new Error('Missing CMS_SITE_KEY environment variable. Authenticated write required.');
+    throw new Error('Missing CMS_TOKEN environment variable. Authenticated write required.');
   }
 
   const createEndpoint = `${serverUrl}/api/blog/create-one`;

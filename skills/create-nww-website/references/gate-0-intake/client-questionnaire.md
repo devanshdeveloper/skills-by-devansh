@@ -70,7 +70,7 @@ graph TD
    - If an optional question receives "I don't know" or "decide later", assign the documented project default.
 5. **Secret Hygiene Guardrail:**
    - Never request, accept, or record secret credentials, API keys, or passwords.
-   - If the user provides a secret, immediately reject it, remind them to keep credentials in `.env.local`, and record only the environment variable name (`CMS_SITE_KEY`, `SERVER_URL`, `REVALIDATE_SECRET`, `PIXABAY_API_KEY`).
+   - If the user provides a secret, immediately reject it, remind them to keep credentials in `.env.local`, and record only the environment variable name (`CMS_TOKEN`, `SERVER_URL`, `REVALIDATE_SECRET`, `PIXABAY_API_KEY`).
 
 ---
 

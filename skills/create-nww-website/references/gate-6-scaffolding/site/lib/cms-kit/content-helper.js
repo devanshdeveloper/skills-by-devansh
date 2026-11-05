@@ -17,7 +17,7 @@ export class ContentHelper {
    */
   static _getCredentials() {
     const rawUrl = process.env.SERVER_URL ? process.env.SERVER_URL.trim() : '';
-    const siteKey = (process.env.CMS_SITE_KEY || process.env.CMS_TOKEN || '').trim();
+    const siteKey = (process.env.CMS_TOKEN || '').trim();
 
     if (!rawUrl) {
       if (process.env.NODE_ENV === 'production') {

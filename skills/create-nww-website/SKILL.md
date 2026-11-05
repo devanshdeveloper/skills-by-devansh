@@ -68,7 +68,7 @@ Execute this protocol immediately on activation before any other work:
    - Add `previous-site/` to root `.gitignore`. Generate root `.env.example` with credential placeholders.
 5. **Execution & Pacing:**
    - Present questions in batches of 5–7 questions per turn.
-   - **Secret Hygiene:** NEVER request, accept, or record secret credentials or API keys; request env var names only (`CMS_SITE_KEY`, `SERVER_URL`, `REVALIDATE_SECRET`, `PIXABAY_API_KEY`).
+   - **Secret Hygiene:** NEVER request, accept, or record secret credentials or API keys; request env var names only (`CMS_TOKEN`, `SERVER_URL`, `REVALIDATE_SECRET`, `PIXABAY_API_KEY`).
    - Save answers in `client-context/answers/batch-*/answers.md` and assets in `client-context/asset-manifest.md`.
 6. **Gate 0 Enforced Halt:** Present intake recap across batch answers, project slug, and asset manifest. Halt execution until explicit human confirmation is received.
 

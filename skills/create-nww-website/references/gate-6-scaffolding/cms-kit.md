@@ -31,7 +31,7 @@ SITE_NAME="Acme Corp"
 
 # NWW CMS Backend Connection
 SERVER_URL="https://cms.example.com"
-CMS_SITE_KEY="your-cms-site-key"
+CMS_TOKEN="your-cms-token"
 REVALIDATE_SECRET="your-revalidate-secret"
 
 # Canonical Site URL

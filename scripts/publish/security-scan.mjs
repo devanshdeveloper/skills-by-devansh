@@ -38,8 +38,8 @@ export const TOKEN_PATTERNS = [
     regex: /(?:UNSPLASH_ACCESS_KEY|UNSPLASH_SECRET_KEY)\s*=\s*["'][A-Za-z0-9_\-]{16,}["']/i
   },
   {
-    name: 'CMS Site Key Literal',
-    regex: /CMS_SITE_KEY\s*=\s*["'][A-Za-z0-9_\-]{16,}["']/i
+    name: 'CMS Token Literal',
+    regex: /CMS_TOKEN\s*=\s*["'][A-Za-z0-9_\-]{16,}["']/i
   },
   {
     name: 'Revalidate Key Literal',

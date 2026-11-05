@@ -135,7 +135,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 - **Execution & Deliverables:**
   1. **QA Artifacts:** Emit master static checklist `project-docs/page-checklist.md`. (Do NOT create `theory-revisions.md`; make revisions directly to existing files).
   2. **Codebase Scaffolding:** Execute `pnpm create next-app site --disable-git` matching runtime conventions.
-  3. **Site Env Template:** Generate `site/.env.example` with all variables needed by the scaffolding (`SITE_NAME`, `SERVER_URL`, `CMS_SITE_KEY`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_PREVIEW_GUARD`).
+  3. **Site Env Template:** Generate `site/.env.example` with all variables needed by the scaffolding (`SITE_NAME`, `SERVER_URL`, `CMS_TOKEN`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_PREVIEW_GUARD`).
   4. **Foundation Shell:** Wire theme tokens into `site/app/globals.css` (Tailwind root tokens and CSS variables in `:root`), export motion tokens to `site/lib/motion.js`, install `site/components/ResponsiveImage.js`, and assemble `Nav.js` and `Footer.js` into root `layout.js`. All component styling uses Tailwind utility classes in JSX.
   5. **Media & Tooling:** Run asset optimizer (`assets-source/` to `site/public/assets/`), write `site/assets-optimize.config.md`, scaffold `site/AGENTS.md` + 4 scoped AGENTS.md, and add check scripts (`pnpm check:all`).
   6. **CMS & Credits:** Wire CMS client data layer (`site/lib/cms/`) if CMS active; generate `site/app/credits/page.js` if stock images used.
@@ -166,7 +166,7 @@ All progress is tracked in `project-docs/router-state.md`. The agent must initia
 - **Goal:** Execute full production audit and prepare handover:
   - Run `node scripts/structure-audit/index.js` to audit all deliverables, verify documentation completeness, check strict line limits, and generate `project-docs/client-review/gate-9-final-verification/structure-audit.md`.
   - Conduct Pre-Launch SEO Audit on production build (`pnpm build && pnpm start`): metadata, JSON-LD, 301 redirects, robots.txt, sitemap. Validate using companion utilities: `node skills/create-nww-website/scripts/seo/sitemap-robots-parser.js --url http://localhost:3000` and `node skills/create-nww-website/scripts/seo/pagespeed-check.js --url http://localhost:3000`.
-  - Verify CMS checks (if CMS active): unpublished posts excluded, sanitizer strips malicious HTML, webhook responds within 5s, `REVALIDATE_SECRET` and `CMS_SITE_KEY` not leaked.
+  - Verify CMS checks (if CMS active): unpublished posts excluded, sanitizer strips malicious HTML, webhook responds within 5s, `REVALIDATE_SECRET` and `CMS_TOKEN` not leaked.
   - Verify stock audit: no provider API keys in site build or bundles; `/credits` page renders cleanly; Unsplash images include proper attribution; `stock-provenance.json` backed up with assets.
   - Deactivate pre-launch guard per `project-docs/launch-checklist.md` (`NEXT_PUBLIC_PREVIEW_GUARD="false"`).
   - Run `pnpm check:all`.

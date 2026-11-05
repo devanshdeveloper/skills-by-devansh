@@ -15,7 +15,7 @@ import path from 'node:path';
 import process from 'node:process';
 
 const SERVER_URL = process.env.SERVER_URL ? process.env.SERVER_URL.replace(/\/+$/, '') : '';
-const CMS_SITE_KEY = process.env.CMS_SITE_KEY || process.env.CMS_TOKEN;
+const CMS_TOKEN = process.env.CMS_TOKEN;
 
 function parseArgs(argv) {
   const options = {
@@ -62,8 +62,8 @@ async function generateSlug(title) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${CMS_SITE_KEY}`,
-      'x-site-key': CMS_SITE_KEY,
+      Authorization: `Bearer ${CMS_TOKEN}`,
+      'x-site-key': CMS_TOKEN,
     },
     body: JSON.stringify({ title }),
   });
@@ -85,8 +85,8 @@ async function insertPost(post, autoSlug) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${CMS_SITE_KEY}`,
-      'x-site-key': CMS_SITE_KEY,
+      Authorization: `Bearer ${CMS_TOKEN}`,
+      'x-site-key': CMS_TOKEN,
     },
     body: JSON.stringify(payload),
   });
@@ -99,8 +99,8 @@ async function insertPost(post, autoSlug) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${CMS_SITE_KEY}`,
-        'x-site-key': CMS_SITE_KEY,
+        Authorization: `Bearer ${CMS_TOKEN}`,
+        'x-site-key': CMS_TOKEN,
       },
       body: JSON.stringify(payload),
     });
@@ -165,8 +165,8 @@ Options:
 
   process.stdout.write(`Found ${files.length} blog seed file(s).\n`);
   if (!opts.dryRun) {
-    if (!SERVER_URL || !CMS_SITE_KEY) {
-      process.stderr.write('Error: SERVER_URL and CMS_SITE_KEY must be set in environment for live insertion.\n');
+    if (!SERVER_URL || !CMS_TOKEN) {
+      process.stderr.write('Error: SERVER_URL and CMS_TOKEN must be set in environment for live insertion.\n');
       process.exit(1);
     }
   }
