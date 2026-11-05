@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.11] - 2026-11-05
+
+### Fixed
+- **Site Fetcher Symbol Export (`site-fetch/index.js`)**:
+  - Fixed `ReferenceError: relativizeHtmlForOfflineMirror is not defined` by importing the alias from `lib/hardening.js`.
+- **Cross-Platform Directory & File Collision Resilience (`site-fetch/lib/harvest.js`)**:
+  - Implemented `ensureSafeDirectoryForFile` to resolve file-directory collisions when nested API assets share prefixes with parent filenames (e.g. Google Maps `/maps/api/js`).
+  - Added Windows path character sanitization (`[<>:"|?*]`) in `resolveAssetSourceRelativePath`.
+  - Added safe error boundaries around asset filesystem writes so individual asset fetch failures never abort the crawling pipeline.
+
 ## [1.10.10] - 2026-11-04
 
 ### Added
