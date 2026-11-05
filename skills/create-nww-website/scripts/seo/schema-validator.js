@@ -165,7 +165,7 @@ async function run() {
     const kitPath = path.resolve(__dirname, '../../references/gate-6-scaffolding/cms-kit/index.js');
     process.env.SITE_NAME = process.env.SITE_NAME || 'Acme Corp';
     process.env.SITE_URL = process.env.SITE_URL || 'https://acme.example.com';
-    process.env.SERVER_URL = process.env.SERVER_URL || 'https://cms.acme.example.com';
+    process.env.SERVER_URL = process.env.SERVER_URL || 'https://prod-server.nextwebworks.com';
 
     const {
       Blog,

@@ -153,7 +153,7 @@ NEXT_PUBLIC_SITE_URL="https://example.com"
 Requires tenant verification and API keys:
 ```env
 SITE_NAME="Brand Name"
-SERVER_URL="https://cms.example.com"
+SERVER_URL="https://prod-server.nextwebworks.com"
 CMS_TOKEN="your-cms-token"
 REVALIDATE_SECRET="your-revalidate-secret"
 NEXT_PUBLIC_SITE_URL="https://example.com"

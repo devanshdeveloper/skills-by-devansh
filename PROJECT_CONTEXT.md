@@ -138,7 +138,7 @@ skills-by-devansh/
   - `UNSPLASH_ACCESS_KEY`: Access key for Unsplash image queries [read: `skills/create-nww-website/scripts/stock-fetch/index.js:365`].
   - `RESEND_API_KEY`: API token for client notification email delivery via Resend [read: `skills/create-nww-website/scripts/client-notify/index.js:379`].
   - `RESEND_FROM`: Configurable sender address for milestone emails [read: `skills/create-nww-website/scripts/client-notify/index.js:380`].
-  - `SERVER_URL`: NWW CMS API base URL [read: `skills/create-nww-website/references/cms-architecture.md:72`].
+  - `SERVER_URL`: NWW CMS API base URL (default: `https://prod-server.nextwebworks.com`) [read: `skills/create-nww-website/references/cms-architecture.md:72`].
   - `CMS_TOKEN`: Bearer token for NWW CMS queries [read: `skills/create-nww-website/references/cms-architecture.md:73`].
   - `REVALIDATE_SECRET`: Shared secret for on-demand ISR webhook verification [read: `skills/create-nww-website/references/cms-architecture.md:153`].
   - `REVALIDATE_SECONDS`: Cache duration fallback interval for Next.js ISR [read: `skills/create-nww-website/references/cms-architecture.md:47`].

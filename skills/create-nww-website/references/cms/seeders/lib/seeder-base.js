@@ -34,11 +34,8 @@ export function parseArgs(argv, defaultDir = 'project-docs/client-review/gate-5-
 }
 
 export function resolveEnv() {
-  const rawUrl = process.env.SERVER_URL;
+  const rawUrl = process.env.SERVER_URL || 'https://prod-server.nextwebworks.com';
   const siteKey = process.env.CMS_TOKEN;
-  if (!rawUrl) {
-    throw new Error('SERVER_URL must be set in environment or .env.local');
-  }
   if (!siteKey) {
     throw new Error('CMS_TOKEN must be set in environment or .env.local');
   }

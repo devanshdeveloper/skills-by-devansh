@@ -30,7 +30,7 @@ All variables are configured in `site/.env.local` (and documented in `site/.env.
 SITE_NAME="Acme Corp"
 
 # NWW CMS Backend Connection
-SERVER_URL="https://cms.example.com"
+SERVER_URL="https://prod-server.nextwebworks.com"
 CMS_TOKEN="your-cms-token"
 REVALIDATE_SECRET="your-revalidate-secret"
 

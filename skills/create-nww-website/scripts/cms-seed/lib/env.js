@@ -50,7 +50,7 @@ function resolveEnvConfig(projRoot, customEnvPath) {
   }
 
   return {
-    serverUrl: (serverUrl || 'https://api.nextwebworks.in').replace(/\/$/, ''),
+    serverUrl: (serverUrl || 'https://prod-server.nextwebworks.com').replace(/\/$/, ''),
     cmsToken: cmsToken || '',
     siteKey: cmsToken || ''
   };

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.18] - 2026-11-05
+
+### Changed
+- **Default NWW CMS Server Endpoint (`https://prod-server.nextwebworks.com`)**:
+  - Configured `https://prod-server.nextwebworks.com` as the standard default server endpoint for all NWW CMS connections when `SERVER_URL` is omitted from the environment.
+  - Standardized `.env.example` templates in `references/gate-0-intake/runbook.md`, `references/gate-6-scaffolding/cms-kit.md`, and `references/gate-6-scaffolding/runbook.md` with `SERVER_URL="https://prod-server.nextwebworks.com"`.
+  - Updated CMS seeding CLI environment loader (`scripts/cms-seed/lib/env.js`) to default `serverUrl` to `https://prod-server.nextwebworks.com`.
+  - Updated Next.js CMS client helper (`references/gate-6-scaffolding/site/lib/cms-kit/content-helper.js`) to fallback safely to `https://prod-server.nextwebworks.com`.
+  - Updated seeder utilities (`delete.js`, `insert.js`, `update.js`, `form/submit.js`, and `lib/seeder-base.js`) and schema validator to default to `https://prod-server.nextwebworks.com`.
+
 ## [1.10.17] - 2026-11-05
 
 ### Changed

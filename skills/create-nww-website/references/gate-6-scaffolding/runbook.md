@@ -115,7 +115,7 @@ pnpm create next-app@latest site --js --tailwind --app --eslint --import-alias "
 - **Site Environment Template:** Create `site/.env.example` documenting all required variables:
   ```env
   SITE_NAME="Your Brand Name"
-  SERVER_URL="https://cms.example.com"
+  SERVER_URL="https://prod-server.nextwebworks.com"
   CMS_TOKEN="your-cms-token"
   REVALIDATE_SECRET="your-revalidate-secret"
   NEXT_PUBLIC_SITE_URL="https://example.com"

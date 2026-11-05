@@ -12,7 +12,7 @@
 import fs from 'node:fs';
 import process from 'node:process';
 
-const SERVER_URL = process.env.SERVER_URL;
+const SERVER_URL = (process.env.SERVER_URL || 'https://prod-server.nextwebworks.com').replace(/\/+$/, '');
 
 function parseArgs(argv) {
   const options = {

@@ -16,15 +16,8 @@ export class ContentHelper {
    * @private
    */
   static _getCredentials() {
-    const rawUrl = process.env.SERVER_URL ? process.env.SERVER_URL.trim() : '';
+    const rawUrl = (process.env.SERVER_URL || 'https://prod-server.nextwebworks.com').trim();
     const siteKey = (process.env.CMS_TOKEN || '').trim();
-
-    if (!rawUrl) {
-      if (process.env.NODE_ENV === 'production') {
-        throw new CMSError('[ContentHelper] Missing required environment variable: SERVER_URL.', 500);
-      }
-      return { serverUrl: '', siteKey };
-    }
 
     const serverUrl = rawUrl.replace(/\/+$/, '');
     return { serverUrl, siteKey };
