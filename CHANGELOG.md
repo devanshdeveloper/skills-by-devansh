@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.12] - 2026-11-05
+
+### Changed
+- **Project Identity Detection (Read Directory Name First)**:
+  - Updated `create-nww-website/SKILL.md`, `README.md`, `gate-0-intake/runbook.md`, `client-questionnaire.md`, and `batch-01-core-identity/questionnaire.md` to require AI agents to inspect the current working directory name (`path.basename(process.cwd())`) to derive the technical project slug and default Brand Name in Title Case.
+  - Removed misleading hardcoded project examples (`Minit Charger`, commercial bus depot DC fast charging) from starter brief templates and discovery questionnaires.
+  - Added explicit zero-external-hallucination guardrail instructing agents to never inject or assume fictional sample projects.
+  - Updated notification email templates in `scripts/client-notify/lib/templates.js` to default project slugs to the current workspace directory name.
+
+### Removed
+- **Non-Skill Authoring Artifacts & Cleanup**:
+  - Removed legacy scratch notes (`tasks/23.10.2026/`, `tasks/24.10.2026/`).
+  - Removed extraneous test runner and dummy env files from `skills/create-nww-website/references/cms/test/`.
+  - Removed invalid empty directory `skills/create-nww-website/references/gate-10-client-revisions/` to maintain strict 10-stage gate containment invariant (Gates 0 through 9).
+  - Removed orphaned test suite `skills/create-nww-website/scripts/cms-kit-smoke-test/`.
+  - Purged local test deliverables from `project-docs/`.
+
 ## [1.10.11] - 2026-11-05
 
 ### Fixed

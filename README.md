@@ -69,11 +69,12 @@ Copy and paste into your AI assistant (Antigravity, Cursor, Claude Code, or Code
 Activate the create-nww-website skill. Here is our project brief to initialize Stage 0 Intake:
 
 ## 1. Project Identity & Purpose
-- Business / Brand Name: [e.g. Minit Charger]
-- Core Offering: [e.g. Turnkey Level 3 DC fast charging infrastructure for commercial transit and electric bus fleets.]
-- Target Audience: [e.g. Municipal transit directors, commercial depot operators, fleet logistics managers]
-- Primary Conversion Action: [e.g. Schedule Feasibility Study / Book a Consultation]
-- Website Type: [e.g. Business/Corporate]
+- Business / Brand Name: [Client / Business Brand Name, or leave blank to derive from directory name]
+- Technical Project Slug: [Defaults to current working directory name, e.g. <current-directory-name>]
+- Core Offering: [Primary product or service offering in 1-2 sentences]
+- Target Audience: [Target customer persona / visitor demographics]
+- Primary Conversion Action: [Primary conversion goal, e.g. Book Consultation, Request Quote, Buy Now]
+- Website Type: [e.g. Business/Corporate, E-commerce, Portfolio, SaaS, Service]
 - CMS Mode: [Choose: "cms" (dynamic blog, lead capture, page configs) or "none" (100% static)]
 - Build Origin: [Choose: "scratch" or "migration"]
 - Target Launch Timeline: [e.g. 4 weeks]

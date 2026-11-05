@@ -76,7 +76,9 @@ graph TD
 
 ## 2. Technical Project Name & Vercel Slug Propagation
 
-During **Batch 01 (Q1b)**, the agent confirms the **Technical Project Name / Slug** (e.g., `minit-charger`, `lumina-portfolio`, `apex-saas`).
+> **Read Directory Name First:** The agent must inspect the current working directory name (`path.basename(process.cwd())`) to establish the default project slug and derive the Brand Name in Title Case. Never assume or introduce fictional or unrelated projects (such as "Minit Charger").
+
+During **Batch 01 (Q1b)**, the agent confirms the **Technical Project Name / Slug** (defaults to current working directory name, e.g., `<current-directory-slug>`, or custom slug like `lumina-portfolio`, `apex-saas`).
 
 This project slug is strictly propagated across downstream pipeline stages:
 1. **Gate 2 Design Variations:**

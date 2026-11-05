@@ -43,7 +43,9 @@ graph TD
 
 ## Technical Project Name & Vercel Slug Propagation
 
-In Batch 01, the agent confirms the **Technical Project Name / Slug** (e.g. `minit-charger`, `lumina-portfolio`, `apex-saas`). This identifier must be used consistently:
+> **Read Directory Name First:** Always inspect `path.basename(process.cwd())` to establish the technical slug and derive the default brand name in Title Case. Never inject or assume unrelated external projects (such as "Minit Charger").
+
+In Batch 01, the agent confirms the **Technical Project Name / Slug** (defaults to current working directory name, e.g. `<current-directory-slug>`, or custom slug like `lumina-portfolio`, `apex-saas`). This identifier must be used consistently:
 1. **Gate 2 Variations:** Every design variation directory and review portal must use this slug (e.g. `project-docs/client-review/gate-2-design-theory/<project-slug>-v1/index.html`).
 2. **Next.js Package Name:** Stored as `"name": "<project-slug>"` in `site/package.json`.
 3. **Vercel Project Setup:** Used when creating or linking the Vercel project (`vercel link --project <project-slug>`) for public preview and staging reviews. Localhost forwarding is strictly forbidden.

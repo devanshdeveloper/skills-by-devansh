@@ -35,7 +35,7 @@ Before presenting this batch, the agent must check all incoming client input sou
 - **Question:** What is the official name of your business or organization as it should appear across the website?
 - **Answer Type:** Free text
 - **Required:** Yes
-- **Default:** None (Must be provided)
+- **Default:** Derived by converting the current working directory name to Title Case (e.g. `tejas-cure-physiotherapy-clinic` -> `Tejas Cure Physiotherapy Clinic`) if not explicitly specified in brief or client documents.
 - **Downstream Consumers:** 
   - Stage 1: Tech stack documentation title
   - Stage 2: Brand identity tokens, typography showcase, and variation headings
@@ -43,10 +43,10 @@ Before presenting this batch, the agent must check all incoming client input sou
   - Stage 5: Structured JSON-LD Organization schema
 
 ### Q1b [Project Name & Vercel Deployment Slug]
-- **Question:** What is the technical project name / slug for this build? (Lowercase alphanumeric and hyphens only, e.g. `minit-charger`, `lumina-portfolio`, `apex-saas`).
+- **Question:** What is the technical project name / slug for this build? (Defaults to current working directory name, e.g. `<current-directory-slug>`; lowercase alphanumeric and hyphens only).
 - **Answer Type:** Identifier string (alphanumeric + hyphen)
 - **Required:** Yes
-- **Default:** Automatically slugified from Q1a (e.g. `"Acme Corp LLC"` -> `acme-corp`)
+- **Default:** Automatically defaults to current working directory name (`path.basename(process.cwd())`), or slugified from Q1a (e.g. `"Acme Corp LLC"` -> `acme-corp`)
 - **Strict Propagation Rules:**
   - **Gate 2 Variations:** Every design variation directory, HTML title, and public review portal must use this project name (e.g. `<project-slug>-v1`, `<project-slug>-v2`, `<project-slug>-v3`).
   - **Stage 6 Scaffolding:** Used as the `name` field in `site/package.json` (`"name": "<project-slug>"`).

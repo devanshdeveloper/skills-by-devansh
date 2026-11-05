@@ -233,7 +233,7 @@ function getBatchQuestionnaireTemplate(batchKey, context) {
 `Please review and answer the Batch 01 discovery questions below so we can establish your project identity and technical scope:
 
 Q1a (Business & Brand Name): What is the official name of your business or organization as it should appear across the website?
-Q1b (Technical Project Name / Slug): What is the technical project name / slug for this build? (Lowercase alphanumeric and hyphens only, e.g. minit-charger, devanshkhetwani).
+Q1b (Technical Project Name / Slug): What is the technical project name / slug for this build? (Lowercase alphanumeric and hyphens only; defaults to current directory name).
 Q2 (Core Offering & Value Proposition): What does your business do, and what is your primary product or service offering in 1–2 sentences?
 Q3 (Target Audience & Visitor Intent): Who is your ideal customer or visitor (demographics, profession, problem they want to solve when landing on the site)?
 Q4 (Primary Conversion Action): What is the single #1 action you want a visitor to take on the site (e.g. Book a Discovery Call, Buy a Product, View Work, Submit an Inquiry)?

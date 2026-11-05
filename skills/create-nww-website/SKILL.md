@@ -7,6 +7,8 @@ description: Orchestrates end-to-end creation of Next.js websites with optional 
 
 > [!IMPORTANT]
 > **Do Not Edit Skill Files:** Skill files (`SKILL.md`, `references/**`, `scripts/**`) are immutable runbooks. Never edit or overwrite skill files directly during project execution. If workflow changes or enhancements are required, **request changes with a prompt** instead.
+>
+> **Project Identity Detection (Read Directory Name First):** Always inspect the current working directory name (`path.basename(process.cwd())`) to derive the project slug and default Brand Name in Title Case. Never introduce, assume, or hallucinate unrelated external projects (such as "Minit Charger" or sample brands). Anchor all branding and scope strictly to the current workspace.
 
 This skill orchestrates the end-to-end creation of production-grade Next.js App Router websites with optional Next Web Website (NWW) CMS integration. It enforces a disciplined 10-stage human-gated workflow (Stages 0 through 9) ensuring structural rigor, taste-driven aesthetic polish, and technical quality.
 
@@ -29,14 +31,16 @@ Copy and paste into your agent to initialize Stage 0 Intake:
 
 ```markdown
 Activate create-nww-website. Here is our project brief for Stage 0 Intake:
-- Brand Name: [e.g. Minit Charger] | Slug: [e.g. minit-charger] | Type: [e.g. Corporate]
-- Core Offering & Audience: [Turnkey DC fast charging for commercial bus depots]
-- Primary CTA: [Schedule Depot Feasibility Study] | Timeline: [4 weeks]
+- Brand Name: [Client / Business Brand Name, or leave blank to derive from directory name]
+- Project Slug: [Defaults to current working directory name, e.g. <current-directory-name>]
+- Project Type: ["Corporate" | "E-commerce" | "Publication" | "Portfolio" | "Service" | "SaaS"]
+- Core Offering & Audience: [Primary service / product offering and target audience]
+- Primary CTA: [Primary conversion action] | Timeline: [Target delivery timeline]
 - CMS Mode: ["cms" or "none"] | Origin: ["scratch" or "migration"]
-- Brand Tokens: [Primary: #0A192F, Accent: #00E5FF, Headings: Plus Jakarta Sans, Body: Inter]
+- Brand Tokens: [Primary: #hex, Accent: #hex, Headings: Font, Body: Font]
 - Motion Tier: ["disabled", "low", "medium", "high", "max", or "ultra"] (Default: "medium")
-- Benchmarks: [https://stripe.com (spatial hierarchy), https://linear.app (dark accents)]
-- Scope: [Home, Solutions, About, Blog, Contact] | Forms: [Consultation request]
+- Benchmarks: [List 1-3 design inspiration or benchmark URLs]
+- Scope: [List of core routes/pages] | Forms: [Required forms]
 Parse into `client-context/answers/batch-*/answers.md` and present the Gate 0 Intake Recap.
 ```
 
@@ -46,19 +50,24 @@ Parse into `client-context/answers/batch-*/answers.md` and present the Gate 0 In
 
 Execute this protocol immediately on activation before any other work:
 
-1. **Email Milestone Inquiry:** Ask: *"Would you like client milestone approval emails prepared and dispatched at each stage?"*
-2. **Intake Status Check:** Inspect `client-context/answers/batch-01-core-identity/answers.md`:
+1. **Project Identity Detection (Read Directory Name First):**
+   - **Inspect Current Directory Name:** Read `path.basename(process.cwd())` (or inspect the workspace folder name).
+   - **Derive Project Slug:** Use the exact current directory name as the Technical Project Slug (e.g. `tejas-cure-physiotherapy-clinic` -> `tejas-cure-physiotherapy-clinic`).
+   - **Derive Default Brand Name:** Convert the directory slug to Title Case (e.g. `tejas-cure-physiotherapy-clinic` -> `Tejas Cure Physiotherapy Clinic`), unless the user or workspace documents (`client-context/`, brief) explicitly provide an official brand name.
+   - **Zero External Hallucination:** NEVER introduce, assume, or borrow fictional or unrelated project names, business domains, or industries (e.g. NEVER inject "Minit Charger", EV charging, commercial bus depots, or unrelated sample brands). The project identity MUST be anchored exclusively to the current workspace directory and genuine client materials.
+2. **Email Milestone Inquiry:** Ask: *"Would you like client milestone approval emails prepared and dispatched at each stage?"*
+3. **Intake Status Check:** Inspect `client-context/answers/batch-01-core-identity/answers.md`:
    - If answers exist and are complete, recap for Gate 0 confirmation.
    - If user provided a brief, extract known fields to `client-context/answers/batch-*/answers.md` and present only unanswered questions.
    - If no answers exist, immediately output Batch 01 (Q1a to Q8) from [references/gate-0-intake/client-questionnaire.md](references/gate-0-intake/client-questionnaire.md).
-3. **Migration Setup (if `build_origin: migration`):**
+4. **Migration Setup (if `build_origin: migration`):**
    - Run universal site crawler before Gate 1: `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode max-sampled`.
    - Add `previous-site/` to root `.gitignore`. Generate root `.env.example` with credential placeholders.
-4. **Execution & Pacing:**
+5. **Execution & Pacing:**
    - Present questions in batches of 5–7 questions per turn.
    - **Secret Hygiene:** NEVER request, accept, or record secret credentials or API keys; request env var names only (`CMS_SITE_KEY`, `SERVER_URL`, `REVALIDATE_SECRET`, `PIXABAY_API_KEY`).
    - Save answers in `client-context/answers/batch-*/answers.md` and assets in `client-context/asset-manifest.md`.
-5. **Gate 0 Enforced Halt:** Present intake recap across batch answers, project slug, and asset manifest. Halt execution until explicit human confirmation is received.
+6. **Gate 0 Enforced Halt:** Present intake recap across batch answers, project slug, and asset manifest. Halt execution until explicit human confirmation is received.
 
 ---
 
