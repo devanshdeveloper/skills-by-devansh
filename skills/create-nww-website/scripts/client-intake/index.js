@@ -125,6 +125,9 @@ async function main() {
     } else {
       console.log(`  [COMPLETE] Healthy open questions queue (>= 20 questions).`);
     }
+    if (/(?:confirmed decision|decisions confirmed|agreed decisions|confirmed parameters)/i.test(text)) {
+      console.warn('  [WARNING] Confirmed decisions detected in open-questions.md! Confirmed decisions must be kept strictly in client-context/answers/ and NEVER in open-questions.md.');
+    }
   } else {
     console.log('[PENDING] No open-questions.md found. Required at Gate 0 takeoff before proceeding to Stage 1.');
   }

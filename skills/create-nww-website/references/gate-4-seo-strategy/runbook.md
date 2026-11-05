@@ -335,7 +335,7 @@ If the build is a migration (`build_origin: migration`):
 12. **Internationalization & Hreflang (if applicable):** Single-language statement or multi-locale routing.
 13. **Migration 301 Redirect Map (if migration):** Old URL to new route mapping.
 14. **Core Web Vitals & Media Rules for Scaffolding:** Image dimensions, WebP format, LCP high-priority fetch rules.
-15. **Open Questions:** Client follow-up items regarding SEO inputs.
+15. **Open Questions:** Client follow-up items regarding SEO inputs (strictly unresolved questions; never list confirmed decisions here).
 
 ---
 

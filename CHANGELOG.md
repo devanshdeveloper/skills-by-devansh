@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.17] - 2026-11-05
+
+### Changed
+- **Zero Confirmed Decisions in Open Questions Invariant**:
+  - Enforced repository-wide rule across `AGENTS.md`, `SKILL.md`, `references/gate-0-intake/client-questionnaire.md`, `batch-08-open-questions/questionnaire.md`, and `runbook.md`: strictly DO NOT include any confirmed decision, resolved answer, agreed parameter, or project recap in the open questions document (`client-context/open-questions.md`) or deliverable Open Questions sections.
+  - Mandated that confirmed decisions reside strictly in `client-context/answers/batch-*/answers.md` and design specifications.
+  - Prohibited embedding confirmed facts into open question phrasing (questions must probe genuine unresolved gaps only).
+  - Updated companion intake validator `scripts/client-intake/index.js` to audit and warn if confirmed decisions are detected in `open-questions.md`.
+
 ## [1.10.16] - 2026-11-05
 
 ### Changed

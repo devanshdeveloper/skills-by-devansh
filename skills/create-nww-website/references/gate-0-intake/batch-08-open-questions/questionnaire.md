@@ -27,7 +27,7 @@ graph TD
 
 ---
 
-## Strict Guardrail: Zero Already-Answered Questions
+## Strict Guardrail: Zero Already-Answered Questions & Zero Confirmed Decisions
 
 Before compiling or presenting this batch, the agent **MUST** perform a strict check against all recorded project context:
 1. **Inspect All Prior Answers:**
@@ -38,8 +38,9 @@ Before compiling or presenting this batch, the agent **MUST** perform a strict c
    - `client-context/answers/batch-05-type-specific-routing/answers.md`
    - `client-context/answers/batch-06-legacy-site-migration/answers.md` (if migration)
    - `client-context/answers/batch-07-seo-analytics-governance/answers.md`
-2. **Eliminate Duplicates:** If the client has already answered a question (e.g. they already confirmed dark theme, provided their Calendly link, or supplied their logo), that question **CANNOT** be included in the open questions batch.
-3. **Target Genuine Unresolved Gaps:** Every question in this batch must probe for high-value specifics that refine copy, visual assets, conversion mechanics, or integrations.
+2. **Zero Confirmed Decisions Guardrail:** Under NO circumstances should confirmed decisions, agreed parameters, or already-decided answers be included or summarized in `client-context/open-questions.md`. Do not add a "Confirmed Decisions" section or header. Confirmed decisions belong strictly in `client-context/answers/` and stage specifications.
+3. **Eliminate Duplicates:** If the client has already answered a question (e.g. they already confirmed dark theme, provided their Calendly link, or supplied their logo), that question **CANNOT** be included in the open questions batch.
+4. **Target Genuine Unresolved Gaps:** Every question in this batch must probe for high-value specifics that refine copy, visual assets, conversion mechanics, or integrations. Do not embed confirmed facts or decided parameters into question prompts.
 
 ---
 

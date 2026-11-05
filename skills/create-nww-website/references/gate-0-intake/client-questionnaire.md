@@ -314,12 +314,17 @@ client-context/open-questions.md
 Client discovery is not a static gate that closes forever; it is a **continuous, asynchronous refinement loop**.
 1. **Never Halts Pipeline Momentum:** The pipeline advances sequentially through Stages 1 to 8 without waiting for open questions to be answered.
 2. **Rolling Queue of >= 20 Questions:** The file must maintain **at least 20 active, high-value open questions** at all times.
-3. **Dynamic Removal & Replenishment:**
+3. **Strict Guardrail — Zero Confirmed Decisions in Open Questions:**
+   - Under NO circumstances may confirmed decisions, resolved answers, agreed parameters, or project recap summaries be included in `client-context/open-questions.md`.
+   - Confirmed decisions belong strictly in `client-context/answers/batch-[number]-[batch-name]/answers.md` or `project-docs/client-brief.md`.
+   - Never embed confirmed answers into the questions (e.g. avoid "Since we confirmed X, do you want Y?"). Keep questions focused purely on genuine unknown gaps.
+   - Do not include a "Confirmed Decisions" section or header in `open-questions.md`.
+4. **Dynamic Removal & Replenishment:**
    - When the client provides an answer to a question in `open-questions.md`:
      1. **Remove:** Delete the answered question from `client-context/open-questions.md`.
      2. **Persist:** Record the question and answer in the matching modular batch file (`client-context/answers/batch-[number]-[batch-name]/answers.md`) or `client-context/asset-manifest.md`.
      3. **Replenish:** Formulate and add a new targeted open question into `open-questions.md` so the active pool remains at **>= 20 questions**.
-4. **Immediate Action on Code & Downstream Specs:**
+5. **Immediate Action on Code & Downstream Specs:**
    - **If the Next.js site is already generated (`site/app/...`, `site/components/...`, `site/content/...`):** The agent **immediately implements the answer directly in the generated code**—updating React components, page copy, layout system, theme tokens, metadata, or CMS data.
    - **If before site generation:** The agent updates the respective planning specification (`layout-system.md`, `page-specs/`, `seo-strategy.md`).
    - If the answer impacts a milestone decision, record the update in `project-docs/router-state.md` and offer a milestone update to the client.
@@ -333,6 +338,7 @@ When generating `client-context/open-questions.md` at Gate 0 takeoff, seed it wi
 
 > **Instructions for Client & Team:**  
 > This document tracks ongoing, high-value questions to refine copywriting, visual assets, conversion details, and integrations.  
+> Strictly zero confirmed decisions are recorded here; confirmed decisions reside in `client-context/answers/`.
 > Whenever an answer is provided, the question is removed, the answer is codified into the respective batch answers file and live site code, and a new question is added to keep the refinement queue active (minimum 20 open questions).
 
 ---

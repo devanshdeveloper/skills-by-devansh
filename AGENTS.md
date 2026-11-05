@@ -48,6 +48,7 @@ Execute only verbatim commands matching what exists in this repository:
 - **Keep changes scoped**: Modify only files directly requested. Never modify files in `context/`.
 - **Do not edit skill files during project tasks**: Skill files are immutable runbooks. Never edit skill files during project tasks or workflow runs; instead, request changes with a prompt.
 - **Gate containment invariant**: Zero loose markdown files outside gates. Every reference file in `skills/<skill>/references/` and every deliverable under `project-docs/client-review/` must reside strictly inside its designated gate directory (`gate-0-intake/` through `gate-9-final-verification/`). Loose markdown files outside gates are strictly prohibited.
+- **Zero confirmed decisions in open questions**: DO NOT include any confirmed decision, resolved answer, agreed parameter, or project summary in the open questions document (`client-context/open-questions.md`) or Open Questions deliverable sections. Confirmed decisions belong strictly in `client-context/answers/batch-*/answers.md` or stage design specifications. The open questions document must strictly contain ONLY unresolved, pending open questions.
 
 ## Editing Rules (Non-Negotiable)
 - Use ONLY IDE editor tools (`write_to_file`, `replace_file_content`, `multi_replace_file_content`).
@@ -55,6 +56,7 @@ Execute only verbatim commands matching what exists in this repository:
 
 ## Forbidden Without Explicit Approval
 - Injecting or adding context, branding, or domain examples from external projects into skill files or runbooks.
+- Including confirmed decisions, answered items, or agreed specifications in `client-context/open-questions.md`.
 - Installing new dependencies or adding root `package.json` without approval.
 - Modifying environment files or exposing credentials (`PIXABAY_API_KEY`, `PEXELS_API_KEY`, etc.).
 - Running destructive commands: `rm -rf`, `git reset --hard`, `git clean`, `git push --force`.

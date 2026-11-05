@@ -179,7 +179,7 @@ Before requesting Gate 0 approval, verify that all required assets exist:
 ## Gate 0 Approval & Takeoff Protocol
 
 1. Present the project brief, asset manifest summary, selected CMS mode, and motion tier to the user/client.
-2. Initialize `client-context/open-questions.md` with at least 20 targeted, granular open questions spanning copywriting, assets, conversion, integrations, and technical domain requirements.
+2. Initialize `client-context/open-questions.md` with at least 20 targeted, granular open questions spanning copywriting, assets, conversion, integrations, and technical domain requirements. **Strict Guardrail:** Do NOT include any confirmed decision, resolved answer, agreed parameter, or project recap in `client-context/open-questions.md`. Confirmed decisions belong strictly in `client-context/answers/batch-*/answers.md` and `project-docs/client-brief.md`.
 3. Halt execution and explicitly prompt:
    > *"Stage 0 Intake is complete. Please review the confirmed batch answers (`client-context/answers/batch-*/answers.md`), asset manifest (`client-context/asset-manifest.md`), initial rolling open questions (`client-context/open-questions.md`), confirmed CMS mode, and motion tier. Respond with 'approved' to proceed to Stage 1 (Tech Stack)."*
 4. Update `project-docs/router-state.md` upon explicit confirmation (`Gate 0: Intake Confirmed`).
@@ -190,11 +190,12 @@ Before requesting Gate 0 approval, verify that all required assets exist:
 
 Client discovery does not end at Gate 0:
 1. **Never Halts Pipeline Momentum:** The pipeline advances through Stages 1 to 8 without waiting for answers.
-2. **Rolling Queue:** When the client provides answers:
+2. **Zero Confirmed Decisions Invariant:** Never include confirmed decisions or answered items in `client-context/open-questions.md`.
+3. **Rolling Queue:** When the client provides answers:
    - Remove the answered question from `client-context/open-questions.md`.
    - Record the answer in the respective `client-context/answers/batch-*/answers.md` file (or `client-context/asset-manifest.md`).
    - Add a new targeted question into `client-context/open-questions.md` to keep the active queue at **>= 20 questions**.
-3. **Immediate Action on Code & Specs:**
+4. **Immediate Action on Code & Specs:**
    - **If the Next.js site is already generated (`site/`):** Immediately implement the answer in the codebase (updating components, page copy, layout system, theme tokens, metadata, or CMS seed data).
    - **If before site generation:** Update the relevant stage specifications (`layout-system.md`, `page-specs/`, `seo-strategy.md`).
 

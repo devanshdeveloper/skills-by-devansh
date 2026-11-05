@@ -85,7 +85,7 @@ Consolidate disliked-site signals and generic AI-generated tells into an explici
 Restate client brand scale answers (Minimal↔Maximal, Corporate↔Playful, Luxury↔Accessible, Modern↔Classic) and confirm alignment with derived tokens.
 
 ### 6. Open Questions
-Document any ambiguities, unverified reference fetches, or design tensions requiring client clarification.
+Document any ambiguities, unverified reference fetches, or design tensions requiring client clarification. Strictly do not include any confirmed decisions in this section; confirmed decisions belong exclusively in Brand Positioning, Tokens, or batch answers.
 
 ### 7. Reference Summary Table
 A compact audit table:
