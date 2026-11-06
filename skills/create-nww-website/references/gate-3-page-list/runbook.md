@@ -46,6 +46,8 @@ Do NOT generate `page-design-notes.md`. Do not create any additional markdown fi
   - Slug: blog-post
   - Route: /blog/[slug]
   - Content owner: client
+  - CMS-Controlled: true
+  - Target model: blog
   - Purpose: Editorial thought leadership, organic topical authority, and lead capture.
   - Key sections: Article Hero, Sticky Table of Contents, HTML Rich Text Body, Author Bio, Related Articles Grid, Newsletter CTA
   - Primary CTA: Subscribe to Insights -> /newsletter

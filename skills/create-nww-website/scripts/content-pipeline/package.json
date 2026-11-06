@@ -1,0 +1,19 @@
+{
+  "name": "content-pipeline",
+  "version": "1.0.0",
+  "description": "Script-driven content pipeline for NWW CMS-controlled content",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "content-pipeline": "./index.js"
+  },
+  "scripts": {
+    "validate": "node index.js validate",
+    "seo-check": "node index.js seo-check",
+    "to-seed": "node index.js to-seed",
+    "push": "node index.js push"
+  },
+  "dependencies": {
+    "zod": "4.6.7"
+  }
+}

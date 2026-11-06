@@ -35,19 +35,23 @@ Before authoring content seeds:
 
 ---
 
-## 2. Automated Compilation from Stage 4 Markdown (`markdown-to-seed.js`)
+## 2. Automated Compilation from Stage 4 MDX (`to-seed.js`)
 
-To prevent burning massive AI tokens, avoid JSON string escaping errors, and eliminate manual authoring of heavy JSON files for multi-thousand word articles, run the automated companion compiler:
+To prevent burning massive AI tokens, avoid JSON string escaping errors, and guarantee round-trip schema validation, run the automated companion compiler:
 
 ```bash
-# 1. Preview compilation without file writes
-node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js --dry-run
+# 1. Preview compilation without file writes (Dry Run)
+node skills/create-nww-website/scripts/content-pipeline/index.js to-seed \
+  --src client-context \
+  --dry-run
 
-# 2. Compile all client-context/ content into Mongoose-ready JSON seeds
-node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js
+# 2. Compile all client-context/ MDX content into Mongoose JSON seeds
+node skills/create-nww-website/scripts/content-pipeline/index.js to-seed \
+  --src client-context \
+  --out project-docs/client-review/gate-5-cms-content
 
-# 3. (Optional) Compile and push directly to live CMS in one command
-node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js --seed
+# Legacy markdown-to-seed compiler fallback:
+# node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js
 ```
 
 ### Compiler Automation Features

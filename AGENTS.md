@@ -38,6 +38,11 @@ Execute only verbatim commands matching what exists in this repository:
 - **Compile & Seed Directly to Live CMS**: `node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js --seed`
 - **Run PageSpeed Check**: `node skills/create-nww-website/scripts/seo/pagespeed-check.js --help`
 - **Run Robots & Sitemap Parser**: `node skills/create-nww-website/scripts/seo/sitemap-robots-parser.js --help`
+- **Run Content Pipeline CLI**: `node skills/create-nww-website/scripts/content-pipeline/index.js --help`
+- **Validate MDX against Zod Schema**: `node skills/create-nww-website/scripts/content-pipeline/index.js validate --help`
+- **Audit SEO Rules on Content**: `node skills/create-nww-website/scripts/content-pipeline/index.js seo-check --help`
+- **Compile MDX to JSON Seeds**: `node skills/create-nww-website/scripts/content-pipeline/index.js to-seed --help`
+- **Push Seeds to CMS (Dry-Run)**: `node skills/create-nww-website/scripts/content-pipeline/index.js push --help`
 - **Run Security Scan**: `node scripts/publish/security-scan.mjs`
 - **Run Preflight Checks**: `node scripts/publish/preflight.mjs --dry-run`
 - **Run Release (Dry Run)**: `node scripts/publish/release.mjs --dry-run`

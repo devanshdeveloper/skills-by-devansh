@@ -126,8 +126,8 @@ The workflow advances strictly one stage at a time. Every stage requires explici
 │   ├── answers/batch-*/answers.md        # Modular batch answers (Batches 01 to 07)
 │   ├── asset-manifest.md                 # Visual asset inventory, provenance & status
 │   ├── open-questions.md                 # Rolling queue of >= 20 open discovery questions
-│   ├── blog/<blog-slug>/                 # [Gate 4/Stage 0] Modular blog posts (content.md + co-located images)
-│   │   ├── content.md                    # Complete SEO-optimized article with frontmatter
+│   ├── blog/<blog-slug>/                 # [Gate 4/Stage 0] Modular blog posts (content.mdx for CMS + co-located images)
+│   │   ├── content.mdx                   # Complete SEO-optimized MDX article with frontmatter (or content.md)
 │   │   └── cover.webp                    # Co-located image assets
 │   ├── tool/<category-slug>/<tool-slug>/ # [Gate 4/Stage 0] Modular tool content (when tool model is enabled)
 │   │   ├── content.md                    # Complete tool copy, specs, SEO metadata

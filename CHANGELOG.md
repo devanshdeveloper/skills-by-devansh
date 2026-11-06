@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.22] - 2026-11-06
+
+### Added
+- **Script-Driven CMS Content Pipeline (`scripts/content-pipeline/`)**:
+  - Engineered standalone CLI content pipeline under `skills/create-nww-website/scripts/content-pipeline/` with commands: `validate`, `seo-check`, `to-seed`, and `push`.
+  - Pinned and isolated `zod@4.6.7` in script package with zero root dependency footprint.
+  - Implemented authoritative Zod schemas for CMS models (`blog`, `project`, `service`, `case-study`, `faq`, `testimonial`, `tool`, `article`, `page-config`) as single sources of truth.
+  - Added strict MDX frontmatter validation, slug-filename matching, single H1 heading enforcement, image alt text verification, and local asset existence checks.
+  - Added static SEO rule checker enforcing Google Search Central requirements (ERROR) and display truncation heuristics (WARN).
+  - Integrated Gate 5 Batch 02 automated compiler converting validated MDX into Mongoose strict-mode JSON seeds with round-trip Zod schema validation.
+  - Added safe CMS ingestion CLI with dry-run default, explicit `--apply` requirement, secret token masking, and idempotent slug upsert.
+  - Codified confirmed implementation rules in `project-docs/client-review/gate-5-cms-requirements/cms-implementation-rules.md`.
+
 ## [1.10.21] - 2026-11-05
 
 ### Added
