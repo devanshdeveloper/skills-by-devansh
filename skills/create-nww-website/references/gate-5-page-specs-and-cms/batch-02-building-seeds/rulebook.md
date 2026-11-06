@@ -1,10 +1,10 @@
 # Stage 5 Batch 02: Building CMS Content Seeds & Schema Mapping
 
-This rulebook governs **Batch 2 of Stage 5**. When CMS integration is active (`cms: cms`), the agent formalizes CMS schema mappings and authors production-grade seed content in `project-docs/client-review/gate-5-cms-content/`, sourcing copy and frontmatter directly from the modular content authored in `client-context/<model>/.../content.md` during Stage 4 SEO Strategy. All deliverables authored in this batch must strictly adhere to the payload schemas and validation rules enforced by the NWW CMS standalone seeders and companion CLI utilities.
+This rulebook governs **Batch 2 of Stage 5**. When CMS integration is active (`cms: cms`), the agent formalizes CMS schema mappings and authors production-grade seed content in `project-docs/client-review/gate-5-cms-content/`, sourcing copy and frontmatter directly from the modular MDX content authored in `client-context/<model>/.../content.mdx` during Stage 4 SEO Strategy. All deliverables authored in this batch must strictly adhere to the payload schemas and validation rules enforced by the `content-pipeline` CLI.
 
 ## Table of Contents
 - [1. Resolving the 28 Open Questions](#1-resolving-the-28-open-questions)
-- [2. Automated Compilation from Stage 4 Markdown (`markdown-to-seed.js`)](#2-automated-compilation-from-stage-4-markdown-markdown-to-seedjs)
+- [2. Automated Compilation from Stage 4 MDX (`to-seed.js`)](#2-automated-compilation-from-stage-4-mdx-to-seedjs)
 - [3. Mongoose Strict-Mode Rules & Seed Formatting](#3-mongoose-strict-mode-rules--seed-formatting)
   - [2.1 The Critical Mongoose Strict-Mode Rule](#21-the-critical-mongoose-strict-mode-rule)
   - [2.2 Blog Model Schema & Field Specifications](#22-blog-model-schema--field-specifications)

@@ -52,3 +52,4 @@ export function finishCli(passed, jsonPayload = null, asJson = false) {
   }
   process.exit(passed ? 0 : 1);
 }
+

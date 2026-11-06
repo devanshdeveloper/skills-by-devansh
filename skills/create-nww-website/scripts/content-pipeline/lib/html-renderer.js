@@ -185,3 +185,4 @@ export function markdownToHtml(markdown) {
 
   return htmlParts.join('\n');
 }
+

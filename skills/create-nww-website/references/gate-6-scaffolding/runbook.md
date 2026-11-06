@@ -158,7 +158,7 @@ Generate the master QA acceptance checklist before building pages:
 
 ## 5. Output Mapping from Content & SEO Specifications
 
-Stage 6 maps the route inventory from `project-docs/client-review/gate-3-page-list/page-list.md`, metadata from `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md`, and modular content from `client-context/<model>/.../content.md` into the App Router structure:
+Stage 6 maps the route inventory from `project-docs/client-review/gate-3-page-list/page-list.md`, metadata from `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md`, and modular content from `client-context/<model>/.../` (`content.mdx` for CMS-controlled pages; `content.md` for non-CMS) into the App Router structure:
 
 1. **One Route per Slug:**
    - Each page slug from `project-docs/client-review/gate-3-page-list/page-list.md` maps 1:1 to an App Router route (`site/app/<route>/page.js`).

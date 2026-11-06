@@ -244,3 +244,4 @@ export function readAndParseMDX(filePath) {
   const content = fs.readFileSync(filePath, 'utf-8');
   return parseMDX(content, filePath);
 }
+

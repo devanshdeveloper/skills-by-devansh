@@ -89,3 +89,4 @@ export function resolveEnvConfig(projectRoot = process.cwd(), customEnvPath = nu
     isConfigured: Boolean(cmsToken),
   };
 }
+

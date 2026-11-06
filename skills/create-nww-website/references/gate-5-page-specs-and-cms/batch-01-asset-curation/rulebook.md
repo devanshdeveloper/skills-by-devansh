@@ -1,6 +1,6 @@
 # Stage 5 Batch 01: Asset Curation & Licensed Media Sourcing
 
-This rulebook governs **Batch 1 of Stage 5**. In this batch, the agent curates and sources authentic media assets for all image and video slots defined across `client-context/<model>/.../content.md` and `project-docs/client-review/gate-3-page-list/page-list.md`.
+This rulebook governs **Batch 1 of Stage 5**. In this batch, the agent curates and sources authentic media assets for all image and video slots defined across `client-context/<model>/.../` (`content.mdx` or `content.md`) and `project-docs/client-review/gate-3-page-list/page-list.md`.
 
 ## Table of Contents
 - [1. The Two-Source Rule](#1-the-two-source-rule)

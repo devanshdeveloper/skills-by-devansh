@@ -30,7 +30,7 @@ Ingest Specs -> Confirm -> Code Thin Page & Sections -> Self-Critique -> Gate 7a
 
 ### Step 1: Ingest Specifications & Confirm
 Before touching code for sub-page `<slug>`:
-1. Read `client-context/<model>/<slug>/content.md` (or `client-context/<slug>/content.md`) and `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md` for section layout, verbatim copy, asset slots, and metadata.
+1. Read `client-context/<model>/<slug>/content.mdx` (or `content.md` if non-CMS) and `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md` for section layout, verbatim copy, asset slots, and metadata.
 2. Inspect the analogous captured reference sub-pages from `project-docs/design-references/<domain>/<slug>/` (`index.html`, `content.md`, `screenshot.png`) and (if site migration) `previous-site/<slug>/` to review authentic spatial rhythm, card density, and interactive states for this specific page type. (Note: Gate 6 does not require sub-page benchmarking as it focuses solely on the Landing Page / Home).
 3. Read `project-docs/page-checklist.md` for QA acceptance criteria.
 4. Read `site/AGENTS.md` and the scoped AGENTS.md for each folder the page touches.

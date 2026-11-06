@@ -1,6 +1,6 @@
 # Stage 5 Batch 03: Pushing Seeds & Gate 5 Sign-Off
 
-This rulebook governs **Batch 3 of Stage 5**. In this final batch of Stage 5, the agent validates, tests, and seeds content into the live NWW CMS backend using standalone seeder utilities, then presents the complete Stage 5 deliverable package for human Gate 5 sign-off.
+This rulebook governs **Batch 3 of Stage 5**. In this final batch of Stage 5, the agent validates, tests, and seeds content into the live NWW CMS backend using the companion `content-pipeline` CLI, then presents the complete Stage 5 deliverable package for human Gate 5 sign-off.
 
 ## Table of Contents
 - [1. Seeder Execution Workflow](#1-seeder-execution-workflow)
@@ -104,9 +104,9 @@ If the live website or local dev server is operational, verify that on-demand IS
 Before presenting Gate 5 to the user for formal sign-off:
 
 ### Master Deliverables Checklist
-- [ ] **SEO Content Complete:** All modular content authored in `client-context/<model>/.../content.md` with co-located image assets.
+- [ ] **SEO Content Complete:** All modular content authored in `client-context/<model>/.../` (`content.mdx` for CMS-controlled pages; `content.md` for non-CMS) with co-located image assets.
 - [ ] **Batch 1 Complete:** Media slots populated via client assets or licensed stock; `project-docs/stock-provenance.json` logged.
-- [ ] **Batch 2 Complete:** Content seeds authored in `project-docs/client-review/gate-5-cms-content/` from `client-context/` content.
+- [ ] **Batch 2 Complete:** Content seeds compiled into `project-docs/client-review/gate-5-cms-content/` from validated `client-context/` MDX via `content-pipeline to-seed`.
 - [ ] **CMS Open Questions Resolved:** All 28 questions in `gate-5-cms-requirements/open-questions.md` codified into `cms-implementation-rules.md`.
 - [ ] **Batch 3 Complete:** Content pipeline operations executed successfully with zero fatal errors.
 - [ ] **Gate Containment Verified:** Zero loose markdown files outside designated gate folders.

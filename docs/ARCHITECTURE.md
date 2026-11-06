@@ -70,6 +70,7 @@ When an agent executes the `create-nww-website` or `nww` pipeline to develop a w
 │   ├── answers/                          # Modular batch discovery & intake answers (batch-01 to batch-07)
 │   ├── asset-manifest.md                 # Complete visual asset inventory, harvesting & generation manifest
 │   ├── open-questions.md                 # Rolling pool of >= 20 open questions for continuous client discovery
+│   ├── <model>/<slug>/                   # [Gate 4] Modular content (content.mdx for CMS + assets; content.md if non-CMS)
 │   ├── branding/                         # Brand logos, color guides, visual assets
 │   ├── uploads/                          # Client-provided images, headshots, brochures
 │   └── notes/                            # Raw notes, transcripts, or initial requirements
