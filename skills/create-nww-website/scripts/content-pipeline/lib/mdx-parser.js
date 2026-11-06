@@ -153,11 +153,16 @@ export function parseMDX(content, filePath = '') {
     });
   }
 
+  // Strip code blocks and inline code spans before extracting prose images/links
+  const contentProse = body
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`\n]+`/g, '');
+
   // Extract images: Markdown ![alt](src) and JSX <img src="..." alt="..." /> or <Image ... />
   const images = [];
   const mdImgRegex = /!\[(.*?)\]\((.*?)\)/g;
   let imgMatch;
-  while ((imgMatch = mdImgRegex.exec(body)) !== null) {
+  while ((imgMatch = mdImgRegex.exec(contentProse)) !== null) {
     const alt = imgMatch[1].trim();
     const src = imgMatch[2].trim().split(/\s+/)[0]; // strip optional title
     images.push({
@@ -169,7 +174,7 @@ export function parseMDX(content, filePath = '') {
 
   const jsxImgRegex = /<(?:img|Image)\b([^>]*?)\/?>/gi;
   let jsxMatch;
-  while ((jsxMatch = jsxImgRegex.exec(body)) !== null) {
+  while ((jsxMatch = jsxImgRegex.exec(contentProse)) !== null) {
     const attrs = jsxMatch[1];
     const srcMatch = attrs.match(/src=["'](.*?)["']/i);
     const altMatch = attrs.match(/alt=["'](.*?)["']/i);
@@ -202,7 +207,7 @@ export function parseMDX(content, filePath = '') {
   const links = [];
   const linkRegex = /\[(.*?)\]\((.*?)\)/g;
   let linkMatch;
-  while ((linkMatch = linkRegex.exec(body)) !== null) {
+  while ((linkMatch = linkRegex.exec(contentProse)) !== null) {
     const text = linkMatch[1].trim();
     const href = linkMatch[2].trim();
     if (!href.startsWith('#')) {

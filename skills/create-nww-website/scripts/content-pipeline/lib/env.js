@@ -81,7 +81,19 @@ export function resolveEnvConfig(projectRoot = process.cwd(), customEnvPath = nu
     'https://prod-server.nextwebworks.com'
   ).replace(/\/+$/, '');
 
-  const cmsToken = process.env.CMS_TOKEN || loadedEnv.CMS_TOKEN || null;
+  const cmsToken = (
+    process.env.CMS_TOKEN ||
+    loadedEnv.CMS_TOKEN ||
+    process.env.CMS_SITE_KEY ||
+    loadedEnv.CMS_SITE_KEY ||
+    process.env.SERVER_AUTH_TOKEN ||
+    loadedEnv.SERVER_AUTH_TOKEN ||
+    process.env.PROD_SEED_TOKEN ||
+    loadedEnv.PROD_SEED_TOKEN ||
+    process.env.SEED_TOKEN ||
+    loadedEnv.SEED_TOKEN ||
+    null
+  );
 
   return {
     serverUrl,

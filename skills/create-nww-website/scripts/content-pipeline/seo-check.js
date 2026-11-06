@@ -109,7 +109,7 @@ export function auditSeoForMdx(filePath) {
   const { frontmatter, headings, images, raw } = parsed;
 
   // 1. Title Presence (ERROR) & Length Heuristic (WARN)
-  const title = frontmatter.metaTitle || frontmatter.title;
+  const title = frontmatter.metaTitle || frontmatter.title || frontmatter.name;
   if (!title || typeof title !== 'string' || title.trim().length === 0) {
     issues.push({
       severity: 'ERROR',

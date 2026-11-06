@@ -13,6 +13,7 @@ import * as testimonial from './testimonial/schema.js';
 import * as tool from './tool/schema.js';
 import * as article from './article/schema.js';
 import * as pageConfig from './page-config/schema.js';
+import * as policy from './policy/schema.js';
 
 export const MODELS = {
   blog,
@@ -24,6 +25,7 @@ export const MODELS = {
   tool,
   article,
   'page-config': pageConfig,
+  policy,
 };
 
 /**

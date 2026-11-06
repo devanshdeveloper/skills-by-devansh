@@ -147,9 +147,10 @@ Registered Models:
       });
 
       if (!opts.dryRun) {
-        const outDir = opts.out
+        const baseOutDir = opts.out
           ? path.resolve(opts.out)
-          : path.join(process.cwd(), 'project-docs', 'client-review', 'gate-5-cms-content', model);
+          : path.join(process.cwd(), 'project-docs', 'client-review', 'gate-5-cms-content');
+        const outDir = path.join(baseOutDir, model);
 
         if (!fs.existsSync(outDir)) {
           fs.mkdirSync(outDir, { recursive: true });

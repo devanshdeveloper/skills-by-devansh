@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.25] - 2026-11-06
+
+### Added
+- **Policy Model Schema (`models/policy/schema.js`)**:
+  - Implemented authoritative Zod schema for legal policy models (`privacy-policy`, `terms-and-conditions`).
+  - Registered `policy` model in central model registry (`models/registry.js`).
+- **Flexible Field Aliases in Model Schemas**:
+  - Enhanced `tool` schema to support `name`, `categorySlug`, `categoryName`, `pricing`, `publishedAt`, `postedAt`, `primaryKeyword`, `searchIntent`, and `applicationCategory`.
+  - Enhanced `blog` schema to support `publishedAt` alongside `postedAt`.
+- **Environment Configuration Multi-Token Resolution (`lib/env.js`)**:
+  - Enhanced `resolveEnvConfig` to resolve `CMS_TOKEN`, `CMS_SITE_KEY`, `SERVER_AUTH_TOKEN`, `PROD_SEED_TOKEN`, or `SEED_TOKEN`.
+- **Parser Prose Link & Image Filtering (`lib/mdx-parser.js`)**:
+  - Stripped code blocks and inline code spans before extracting embedded content images/links, preventing syntax example false positives.
+
 ## [1.10.24] - 2026-11-06
 
 ### Changed
@@ -461,39 +475,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.3.0] - 2026-10-21
 ### Added
-- **Client Milestone Notification Engine (`scripts/client-notify/index.js`)**: Multi-stage companion utility allowing agents to draft and dispatch milestone review emails to clients across all 12 pipeline gates, with strict human approval required before sending, Resend/SendGrid/SMTP integration, clickable `mailto:` links, and automated logging in `router-state.md`.
-- **Mandatory Notification Prompt Rule**: Enforced state machine protocol rule in `SKILL.md` and `pipeline-stages.md` requiring agents to ask whether to notify the client at every stage and gate sign-off.
-- **Stage 11 Structure Auditor (`scripts/structure-audit/index.js`)**: Companion utility to automatically audit all 12 stage deliverables, verify strict component line limits, and generate `project-docs/structure-audit.md`.
-
-## [1.2.1] - 2026-10-21
-### Fixed
-- **Concept Sorting in Review Hub**: Explicitly sorted Gate 2 concept cards by numerical concept/option number (`Concept 1`, `Option 1`, etc.) ascending rather than relying on filesystem directory order.
-
-### Added
-- **GitHub Pages Review Deployment**: Added `client-review-pages.yml` reusable GitHub Actions workflow asset to instantly publish Gate 2 client review websites to GitHub Pages.
+- **Client Milestone Notification Engine & Structure Auditor**: Added `scripts/client-notify/index.js` for automated client milestone dispatches and `scripts/structure-audit/index.js` for stage deliverable audits.
 
 ## [1.2.0] - 2026-10-21
 ### Added
-- **Full-Page Client Review Experience**: Replaced card-based review mockups with full-page final HTML websites at `project-docs/client-review/gate-2-design-theory/<concept-name>/index.html` featuring complete realistic portfolio content, real project showcases, timeline, stack, and floating review switcher navigation.
-- **Companion Reference Capture Utility (`scripts/reference-capture/index.js`)**: Provided automated Node.js utility to fetch rendered HTML (`page.html`), stripped markdown (`content.md`), full-page screenshots (`screenshot-full-1440.png`), and structured audit records (`capture.json`) into `project-docs/design-references/<domain>/`.
-- **Eliminated Artificial Slug Layers**: Removed artificial `/home` subdirectories from both reference captures (`project-docs/design-references/<domain>/`) and client reviews (`gate-2-design-theory/<concept-name>/index.html`) for cleaner, direct paths.
-- **Optimized Gate 2 Review Generator (`scripts/client-review/index.js`)**: Updated companion script to scan direct concept directories and generate/update the Gate 2 comparison hub (`gate-2-design-theory/index.html`) and root portal (`client-review/index.html`).
+- **Full-Page Client Review & Reference Capture**: Replaced card-based mockups with full-page HTML reviews, added `scripts/reference-capture/index.js` utility, and streamlined concept routing.
 
 ## [1.1.0] - 2026-10-21
 ### Added
-- **Reference Capture Engine (Landing Pages Only)**: Standardized reference captures into `project-docs/design-references/` capturing 4 distinct artifacts per page: `page.html`, `content.md`, `screenshot-full-1440.png`, and `capture.json`.
-- **Mandatory Usage Notice**: Enforced legal/security disclaimer in `sources.md` prohibiting third-party markup, text, or image reuse in client deliverables.
-- **Modular Client Review Architecture**: Restructured Gate 2 deliverables from a single file into modular per-concept pages.
-- **Companion Review Generator Utility (`scripts/client-review/index.js`)**: Provided zero-dependency Node.js companion script to scan concept directories and generate the Gate 2 comparison hub.
-- **Client Decision Protocol**: Formalized Gate 2 halt condition in `project-docs/router-state.md` preventing raw technical spec review and providing copy-ready decision snippets.
+- **Reference Capture Engine & Client Review Hub**: Standardized multi-artifact captures (`page.html`, `content.md`, screenshots), modular review architecture, and client decision protocols.
 
 ## [1.0.0] - 2026-10-21
 ### Added
-- **create-nextjs-website**: Single-file runbook to scaffold modern Next.js App Router websites with TypeScript and Tailwind CSS.
-- **create-nww-website**: 12-stage human-gated website build pipeline with optional NWW CMS integration, responsive image optimizer, and stock image sourcing.
-- **nww**: Fast shortcut alias to start the Next Web Website (NWW) site creation pipeline.
-- **publish**: Maintainer-only release automation and preflight validation suite enforcing the 10-gate safety architecture.
-- **skills.manifest.json**: Authoritative manifest defining publishable and internal skills.
-- **publish.config.json**: Authoritative publish configuration defining approved remote allowlists, branch restrictions, and security guardrails.
-### Security & Privacy
-- Enforced strict preflight checks (G1 through G10) blocking accidental secret leaks, un-gitignored context files, and unapproved remotes.
+- Initial release with skills `create-nextjs-website`, `create-nww-website`, `nww`, and `publish`, backed by strict 10-gate safety architecture.
