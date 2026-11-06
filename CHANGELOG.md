@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.26] - 2026-11-06
+
+### Added
+- **State Synchronization & Manifest Tracking (`push.js`)**:
+  - Implemented atomic `manifest.json` persistence tracking synchronized documents (`status: 'synced'`, `id`, `pushedAt`, `attempts`, `endpoint`).
+  - Added duplicate write suppression skipping previously synced items unless `--force` is specified.
+  - Added structured execution reporting (`sync-report.json`) tracking overall batch stats (total, created, skipped, alreadyExists, failed) and per-document outcomes.
+- **Exponential Retry & Rate Limit Controls (`push.js`)**:
+  - Added configurable `--retries` (default 3) and `--retry-delay` (default 1000ms) with exponential backoff and jitter for 5xx errors and network drops.
+  - Added rate-limiting backoff respecting HTTP 429 `Retry-After` headers.
+  - Implemented fast-fail on non-retryable 4xx client errors (400, 401, 403, 404, 422).
+  - Added dynamic route resolution for policy models (`website-privacy-policy` vs `website-terms-and-conditions`).
+- **Clean Event Loop Exit Handling (`lib/reporter.js`)**:
+  - Replaced synchronous `process.exit()` with `process.exitCode` assignment and active timer clearing, preventing libuv handle assertions on Windows.
+
 ## [1.10.25] - 2026-11-06
 
 ### Added

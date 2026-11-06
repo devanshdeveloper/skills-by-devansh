@@ -50,6 +50,6 @@ export function finishCli(passed, jsonPayload = null, asJson = false) {
       process.stderr.write(`✗ FAILED: One or more validation errors detected.\n\n`);
     }
   }
-  process.exit(passed ? 0 : 1);
+  process.exitCode = passed ? 0 : 1;
 }
 

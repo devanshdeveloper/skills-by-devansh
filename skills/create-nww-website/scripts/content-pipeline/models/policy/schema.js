@@ -52,3 +52,4 @@ export function toSeedPayload(fm, htmlBody) {
     canonicalUrl: fm.canonicalUrl || `/${fm.slug}`,
   };
 }
+
