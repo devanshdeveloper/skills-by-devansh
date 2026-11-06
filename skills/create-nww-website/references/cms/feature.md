@@ -56,18 +56,35 @@ export async function LandingFeaturesSection({ limit = 8 }) {
 
 ## 3. Running the Seeder [Exact Code without the JSX]
 
-The standalone Feature seeder scripts reside in `skills/create-nww-website/references/cms/seeders/feature/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/features/`.
+The Feature content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/features/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
-node skills/create-nww-website/references/cms/seeders/feature/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/features \
-  --dry-run
+  --model feature
 ```
 
 ### 2. Live Seeding
 ```bash
-node skills/create-nww-website/references/cms/seeders/feature/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content/features
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
+  --dir project-docs/client-review/gate-5-cms-content/features \
+  --model feature \
+  --apply
+```
+
+### 3. Updating an Existing Feature
+```bash
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model feature \
+  --id "65f8a123bc45de6789012345" \
+  --file update.json
+```
+
+### 4. Deleting a Feature
+```bash
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model feature \
+  --id "65f8a123bc45de6789012345"
 ```
 

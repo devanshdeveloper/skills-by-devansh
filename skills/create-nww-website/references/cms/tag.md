@@ -101,36 +101,39 @@ export default async function TaggedBlogPage({ params }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Website Tag seeder scripts reside in `skills/create-nww-website/references/cms/seeders/tag/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/tags/`.
+The Website Tag content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/tags/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates schema rules, required name without network writes
-node skills/create-nww-website/references/cms/seeders/tag/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/tags \
-  --dry-run
+  --model tag
 ```
 
-### 2. Live Seeding with Collision Resolution
+### 2. Live Seeding
 ```bash
-# Live insertion of tag seeds with automated collision handling
-node skills/create-nww-website/references/cms/seeders/tag/insert.js \
+# Live insertion of tag seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/tags \
-  --auto-slug
+  --model tag \
+  --apply
 ```
 
 ### 3. Updating an Existing Tag
 ```bash
-# Update fields for an existing tag by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/tag/update.js \
+# Update fields for an existing tag by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model tag \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/tags/tag-update.json
 ```
 
 ### 4. Deleting a Tag
 ```bash
-# Delete a tag by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/tag/delete.js \
+# Delete a tag by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model tag \
   --id "65f8a123bc45de6789012345"
 ```
 

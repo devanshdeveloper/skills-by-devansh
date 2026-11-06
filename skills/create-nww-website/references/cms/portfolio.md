@@ -148,36 +148,39 @@ export default async function SinglePortfolioPage({ params }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Portfolio seeder scripts reside in `skills/create-nww-website/references/cms/seeders/portfolio/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/portfolio/`.
+The Portfolio content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/portfolio/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates schema rules, required title and slug without network writes
-node skills/create-nww-website/references/cms/seeders/portfolio/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/portfolio \
-  --dry-run
+  --model portfolio
 ```
 
-### 2. Live Seeding with Collision Resolution
+### 2. Live Seeding
 ```bash
-# Live insertion of portfolio seeds with automated collision handling
-node skills/create-nww-website/references/cms/seeders/portfolio/insert.js \
+# Live insertion of portfolio seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/portfolio \
-  --auto-slug
+  --model portfolio \
+  --apply
 ```
 
 ### 3. Updating an Existing Portfolio Item
 ```bash
-# Update fields for an existing portfolio item by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/portfolio/update.js \
+# Update fields for an existing portfolio item by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model portfolio \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/portfolio/portfolio-update.json
 ```
 
 ### 4. Deleting a Portfolio Item
 ```bash
-# Delete a portfolio item by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/portfolio/delete.js \
+# Delete a portfolio item by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model portfolio \
   --id "65f8a123bc45de6789012345"
 ```
 

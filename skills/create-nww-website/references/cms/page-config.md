@@ -271,36 +271,39 @@ export default async function SubPageLayout({ children, params }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Page Configuration seeder scripts reside in `skills/create-nww-website/references/cms/seeders/page-config/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/page-configs/`.
+The Page Configuration content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/page-configs/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates schema constraints, kebab-case slugs, and required path without network writes
-node skills/create-nww-website/references/cms/seeders/page-config/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/page-configs \
-  --dry-run
+  --model page-config
 ```
 
 ### 2. Live Seeding Page Configs
 ```bash
-# Live insertion of page configurations into WebsitePageConfig
-node skills/create-nww-website/references/cms/seeders/page-config/insert.js \
+# Live insertion of page configurations into WebsitePageConfig (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/page-configs \
-  --auto-slug
+  --model page-config \
+  --apply
 ```
 
 ### 3. Updating an Existing Page Config
 ```bash
-# Update page config fields by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/page-config/update.js \
+# Update page config fields by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model page-config \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/page-configs/home-update.json
 ```
 
 ### 4. Deleting a Page Config
 ```bash
-# Delete a page config by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/page-config/delete.js \
+# Delete a page config by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model page-config \
   --id "65f8a123bc45de6789012345"
 ```
 

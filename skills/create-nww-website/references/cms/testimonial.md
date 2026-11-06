@@ -118,35 +118,39 @@ export async function LandingTestimonialsSection({ limit = 6 }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Testimonial seeder scripts reside in `skills/create-nww-website/references/cms/seeders/testimonial/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/testimonials/`.
+The Testimonial content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/testimonials/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates schema rules, name and content without network writes
-node skills/create-nww-website/references/cms/seeders/testimonial/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/testimonials \
-  --dry-run
+  --model testimonial
 ```
 
 ### 2. Live Seeding
 ```bash
-# Live insertion of testimonial seeds
-node skills/create-nww-website/references/cms/seeders/testimonial/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content/testimonials
+# Live insertion of testimonial seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
+  --dir project-docs/client-review/gate-5-cms-content/testimonials \
+  --model testimonial \
+  --apply
 ```
 
 ### 3. Updating an Existing Testimonial
 ```bash
-# Update fields for an existing testimonial by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/testimonial/update.js \
+# Update fields for an existing testimonial by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model testimonial \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/testimonials/testimonial-update.json
 ```
 
 ### 4. Deleting a Testimonial
 ```bash
-# Delete a testimonial by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/testimonial/delete.js \
+# Delete a testimonial by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model testimonial \
   --id "65f8a123bc45de6789012345"
 ```
 

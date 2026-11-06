@@ -135,32 +135,38 @@ export default async function SingleJobPage({ params }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Job seeder scripts reside in `skills/create-nww-website/references/cms/seeders/job/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/jobs/`.
+The Job content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/jobs/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
-node skills/create-nww-website/references/cms/seeders/job/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/jobs \
-  --dry-run
+  --model job
 ```
 
 ### 2. Live Seeding
 ```bash
-node skills/create-nww-website/references/cms/seeders/job/insert.js \
+# Live insertion of job seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/jobs \
-  --auto-slug
+  --model job \
+  --apply
 ```
 
 ### 3. Updating an Existing Job
 ```bash
-node skills/create-nww-website/references/cms/seeders/job/update.js \
+# Update fields for an existing job by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model job \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/jobs/job-update.json
 ```
 
 ### 4. Deleting a Job
 ```bash
-node skills/create-nww-website/references/cms/seeders/job/delete.js \
+# Delete a job by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model job \
   --id "65f8a123bc45de6789012345"
 ```
 

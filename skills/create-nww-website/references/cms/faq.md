@@ -114,35 +114,39 @@ export async function PageFAQSection({ category = 'General' }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone FAQ seeder scripts reside in `skills/create-nww-website/references/cms/seeders/faq/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/faqs/`.
+The FAQ content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/faqs/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates schema rules, question and answer without network writes
-node skills/create-nww-website/references/cms/seeders/faq/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/faqs \
-  --dry-run
+  --model faq
 ```
 
 ### 2. Live Seeding
 ```bash
-# Live insertion of FAQ seeds
-node skills/create-nww-website/references/cms/seeders/faq/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content/faqs
+# Live insertion of FAQ seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
+  --dir project-docs/client-review/gate-5-cms-content/faqs \
+  --model faq \
+  --apply
 ```
 
 ### 3. Updating an Existing FAQ
 ```bash
-# Update fields for an existing FAQ by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/faq/update.js \
+# Update fields for an existing FAQ by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model faq \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/faqs/faq-update.json
 ```
 
 ### 4. Deleting an FAQ
 ```bash
-# Delete an FAQ by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/faq/delete.js \
+# Delete an FAQ by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model faq \
   --id "65f8a123bc45de6789012345"
 ```
 

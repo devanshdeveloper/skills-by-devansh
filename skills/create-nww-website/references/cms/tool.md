@@ -157,36 +157,39 @@ export default async function SingleToolPage({ params }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Tool seeder scripts reside in `skills/create-nww-website/references/cms/seeders/tool/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/tools/`.
+The Tool content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/tools/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates schema rules, required title and slug without network writes
-node skills/create-nww-website/references/cms/seeders/tool/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/tools \
-  --dry-run
+  --model tool
 ```
 
-### 2. Live Seeding with Collision Resolution
+### 2. Live Seeding
 ```bash
-# Live insertion of tool seeds with automated collision handling
-node skills/create-nww-website/references/cms/seeders/tool/insert.js \
+# Live insertion of tool seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/tools \
-  --auto-slug
+  --model tool \
+  --apply
 ```
 
 ### 3. Updating an Existing Tool
 ```bash
-# Update fields for an existing tool by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/tool/update.js \
+# Update fields for an existing tool by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model tool \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/tools/tool-update.json
 ```
 
 ### 4. Deleting a Tool
 ```bash
-# Delete a tool by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/tool/delete.js \
+# Delete a tool by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model tool \
   --id "65f8a123bc45de6789012345"
 ```
 

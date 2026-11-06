@@ -148,36 +148,39 @@ export default async function SingleServicePage({ params }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Service seeder scripts reside in `skills/create-nww-website/references/cms/seeders/service/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/services/`.
+The Service content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/services/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates schema rules, required title and slug without network writes
-node skills/create-nww-website/references/cms/seeders/service/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/services \
-  --dry-run
+  --model service
 ```
 
-### 2. Live Seeding with Collision Resolution
+### 2. Live Seeding
 ```bash
-# Live insertion of service seeds with automated collision handling
-node skills/create-nww-website/references/cms/seeders/service/insert.js \
+# Live insertion of service seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/services \
-  --auto-slug
+  --model service \
+  --apply
 ```
 
 ### 3. Updating an Existing Service
 ```bash
-# Update fields for an existing service by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/service/update.js \
+# Update fields for an existing service by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model service \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/services/service-update.json
 ```
 
 ### 4. Deleting a Service
 ```bash
-# Delete a service by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/service/delete.js \
+# Delete a service by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model service \
   --id "65f8a123bc45de6789012345"
 ```
 

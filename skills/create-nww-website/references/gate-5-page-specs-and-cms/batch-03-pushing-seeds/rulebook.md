@@ -13,31 +13,30 @@ This rulebook governs **Batch 3 of Stage 5**. In this final batch of Stage 5, th
 
 ## 1. Seeder Execution Workflow
 
-Content seeding is executed using standalone model seeders located in `skills/create-nww-website/references/cms/seeders/<model>/insert.js`, paired directly with JSON files in `project-docs/client-review/gate-5-cms-content/<model>/`:
+Content seeding is executed using the companion `content-pipeline` CLI, paired directly with JSON files in `project-docs/client-review/gate-5-cms-content/<model>/`:
 
-| Content Model | Target Seeder Script | Content Source Directory |
+| Content Model | Target CLI Command | Content Source Directory |
 |---|---|---|
-| **Blog Articles** | `skills/create-nww-website/references/cms/seeders/blog/insert.js` | `project-docs/client-review/gate-5-cms-content/blog/` |
-| **Services** | `skills/create-nww-website/references/cms/seeders/service/insert.js` | `project-docs/client-review/gate-5-cms-content/services/` |
-| **Projects / Portfolio** | `skills/create-nww-website/references/cms/seeders/project/insert.js` | `project-docs/client-review/gate-5-cms-content/projects/` |
-| **Testimonials** | `skills/create-nww-website/references/cms/seeders/testimonial/insert.js` | `project-docs/client-review/gate-5-cms-content/testimonials/` |
-| **FAQs** | `skills/create-nww-website/references/cms/seeders/faq/insert.js` | `project-docs/client-review/gate-5-cms-content/faqs/` |
-| **Features** | `skills/create-nww-website/references/cms/seeders/feature/insert.js` | `project-docs/client-review/gate-5-cms-content/features/` |
-| **Case Studies** | `skills/create-nww-website/references/cms/seeders/case-study/insert.js` | `project-docs/client-review/gate-5-cms-content/case-studies/` |
-| **Contact Us (Module)** | `skills/create-nww-website/references/cms/seeders/contact-us/insert.js` | `project-docs/client-review/gate-5-cms-content/contact-us/` |
-| **Page Configurations** | `skills/create-nww-website/references/cms/seeders/page-config/insert.js` | `project-docs/client-review/gate-5-cms-content/page-configs/` |
-| **Website Tools** | `skills/create-nww-website/references/cms/seeders/tool/insert.js` | `project-docs/client-review/gate-5-cms-content/tools/` |
-| **Website Tool Categories** | `skills/create-nww-website/references/cms/seeders/tool-category/insert.js` | `project-docs/client-review/gate-5-cms-content/tool-categories/` |
-| **Careers / Jobs** | `skills/create-nww-website/references/cms/seeders/job/insert.js` | `project-docs/client-review/gate-5-cms-content/jobs/` |
-| **Events & Webinars** | `skills/create-nww-website/references/cms/seeders/event/insert.js` | `project-docs/client-review/gate-5-cms-content/events/` |
-| **Plans & Pricing** | `skills/create-nww-website/references/cms/seeders/plan/insert.js` | `project-docs/client-review/gate-5-cms-content/plans/` |
-| **Galleries** | `skills/create-nww-website/references/cms/seeders/gallery/insert.js` | `project-docs/client-review/gate-5-cms-content/galleries/` |
-| **Articles** | `skills/create-nww-website/references/cms/seeders/article/insert.js` | `project-docs/client-review/gate-5-cms-content/articles/` |
-| **Industries** | `skills/create-nww-website/references/cms/seeders/industry/insert.js` | `project-docs/client-review/gate-5-cms-content/industries/` |
-| **Portfolio** | `skills/create-nww-website/references/cms/seeders/portfolio/insert.js` | `project-docs/client-review/gate-5-cms-content/portfolio/` |
-| **Legal Policies** | `skills/create-nww-website/references/cms/seeders/policy/insert.js` | `project-docs/client-review/gate-5-cms-content/policies/` |
-| **Website Tags** | `skills/create-nww-website/references/cms/seeders/tag/insert.js` | `project-docs/client-review/gate-5-cms-content/tags/` |
-| **Forms / Leads** | `skills/create-nww-website/references/cms/seeders/form/submit.js` | `project-docs/client-review/gate-5-cms-content/forms/` |
+| **Blog Articles** | `push --model blog` | `project-docs/client-review/gate-5-cms-content/blog/` |
+| **Services** | `push --model service` | `project-docs/client-review/gate-5-cms-content/services/` |
+| **Projects / Portfolio** | `push --model project` | `project-docs/client-review/gate-5-cms-content/projects/` |
+| **Testimonials** | `push --model testimonial` | `project-docs/client-review/gate-5-cms-content/testimonials/` |
+| **FAQs** | `push --model faq` | `project-docs/client-review/gate-5-cms-content/faqs/` |
+| **Features** | `push --model feature` | `project-docs/client-review/gate-5-cms-content/features/` |
+| **Case Studies** | `push --model case-study` | `project-docs/client-review/gate-5-cms-content/case-studies/` |
+| **Contact Us (Module)** | `push --model contact-us` | `project-docs/client-review/gate-5-cms-content/contact-us/` |
+| **Page Configurations** | `push --model page-config` | `project-docs/client-review/gate-5-cms-content/page-configs/` |
+| **Website Tools** | `push --model tool` | `project-docs/client-review/gate-5-cms-content/tools/` |
+| **Website Tool Categories** | `push --model tool-category` | `project-docs/client-review/gate-5-cms-content/tool-categories/` |
+| **Careers / Jobs** | `push --model job` | `project-docs/client-review/gate-5-cms-content/jobs/` |
+| **Events & Webinars** | `push --model event` | `project-docs/client-review/gate-5-cms-content/events/` |
+| **Plans & Pricing** | `push --model plan` | `project-docs/client-review/gate-5-cms-content/plans/` |
+| **Galleries** | `push --model gallery` | `project-docs/client-review/gate-5-cms-content/galleries/` |
+| **Articles** | `push --model article` | `project-docs/client-review/gate-5-cms-content/articles/` |
+| **Industries** | `push --model industry` | `project-docs/client-review/gate-5-cms-content/industries/` |
+| **Portfolio** | `push --model portfolio` | `project-docs/client-review/gate-5-cms-content/portfolio/` |
+| **Legal Policies** | `push --model policy` | `project-docs/client-review/gate-5-cms-content/policies/` |
+| **Website Tags** | `push --model tag` | `project-docs/client-review/gate-5-cms-content/tags/` |
 
 Ensure `SERVER_URL` and `CMS_TOKEN` are configured in the environment before live runs.
 
@@ -45,23 +44,12 @@ Ensure `SERVER_URL` and `CMS_TOKEN` are configured in the environment before liv
 
 ## 2. Step 1: Dry-Run Validation
 
-Always execute a dry run before touching the remote CMS database:
+Always execute a dry run before touching the remote CMS database (dry-run is the default mode):
 
 ```bash
-# Option A: Content Pipeline Seeder Dry-Run (Recommended)
 node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/blog \
   --model blog
-
-# Option B: Run Seeder CLI Dry-Run on Pre-compiled Deliverables
-node skills/create-nww-website/scripts/cms-seed/index.js \
-  --dir project-docs/client-review/gate-5-cms-content/blog \
-  --dry-run
-
-# Option C: Standalone Seeder Validation
-node skills/create-nww-website/references/cms/seeders/blog/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content/blog \
-  --dry-run
 ```
 
 Confirm that:
@@ -72,18 +60,32 @@ Confirm that:
 
 ---
 
-## 3. Step 2: Live Seeding & Collision Handling
+## 3. Step 2: Live Seeding & Management
 
-Execute live insertion with automated collision handling:
+Execute live operations with the mandatory `--apply` flag:
 
 ```bash
-node skills/create-nww-website/references/cms/seeders/blog/insert.js \
+# Live insertion of blog seeds
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/blog \
-  --auto-slug
+  --model blog \
+  --apply
+
+# Update existing document by MongoDB ObjectId
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model blog \
+  --id "65f8a123bc45de6789012345" \
+  --file update.json \
+  --apply
+
+# Delete document by MongoDB ObjectId
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model blog \
+  --id "65f8a123bc45de6789012345" \
+  --apply
 ```
 
-- If a slug collision occurs (HTTP 409), `--auto-slug` automatically calls `POST /api/<model>/generate-slug` to assign a collision-free suffix (e.g. `title-1`).
-- Verify that every item returns HTTP 201 Created with a valid MongoDB `_id`.
+- Verify that every item returns HTTP 201 Created (or HTTP 200 OK for update/delete).
 
 ---
 
@@ -106,7 +108,7 @@ Before presenting Gate 5 to the user for formal sign-off:
 - [ ] **Batch 1 Complete:** Media slots populated via client assets or licensed stock; `project-docs/stock-provenance.json` logged.
 - [ ] **Batch 2 Complete:** Content seeds authored in `project-docs/client-review/gate-5-cms-content/` from `client-context/` content.
 - [ ] **CMS Open Questions Resolved:** All 28 questions in `gate-5-cms-requirements/open-questions.md` codified into `cms-implementation-rules.md`.
-- [ ] **Batch 3 Complete:** Seeders executed successfully with zero fatal errors.
+- [ ] **Batch 3 Complete:** Content pipeline operations executed successfully with zero fatal errors.
 - [ ] **Gate Containment Verified:** Zero loose markdown files outside designated gate folders.
 - [ ] **Codebase Untouched:** `site/` contains zero premature code or scaffold files.
 

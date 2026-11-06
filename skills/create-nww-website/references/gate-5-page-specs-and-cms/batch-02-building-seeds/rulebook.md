@@ -49,9 +49,6 @@ node skills/create-nww-website/scripts/content-pipeline/index.js to-seed \
 node skills/create-nww-website/scripts/content-pipeline/index.js to-seed \
   --src client-context \
   --out project-docs/client-review/gate-5-cms-content
-
-# Legacy markdown-to-seed compiler fallback:
-# node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js
 ```
 
 ### Compiler Automation Features
@@ -91,7 +88,7 @@ The NWW CMS MongoDB backend enforces Mongoose strict mode (`strict: true`). Any 
 
 ### 2.2 Blog Model Schema & Field Specifications
 
-Seed payloads for the `Blog` model must conform to the validation rules enforced by `references/cms/seeders/blog/insert.js` and `scripts/cms-seed/lib/schema.js`:
+Seed payloads for the `Blog` model must conform to the validation rules enforced by `skills/create-nww-website/scripts/content-pipeline/models/blog/schema.js`:
 
 | Field | Type | Required | Validation & Constraints | Purpose / Fallback |
 | :--- | :--- | :---: | :--- | :--- |
@@ -158,7 +155,7 @@ Every blog post seed must be a standalone JSON file matching this structure:
 
 ### 2.4 Project (Portfolio) Model Schema & Payload Template
 
-When portfolio projects are enabled (`Portfolio` module -> collection `project`), author seed files conforming to `references/cms/project.md` and `references/cms/seeders/project/insert.js`:
+When portfolio projects are enabled (`Portfolio` module -> collection `project`), author seed files conforming to `references/cms/project.md` and `skills/create-nww-website/scripts/content-pipeline/models/project/schema.js`:
 
 - **Required Fields:** `title` (string, min 2 chars), `slug` (lowercase kebab-case string).
 - **Template (`projects/project-fintech-analytics.json`):**
@@ -191,7 +188,7 @@ The NWW CMS provides two distinct contact mechanisms:
 1. **Direct `WebsiteContactUs` Module (`POST /api/website-contact-us/create-one`):** Dedicated collection for direct inquiries with structured customer fields.
 2. **Generic Forms Engine (`POST /api/form/:id/submit`):** Dynamic survey engine saving unstructured responses to `FormResponse`.
 
-When testing or seeding direct `WebsiteContactUs` inquiries via `references/cms/seeders/contact-us/insert.js`:
+When testing or seeding direct `WebsiteContactUs` inquiries:
 - **Required Fields:** `firstName`, `lastName`, `email`, `phone`, `message`.
 - **Template (`contact-us/inquiry-vip-consultation.json`):**
   ```json
@@ -266,7 +263,7 @@ The `WebsitePageConfig` model (`website-page-config`) governs page-level routing
 
 ### 2.7 Secondary Active Collections (Services, FAQs, Testimonials, etc.)
 
-When additional secondary modules are enabled, seed records must conform to their respective seeders in `references/cms/seeders/`:
+When additional secondary modules are enabled, seed records must conform to their respective schema definitions in `skills/create-nww-website/scripts/content-pipeline/models/`:
 
 - **Services (`services/service-<slug>.json`):** Required: `title`, `slug`. Include `summary`, `content`, `icon`, `status: "published"`, `metadata`.
 - **FAQs (`faqs/faq-<slug>.json`):** Required: `question`, `answer`. Include `category`, `order`, `status: "published"`.
@@ -292,50 +289,50 @@ When additional secondary modules are enabled, seed records must conform to thei
 ### 3.1 Directory Organization Standard
 
 All content deliverables are housed inside `project-docs/client-review/gate-5-cms-content/`.
-To ensure 100% compatibility with standalone seeders (`references/cms/seeders/<model>/insert.js`) and the Batch 4 seeder catalog, organize files by collection:
+To ensure 100% compatibility with the content pipeline CLI, organize files by collection:
 
 ```text
 project-docs/client-review/gate-5-cms-content/
 ├── index.md                             # Content Master Index cataloging all seeds & taxonomies
-├── blog/                                # Blog post seed collection (seeders/blog/insert.js)
+├── blog/                                # Blog post seed collection
 │   ├── blog-article-1.json
 │   ├── blog-article-2.json
 │   └── blog-article-3.json
-├── projects/                            # [If Active] Portfolio project seed collection (seeders/project/insert.js)
+├── projects/                            # [If Active] Portfolio project seed collection
 │   ├── project-1.json
 │   └── project-2.json
-├── contact-us/                          # [If Active] Direct Contact Us inquiry seeds (seeders/contact-us/insert.js)
+├── contact-us/                          # [If Active] Direct Contact Us inquiry seeds
 │   └── inquiry-1.json
-├── page-configs/                        # [If Active] Page configuration seeds (seeders/page-config/insert.js)
+├── page-configs/                        # [If Active] Page configuration seeds
 │   ├── page-home.json
 │   └── page-about.json
-├── services/                            # [If Active] Service seed collection (seeders/service/insert.js)
+├── services/                            # [If Active] Service seed collection
 │   └── service-<slug>.json
-├── testimonials/                        # [If Active] Testimonials seed collection (seeders/testimonial/insert.js)
+├── testimonials/                        # [If Active] Testimonials seed collection
 │   └── testimonial-<slug>.json
-├── faqs/                                # [If Active] FAQs seed collection (seeders/faq/insert.js)
+├── faqs/                                # [If Active] FAQs seed collection
 │   └── faq-<slug>.json
-├── features/                            # [If Active] Features seed collection (seeders/feature/insert.js)
+├── features/                            # [If Active] Features seed collection
 │   └── feature-<slug>.json
-├── tools/                               # [If Active] Website tools seed collection (seeders/tool/insert.js)
+├── tools/                               # [If Active] Website tools seed collection
 │   └── tool-<slug>.json
-├── tool-categories/                     # [If Active] Tool categories seed collection (seeders/tool-category/insert.js)
+├── tool-categories/                     # [If Active] Tool categories seed collection
 │   └── category-<slug>.json
-├── jobs/                                # [If Active] Careers & jobs seed collection (seeders/job/insert.js)
+├── jobs/                                # [If Active] Careers & jobs seed collection
 │   └── job-<slug>.json
-├── events/                              # [If Active] Events & webinars seed collection (seeders/event/insert.js)
+├── events/                              # [If Active] Events & webinars seed collection
 │   └── event-<slug>.json
-├── plans/                               # [If Active] Pricing plans seed collection (seeders/plan/insert.js)
+├── plans/                               # [If Active] Pricing plans seed collection
 │   └── plan-<slug>.json
-├── galleries/                           # [If Active] Photo galleries seed collection (seeders/gallery/insert.js)
+├── galleries/                           # [If Active] Photo galleries seed collection
 │   └── gallery-<slug>.json
-├── articles/                            # [If Active] Articles seed collection (seeders/article/insert.js)
+├── articles/                            # [If Active] Articles seed collection
 │   └── article-<slug>.json
-└── case-studies/                        # [If Active] Case study collection (seeders/case-study/insert.js)
+└── case-studies/                        # [If Active] Case study collection
     └── case-study-<slug>.json
 ```
 
-*Compatibility Note:* Standalone seeders default to `project-docs/client-review/gate-5-cms-content/<model>`. Structuring files within model subdirectories prevents namespace collisions across JSON files and allows both single-file and directory-wide batch executions without flags.
+*Compatibility Note:* Content pipeline defaults to `project-docs/client-review/gate-5-cms-content/<model>`. Structuring files within model subdirectories prevents namespace collisions across JSON files and allows both single-file and directory-wide batch executions without flags.
 
 ---
 
@@ -402,68 +399,42 @@ Author `project-docs/client-review/gate-5-cms-schema/cms-schema.md` documenting:
 
 ## 5. Preflight Seeder Dry-Run Validation
 
-Before completing Batch 3, execute dry-run validation using both the standalone seeder scripts and companion CLI utilities. Dry runs validate payload syntax, schema rules, and Mongoose strict compliance with **zero network writes** and no active server credentials required.
+Before completing Batch 3, execute dry-run validation using the companion `content-pipeline` CLI. Dry runs validate payload syntax, schema rules, and Mongoose strict compliance with **zero network writes** and no active server credentials required (dry-run is the default mode).
 
 ### 1. Blog Post Dry-Run
 ```bash
-# Validate via standalone model seeder
-node skills/create-nww-website/references/cms/seeders/blog/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/blog \
-  --dry-run
-
-# Validate via companion CMS Seeding Engine
-node skills/create-nww-website/scripts/cms-seed/index.js \
-  --dir=project-docs/client-review/gate-5-cms-content/blog \
-  --dry-run
+  --model blog
 ```
 
 ### 2. Projects (Portfolio) Dry-Run
 ```bash
-node skills/create-nww-website/references/cms/seeders/project/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/projects \
-  --dry-run
+  --model project
 ```
 
-### 3. Contact Us Inquiries Dry-Run (Direct Module)
+### 3. Contact Us Inquiries Dry-Run
 ```bash
-node skills/create-nww-website/references/cms/seeders/contact-us/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/contact-us \
-  --dry-run
+  --model contact-us
 ```
 
 ### 4. Page Configurations Dry-Run
 ```bash
-node skills/create-nww-website/references/cms/seeders/page-config/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/page-configs \
-  --dry-run
+  --model page-config
 ```
 
 ### 5. Secondary Collections Dry-Run (When Active)
 ```bash
-# Services validation
-node skills/create-nww-website/references/cms/seeders/service/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content/services \
-  --dry-run
-
-# FAQs validation
-node skills/create-nww-website/references/cms/seeders/faq/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content/faqs \
-  --dry-run
-
-# Testimonials validation
-node skills/create-nww-website/references/cms/seeders/testimonial/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content/testimonials \
-  --dry-run
-
-# Tools validation
-node skills/create-nww-website/references/cms/seeders/tool/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content/tools \
-  --dry-run
-
-# Tool Categories validation
-node skills/create-nww-website/references/cms/seeders/tool-category/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content/tool-categories \
-  --dry-run
+# Push dry-run validation for any active model (service, faq, testimonial, tool, etc.)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
+  --dir project-docs/client-review/gate-5-cms-content/<model> \
+  --model <model>
 ```
 
 Ensure all preflight validations complete with **exit code 0** and zero `[FAIL]` messages.
@@ -482,9 +453,5 @@ Before proceeding to Batch 3 (Pushing Seeds & Gate 5 Sign-Off), verify:
 - [ ] All seeds include `status: "published"` (or `"pending"` for inquiries) and `"editTimeFields": true`.
 - [ ] `project-docs/client-review/gate-5-cms-content/index.md` catalogs all seeded records, categories, publication dates, and author bios.
 - [ ] `project-docs/client-review/gate-5-cms-schema/cms-schema.md` defines collection schemas, taxonomies, and public form contracts.
-- [ ] Standalone seeder dry-run (`node .../seeders/blog/insert.js --dry-run`) reports 100% success with 0 failures.
-- [ ] Project seeder dry-run (`node .../seeders/project/insert.js --dry-run`) reports 100% success.
-- [ ] Contact Us seeder dry-run (`node .../seeders/contact-us/insert.js --dry-run`) reports 100% success.
-- [ ] Page Config seeder dry-run (`node .../seeders/page-config/insert.js --dry-run`) reports 100% success.
-- [ ] Companion CLI dry-run (`node skills/create-nww-website/scripts/cms-seed/index.js --dry-run`) reports 100% success.
+- [ ] Content pipeline dry-run (`node skills/create-nww-website/scripts/content-pipeline/index.js push --dir ... --model ...`) reports 100% success with 0 failures across all active models.
 - [ ] Gate containment invariant satisfied: zero loose markdown files outside designated gate directories.

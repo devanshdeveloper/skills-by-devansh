@@ -126,19 +126,35 @@ export default async function SingleGalleryPage({ params }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Gallery seeder scripts reside in `skills/create-nww-website/references/cms/seeders/gallery/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/galleries/`.
+The Gallery content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/galleries/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
-node skills/create-nww-website/references/cms/seeders/gallery/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/galleries \
-  --dry-run
+  --model gallery
 ```
 
 ### 2. Live Seeding
 ```bash
-node skills/create-nww-website/references/cms/seeders/gallery/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/galleries \
-  --auto-slug
+  --model gallery \
+  --apply
+```
+
+### 3. Updating an Existing Gallery
+```bash
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model gallery \
+  --id "65f8a123bc45de6789012345" \
+  --file update.json
+```
+
+### 4. Deleting a Gallery
+```bash
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model gallery \
+  --id "65f8a123bc45de6789012345"
 ```
 

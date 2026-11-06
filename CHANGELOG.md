@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.23] - 2026-11-06
+
+### Added
+- **Content Pipeline CMS Update & Delete Operations (`scripts/content-pipeline/`)**:
+  - Implemented `update` command (`skills/create-nww-website/scripts/content-pipeline/update.js`) executing authenticated `PUT /api/${resourceSlug}/update-one/${id}` with mandatory `--apply` flag and safe dry-run default.
+  - Implemented `delete` command (`skills/create-nww-website/scripts/content-pipeline/delete.js`) executing authenticated `DELETE /api/${resourceSlug}/delete-one/${id}` with mandatory `--apply` flag and safe dry-run default.
+  - Exposed `update` and `delete` commands in `content-pipeline` CLI entrypoint (`index.js`) and package scripts.
+  - Unified all 21 CMS model reference specifications in `skills/create-nww-website/references/cms/*.md` to use the standardized `content-pipeline` CLI.
+
+### Removed
+- **Legacy Seeder Utilities & Scripts**:
+  - Removed deprecated standalone CMS seeders in `skills/create-nww-website/references/cms/seeders/` (all 22 model subdirectories and seeder-base).
+  - Removed deprecated legacy seeding scripts in `skills/create-nww-website/scripts/cms-seed/` (`index.js`, `markdown-to-seed.js`, and `lib/`).
+  - Cleaned all references across `AGENTS.md`, `docs/ARCHITECTURE.md`, `skills/create-nww-website/SKILL.md`, and Stage 5 Batch 02 & Batch 03 rulebooks.
+
 ## [1.10.22] - 2026-11-06
 
 ### Added

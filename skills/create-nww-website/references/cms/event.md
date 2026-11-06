@@ -130,19 +130,35 @@ export default async function SingleEventPage({ params }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Event seeder scripts reside in `skills/create-nww-website/references/cms/seeders/event/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/events/`.
+The Event content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/events/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
-node skills/create-nww-website/references/cms/seeders/event/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/events \
-  --dry-run
+  --model event
 ```
 
 ### 2. Live Seeding
 ```bash
-node skills/create-nww-website/references/cms/seeders/event/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/events \
-  --auto-slug
+  --model event \
+  --apply
+```
+
+### 3. Updating an Existing Event
+```bash
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model event \
+  --id "65f8a123bc45de6789012345" \
+  --file update.json
+```
+
+### 4. Deleting an Event
+```bash
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model event \
+  --id "65f8a123bc45de6789012345"
 ```
 

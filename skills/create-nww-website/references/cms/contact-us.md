@@ -185,35 +185,39 @@ export async function handleContactSubmission(prevState, formData) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Contact Us seeder scripts reside in `skills/create-nww-website/references/cms/seeders/contact-us/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/contact-us/`.
+The Contact Us inquiries operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/contact-us/`.
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates schema rules, required fields, and email format without network writes
-node skills/create-nww-website/references/cms/seeders/contact-us/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/contact-us \
-  --dry-run
+  --model contact-us
 ```
 
 ### 2. Live Seeding Test Inquiries
 ```bash
-# Live insertion of seed inquiries into WebsiteContactUs
-node skills/create-nww-website/references/cms/seeders/contact-us/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content/contact-us
+# Live insertion of seed inquiries into WebsiteContactUs (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
+  --dir project-docs/client-review/gate-5-cms-content/contact-us \
+  --model contact-us \
+  --apply
 ```
 
 ### 3. Updating an Inquiry Status
 ```bash
-# Update inquiry status to 'replied' or 'closed' by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/contact-us/update.js \
+# Update inquiry status to 'replied' or 'closed' by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model contact-us \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/contact-us/status-update.json
 ```
 
 ### 4. Deleting an Inquiry
 ```bash
-# Delete an inquiry by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/contact-us/delete.js \
+# Delete an inquiry by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model contact-us \
   --id "65f8a123bc45de6789012345"
 ```
 

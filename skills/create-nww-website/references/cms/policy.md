@@ -129,49 +129,39 @@ export function generatePolicySchema(policy, type) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Legal Policy seeder scripts reside in `skills/create-nww-website/references/cms/seeders/policy/` and accept a `--type <privacy|terms|refund>` flag.
+The Legal Policy content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/policies/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates policy content without network writes
-node skills/create-nww-website/references/cms/seeders/policy/insert.js \
-  --type privacy \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/policies/privacy \
-  --dry-run
+  --model policy
 ```
 
 ### 2. Live Seeding
 ```bash
-# Live insertion of privacy policy
-node skills/create-nww-website/references/cms/seeders/policy/insert.js \
-  --type privacy \
-  --dir project-docs/client-review/gate-5-cms-content/policies/privacy
-
-# Live insertion of terms and conditions
-node skills/create-nww-website/references/cms/seeders/policy/insert.js \
-  --type terms \
-  --dir project-docs/client-review/gate-5-cms-content/policies/terms
-
-# Live insertion of refund policy
-node skills/create-nww-website/references/cms/seeders/policy/insert.js \
-  --type refund \
-  --dir project-docs/client-review/gate-5-cms-content/policies/refund
+# Live insertion of legal policy seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
+  --dir project-docs/client-review/gate-5-cms-content/policies/privacy \
+  --model policy \
+  --apply
 ```
 
 ### 3. Updating an Existing Policy
 ```bash
-# Update fields for an existing policy by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/policy/update.js \
-  --type privacy \
+# Update fields for an existing policy by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model policy \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/policies/privacy/update.json
 ```
 
 ### 4. Deleting a Policy
 ```bash
-# Delete a policy by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/policy/delete.js \
-  --type privacy \
+# Delete a policy by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model policy \
   --id "65f8a123bc45de6789012345"
 ```
 

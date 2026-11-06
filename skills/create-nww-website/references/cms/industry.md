@@ -145,36 +145,39 @@ export default async function SingleIndustryPage({ params }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Industry seeder scripts reside in `skills/create-nww-website/references/cms/seeders/industry/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/industries/`.
+The Industry content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/industries/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates schema rules, required name, slug, description, and content without network writes
-node skills/create-nww-website/references/cms/seeders/industry/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/industries \
-  --dry-run
+  --model industry
 ```
 
-### 2. Live Seeding with Collision Resolution
+### 2. Live Seeding
 ```bash
-# Live insertion of industry seeds with automated collision handling
-node skills/create-nww-website/references/cms/seeders/industry/insert.js \
+# Live insertion of industry seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/industries \
-  --auto-slug
+  --model industry \
+  --apply
 ```
 
 ### 3. Updating an Existing Industry
 ```bash
-# Update fields for an existing industry by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/industry/update.js \
+# Update fields for an existing industry by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model industry \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/industries/industry-update.json
 ```
 
 ### 4. Deleting an Industry
 ```bash
-# Delete an industry by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/industry/delete.js \
+# Delete an industry by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model industry \
   --id "65f8a123bc45de6789012345"
 ```
 

@@ -33,9 +33,6 @@ Execute only verbatim commands matching what exists in this repository:
 - **Run Universal Site Fetcher (Previous Site & References)**: `node skills/create-nww-website/scripts/site-fetch/index.js --help`
 - **Run Client Milestone Notifier**: `node skills/create-nww-website/scripts/client-notify/index.js`
 - **Run Structure & Deliverables Auditor**: `node skills/create-nww-website/scripts/structure-audit/index.js`
-- **Run CMS Seeder**: `node skills/create-nww-website/scripts/cms-seed/index.js --help`
-- **Compile Markdown Content to CMS Seeds**: `node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js`
-- **Compile & Seed Directly to Live CMS**: `node skills/create-nww-website/scripts/cms-seed/markdown-to-seed.js --seed`
 - **Run PageSpeed Check**: `node skills/create-nww-website/scripts/seo/pagespeed-check.js --help`
 - **Run Robots & Sitemap Parser**: `node skills/create-nww-website/scripts/seo/sitemap-robots-parser.js --help`
 - **Run Content Pipeline CLI**: `node skills/create-nww-website/scripts/content-pipeline/index.js --help`
@@ -43,6 +40,8 @@ Execute only verbatim commands matching what exists in this repository:
 - **Audit SEO Rules on Content**: `node skills/create-nww-website/scripts/content-pipeline/index.js seo-check --help`
 - **Compile MDX to JSON Seeds**: `node skills/create-nww-website/scripts/content-pipeline/index.js to-seed --help`
 - **Push Seeds to CMS (Dry-Run)**: `node skills/create-nww-website/scripts/content-pipeline/index.js push --help`
+- **Update Document in CMS**: `node skills/create-nww-website/scripts/content-pipeline/index.js update --help`
+- **Delete Document from CMS**: `node skills/create-nww-website/scripts/content-pipeline/index.js delete --help`
 - **Run Security Scan**: `node scripts/publish/security-scan.mjs`
 - **Run Preflight Checks**: `node scripts/publish/preflight.mjs --dry-run`
 - **Run Release (Dry Run)**: `node scripts/publish/release.mjs --dry-run`

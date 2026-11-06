@@ -171,36 +171,39 @@ export default async function SingleCaseStudyPage({ params }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Case Study seeder scripts reside in `skills/create-nww-website/references/cms/seeders/case-study/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/case-studies/`.
+The Case Study content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/case-studies/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates schema rules, required title, slug, and narrative fields
-node skills/create-nww-website/references/cms/seeders/case-study/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/case-studies \
-  --dry-run
+  --model case-study
 ```
 
 ### 2. Live Seeding
 ```bash
-# Live insertion of case study seeds
-node skills/create-nww-website/references/cms/seeders/case-study/insert.js \
+# Live insertion of case study seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/case-studies \
-  --auto-slug
+  --model case-study \
+  --apply
 ```
 
 ### 3. Updating an Existing Case Study
 ```bash
-# Update fields for an existing case study by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/case-study/update.js \
+# Update fields for an existing case study by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model case-study \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/case-studies/case-study-update.json
 ```
 
 ### 4. Deleting a Case Study
 ```bash
-# Delete a case study by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/case-study/delete.js \
+# Delete a case study by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model case-study \
   --id "65f8a123bc45de6789012345"
 ```
 

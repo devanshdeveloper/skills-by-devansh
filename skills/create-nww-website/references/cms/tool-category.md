@@ -157,36 +157,39 @@ export default async function SingleToolCategoryPage({ params }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Tool Category seeder scripts reside in `skills/create-nww-website/references/cms/seeders/tool-category/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/tool-categories/`.
+The Tool Category content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/tool-categories/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates schema rules, required title and slug without network writes
-node skills/create-nww-website/references/cms/seeders/tool-category/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/tool-categories \
-  --dry-run
+  --model tool-category
 ```
 
-### 2. Live Seeding with Collision Resolution
+### 2. Live Seeding
 ```bash
-# Live insertion of category seeds with automated collision handling
-node skills/create-nww-website/references/cms/seeders/tool-category/insert.js \
+# Live insertion of category seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/tool-categories \
-  --auto-slug
+  --model tool-category \
+  --apply
 ```
 
 ### 3. Updating an Existing Tool Category
 ```bash
-# Update fields for an existing category by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/tool-category/update.js \
+# Update fields for an existing category by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model tool-category \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/tool-categories/category-update.json
 ```
 
 ### 4. Deleting a Tool Category
 ```bash
-# Delete a tool category by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/tool-category/delete.js \
+# Delete a tool category by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model tool-category \
   --id "65f8a123bc45de6789012345"
 ```
 

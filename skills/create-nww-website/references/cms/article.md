@@ -139,19 +139,39 @@ export default async function SingleArticlePage({ params }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Article seeder scripts reside in `skills/create-nww-website/references/cms/seeders/article/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/articles/`.
+Article content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/articles/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
-node skills/create-nww-website/references/cms/seeders/article/insert.js \
+# Validates schema rules, Mongoose metadata nesting, and required fields without network writes
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/articles \
-  --dry-run
+  --model article
 ```
 
 ### 2. Live Seeding
 ```bash
-node skills/create-nww-website/references/cms/seeders/article/insert.js \
+# Live insertion of article seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/articles \
-  --auto-slug
+  --model article \
+  --apply
+```
+
+### 3. Updating an Existing Article
+```bash
+# Update fields for an existing article by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model article \
+  --id "65f8a123bc45de6789012345" \
+  --file update.json
+```
+
+### 4. Deleting an Article
+```bash
+# Delete an article by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model article \
+  --id "65f8a123bc45de6789012345"
 ```
 

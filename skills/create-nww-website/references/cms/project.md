@@ -179,36 +179,39 @@ export default async function SingleProjectPage({ params }) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The standalone Project seeder scripts reside in `skills/create-nww-website/references/cms/seeders/project/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/projects/`.
+The Project content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/projects/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates schema rules, required title and slug, and metadata without network writes
-node skills/create-nww-website/references/cms/seeders/project/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/projects \
-  --dry-run
+  --model project
 ```
 
-### 2. Live Seeding with Collision Resolution
+### 2. Live Seeding
 ```bash
-# Live insertion of project seeds with automated collision handling
-node skills/create-nww-website/references/cms/seeders/project/insert.js \
+# Live insertion of project seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/projects \
-  --auto-slug
+  --model project \
+  --apply
 ```
 
 ### 3. Updating an Existing Project
 ```bash
-# Update fields for an existing project by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/project/update.js \
+# Update fields for an existing project by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model project \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/projects/project-update.json
 ```
 
 ### 4. Deleting a Project
 ```bash
-# Delete a project by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/project/delete.js \
+# Delete a project by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model project \
   --id "65f8a123bc45de6789012345"
 ```
 

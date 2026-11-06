@@ -38,7 +38,7 @@ skills-by-devansh/
 │   │       ├── site-fetch/             # Universal site crawler & page-type capture (previous site & references)
 │   │       ├── client-notify/          # Multi-stage client email review & approval notification engine
 │   │       ├── structure-audit/        # Stage 8 deliverables and coding conventions validator
-│   │       ├── cms-seed/               # Blog seeding CLI engine and schema validator
+│   │       ├── content-pipeline/       # MDX validation, SEO audit, seed compilation, and CMS sync CLI
 │   │       └── seo/                    # PageSpeed Insights & sitemap/robots CLI helpers
 │   ├── nww/                            # Shortcut alias skill for create-nww-website
 │   │   └── SKILL.md                    # Fast shortcut delegation runbook
@@ -151,6 +151,7 @@ Skills may contain companion CLI utilities inside `scripts/`:
 - **`reference-capture`**: A standalone Node.js utility for Stage 2 design references. Reads intake brief Q12, captures multi-page benchmark snapshots (`<domain>/<slug>/`), and compiles `sources.md`.
 - **`client-notify`**: A Node.js utility providing stage-by-stage client email drafting, Resend/SendGrid/SMTP dispatch upon explicit user approval, clickable `mailto:` links, and automated logging in `router-state.md`.
 - **`structure-audit`**: A Node.js utility auditing project documentation across all 12 stages, enforcing strict line limits and section comments, and compiling `project-docs/structure-audit.md`.
+- **`content-pipeline`**: A Node.js utility for validating CMS MDX content with Zod against model schemas, auditing SEO rules, compiling MDX into strict-mode JSON seeds, and pushing/updating/deleting content via live CMS endpoints (dry-run default; `--apply` required for writes).
 
 These utilities are self-contained and invoked via Node directly (`node index.js`).
 

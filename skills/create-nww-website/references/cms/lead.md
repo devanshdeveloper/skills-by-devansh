@@ -104,25 +104,18 @@ export async function submitConsultationRequest(prevState, formData) {
 
 ---
 
-## 4. Running the Seeder & Testing Submission [Exact Code without the JSX]
+## 4. Testing Submission [Exact Code without the JSX]
 
-Testing inbound form submissions uses `skills/create-nww-website/references/cms/seeders/form/submit.js`.
+Testing inbound form submissions can be validated directly against the backend form ingestion endpoint:
 
-### 1. Test Ingestion Payload with Dry Run
+### 1. Test Ingestion Payload with Curl
 ```bash
-# Validates form payload JSON file without network call
-node skills/create-nww-website/references/cms/seeders/form/submit.js \
-  --form-id "65f8a123bc45de6789012345" \
-  --file project-docs/client-review/gate-5-cms-content/forms/test-lead.json \
-  --dry-run
-```
-
-### 2. Live Test Submission
-```bash
-# Sends live test submission to backend form ingestion
-node skills/create-nww-website/references/cms/seeders/form/submit.js \
-  --form-id "65f8a123bc45de6789012345" \
-  --file project-docs/client-review/gate-5-cms-content/forms/test-lead.json
+# Sends test submission to backend form ingestion endpoint
+curl -X POST "${SERVER_URL}/api/form/65f8a123bc45de6789012345/submit" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${CMS_TOKEN}" \
+  -H "x-site-key: ${CMS_TOKEN}" \
+  -d @project-docs/client-review/gate-5-cms-content/forms/test-lead.json
 ```
 
 ### 3. Lead Implementation Binary QA Checklist

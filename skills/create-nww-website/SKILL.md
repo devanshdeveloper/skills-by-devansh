@@ -198,28 +198,28 @@ Consult the matching reference guide when executing each stage or specialized ca
 | **SEO Tool Library** | [gate-4-seo-strategy/seo-tool-library.md](references/gate-4-seo-strategy/seo-tool-library.md) | Running SEO tool availability check or auditing PageSpeed / sitemap / robots. |
 | **Stage 5 Batch 1 Asset Curation** | [gate-5-page-specs-and-cms/batch-01-asset-curation/rulebook.md](references/gate-5-page-specs-and-cms/batch-01-asset-curation/rulebook.md) | Sourcing licensed stock images via Pixabay, Pexels, or Unsplash with provenance logging. |
 | **Stage 5 Batch 2 Building Seeds** | [gate-5-page-specs-and-cms/batch-02-building-seeds/rulebook.md](references/gate-5-page-specs-and-cms/batch-02-building-seeds/rulebook.md) | Authoring seed content JSONs and schema specifications from client-context/ content. |
-| **Stage 5 Batch 3 Pushing Seeds** | [gate-5-page-specs-and-cms/batch-03-pushing-seeds/rulebook.md](references/gate-5-page-specs-and-cms/batch-03-pushing-seeds/rulebook.md) | Validating and pushing seed records into live CMS collections via standalone CLI scripts. |
+| **Stage 5 Batch 3 Pushing Seeds** | [gate-5-page-specs-and-cms/batch-03-pushing-seeds/rulebook.md](references/gate-5-page-specs-and-cms/batch-03-pushing-seeds/rulebook.md) | Validating and pushing seed records into live CMS collections via the companion content-pipeline CLI. |
 | **CMS Integration & Architecture** | [cms/rulebook.md](references/cms/rulebook.md) | Connecting NWW CMS endpoints, on-demand ISR revalidation handler, and client helper wiring. |
-| **CMS Blog Model & Implementation** | [cms/blog.md](references/cms/blog.md) | Querying blog posts, dynamic routes, ISR caching, metadata, Core Web Vitals, and running standalone seeders. |
-| **CMS Project Model & Implementation** | [cms/project.md](references/cms/project.md) | Portfolio projects, dynamic showcase routes, gallery media, and running standalone seeders. |
-| **CMS Contact Us Module & Implementation** | [cms/contact-us.md](references/cms/contact-us.md) | Direct WebsiteContactUs module, Server Action handler, security rules, and running standalone seeders. |
-| **CMS Page Config Model & Implementation** | [cms/page-config.md](references/cms/page-config.md) | Pure page-level WebsitePageConfig schema, metadata/FAQ injection, shell controls, and running standalone seeders. |
-| **CMS Service Model & Implementation** | [cms/service.md](references/cms/service.md) | Service catalog, dynamic capability routes, JSON-LD schemas, and running standalone seeders. |
-| **CMS FAQ Model & Implementation** | [cms/faq.md](references/cms/faq.md) | Frequently asked questions, in-page accordions, FAQPage schema, and running standalone seeders. |
-| **CMS Testimonial Model & Implementation** | [cms/testimonial.md](references/cms/testimonial.md) | Client reviews, star ratings, social proof showcase, and running standalone seeders. |
-| **CMS Case Study Model & Implementation** | [cms/case-study.md](references/cms/case-study.md) | Narrative enterprise case studies, challenge/solution/results metrics, and running standalone seeders. |
-| **CMS Tool Model & Implementation** | [cms/tool.md](references/cms/tool.md) | Interactive tools, calculators, widget boundaries, JSON-LD schemas, and running standalone seeders. |
-| **CMS Tool Category Model & Implementation** | [cms/tool-category.md](references/cms/tool-category.md) | Hierarchical tool categories, landing pages, taxonomy metadata, and running standalone seeders. |
-| **CMS Feature Model & Implementation** | [cms/feature.md](references/cms/feature.md) | Platform and product features grid, icons, and running standalone seeders. |
-| **CMS Job Model & Implementation** | [cms/job.md](references/cms/job.md) | Careers index, job descriptions, JobPosting schema, and running standalone seeders. |
-| **CMS Event Model & Implementation** | [cms/event.md](references/cms/event.md) | Corporate events, webinars, calendar views, Event schema, and running standalone seeders. |
-| **CMS Plan Model & Implementation** | [cms/plan.md](references/cms/plan.md) | Subscription pricing plans, multi-cycle tiers, and running standalone seeders. |
-| **CMS Gallery Model & Implementation** | [cms/gallery.md](references/cms/gallery.md) | Photo galleries, visual media albums, and running standalone seeders. |
-| **CMS Article Model & Implementation** | [cms/article.md](references/cms/article.md) | Editorial articles with author credits, news posts, and running standalone seeders. |
-| **CMS Industry Model & Implementation** | [cms/industry.md](references/cms/industry.md) | Industry solution verticals, sector capabilities, and running standalone seeders. |
-| **CMS Portfolio Model & Implementation** | [cms/portfolio.md](references/cms/portfolio.md) | Showcase portfolio works, creative media galleries, and running standalone seeders. |
-| **CMS Policy Model & Implementation** | [cms/policy.md](references/cms/policy.md) | Dynamic legal policies (Privacy, Terms, Refund), DigitalDocument schemas, and running standalone seeders. |
-| **CMS Tag Model & Implementation** | [cms/tag.md](references/cms/tag.md) | WebsiteTag taxonomy badges, category filtering UI, and running standalone seeders. |
+| **CMS Blog Model & Implementation** | [cms/blog.md](references/cms/blog.md) | Querying blog posts, dynamic routes, ISR caching, metadata, Core Web Vitals, and running content-pipeline operations. |
+| **CMS Project Model & Implementation** | [cms/project.md](references/cms/project.md) | Portfolio projects, dynamic showcase routes, gallery media, and running content-pipeline operations. |
+| **CMS Contact Us Module & Implementation** | [cms/contact-us.md](references/cms/contact-us.md) | Direct WebsiteContactUs module, Server Action handler, security rules, and running content-pipeline operations. |
+| **CMS Page Config Model & Implementation** | [cms/page-config.md](references/cms/page-config.md) | Pure page-level WebsitePageConfig schema, metadata/FAQ injection, shell controls, and running content-pipeline operations. |
+| **CMS Service Model & Implementation** | [cms/service.md](references/cms/service.md) | Service catalog, dynamic capability routes, JSON-LD schemas, and running content-pipeline operations. |
+| **CMS FAQ Model & Implementation** | [cms/faq.md](references/cms/faq.md) | Frequently asked questions, in-page accordions, FAQPage schema, and running content-pipeline operations. |
+| **CMS Testimonial Model & Implementation** | [cms/testimonial.md](references/cms/testimonial.md) | Client reviews, star ratings, social proof showcase, and running content-pipeline operations. |
+| **CMS Case Study Model & Implementation** | [cms/case-study.md](references/cms/case-study.md) | Narrative enterprise case studies, challenge/solution/results metrics, and running content-pipeline operations. |
+| **CMS Tool Model & Implementation** | [cms/tool.md](references/cms/tool.md) | Interactive tools, calculators, widget boundaries, JSON-LD schemas, and running content-pipeline operations. |
+| **CMS Tool Category Model & Implementation** | [cms/tool-category.md](references/cms/tool-category.md) | Hierarchical tool categories, landing pages, taxonomy metadata, and running content-pipeline operations. |
+| **CMS Feature Model & Implementation** | [cms/feature.md](references/cms/feature.md) | Platform and product features grid, icons, and running content-pipeline operations. |
+| **CMS Job Model & Implementation** | [cms/job.md](references/cms/job.md) | Careers index, job descriptions, JobPosting schema, and running content-pipeline operations. |
+| **CMS Event Model & Implementation** | [cms/event.md](references/cms/event.md) | Corporate events, webinars, calendar views, Event schema, and running content-pipeline operations. |
+| **CMS Plan Model & Implementation** | [cms/plan.md](references/cms/plan.md) | Subscription pricing plans, multi-cycle tiers, and running content-pipeline operations. |
+| **CMS Gallery Model & Implementation** | [cms/gallery.md](references/cms/gallery.md) | Photo galleries, visual media albums, and running content-pipeline operations. |
+| **CMS Article Model & Implementation** | [cms/article.md](references/cms/article.md) | Editorial articles with author credits, news posts, and running content-pipeline operations. |
+| **CMS Industry Model & Implementation** | [cms/industry.md](references/cms/industry.md) | Industry solution verticals, sector capabilities, and running content-pipeline operations. |
+| **CMS Portfolio Model & Implementation** | [cms/portfolio.md](references/cms/portfolio.md) | Showcase portfolio works, creative media galleries, and running content-pipeline operations. |
+| **CMS Policy Model & Implementation** | [cms/policy.md](references/cms/policy.md) | Dynamic legal policies (Privacy, Terms, Refund), DigitalDocument schemas, and running content-pipeline operations. |
+| **CMS Tag Model & Implementation** | [cms/tag.md](references/cms/tag.md) | WebsiteTag taxonomy badges, category filtering UI, and running content-pipeline operations. |
 | **CMS User Event & Telemetry** | [cms/user-event.md](references/cms/user-event.md) | Visitor telemetry, interaction analytics, and server-side ingestion handler. |
 | **CMS Lead & Inbound Capture** | [cms/lead.md](references/cms/lead.md) | Inbound lead inquiries, Server Action submission with honeypot anti-spam, and form testing. |
 | **Stage 6 Scaffolding** | [gate-6-scaffolding/runbook.md](references/gate-6-scaffolding/runbook.md) | Scaffolding `site/`, generating master QA checklist, and constructing Landing Page showcase. |

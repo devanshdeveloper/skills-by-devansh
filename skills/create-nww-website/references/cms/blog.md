@@ -210,44 +210,48 @@ export async function loadBlogPostData(slug) {
 
 ## 4. Running the Seeder [Exact Code without the JSX]
 
-The seeder scripts reside in `skills/create-nww-website/references/cms/seeders/` and operate directly on JSON files in `project-docs/client-review/gate-5-cms-content/`.
+The blog content operations are managed via the companion `content-pipeline` CLI operating directly on JSON files in `project-docs/client-review/gate-5-cms-content/blog/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
 # Validates schema rules, Mongoose metadata nesting, and required fields without network writes
-node skills/create-nww-website/references/cms/seeders/blog/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content \
-  --dry-run
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
+  --dir project-docs/client-review/gate-5-cms-content/blog \
+  --model blog
 ```
 
-### 2. Live Seeding with Collision Resolution
+### 2. Live Seeding
 ```bash
-# Live insertion of blog seeds with automated collision handling
-node skills/create-nww-website/references/cms/seeders/blog/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content \
-  --auto-slug
+# Live insertion of blog seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
+  --dir project-docs/client-review/gate-5-cms-content/blog \
+  --model blog \
+  --apply
 ```
 
 ### 3. Updating an Existing Post
 ```bash
-# Update fields for an existing post by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/blog/update.js \
+# Update fields for an existing post by MongoDB ObjectId (dry-run default, add --apply for live write)
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model blog \
   --id "65f8a123bc45de6789012345" \
   --file project-docs/client-review/gate-5-cms-content/blog-update.json
 ```
 
 ### 4. Deleting a Post
 ```bash
-# Delete a post by MongoDB ObjectId
-node skills/create-nww-website/references/cms/seeders/blog/delete.js \
+# Delete a post by MongoDB ObjectId (dry-run default, add --apply for live delete)
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model blog \
   --id "65f8a123bc45de6789012345"
 ```
 
-### 5. Companion Blog SEO Audit Utility
+### 5. Content Pipeline SEO Audit Utility
 Verify static prerendering, canonical tags, JSON-LD, Open Graph article tags, and CWV thresholds:
 ```bash
-# Display options
-node skills/create-nww-website/scripts/blog-seo-audit/index.js --help
+# Display SEO check options
+node skills/create-nww-website/scripts/content-pipeline/index.js seo-check --help
+```
 
 # Run audit on generated Next.js site
 node skills/create-nww-website/scripts/blog-seo-audit/index.js --dir ./site --strict

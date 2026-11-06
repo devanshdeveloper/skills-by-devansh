@@ -93,18 +93,36 @@ export default async function PricingPage() {
 
 ## 3. Running the Seeder [Exact Code without the JSX]
 
-The standalone Plan seeder scripts reside in `skills/create-nww-website/references/cms/seeders/plan/` and operate on JSON files in `project-docs/client-review/gate-5-cms-content/plans/`.
+The Plan content operations are managed via the companion `content-pipeline` CLI operating on JSON files in `project-docs/client-review/gate-5-cms-content/plans/` (or compiled from MDX).
 
 ### 1. Validate & Dry Run
 ```bash
-node skills/create-nww-website/references/cms/seeders/plan/insert.js \
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
   --dir project-docs/client-review/gate-5-cms-content/plans \
-  --dry-run
+  --model plan
 ```
 
 ### 2. Live Seeding
 ```bash
-node skills/create-nww-website/references/cms/seeders/plan/insert.js \
-  --dir project-docs/client-review/gate-5-cms-content/plans
+# Live insertion of plan seeds (requires --apply)
+node skills/create-nww-website/scripts/content-pipeline/index.js push \
+  --dir project-docs/client-review/gate-5-cms-content/plans \
+  --model plan \
+  --apply
+```
+
+### 3. Updating an Existing Plan
+```bash
+node skills/create-nww-website/scripts/content-pipeline/index.js update \
+  --model plan \
+  --id "65f8a123bc45de6789012345" \
+  --file update.json
+```
+
+### 4. Deleting a Plan
+```bash
+node skills/create-nww-website/scripts/content-pipeline/index.js delete \
+  --model plan \
+  --id "65f8a123bc45de6789012345"
 ```
 
