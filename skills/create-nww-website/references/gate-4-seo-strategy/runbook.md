@@ -83,6 +83,12 @@ All long-form SEO copy, articles, tool guides, and service details are stored in
 > **Consolidation of Page Specs with SEO Content:**
 > Because page copywriting, section hierarchies, keyword targeting, and media slots are authored here in Stage 4 alongside the SEO strategy (in `client-context/<model>/.../` and `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md`), Stage 5 does not require a redundant page-specs batch. Stage 5 focuses directly on CMS schema resolution, asset curation, and live database seeding.
 >
+> **Zero Repeated Content & Anti-Duplication Invariant:**
+> Duplicate copy across pages severely harms SEO and user trust. No headlines, subheadings, paragraphs, bullet points, feature card copy, or FAQ items may be repeated across multiple pages or between sections on the same page. Every page's content markdown (`content.mdx` / `content.md`) must be 100% original copy authored specifically for that route's search intent. Only UI section types may repeat—never exact content or sections.
+>
+> **High FAQ Density & Informational Richness Invariant:**
+> FAQ sections must maintain high informational density with a minimum of 10 to 15 comprehensive, substantive FAQs per section / FAQ route. Answers must be detailed, multi-sentence explanations addressing genuine user objections, pricing, technical architecture, and onboarding. Zero 1-sentence superficial answers. Zero duplicate FAQs across different pages.
+>
 > **The MDX-to-JSON-to-Seeding Pipeline Invariant:**
 > 1. **Authoring (Stage 4):** When CMS mode is active (`cms: cms`) and a route is requested to be controlled via the CMS (`CMS-Controlled: true` in `page-list.md`), the agent ALWAYS writes an MDX file (`content.mdx`) in `client-context/<model>/<slug>/content.mdx`.
 > 2. **Validation (Stage 4):** Validate immediately against the model's Zod schema (`models/<model>/schema.js`):
@@ -268,6 +274,10 @@ publishedAt: "YYYY-MM-DD"
    - `[from-competitor-fetch]` — Discovered via verified live competitor crawl.
    - `[needs-tool-validation]` — Heuristic suggestion that must be verified when third-party tools are connected.
 
+4. **Content Non-Duplication & Section Uniqueness:**
+   - No two pages may share identical copy blocks, mirrored feature lists, or copy-pasted section layouts. Only section types may be repeated.
+   - All FAQ sections across pages must feature distinct questions and answers unique to each page's specific topic with high density (10–15+ questions).
+
 ---
 
 ## 5. Technical SEO Architecture Specifications
@@ -361,5 +371,7 @@ Before presenting Gate 4 for client approval:
 - [ ] Visual assets (images, icons, diagrams) are co-located in the same slug folders alongside `content.mdx` (or `content.md`).
 - [ ] Strictly zero Next.js or React code emitted in Gate 4 deliverables (code deferred to Stage 6).
 - [ ] Structured data schemas mapped to real visible page content.
+- [ ] Zero repeated content: all copy, value arguments, and card descriptions are 100% unique across pages (only section types repeat).
+- [ ] High FAQ Density enforced: all FAQ sections feature 10–15+ substantive, unique questions with multi-sentence answers.
 - [ ] 301 redirect map completed for all legacy URLs (if migrating).
 - [ ] **Gate 4 Halt:** Present `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md` and content inventory. Await explicit human sign-off before proceeding.

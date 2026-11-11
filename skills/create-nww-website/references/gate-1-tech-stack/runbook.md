@@ -51,7 +51,7 @@ Check GSAP Animation Tier in `client-context/answers/batch-02-branding-motion/an
 6. **Tier: `ultra`**:
    - Experiential Three.js/WebGL canvas orchestration driven by master ScrollTrigger scrub, custom GLSL shaders, and 120fps GPU target.
 
-For complete implementation guides and code examples, consult [gsap-animation-tiers.md](../gate-6-scaffolding/gsap-animation-tiers.md).
+For complete implementation guides and code examples, consult [gsap-animation-tiers.md](../gate-6-scaffolding/batch-02-foundation-shell/gsap-animation-tiers.md).
 
 ---
 
@@ -78,6 +78,6 @@ Before requesting Gate 1 sign-off:
 
 ## References
 
-- [GSAP Animation Tiers](../gate-6-scaffolding/gsap-animation-tiers.md) — 6-tier motion architecture and code recipes.
-- [Code Conventions & Agent Rules](../gate-6-scaffolding/code-conventions.md) — App Router coding rules, line limits, and scoped AGENTS.md.
+- [GSAP Animation Tiers](../gate-6-scaffolding/batch-02-foundation-shell/gsap-animation-tiers.md) — 6-tier motion architecture and code recipes.
+- [Code Conventions & Agent Rules](../gate-6-scaffolding/batch-01-codebase-scaffolding/code-conventions.md) — App Router coding rules, line limits, and scoped AGENTS.md.
 - [Pipeline Stages & State Machine](../gate-0-intake/pipeline-stages.md) — Master pipeline and state machine specification.

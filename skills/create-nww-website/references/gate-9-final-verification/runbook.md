@@ -42,7 +42,10 @@ The script verifies:
 2. Thin page server components (`page.js`) do not exceed **80 lines**.
 3. Section components do not exceed **250 lines** and have `// section: <id>` and `data-section="<id>"` markers.
 4. No unstated markdown files were generated (zero `theory-revisions.md`, `page-design-notes.md`, `migration-inventory.md`).
-5. Generates the compliance audit report at `project-docs/client-review/gate-9-final-verification/structure-audit.md`.
+5. Zero duplicate content or exact sections across routes (only section types repeat; all body copy and cards are unique).
+6. Minimum 5 substantive sections verified on every page (excluding Hero, CTA banner, FAQ, Contact Us form, and Footer).
+7. High FAQ Density verified across all FAQ sections (minimum 10–15 substantive, unique FAQs with zero cross-page duplication).
+8. Generates the compliance audit report at `project-docs/client-review/gate-9-final-verification/structure-audit.md`.
 
 ---
 
@@ -136,6 +139,9 @@ Once audit fixes are approved and verified:
 
 Before declaring project completion:
 - [ ] Structure and deliverable audit passed (`structure-audit.md` generated).
+- [ ] Minimum 5 substantive sections verified per page (excluding Hero, CTA, FAQ, Contact Us form, and Footer).
+- [ ] Cross-page content uniqueness verified (zero duplicate copy/sections; only section types repeat).
+- [ ] High FAQ Density verified across all FAQ sections (minimum 10–15 substantive, unique FAQs).
 - [ ] **Gate 9a Halt:** Present cross-page QA fix summary; await approval.
 - [ ] `pnpm build` compiles cleanly with zero errors.
 - [ ] Zero API keys or secrets leaked in code or client bundles.

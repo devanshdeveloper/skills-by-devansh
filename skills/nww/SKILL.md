@@ -69,3 +69,18 @@ nww
    - Skill files are immutable runbooks: never edit skill files directly; instead, request changes with a prompt.
    - Adhere strictly to the activation protocol defined in `create-nww-website`: always begin with the read-only brief check (`client-context/answers/`) and immediately present Batch 01 of the intake questionnaire.
    - Do not perform any preliminary file reading, repository scanning, planning, command execution, or code generation before the intake questionnaire is presented.
+
+3. **Mandatory Reference Site Crawl Rule (Pre-Gate 2):**
+   - If reference website URLs are provided in the intake brief or Batch 02, executing `site-fetch` on each reference URL into `project-docs/design-references/<domain>` and compiling `project-docs/design-references/sources.md` as part of Gate 0 context before moving to Gate 2 is **MANDATORY**. This step is skipped ONLY if zero reference websites were provided.
+
+4. **Universal Gate Compaction Rule (`/compact` on Each Gate Transaction):**
+   - At every gate transaction or stage transition across the 10-stage pipeline (Gates 0 through 9), the agent MUST remind the user to run the `/compact` command to summarize and compact conversation context, freeing working memory for the upcoming gate.
+
+5. **Section Uniqueness, Minimum 5 Substantive Sections & High FAQ Density Invariants:**
+   - Enforce strictly that only section types may repeat across pages; zero duplicated sections or repeating content/headings anywhere on the website.
+   - Enforce minimum 5 distinct, substantive semantic sections *other than* Hero, CTA banner, FAQ, Contact Us form, and Footer on every page.
+   - Enforce High FAQ Density (minimum 10 to 15 substantive, multi-sentence FAQs with zero cross-page duplication) on any page featuring FAQs.
+
+6. **Rolling Open Questions Pool & Zero Confirmed Decisions Invariant:**
+   - Enforce strictly that `client-context/open-questions.md` maintains a minimum rolling queue of at least 20 targeted open questions across every stage of the pipeline (Stages 0 through 9).
+   - Confirmed decisions, resolved answers, agreed parameters, or project summaries in `client-context/open-questions.md` are strictly prohibited. The moment a question is answered, move it immediately to batch answers and replenish the pool with a new open question to keep the total at >= 20 at all times.

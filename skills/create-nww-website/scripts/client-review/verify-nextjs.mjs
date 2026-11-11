@@ -62,6 +62,25 @@ if (manifest.preLaunchGuard && manifest.preLaunchGuard.enabled) {
   warnings.push('Manifest does not declare an active preLaunchGuard.');
 }
 
+// 3b. Verify Motion Tier & Component Stack in manifest
+const validTiers = ['disabled', 'low', 'medium', 'high', 'max', 'ultra'];
+if (manifest.motionTier) {
+  if (!validTiers.includes(manifest.motionTier.toLowerCase())) {
+    errors.push(`Manifest specifies invalid motionTier: '${manifest.motionTier}'. Must be one of: ${validTiers.join(', ')}`);
+  } else {
+    const stack = manifest.motionStack || {};
+    const showpieceCount = Array.isArray(stack.showpieces) ? stack.showpieces.length : 0;
+    if (showpieceCount > 2) {
+      errors.push(`Manifest exceeds showpiece cap: declared ${showpieceCount} showpieces (maximum 2 allowed).`);
+    } else {
+      console.log(`✓ Motion Tier verified: ${manifest.motionTier} (System: ${stack.systemLayer || 'none'}, Showpieces: ${showpieceCount})`);
+      checksPassed++;
+    }
+  }
+} else {
+  warnings.push('Manifest does not declare a motionTier (defaults to medium).');
+}
+
 // 4. Verify pages in manifest against page-specs/<slug>/page.md
 if (!Array.isArray(manifest.pages) || manifest.pages.length === 0) {
   errors.push('Manifest contains no pages.');

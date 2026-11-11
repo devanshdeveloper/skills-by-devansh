@@ -84,8 +84,10 @@ Please scaffold the Next.js App Router project, configure layout and metadata, a
 4. **Develop Component Architecture**:
    - Organize reusable UI elements in `src/components/` (e.g., Navbar, Footer, Hero, Cards).
    - Ensure components use clean typing and responsive layout patterns.
+   - **Zero Repeated Content & Exact Sections:** Only section types (Hero, Features, Testimonials, FAQ, CTA) may be repeated across pages. No exact section, identical card layout, or duplicate content/headings may appear across different pages or within the same page. Every page must feature unique copywriting, bespoke cards/items, and page-specific value propositions.
+   - **Minimum 5 Substantive Sections & High FAQ Density:** Every page must render at least 5 distinct substantive sections *other than* Hero, CTA banner, FAQ, Contact Us form, and Footer (e.g. Features/Value Grid, Social Proof/Testimonials, How-It-Works/Process, Capabilities/Bento Grid, Stats/Metrics, Case Studies, Comparison Table). Standard bookends do not count toward this 5-section minimum. Any page with FAQs must enforce High FAQ Density with a minimum of 10 to 15 substantive, multi-sentence FAQs addressing real user objections, technical architecture, and pricing/support details (zero duplicate FAQs across routes).
 
 5. **Local Validation**:
    - Test development build using `npm run dev` or run a production build check with `npm run build`.
-   - Confirm no TypeScript compilation errors or broken links exist.
+   - Confirm no TypeScript compilation errors, duplicate content/sections, or broken links exist.
 

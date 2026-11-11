@@ -43,6 +43,9 @@ Before touching code for sub-page `<slug>`:
 ### Step 2: Implement Thin Page & Section Components
 1. **Thin Page Server Component (`site/app/<route>/page.js`):**
    - Strict limit: **Maximum 80 lines**.
+   - Must orchestrate **at least 5 distinct, substantive semantic sections OTHER THAN Hero, CTA banner, FAQ, Contact Us form, and Footer** (e.g. Value/Features, Social Proof/Case Studies, Capabilities/Bento Grid, How It Works, Stats/Metrics). Sub-pages with fewer than 5 substantive body sections are prohibited.
+   - **Zero Repeated Content & Exact Sections Invariant:** Sub-pages must NEVER duplicate exact sections, identical card sets, or copy blocks from the Homepage or previously built sub-pages. Only section types may be repeated across pages. Every section must have bespoke copywriting and unique items tailored to this sub-page.
+   - **High FAQ Density Invariant:** If the sub-page includes an FAQ section, it must render **High FAQ Density** with a **minimum of 10 to 15 comprehensive, substantive FAQs** answering customer objections and details with rich multi-sentence depth. All FAQs must be 100% unique to this specific sub-page (zero duplicate FAQs from other pages).
    - Server Component by default; never place `'use client'` on `page.js`.
    - Export `metadata` or `generateMetadata` with titles, descriptions, and canonical URL from Stage 4 SEO Strategy or CMS readers.
    - Render section components in sequence.
@@ -131,6 +134,9 @@ Present the completed `project-docs/client-review/gate-7-sub-pages/<slug>/checkl
 - Verified single `h1`, heading order, and metadata.
 - Tested responsive behavior across mobile, tablet, desktop.
 - Confirmed WCAG AA contrast, focus rings, and keyboard tab navigation.
+- Confirmed at least 5 substantive sections other than Hero, CTA banner, FAQ, Contact Us form, and Footer.
+- Verified zero repeated content or exact sections (all copy and cards unique to this route; only section types repeated).
+- Confirmed High FAQ Density (minimum 10–15 substantive, unique FAQs if FAQs present).
 - Passing `pnpm check:all` result.
 - **Gate 7b Halt:** Run binary QA checklist; await QA sign-off before next sub-page.
 - User grants explicit approval for **Gate 7b**.

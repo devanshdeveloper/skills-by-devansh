@@ -62,7 +62,7 @@ Before presenting this batch, inspect existing inputs:
 - **Required:** Yes
 - **Default:** None (Must be provided; e.g. `https://stripe.com`, `https://linear.app`)
 - **Downstream Consumers:** 
-  - Automated crawl via `node skills/create-nww-website/scripts/reference-capture/index.js`
+  - Mandatory Gate 0 crawl via `node skills/create-nww-website/scripts/site-fetch/index.js --url <reference-url> --out project-docs/design-references/<domain> --limit-mode max-sampled` (must be completed before advancing to Gate 2).
   - Stage 2 `design-theory.md` Principles Extraction
   - Stage 5 Page Specs IA benchmarks
 
@@ -111,7 +111,7 @@ Before presenting this batch, inspect existing inputs:
 - **Allowed Options:** `disabled`, `low`, `medium`, `high`, `max`, `ultra`
 - **Required:** Yes
 - **Default:** `medium`
-- **Downstream Consumers:** Stage 1 Tech Stack dependencies, Stage 2 Gate 2 variation scripts, Stage 6 `lib/motion.js`, [gsap-animation-tiers.md](../../gate-6-scaffolding/gsap-animation-tiers.md)
+- **Downstream Consumers:** Stage 1 Tech Stack dependencies, Stage 2 Gate 2 variation scripts, Stage 6 `lib/motion.js`, [gsap-animation-tiers.md](../../gate-6-scaffolding/batch-02-foundation-shell/gsap-animation-tiers.md)
 
 ---
 
@@ -136,3 +136,5 @@ After receiving responses to Batch 02:
    > *"Please confirm the branding direction, reference URLs, and motion tier above. Once confirmed, we will advance to Batch 03 (Sitemap, Navigation & Copywriting)."*
 3. **Persist State:**
    Write confirmed answers into `client-context/answers/batch-02-branding-motion/answers.md`.
+4. **Trigger Mandatory Reference Crawl (`site-fetch`):**
+   Immediately after confirming reference URLs, execute the mandatory reference site crawl for each URL into `project-docs/design-references/<domain>` using `node skills/create-nww-website/scripts/site-fetch/index.js --url <reference-url> --out project-docs/design-references/<domain> --limit-mode max-sampled`, and compile `project-docs/design-references/sources.md` as part of Gate 0 context before moving to Gate 2. This step is mandatory before Gate 2 and can be skipped only if zero reference sites are provided.

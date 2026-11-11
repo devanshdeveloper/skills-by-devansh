@@ -9,6 +9,7 @@ A collection of agent skills compatible with the [skills.sh](https://skills.sh/)
 
 | Skill | Description | Location |
 | :--- | :--- | :--- |
+| **asset-optimizer** | Optimizes images, videos, PDFs, and brand logos into lightweight, responsive WebP/MP4 assets with byte budget enforcement and manifest indexing. Use when optimizing media files or running /asset-optimizer. | `skills/asset-optimizer/SKILL.md` |
 | **create-nextjs-website** | Scaffold modern Next.js web applications with App Router, TypeScript, and production-ready structure. Use when the user asks to create, scaffold, or initialize a new Next.js website or web application with App Router, TypeScript, and clean component architecture. | `skills/create-nextjs-website/SKILL.md` |
 | **create-nww-website** | Orchestrates end-to-end creation of Next.js websites with optional NWW CMS integration using a 9-stage human-gated workflow. Enforces single-mode markdown page specifications, Next.js project scaffolding, and manifest-driven incremental builds. Use when asked to create, scaffold, or develop an NWW website, run the website build pipeline, or start a new Next.js client project. | `skills/create-nww-website/SKILL.md` |
 | **nww** | Fast shortcut alias to start the NWW website pipeline. Use when the user types 'nww', 'start nww', or '/nww'. | `skills/nww/SKILL.md` |

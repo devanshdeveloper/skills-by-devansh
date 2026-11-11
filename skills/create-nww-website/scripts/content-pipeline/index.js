@@ -25,6 +25,7 @@ import { main as runToSeed } from './to-seed.js';
 import { main as runPush } from './push.js';
 import { main as runUpdate } from './update.js';
 import { main as runDelete } from './delete.js';
+import { main as runUpload } from './upload.js';
 import { listModels } from './models/registry.js';
 
 function printHelp() {
@@ -37,7 +38,8 @@ Commands:
   validate     Validate authored MDX against model Zod schemas and asset invariants
   seo-check    Audit SEO standards, metadata, single H1, and Google guidelines
   to-seed      Compile validated MDX into Mongoose strict-mode JSON seeds (Gate 5 Batch 02)
-  push         Push validated JSON seeds to live NWW CMS database (Gate 5 Batch 03)
+  push         Push validated JSON seeds & upload images to live NWW CMS (Gate 5 Batch 03)
+  upload       Upload local images/media to NWW CMS media asset storage
   update       Update an existing document by MongoDB ObjectId in NWW CMS
   delete       Delete an existing document by MongoDB ObjectId from NWW CMS
 
@@ -52,6 +54,7 @@ Examples:
   node index.js seo-check --file client-context/blog/my-post/content.mdx
   node index.js to-seed --src client-context/blog --out project-docs/client-review/gate-5-cms-content/blog
   node index.js push --dir project-docs/client-review/gate-5-cms-content/blog --model blog
+  node index.js upload --file client-context/blog/my-post/hero.webp --apply
   node index.js update --model blog --id 65f8a123bc45de6789012345 --file update.json
   node index.js delete --model blog --id 65f8a123bc45de6789012345
 `);
@@ -81,6 +84,9 @@ async function main() {
       break;
     case 'push':
       await runPush();
+      break;
+    case 'upload':
+      await runUpload();
       break;
     case 'update':
       await runUpdate();

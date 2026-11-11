@@ -18,7 +18,7 @@ During Stage 7 sub-page builds, per-page QA execution results are logged to `pro
 ## Taste Verification Pass (Stage 6 Prerequisite)
 
 Before compiling the checklist in Stage 6:
-1. **Taste Skill Check:** Verify if `frontend-design` is available per [runbook.md](../gate-2-design-theory/runbook.md) or apply built-in taste rules.
+1. **Taste Skill Check:** Verify if `frontend-design` is available per [runbook.md](../../gate-2-design-theory/runbook.md) or apply built-in taste rules.
 2. **In-Place Quality Adjustments:** Cross-examine design theory and page specifications against taste standards:
    - Identify generic defaults (warm-cream defaults, unearned fade-and-slide-up animations across multiple sections).
    - Revise theories and specs directly in-place to ensure distinctive styling justified by client references.
@@ -36,6 +36,9 @@ Before compiling the checklist in Stage 6:
 ## [Page Name] (`/route-slug`)
 
 - [ ] **Structure & Line Limits:** Thin page server component (`page.js`) is <= 80 lines; section components in route `_components/` are <= 250 lines; each section file opens with `// section: <id>`; no cross-route imports; no new components in `site/components/` unless reused across 2+ pages; no `'use client'` on `page.js`; `pnpm check:structure` passes.
+- [ ] **Section Count Invariant (Minimum 5 Substantive Sections Excluding Bookends):** Page renders at least **5 distinct, substantive semantic section components OTHER THAN Hero, CTA banner, FAQ, Contact Us form, and Footer**. Bookends (Hero, CTA, FAQ, Contact Us form, Footer) do not count toward this 5-section minimum. Every page must feature at least 5 rich substantive body sections (e.g. Features/Value Grid, Social Proof/Testimonials, How-It-Works/Process, Capabilities/Bento Grid, Stats/Metrics, Case Studies, Comparison Table). Pages with fewer than 5 substantive body sections fail binary QA.
+- [ ] **Zero Repeated Content & Exact Sections Invariant:** Only section types (e.g. Hero, Features, Social Proof, FAQ, CTA) may be repeated across pages. No exact section, identical card layout, or duplicate copy/headings appears on this page or repeats from another page. All copy and value arguments are 100% unique to this route. Zero copy-pasting of body sections or content blocks.
+- [ ] **High FAQ Density Invariant (if page features FAQs):** Contains a minimum of **10 to 15 comprehensive, substantive FAQs** addressing real user objections, technical architecture, support, pricing, and onboarding with rich multi-sentence depth. All FAQs are 100% unique to this page's topic (zero duplicate questions or answers from other pages).
 - [ ] **Layout Fidelity:** Section order, layout pattern, and section count match route blueprint and content specifications. Every section ID appears; no extra sections exist.
 - [ ] **Next.js Stack & Components:** Route exists and compiles without console errors. `'use client'` appears only on leaf components requiring state or GSAP animations.
 - [ ] **Design Tokens:** Exact semantic hex tokens, modular type scale, and container widths from `design-theory.md` are used; zero hardcoded hex colors or arbitrary font values; tap targets >= 44x44px.
@@ -123,3 +126,4 @@ When building page `<slug>` in Stage 7:
 3. If an item fails, fix the code immediately and record what was changed.
 4. Present `checklist-state.md` to the user at **Gate 7b (Binary QA Sign-Off)**.
 5. Append final verification summary to `site/build-log.md`.
+

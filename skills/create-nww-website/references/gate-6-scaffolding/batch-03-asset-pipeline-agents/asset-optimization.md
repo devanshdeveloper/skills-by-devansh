@@ -149,3 +149,4 @@ The automated script `site/scripts/check-assets.mjs` (executed via `pnpm check:a
 - **General Content Images:** <= 60 KB
 - **Vector SVGs / Icons:** <= 5 KB
 - **Downloadable Documents (PDFs):** <= 2 MB
+

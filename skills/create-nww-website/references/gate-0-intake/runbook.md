@@ -5,6 +5,7 @@
 - [Technical Project Name & Vercel Slug Propagation](#technical-project-name--vercel-slug-propagation)
 - [Pre-Gate 1 Legacy Website Archiving & Asset Salvage](#pre-gate-1-legacy-website-archiving--asset-salvage)
   - [Git Hygiene: Adding `previous-site/` to `.gitignore`](#git-hygiene-adding-previous-site-to-gitignore)
+- [Pre-Gate 2 Mandatory Reference Website Crawling & Context Ingestion](#pre-gate-2-mandatory-reference-website-crawling--context-ingestion)
 - [Asset Harvesting & Generation System (Batch 04)](#asset-harvesting--generation-system-batch-04)
 - [Questionnaire & Client Discovery Batches](#questionnaire--client-discovery-batches)
 - [Environment & CMS Mode Configuration](#environment--cms-mode-configuration)
@@ -34,7 +35,10 @@ graph TD
     C -- No --> E[Environment & CMS Mode Setup]
     D --> E
     E --> F[Asset Harvesting & Per-Entity Inventory: asset-manifest.md]
-    F --> G[Persist client-context/answers/batch-*/answers.md]
+    F --> R{Reference Sites Provided?}
+    R -- Yes --> S[Mandatory Pre-Gate 2 Crawl: site-fetch to project-docs/design-references/]
+    R -- No --> G[Persist client-context/answers/batch-*/answers.md]
+    S --> G
     G --> H[Gate 0 Sign-Off: Modular Batch Answers, Asset Manifest & Mode Approval]
     H --> I[Stage 1: Tech Stack Specification]
 ```
@@ -111,6 +115,34 @@ If the root `.gitignore` does not yet exist, create it and verify with `git stat
 
 ---
 
+## Pre-Gate 2 Mandatory Reference Website Crawling & Context Ingestion
+
+If the client or intake brief provides one or more reference website URLs (e.g. in the initial prompt or Batch 02 Q13a), running the companion `site-fetch` utility on every reference site is **MANDATORY** before advancing to Gate 2 (Design Theory).
+
+> [!IMPORTANT]
+> **Mandatory Gate 0 Context Invariant:** All reference website captures and analysis artifacts must be ingested into the Gate 0 context (`project-docs/design-references/` and `sources.md`) before moving to Gate 2. This step can be skipped **ONLY if zero reference websites were provided**.
+
+### Execution Command
+Execute `site-fetch` for each provided reference website URL:
+```bash
+node skills/create-nww-website/scripts/site-fetch/index.js \
+  --url "<reference-url>" \
+  --out "project-docs/design-references/<domain>" \
+  --limit-mode max-sampled \
+  --max-pages 15
+```
+
+The crawler captures representative page types into `project-docs/design-references/<domain>/`:
+- `index.html`: Fully rendered and hardened offline snapshot.
+- `content.md`: Clean, readability-extracted Markdown content.
+- `screenshot.png`: High-resolution full-page visual capture.
+- `manifest.json`: Route inventory and harvested asset catalog.
+
+### Reference Ledger Compilation (`sources.md`)
+Immediately compile `project-docs/design-references/sources.md` summarizing all captured reference sites, their key design patterns, and an explicit third-party usage notice (strictly for design principle analysis; zero copied markup or assets).
+
+---
+
 ## Asset Harvesting & Generation System (Batch 04)
 
 Visual assets are audited and classified before design or technical architecture:
@@ -171,6 +203,7 @@ Before requesting Gate 0 approval, verify that all required assets exist:
 - [ ] `project-docs/client-brief.md`: Structured project brief synthesizing goals, target audience, and brand voice.
 - [ ] `project-docs/router-state.md`: Initialized stage tracker (`stage: 0`, `gate_0: pending`).
 - [ ] `previous-site/`: Crawled legacy site assets (if migration).
+- [ ] `project-docs/design-references/`: Crawled reference site offline mirrors, screenshots, and `sources.md` ledger (Mandatory if reference URLs provided; skippable only if none exist).
 - [ ] `.gitignore`: Contains `previous-site/` rule so legacy crawl files and media remain untracked.
 - [ ] `.env.example`: Configured environment variable contract in root and `site/`.
 
@@ -181,20 +214,20 @@ Before requesting Gate 0 approval, verify that all required assets exist:
 1. Present the project brief, asset manifest summary, selected CMS mode, and motion tier to the user/client.
 2. Initialize `client-context/open-questions.md` with at least 20 targeted, granular open questions spanning copywriting, assets, conversion, integrations, and technical domain requirements. **Strict Guardrail:** Do NOT include any confirmed decision, resolved answer, agreed parameter, or project recap in `client-context/open-questions.md`. Confirmed decisions belong strictly in `client-context/answers/batch-*/answers.md` and `project-docs/client-brief.md`.
 3. Halt execution and explicitly prompt:
-   > *"Stage 0 Intake is complete. Please review the confirmed batch answers (`client-context/answers/batch-*/answers.md`), asset manifest (`client-context/asset-manifest.md`), initial rolling open questions (`client-context/open-questions.md`), confirmed CMS mode, and motion tier. Respond with 'approved' to proceed to Stage 1 (Tech Stack)."*
-4. Update `project-docs/router-state.md` upon explicit confirmation (`Gate 0: Intake Confirmed`).
+   > *"Stage 0 Intake is complete. Please review the confirmed batch answers (`client-context/answers/batch-*/answers.md`), asset manifest (`client-context/asset-manifest.md`), initial rolling open questions (`client-context/open-questions.md`), confirmed CMS mode, and motion tier. Respond with 'approved' to proceed to Stage 1 (Tech Stack). Run `/compact` to compact context before Stage 1."*
+4. Update `project-docs/router-state.md` upon explicit confirmation (`Gate 0: Intake Confirmed`). Remind the user to trigger `/compact` on this gate transaction.
 
 ---
 
 ## Continuous Discovery Loop Across Downstream Stages & Live Code
 
 Client discovery does not end at Gate 0:
-1. **Never Halts Pipeline Momentum:** The pipeline advances through Stages 1 to 8 without waiting for answers.
-2. **Zero Confirmed Decisions Invariant:** Never include confirmed decisions or answered items in `client-context/open-questions.md`.
-3. **Rolling Queue:** When the client provides answers:
+1. **Never Halts Pipeline Momentum:** The pipeline advances through Stages 1 to 9 without waiting for answers.
+2. **Minimum 20 Open Questions at Any Stage & Zero Confirmed Decisions Invariant:** Maintain a minimum rolling queue of at least 20 active open questions in `client-context/open-questions.md` across EVERY stage of the pipeline (Stages 0 through 9). Confirmed decisions, agreed parameters, answered items, or project recaps in `client-context/open-questions.md` are strictly prohibited; that document must contain ONLY active, pending, unanswered discovery questions.
+3. **Rolling Replenishment:** When answers arrive:
    - Remove the answered question from `client-context/open-questions.md`.
    - Record the answer in the respective `client-context/answers/batch-*/answers.md` file (or `client-context/asset-manifest.md`).
-   - Add a new targeted question into `client-context/open-questions.md` to keep the active queue at **>= 20 questions**.
+   - Add a new targeted question into `client-context/open-questions.md` to keep the active queue at **>= 20 questions at all times**.
 4. **Immediate Action on Code & Specs:**
    - **If the Next.js site is already generated (`site/`):** Immediately implement the answer in the codebase (updating components, page copy, layout system, theme tokens, metadata, or CMS seed data).
    - **If before site generation:** Update the relevant stage specifications (`layout-system.md`, `page-specs/`, `seo-strategy.md`).

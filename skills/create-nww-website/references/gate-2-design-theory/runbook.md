@@ -17,6 +17,13 @@ The deliverable is saved to `project-docs/client-review/gate-2-design-theory/des
 ## Prerequisites & Taste Skill Activation
 
 When entering Stage 2:
+0. **Mandatory Gate 0 Reference Site Verification (Gatekeeper Check):**
+   - Verify that all reference URLs provided in Gate 0 (`client-context/answers/batch-02-branding-motion/answers.md` or initial brief) were crawled using `site-fetch` into `project-docs/design-references/<domain>/` with `project-docs/design-references/sources.md` compiled in Gate 0 context.
+   - If reference websites were provided but NOT yet crawled, the agent **MUST halt immediately** and execute the crawl before proceeding with design theory authoring or variation generation:
+     ```bash
+     node skills/create-nww-website/scripts/site-fetch/index.js --url "<reference-url>" --out "project-docs/design-references/<domain>" --limit-mode max-sampled
+     ```
+   - **Enforcement:** Mandatory before Gate 2; skippable **ONLY if zero reference sites were provided**.
 1. **Live-Fetch & Capture Reference Sites (Key Page Types):**
    - For every liked reference URL in `client-context/answers/batch-02-branding-motion/answers.md`, discover sitemap URLs, navigate internal links, cluster representative page types up to `--max-pages`, and capture snapshots directly into `project-docs/design-references/<domain>/<slug>/` using companion script `node skills/create-nww-website/scripts/reference-capture/index.js`.
    - Produce four standard artifacts per page type:

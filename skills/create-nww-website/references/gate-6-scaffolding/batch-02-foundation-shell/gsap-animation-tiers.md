@@ -653,3 +653,4 @@ export default function UltraExperientialHero() {
 - [ ] SplitText or character-split wrappers include `split.revert()` in their cleanup callback.
 - [ ] Smooth scrolling with Lenis updates `ScrollTrigger.update()` on every frame.
 - [ ] Zero animations target `top`, `left`, `width`, or `height` inside scroll loops.
+

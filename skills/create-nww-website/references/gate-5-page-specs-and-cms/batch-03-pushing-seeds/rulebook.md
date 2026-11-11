@@ -40,6 +40,14 @@ Content seeding is executed using the companion `content-pipeline` CLI, paired d
 
 Ensure `SERVER_URL` and `CMS_TOKEN` are configured in the environment before live runs.
 
+> [!IMPORTANT]
+> **Token Confirmation & Website Name Verification Invariant:**
+> Before proceeding to push seeds or content to the CMS, the agent MUST confirm the token details—specifically verifying the **Website Name**, **Domain/Website ID**, and backend URL inside the CMS. The `content-pipeline push` CLI automatically probes and verifies the token and displays the confirmed Website Name. Never execute live database writes without confirming that `CMS_TOKEN` resolves to the intended client website inside the CMS backend.
+
+> [!NOTE]
+> **Automatic Local Image Upload Support:**
+> The `content-pipeline push` engine and standalone `content-pipeline upload` command automatically detect local images referenced in seed payloads (cover images, inline rich-text `<img>` tags, gallery photos, author avatars) and upload them via `multipart/form-data` to the CMS media asset library. In dry-run mode, local file existence and byte budgets are validated; on `--apply`, local paths are automatically substituted with the remote CMS CDN URLs before collection insertion.
+
 ---
 
 ## 2. Step 1: Dry-Run Validation

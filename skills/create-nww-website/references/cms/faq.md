@@ -2,6 +2,12 @@
 
 This reference provides the unified technical specification for the NWW CMS `FAQ` model, including its data contract, FAQs page implementation, Schema.org `FAQPage` structured data injection, and companion seeder workflows.
 
+> [!IMPORTANT]
+> **Hard Invariants — High FAQ Density & Zero Cross-Page Duplication:**
+> 1. **High FAQ Density:** Every FAQ route (such as `/faqs`) and in-page FAQ section must enforce **High FAQ Density** with a **minimum of 10 to 15 comprehensive, substantive FAQs**. Shallow 1-sentence answers or thin lists (<10 items) are strictly prohibited.
+> 2. **Multi-Sentence Informational Depth:** Answers must be comprehensive paragraphs explaining technical architecture, pricing nuances, service-specific workflows, onboarding steps, and user objections.
+> 3. **Zero Cross-Page Duplicate FAQs:** When multiple pages feature FAQ sections (e.g. Home FAQ vs Service FAQ vs `/faqs`), each page's FAQ set must be 100% unique to that specific page's topic. Reusing identical questions or answers across pages is strictly prohibited.
+
 ## Table of Contents
 - [1. Model](#1-model)
 - [2. Implementation on Model List Page [Exact Code without the JSX]](#2-implementation-on-model-list-page-exact-code-without-the-jsx)
@@ -98,7 +104,8 @@ import { FAQ } from '@/lib/cms';
 import { Schema } from '@/components/seo/Schema';
 
 export async function PageFAQSection({ category = 'General' }) {
-  const { items: faqs } = await FAQ.paginate({ limit: 10, category });
+  // Enforces High FAQ Density (10-15+ substantive FAQs)
+  const { items: faqs } = await FAQ.paginate({ limit: 15, category });
   const jsonLd = FAQ.generateJSONLD(faqs);
 
   return (
@@ -151,6 +158,7 @@ node skills/create-nww-website/scripts/content-pipeline/index.js delete \
 ```
 
 ### 5. FAQ Implementation Binary QA Checklist
+- [ ] **FAQ Volume:** Minimum **10 comprehensive, substantive questions and answers** rendered per FAQ page or in-page FAQ section.
 - [ ] **Static Guardrail:** `ensureStatic = 'navigation'` is exported from `faqs/page.js`.
 - [ ] **Structured Data:** Valid `FAQPage` JSON-LD rendered with `<` Unicode escaping (`\u003c`).
 - [ ] **Accessible Accordion:** Accordion triggers apply `aria-expanded` and `aria-controls` attributes correctly.

@@ -26,7 +26,7 @@ skills-by-devansh/
 │   │   │   ├── gate-3-page-list/       # Stage 3: runbook.md
 │   │   │   ├── gate-4-seo-strategy/    # Stage 4: runbook.md, seo-tool-library.md, seo-tool-registry.json
 │   │   │   ├── gate-5-page-specs/      # Stage 5: runbook.md, cms-architecture.md, stock-image-sourcing.md, cms/
-│   │   │   ├── gate-6-scaffolding/     # Stage 6: runbook.md, gsap-animation-tiers.md, code-conventions.md, asset-optimization.md, page-checklist.md
+│   │   │   ├── gate-6-scaffolding/     # Stage 6: runbook.md, batch-01 through batch-06 modular rulebooks & references
 │   │   │   ├── gate-7-sub-pages/       # Stage 7: runbook.md
 │   │   │   ├── gate-8-additional-features/ # Stage 8: rulebook.md, site/features/nww-analytics/
 │   │   │   └── gate-9-final-verification/  # Stage 9: runbook.md

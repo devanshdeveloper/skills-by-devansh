@@ -5,7 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.10.27] - 2026-11-11
+
+### Added
+- **Motion Tier & UI Component Stack Architecture (`motion-component-stack.md`)**:
+  - Engineered unified 4-tier matrix (T0 Static, T1 Subtle, T2 System, T3 Showpiece) mapped to existing intake values (`disabled`, `low`, `medium`, `high`, `max`, `ultra`).
+  - Standardized shadcn/ui Base UI foundation with `"tsx": false` JavaScript generation for clean `.jsx` component code.
+  - Enforced "Rule of One Foundation + One System Layer" allowing exactly one of Magic UI, Cult UI, or Kokonut UI.
+  - Permitted small primitives (Motion-Primitives, React Bits, Animata, Eldora UI, Fancy Components) and capped Aceternity showpieces to max 1–2 (Hero/CTA only, lazy-loaded via `next/dynamic`).
+  - Officially dropped Skiper UI (mandatory public attribution on free tier) and Origin UI (stale / copyleft AGPL risk).
+- **Deterministic Motion Tier CLI (`scripts/motion-tier/index.js`)**:
+  - Embedded zero-dependency standalone Node CLI generating exact package manager and shadcn commands per tier and outputting manifest snippets.
+- **Site Manifest Motion Stack Auditing (`verify-nextjs.mjs`)**:
+  - Enhanced Next.js scaffolding auditor to validate `motionTier` and `motionStack` configuration and enforce the 2-showpiece ceiling.
+- **Hard Instructions for Rolling Open Questions Pool**:
+  - Codified mandatory minimum rolling queue of >= 20 targeted open questions in `client-context/open-questions.md` across all stages (0 through 9) with strict zero confirmed decisions invariant.
 
 ## [1.10.26] - 2026-11-06
 

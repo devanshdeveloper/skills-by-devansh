@@ -41,6 +41,7 @@ Before compiling or presenting this batch, the agent **MUST** perform a strict c
 2. **Zero Confirmed Decisions Guardrail:** Under NO circumstances should confirmed decisions, agreed parameters, or already-decided answers be included or summarized in `client-context/open-questions.md`. Do not add a "Confirmed Decisions" section or header. Confirmed decisions belong strictly in `client-context/answers/` and stage specifications.
 3. **Eliminate Duplicates:** If the client has already answered a question (e.g. they already confirmed dark theme, provided their Calendly link, or supplied their logo), that question **CANNOT** be included in the open questions batch.
 4. **Target Genuine Unresolved Gaps:** Every question in this batch must probe for high-value specifics that refine copy, visual assets, conversion mechanics, or integrations. Do not embed confirmed facts or decided parameters into question prompts.
+5. **Maintain at Least 20 Open Questions at ANY Stage:** Across all stages of the pipeline (Stages 0 through 9), `client-context/open-questions.md` must maintain a minimum rolling queue of at least 20 active, unanswered open questions. Under NO circumstances may confirmed decisions be written to that file. When questions are answered, remove them immediately, log the answers in batch answers, and replenish with new open questions to keep the total at >= 20 at all times.
 
 ---
 

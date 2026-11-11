@@ -22,7 +22,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
-import { resolveEnvConfig, maskToken } from './lib/env.js';
+import { resolveEnvConfig, maskToken, verifyCmsToken } from './lib/env.js';
+import { processSeedImages } from './lib/image-uploader.js';
 import { getModel, listModels } from './models/registry.js';
 import { printHeader, finishCli } from './lib/reporter.js';
 
@@ -203,20 +204,26 @@ export async function fetchWithRetry(url, init, maxRetries = 3, baseDelay = 1000
  * @param {boolean} autoSlug
  * @param {number} retries
  * @param {number} retryDelay
- * @returns {Promise<{ slug: string, status: string, message: string, id?: string, attempts: number, endpoint: string }>}
+ * @param {string} [seedFilePath=null]
+ * @returns {Promise<{ slug: string, status: string, message: string, id?: string, attempts: number, endpoint: string, uploads?: Array<object> }>}
  */
-export async function pushItem(item, resourceSlug, envConfig, apply = false, autoSlug = false, retries = 3, retryDelay = 1000) {
+export async function pushItem(item, resourceSlug, envConfig, apply = false, autoSlug = false, retries = 3, retryDelay = 1000, seedFilePath = null) {
   const { serverUrl, cmsToken } = envConfig;
   const slug = item.slug || 'unknown';
   const endpoint = `${serverUrl}/api/${resourceSlug}/create-one`;
 
+  // 1. Process & Upload any local images referenced in the payload
+  const { payload: itemWithRemoteImages, uploads } = await processSeedImages(item, seedFilePath, envConfig, apply, { autoSlug });
+
   if (!apply) {
+    const uploadSummary = uploads.length ? ` (${uploads.length} image reference(s) inspected)` : '';
     return {
       slug,
       status: 'DRY_RUN_VALIDATED',
-      message: `Payload verified for endpoint POST ${endpoint} (Write suppressed: --apply not set)`,
+      message: `Payload verified for endpoint POST ${endpoint}${uploadSummary} (Write suppressed: --apply not set)`,
       attempts: 0,
       endpoint,
+      uploads,
     };
   }
 
@@ -231,8 +238,8 @@ export async function pushItem(item, resourceSlug, envConfig, apply = false, aut
   };
 
   const payload = {
-    ...item,
-    status: item.status || 'published',
+    ...itemWithRemoteImages,
+    status: itemWithRemoteImages.status || 'published',
     editTimeFields: true,
   };
 
@@ -366,9 +373,16 @@ Safety Notice:
   const manifest = loadManifest(manifestPath);
   manifest.model = opts.model || manifest.model || 'unknown';
 
+  const tokenMeta = await verifyCmsToken(envConfig.serverUrl, envConfig.cmsToken);
+
   if (!opts.json) {
     printHeader(`CMS SEED INGESTION (${opts.apply ? 'LIVE APPLY' : 'DRY-RUN PREVIEW'})`);
-    process.stdout.write(`  Target Server: ${envConfig.serverUrl}\n  Model Schema:  ${opts.model || 'auto'}\n  Token Status:  ${envConfig.isConfigured ? maskToken(envConfig.cmsToken) : '[MISSING / UNSET]'}\n  Retry Policy:  ${opts.retries} retries (base delay: ${opts.retryDelay}ms)\n  Operation:     ${opts.apply ? 'LIVE DATABASE WRITE' : 'DRY-RUN (Simulated; zero network writes)'}\n\n`);
+    process.stdout.write(`  Target Server:  ${envConfig.serverUrl}\n  Model Schema:   ${opts.model || 'auto'}\n  Token Status:   ${envConfig.isConfigured ? maskToken(envConfig.cmsToken) : '[MISSING / UNSET]'}\n  Website Name:   "${tokenMeta.websiteName || '[UNRESOLVED]'}" (ID: ${tokenMeta.websiteId || 'none'})\n  Auth Check:     ${tokenMeta.status}\n  Retry Policy:   ${opts.retries} retries (base delay: ${opts.retryDelay}ms)\n  Operation:      ${opts.apply ? 'LIVE DATABASE WRITE' : 'DRY-RUN (Simulated; zero network writes)'}\n\n`);
+  }
+
+  if (opts.apply && tokenMeta.status === 'UNAUTHORIZED') {
+    process.stderr.write(`\n  ✗ [CMS_AUTH_FAILED] CMS_TOKEN is unauthorized for ${envConfig.serverUrl}. Please confirm token credentials before applying live content.\n\n`);
+    process.exit(1);
   }
 
   const results = [];
@@ -411,7 +425,7 @@ Safety Notice:
     }
 
     try {
-      const res = await pushItem(raw, resourceSlug, envConfig, opts.apply, opts.autoSlug, opts.retries, opts.retryDelay);
+      const res = await pushItem(raw, resourceSlug, envConfig, opts.apply, opts.autoSlug, opts.retries, opts.retryDelay, f);
       results.push({ file: f, ...res });
 
       if (res.status === 'CREATED' || res.status === 'CREATED_WITH_NEW_SLUG') {
@@ -438,6 +452,12 @@ Safety Notice:
       if (!opts.json) {
         const symbol = res.status.includes('CREATED') ? '✓' : res.status === 'ALREADY_EXISTS' ? '↷' : '✓';
         process.stdout.write(`  ${symbol} [${res.status}] Slug: '${res.slug}' — ${res.message}\n`);
+        if (res.uploads && res.uploads.length) {
+          for (const up of res.uploads) {
+            const sym = up.status === 'UPLOADED' || up.status === 'DRY_RUN_VALIDATED' ? '↳' : '⚠';
+            process.stdout.write(`    ${sym} [Image: ${up.status}] ${up.originalPath} -> ${up.url}\n`);
+          }
+        }
       }
     } catch (err) {
       allPassed = false;

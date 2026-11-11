@@ -60,15 +60,20 @@ graph TD
    - Ensure `previous-site/` is added to the project's root `.gitignore` so legacy crawl assets remain local.
    - Audit crawled routes and harvested visual assets in `manifest.json`, `sitemap.xml`, and `previous-site/` source locations.
    - Present discovered resources to the client for disposition in Batch 04 and Batch 06.
-3. **Source 3: Client Raw Files & Uploaded Assets:**
+3. **Source 2b: Mandatory Reference Website Crawl (`project-docs/design-references/`):**
+   - If reference website URLs are supplied in the brief or Batch 02 (Q13a), crawl each reference site using `site-fetch` before proceeding to Gate 2:
+     `node skills/create-nww-website/scripts/site-fetch/index.js --url <reference-url> --out project-docs/design-references/<domain> --limit-mode max-sampled`
+   - Compile `project-docs/design-references/sources.md` as part of the Gate 0 context.
+   - **Enforcement:** Mandatory before Gate 2; skippable ONLY if zero reference websites were provided.
+4. **Source 3: Client Raw Files & Uploaded Assets:**
    - Inspect `client-context/assets/`, `client-context/raw/`, and `public/` for logos, diagrams, or product photos.
    - Verify file types and resolution status in Batch 04.
-4. **Source 4: Interactive Dialogue Pacing:**
+5. **Source 4: Interactive Dialogue Pacing:**
    - Present exactly one batch (5 to 7 questions) per turn.
    - Wait for user response before presenting the subsequent batch.
    - For vague or contradictory replies, ask a concise follow-up question. Never fabricate required answers.
    - If an optional question receives "I don't know" or "decide later", assign the documented project default.
-5. **Secret Hygiene Guardrail:**
+6. **Secret Hygiene Guardrail:**
    - Never request, accept, or record secret credentials, API keys, or passwords.
    - If the user provides a secret, immediately reject it, remind them to keep credentials in `.env.local`, and record only the environment variable name (`CMS_TOKEN`, `SERVER_URL`, `REVALIDATE_SECRET`, `PIXABAY_API_KEY`).
 
@@ -312,10 +317,10 @@ client-context/open-questions.md
 
 ### Purpose & Continuous Discovery Loop
 Client discovery is not a static gate that closes forever; it is a **continuous, asynchronous refinement loop**.
-1. **Never Halts Pipeline Momentum:** The pipeline advances sequentially through Stages 1 to 8 without waiting for open questions to be answered.
-2. **Rolling Queue of >= 20 Questions:** The file must maintain **at least 20 active, high-value open questions** at all times.
+1. **Never Halts Pipeline Momentum:** The pipeline advances sequentially through Stages 1 to 9 without waiting for open questions to be answered.
+2. **Rolling Queue of >= 20 Questions Across All Stages:** The file `client-context/open-questions.md` must maintain **at least 20 active, high-value open questions at ANY stage** of the pipeline (Stages 0 through 9) at all times.
 3. **Strict Guardrail — Zero Confirmed Decisions in Open Questions:**
-   - Under NO circumstances may confirmed decisions, resolved answers, agreed parameters, or project recap summaries be included in `client-context/open-questions.md`.
+   - Under NO circumstances may confirmed decisions, resolved answers, agreed parameters, or project recap summaries be included in `client-context/open-questions.md`. No confirmed decisions on that file.
    - Confirmed decisions belong strictly in `client-context/answers/batch-[number]-[batch-name]/answers.md` or `project-docs/client-brief.md`.
    - Never embed confirmed answers into the questions (e.g. avoid "Since we confirmed X, do you want Y?"). Keep questions focused purely on genuine unknown gaps.
    - Do not include a "Confirmed Decisions" section or header in `open-questions.md`.

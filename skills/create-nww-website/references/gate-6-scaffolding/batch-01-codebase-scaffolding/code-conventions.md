@@ -15,7 +15,7 @@ This document establishes the architecture, directory structure, coding standard
 
 ## Core Technology Stack & Convention Discovery
 
-The website stack is centered on Next.js App Router and Tailwind CSS. The programming language (JavaScript or TypeScript), package manager, folder structure, and naming conventions are **discovered from project files and documentation at run time** using the 5-step detection procedure in [runbook.md](runbook.md#3-runtime-convention-discovery-procedure).
+The website stack is centered on Next.js App Router and Tailwind CSS. The programming language (JavaScript or TypeScript), package manager, folder structure, and naming conventions are **discovered from project files and documentation at run time** using the runtime detection procedure in [../runbook.md](../runbook.md).
 
 ### Discovered Stack Mapping Matrix
 | Property | Discovered From | Supported Options | Default / Fallback |
@@ -30,13 +30,14 @@ The website stack is centered on Next.js App Router and Tailwind CSS. The progra
 
 ## Scaffolding & Dependency Governance
 
-Scaffold the Next.js application inside `site/` at Stage 6 after Gate 5 page specifications are approved, following the verified execution procedure in [runbook.md](runbook.md#4-scaffolding--foundation-execution-protocol).
+Scaffold the Next.js application inside `site/` at Stage 6 after Gate 5 page specifications are approved, following the verified execution procedure in [../runbook.md](../runbook.md) and [rulebook.md](rulebook.md).
 
 ### Governance Rules:
-1. **Environment Requirement:** Node.js version must satisfy `node -v` >= 18.18.0.
-2. **Mandatory `--disable-git` Flag:** Skips git initialization inside `site/` to prevent creating a nested git repository within the parent workspace.
-3. **Dependency Boundary:** No packages may be installed beyond the official generator output and the approved brief. Never silently add third-party dependencies.
-4. **Motion Dependencies:** Install GSAP packages (`gsap`, `@gsap/react`, `lenis/react`) only when the confirmed motion tier requires them per [gsap-animation-tiers.md](gsap-animation-tiers.md). Never install motion dependencies if `motion: disabled`.
+1. **Homepage-Only Build with Global Scope:** In Gate 6 Scaffolding, **only the Homepage (Landing Page: `site/app/page.js` + `_components/`) is built as a complete page**. Sub-pages (`about`, `services`, `contact`, etc.) must never be built in Gate 6; they are strictly deferred to Stage 7. However, the foundation shell and shared components constructed in Gate 6 (root `layout.js`, `Nav.js`, `Footer.js`, `globals.css`, `motion.js`, `ResponsiveImage.js`, scoped `AGENTS.md` rules, `page-checklist.md`) are engineered with **global scope to all pages**.
+2. **Environment Requirement:** Node.js version must satisfy `node -v` >= 18.18.0.
+3. **Mandatory `--disable-git` Flag:** Skips git initialization inside `site/` to prevent creating a nested git repository within the parent workspace.
+4. **Dependency Boundary:** No packages may be installed beyond the official generator output and the approved brief. Never silently add third-party dependencies.
+5. **Motion Dependencies:** Install GSAP packages (`gsap`, `@gsap/react`, `lenis/react`) only when the confirmed motion tier requires them per [../batch-02-foundation-shell/gsap-animation-tiers.md](../batch-02-foundation-shell/gsap-animation-tiers.md). Never install motion dependencies if `motion: disabled`.
 
 ---
 
@@ -56,7 +57,7 @@ Scaffold the Next.js application inside `site/` at Stage 6 after Gate 5 page spe
 To protect unlaunched sites from being indexed by search engines or mistaken for live production:
 - Root `app/layout.js` exports `robots: { index: false, follow: false }` and `site/app/robots.js` serves `Disallow: /` when `NEXT_PUBLIC_PREVIEW_GUARD="true"`.
 - Renders `<PreviewBanner />` at the top of the viewport.
-- Operational configuration and deactivation checklist items are governed by [runbook.md](runbook.md#6-pre-launch-guard-noindex--preview-banner).
+- Operational configuration and deactivation checklist items are governed by [../runbook.md](../runbook.md).
 
 ---
 
@@ -110,6 +111,18 @@ To preserve readability, modularity, and assist AI agent maintenance:
      - Rather than creating `@apply` classes in `globals.css` or repeating long class strings manually, extract repeating cards into small, focused React sub-components within the same file or `_components/` (e.g., `function FeatureCard({ title, desc, icon }) { return <div className="relative bg-card border border-border/60 rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:border-primary/50 hover:-translate-y-1">...</div> }`), or map data over clean JSX elements with standard utility classes.
      - This maintains pure Tailwind utility discipline in JSX, keeps section components modular and readable, and easily respects the strict **<= 250 line limit**.
 
+5. **Minimum 5 Substantive Sections Per Page (Excluding Bookends) Invariant:**
+   - Every page server component (`page.js`) must orchestrate a **minimum of 5 distinct, substantive semantic section components OTHER THAN Hero, CTA banner, FAQ, Contact Us form, and Footer**.
+   - Standard boilerplate/bookends (Hero, CTA, FAQ, Contact Us form, Footer) do NOT count toward this 5-section minimum.
+   - Every page must feature at least 5 rich substantive body sections (e.g. Features/Value Grid, Social Proof/Testimonials, How-It-Works/Process, Capabilities/Bento Grid, Stats/Metrics, Case Studies, Comparison Table). Scaffolding thin pages with fewer than 5 substantive body sections is strictly prohibited.
+6. **Zero Repeated Content & Exact Sections Invariant:**
+   - Only section types (Hero, Features, Social Proof/Testimonials, FAQ, CTA Banner, Process, Bento Grid, Stats) may be repeated across pages.
+   - Repeating exact sections, identical card sets, or duplicate content/headings/copy across pages or within the same page is strictly prohibited.
+   - Shared components in `site/components/` are restricted strictly to universal chrome (`Nav.js`, `Footer.js`, `PreviewBanner.js`, `ResponsiveImage.js`, `Schema.js`). Every body section component must be bespoke to its route, with unique copy and bespoke visual elements tailored to that specific page's purpose.
+7. **High FAQ Density Invariant:**
+   - Any page that includes an FAQ section, or any standalone FAQ route, must render a **minimum of 10 to 15 comprehensive, substantive FAQs** addressing real user objections, technical architecture, support, pricing, and onboarding.
+   - Answers must be multi-sentence, informative explanations with deep technical, operational, and commercial clarity. Thin FAQs (fewer than 10–15 items or shallow 1-line answers) and cross-page duplicated FAQs are strictly prohibited.
+
 ---
 
 ## Component Boundaries: Server vs. Client
@@ -160,7 +173,7 @@ site/
 │   └── ResponsiveImage.js       # Pre-optimized responsive image component
 ├── lib/
 │   ├── AGENTS.md                # Scoped agent guide for utilities
-│   ├── cms/                     # CMS data access layer (copied directly from references/gate-6-scaffolding/cms-kit/)
+│   ├── cms/                     # CMS data access layer (copied directly from references/gate-6-scaffolding/site/lib/cms-kit/)
 │   ├── motion.js                # Exported GSAP & CSS motion tokens
 │   └── utils.js                 # Helper utilities (cn, formatting)
 ├── content/
@@ -222,3 +235,4 @@ Stage 6 adds three verification scripts to `site/scripts/` and wires them into `
   "check:all": "pnpm lint && pnpm check:structure && pnpm check:assets"
 }
 ```
+

@@ -9,7 +9,7 @@ This reference documents the class-based CMS kit copied verbatim into `site/lib/
 During Stage 6 Scaffolding (Step 5), copy the kit directly into the Next.js site:
 
 ```bash
-cp -r skills/create-nww-website/references/gate-6-scaffolding/cms-kit/* site/lib/cms/
+cp -r skills/create-nww-website/references/gate-6-scaffolding/site/lib/cms-kit/* site/lib/cms/
 ```
 
 ### Core Characteristics

@@ -12,6 +12,21 @@ description: Orchestrates end-to-end creation of Next.js websites with optional 
 > **Project Identity Detection (Read Directory Name First):** Always inspect the current working directory name (`path.basename(process.cwd())`) to derive the project slug and default Brand Name in Title Case. Never introduce, assume, or hallucinate unrelated external projects. Anchor all branding and scope strictly to the current workspace.
 >
 > **Do Not Edit Skill Files:** Skill files (`SKILL.md`, `references/**`, `scripts/**`) are immutable runbooks. Never edit or overwrite skill files directly during project execution. If workflow changes or enhancements are required, **request changes with a prompt** instead.
+>
+> **Hard Rule — Zero Repeated Content & Exact Sections (Only Section Types May Repeat):**
+> Only section types (e.g. Hero, Features, Testimonials, FAQ, CTA Banner, Process, Stats, Bento Grid) may be repeated across pages. No exact section, identical card layout, or duplicate content/copy may be repeated anywhere on the website or within the same page. Every section must have unique copywriting, bespoke cards, and page-specific value propositions. Shared components are strictly limited to global chrome (`Nav`, `Footer`, `PreviewBanner`, `ResponsiveImage`, `Schema`); body sections must never copy identical text across pages.
+>
+> **Hard Rule — Minimum 5 Substantive Sections (Excluding Bookends):**
+> Every page (starting with Homepage in Stage 6 and every sub-page in Stage 7) must orchestrate a **minimum of 5 distinct, substantive semantic sections OTHER THAN Hero, CTA banner, FAQ, Contact Us form, and Footer**. Standard bookends/boilerplate (Hero, CTA, FAQ, Contact Us form, Footer) do NOT count toward this 5-section minimum. Pages must feature at least 5 rich substantive body sections (e.g. Features/Value, Social Proof/Testimonials, How-It-Works/Process, Bento Grid/Capabilities, Stats/Metrics, Case Studies, Comparison Table) in addition to those bookends.
+>
+> **Hard Rule — High FAQ Density:**
+> Any page featuring an FAQ section (and any dedicated FAQ route) must enforce High FAQ Density with a minimum of 10 to 15 comprehensive, substantive FAQs with rich multi-sentence explanations addressing customer objections, technical specifics, pricing, and onboarding nuances. Duplicating FAQs across different pages is strictly prohibited; all FAQs must be 100% unique to that specific page's topic.
+>
+> **Hard Rule — Rolling Open Questions Pool (Minimum 20 at Any Stage & Zero Confirmed Decisions):**
+> Maintain a minimum rolling queue of at least 20 targeted, substantive open questions in `client-context/open-questions.md` across EVERY stage of the pipeline (Stages 0 through 9). Confirmed decisions, agreed parameters, answered items, or project recaps in `client-context/open-questions.md` (and Open Questions deliverable sections) are strictly forbidden; that document must contain ONLY active, pending, unanswered discovery questions. As soon as an answer or decision is confirmed, it MUST be removed from `open-questions.md` immediately, recorded in `client-context/answers/batch-*/answers.md` (or design specifications), and replenished with a new open question to maintain the minimum count of at least 20 at all times.
+>
+> **Universal Instructions — Use `/compact` on Each Gate Transaction:**
+> At every gate transaction or stage transition (Gates 0 through 9), the agent MUST instruct and remind the user to run `/compact`. This compacts and summarizes conversation history, keeping context token-efficient, preventing context window exhaustion during long multi-stage website builds, and ensuring clean state handoffs between gates.
 
 This skill orchestrates the end-to-end creation of production-grade Next.js App Router websites with optional Next Web Website (NWW) CMS integration. It enforces a disciplined 10-stage human-gated workflow (Stages 0 through 9) ensuring structural rigor, taste-driven aesthetic polish, and technical quality.
 
@@ -66,11 +81,16 @@ Execute this protocol immediately on activation before any other work:
 4. **Migration Setup (if `build_origin: migration`):**
    - Run universal site crawler before Gate 1: `node skills/create-nww-website/scripts/site-fetch/index.js --url <legacy-url> --out previous-site --limit-mode max-sampled`.
    - Add `previous-site/` to root `.gitignore`. Generate root `.env.example` with credential placeholders.
-5. **Execution & Pacing:**
+5. **Mandatory Reference Site Crawl (Pre-Gate 2):**
+   - If reference website URLs are provided in the intake brief or Batch 02 (Q13a), execute the universal site crawler before advancing to Gate 2:
+     `node skills/create-nww-website/scripts/site-fetch/index.js --url <reference-url> --out project-docs/design-references/<domain> --limit-mode max-sampled`.
+   - Compile `project-docs/design-references/sources.md` and ingest into Gate 0 context.
+   - **Enforcement:** Mandatory before Gate 2; skippable only if zero reference sites are provided.
+6. **Execution & Pacing:**
    - Present questions in batches of 5–7 questions per turn.
    - **Secret Hygiene:** NEVER request, accept, or record secret credentials or API keys; request env var names only (`CMS_TOKEN`, `SERVER_URL`, `REVALIDATE_SECRET`, `PIXABAY_API_KEY`).
    - Save answers in `client-context/answers/batch-*/answers.md` and assets in `client-context/asset-manifest.md`.
-6. **Gate 0 Enforced Halt:** Present intake recap across batch answers, project slug, and asset manifest. Halt execution until explicit human confirmation is received.
+7. **Gate 0 Enforced Halt & Compaction:** Present intake recap across batch answers, project slug, asset manifest, and reference site crawl status. Halt execution until explicit human confirmation is received. Remind the user to run `/compact` on this gate transaction before advancing to Stage 1.
 
 ---
 
@@ -91,14 +111,14 @@ The workflow advances strictly one stage at a time. Every stage requires explici
 
 | Stage | Name | Key Deliverables | Gate Approval | Primary Reference |
 |:---:|:---|:---|:---|:---|
-| **0** | **Intake Check** | `client-context/answers/batch-*/answers.md`, `asset-manifest.md`, `open-questions.md` (>= 20), `.env.example`, `previous-site/` (if migration) | **Gate 0:** Intake recap, asset manifest & open questions sign-off | [gate-0-intake/runbook.md](references/gate-0-intake/runbook.md) |
+| **0** | **Intake Check** | `client-context/answers/batch-*/answers.md`, `asset-manifest.md`, `open-questions.md` (>= 20), `.env.example`, `previous-site/` (if migration), `project-docs/design-references/` (if reference sites provided) | **Gate 0:** Intake recap, asset manifest, reference site crawl & open questions sign-off | [gate-0-intake/runbook.md](references/gate-0-intake/runbook.md) |
 | **1** | **Tech Stack** | `project-docs/client-review/gate-1-tech-stack/tech-stack.md` | **Gate 1:** Tech stack sign-off (Developer Gate) | [gate-1-tech-stack/runbook.md](references/gate-1-tech-stack/runbook.md) |
 | **2** | **Design Theory & Variations** | `gate-2-design-theory/design-theory.md`, variation HTML previews, `index.html` review hub | **Gate 2:** Visual review & variation selection (via public URL) | [gate-2-design-theory/runbook.md](references/gate-2-design-theory/runbook.md) |
-| **3** | **Page List & Sitemap** | `project-docs/client-review/gate-3-page-list/page-list.md` | **Gate 3:** Sitemap & route structure sign-off | [gate-3-page-list/runbook.md](references/gate-3-page-list/runbook.md) |
-| **4** | **SEO Strategy & Content** | `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md`, modular content in `client-context/<model>/.../` (`content.mdx` for CMS; `content.md` for non-CMS) with co-located images | **Gate 4:** Keywords, JSON-LD schemas, sitemap, redirects & content sign-off | [gate-4-seo-strategy/runbook.md](references/gate-4-seo-strategy/runbook.md) |
-| **5** | **CMS Schema, Asset Curation & Seeds** | `project-docs/client-review/gate-5-cms-requirements/` (`open-questions.md`, `cms-implementation-rules.md`), stock provenance, CMS schemas & seeds | **Gate 5:** CMS schema, asset curation & seeds sign-off | [gate-5-page-specs-and-cms/batch-01-asset-curation/rulebook.md](references/gate-5-page-specs-and-cms/batch-01-asset-curation/rulebook.md) |
-| **6** | **Scaffolding & Showcase** | Scaffold `site/`, `page-checklist.md`, **Landing Page showcase**, CMS blog integration (`references/cms/blog.md`) | **Gate 6:** Scaffolding, foundation & landing showcase sign-off | [gate-6-scaffolding/runbook.md](references/gate-6-scaffolding/runbook.md) |
-| **7** | **Sub-Page Build Loop** | Sequential sub-pages in `site/app/<route>/page.js` with per-page review & QA checklist | **Gate 7a:** Sub-page build review<br>**Gate 7b:** Binary QA sign-off | [gate-7-sub-pages/runbook.md](references/gate-7-sub-pages/runbook.md) |
+| **3** | **Page List & Sitemap** | `project-docs/client-review/gate-3-page-list/page-list.md` (blueprints, min 5 substantive sections/page other than hero/cta/faq/contact/footer, high FAQ density: min 10–15 unique FAQs/page, zero duplicated sections) | **Gate 3:** Sitemap & route structure sign-off | [gate-3-page-list/runbook.md](references/gate-3-page-list/runbook.md) |
+| **4** | **SEO Strategy & Content** | `project-docs/client-review/gate-4-seo-strategy/seo-strategy.md`, modular content in `client-context/<model>/.../` (`content.mdx` for CMS; `content.md` for non-CMS) with co-located images, zero duplicate content across pages, and high FAQ density | **Gate 4:** Keywords, JSON-LD schemas, sitemap, redirects & content sign-off | [gate-4-seo-strategy/runbook.md](references/gate-4-seo-strategy/runbook.md) |
+| **5** | **CMS Schema, Asset Curation & Seeds** | `project-docs/client-review/gate-5-cms-requirements/` (`open-questions.md`, `cms-implementation-rules.md`), stock provenance, CMS schemas & seeds (confirm token/Website Name in CMS; image uploads supported) | **Gate 5:** CMS schema, asset curation & seeds sign-off | [gate-5-page-specs-and-cms/batch-01-asset-curation/rulebook.md](references/gate-5-page-specs-and-cms/batch-01-asset-curation/rulebook.md) |
+| **6** | **Scaffolding & Showcase** | 6-batch execution: scaffold `site/`, foundation shell scoped to all pages, asset optimization, scoped rules, `page-checklist.md`, route stubs, and live **Landing Page showcase** (only Homepage built in Gate 6; min 5 substantive sections other than hero/cta/faq/contact/footer; high FAQ density: min 10–15 substantive FAQs/page; zero repeated sections/content; sub-pages deferred to Stage 7) | **Gate 6:** Scaffolding, foundation & landing showcase sign-off | [gate-6-scaffolding/runbook.md](references/gate-6-scaffolding/runbook.md) |
+| **7** | **Sub-Page Build Loop** | Sequential sub-pages in `site/app/<route>/page.js` with per-page review & QA checklist (strictly unique content/sections; only section types repeat; min 5 substantive sections other than hero/cta/faq/contact/footer; high FAQ density: min 10–15 unique FAQs/page) | **Gate 7a:** Sub-page build review<br>**Gate 7b:** Binary QA sign-off | [gate-7-sub-pages/runbook.md](references/gate-7-sub-pages/runbook.md) |
 | **8** | **Additional Features** | `features-manifest.md`, feature components in `site/`, `nww-analytics` visitor identity SDK & provider | **Gate 8:** Feature integration & analytics sign-off | [gate-8-additional-features/rulebook.md](references/gate-8-additional-features/rulebook.md) |
 | **9** | **Final Verification & Handover** | `structure-audit.md`, production checks, Vercel deployment, client handover | **Gate 9a:** Cross-page fixes approval<br>**Gate 9b:** Final handover sign-off | [gate-9-final-verification/runbook.md](references/gate-9-final-verification/runbook.md) |
 
@@ -110,9 +130,10 @@ The workflow advances strictly one stage at a time. Every stage requires explici
 2. **Never Auto-Advance:** Complete each stage's deliverables and halt execution until the user grants explicit approval.
 3. **In-Place Revisions:** If modifications are requested at any gate, edit existing files in-place; do not create duplicate markdown files (e.g. no `revisions.md`).
 4. **Public Deployments Only:** All client preview links (Gate 2 variations, Next.js site) must be public HTTPS deployments. Never forward localhost URLs to the client.
-5. **Continuous Discovery Loop & Zero Confirmed Decisions Invariant:** Maintain at least 20 targeted questions in `client-context/open-questions.md`. **Zero Confirmed Decisions Guardrail:** Never include any confirmed decision, resolved answer, agreed parameter, or project recap in `client-context/open-questions.md`. That document must strictly contain ONLY active, unanswered open questions. Confirmed decisions belong exclusively in `client-context/answers/batch-*/answers.md`. When answers arrive downstream, remove the question immediately from `open-questions.md`, record the answer in batch answers, replenish with a new open question, and implement the answer directly into site code.
+5. **Continuous Discovery Loop & Zero Confirmed Decisions Invariant:** Maintain at least 20 targeted questions in `client-context/open-questions.md` across every stage of the pipeline (Stages 0 through 9). **Zero Confirmed Decisions Guardrail:** Never include any confirmed decision, resolved answer, agreed parameter, or project recap in `client-context/open-questions.md`. That document must strictly contain ONLY active, unanswered open questions. Confirmed decisions belong exclusively in `client-context/answers/batch-*/answers.md`. When answers arrive downstream, remove the question immediately from `open-questions.md`, record the answer in batch answers, replenish with a new open question to maintain >= 20 at all times, and implement the answer directly into site code.
 6. **Milestone Notifications:** Run `node skills/create-nww-website/scripts/client-notify/index.js` at gate sign-offs to preview and dispatch milestone emails upon explicit user approval.
 7. **Early Content & SEO Preparation (Gate 4 Early Invocation):** If requested during intake (Stage 0), Stage 4 (SEO Strategy & Content) can be executed out of order to formulate keywords, search intent, and author complete content in `client-context/<model>/.../` (`content.mdx` for CMS; `content.md` for non-CMS) with co-located image assets before proceeding to design variations (Stage 2) or page specifications (Stage 5). Stage 4 strictly solves SEO strategy and content authoring; zero Next.js code is written in Stage 4.
+8. **Universal Instruction — Context Compaction on Gate Transactions:** On each gate transaction (whenever completing a gate, awaiting sign-off, or transitioning to the subsequent gate across Gates 0 through 9), the agent MUST instruct and remind the user to trigger `/compact`. Compacting conversation history between gates consolidates previous decisions into persistent state files (`router-state.md`, `answers.md`, deliverables) and frees up the context window for the upcoming stage.
 
 ---
 
@@ -176,6 +197,18 @@ All website code is generated under `site/`:
   - Section component (`_components/*.js`): **<= 250 lines** (hard ceiling 300).
   - Utility and config files: **<= 500 lines**.
   - Every section component must open with `// section: <id>` and render `data-section="<id>"`.
+- **Section Uniqueness & Zero Repeated Content:**
+  - Only section types (Hero, Features, Testimonials, FAQ, Process, Bento, CTA Banner, Stats) may be repeated across pages.
+  - Repeating exact sections, identical card sets, or duplicate content/headings/copy across pages or within the same page is strictly prohibited.
+  - Shared components in `site/components/` are restricted strictly to universal chrome (`Nav`, `Footer`, `PreviewBanner`, `ResponsiveImage`, `Schema`). Every body section component must be bespoke to its route.
+- **Minimum 5 Substantive Sections (Excluding Bookends):**
+  - Every page must contain a minimum of 5 distinct substantive semantic sections *other than* Hero, CTA banner, FAQ, Contact Us form, and Footer.
+  - Standard bookends/boilerplate (Hero, CTA, FAQ, Contact Us form, Footer) do not count toward this 5-section minimum.
+  - Every page must feature at least 5 rich substantive body sections (e.g. Features/Value Grid, Social Proof/Testimonials, How-It-Works/Process, Capabilities/Bento Grid, Stats/Metrics, Case Studies, Comparison Table).
+- **High FAQ Density & Informational Richness:**
+  - Any page with an FAQ section, and any standalone FAQ route, must render a minimum of **10 to 15 comprehensive, substantive FAQs**.
+  - Answers must be multi-sentence, informative explanations addressing deep user objections, edge cases, pricing, technical architecture, and onboarding. Zero shallow 1-line answers or filler questions.
+  - All FAQs across different pages must be 100% unique to that specific page's topic (zero cross-page duplication).
 - **Pre-Launch Guard:** Default `robots: { index: false, follow: false }` metadata and visual `<PreviewBanner />` until Stage 9 production sign-off.
 - **Scoped AGENTS.md:** Scaffold `site/AGENTS.md` (<= 150 lines) and 4 scoped files (`site/app/AGENTS.md`, `site/components/AGENTS.md`, `site/lib/AGENTS.md`, `site/content/AGENTS.md`) with standard H2 headers (`## Architecture`, `## Conventions`, `## Anti-patterns`, `## Commands`).
 
@@ -223,11 +256,12 @@ Consult the matching reference guide when executing each stage or specialized ca
 | **CMS User Event & Telemetry** | [cms/user-event.md](references/cms/user-event.md) | Visitor telemetry, interaction analytics, and server-side ingestion handler. |
 | **CMS Lead & Inbound Capture** | [cms/lead.md](references/cms/lead.md) | Inbound lead inquiries, Server Action submission with honeypot anti-spam, and form testing. |
 | **Stage 6 Scaffolding** | [gate-6-scaffolding/runbook.md](references/gate-6-scaffolding/runbook.md) | Scaffolding `site/`, generating master QA checklist, and constructing Landing Page showcase. |
-| **Class-Based CMS Kit** | [gate-6-scaffolding/cms-kit.md](references/gate-6-scaffolding/cms-kit.md) | Integrating class-based CMS kit, site-name resolution, blog querying, SEO metadata, sitemaps, or feeds. |
-| **Code Conventions** | [references/gate-6-scaffolding/code-conventions.md](references/gate-6-scaffolding/code-conventions.md) | Verifying App Router conventions, line limits, and Tailwind-only JSX utility rules. |
-| **GSAP Motion Tiers** | [references/gate-6-scaffolding/gsap-animation-tiers.md](references/gate-6-scaffolding/gsap-animation-tiers.md) | Loading approved GSAP skills, configuring motion tiers (disabled to ultra), and writing animations. |
-| **Asset Optimization** | [references/gate-6-scaffolding/asset-optimization.md](references/gate-6-scaffolding/asset-optimization.md) | Running `assets-optimizer` CLI, generating responsive WebP/AVIF images, and checking budgets. |
-| **Page QA Checklist** | [references/gate-6-scaffolding/page-checklist.md](references/gate-6-scaffolding/page-checklist.md) | Verifying pages against the binary PASS/FAIL QA acceptance checklist. |
+| **Class-Based CMS Kit** | [gate-6-scaffolding/batch-04-cms-kit-integration/cms-kit.md](references/gate-6-scaffolding/batch-04-cms-kit-integration/cms-kit.md) | Integrating class-based CMS kit, site-name resolution, blog querying, SEO metadata, sitemaps, or feeds. |
+| **Code Conventions** | [references/gate-6-scaffolding/batch-01-codebase-scaffolding/code-conventions.md](references/gate-6-scaffolding/batch-01-codebase-scaffolding/code-conventions.md) | Verifying App Router conventions, line limits, and Tailwind-only JSX utility rules. |
+| **Motion & UI Component Stack** | [references/gate-6-scaffolding/batch-02-foundation-shell/motion-component-stack.md](references/gate-6-scaffolding/batch-02-foundation-shell/motion-component-stack.md) | Installing UI component stack by Motion Tier (T0–T3), shadcn/ui Base UI setup, and GSAP/Motion boundary. |
+| **GSAP Motion Tiers** | [references/gate-6-scaffolding/batch-02-foundation-shell/gsap-animation-tiers.md](references/gate-6-scaffolding/batch-02-foundation-shell/gsap-animation-tiers.md) | Loading approved GSAP skills, configuring motion tiers (disabled to ultra), and writing animations. |
+| **Asset Optimization** | [references/gate-6-scaffolding/batch-03-asset-pipeline-agents/asset-optimization.md](references/gate-6-scaffolding/batch-03-asset-pipeline-agents/asset-optimization.md) | Running `assets-optimizer` CLI, generating responsive WebP/AVIF images, and checking budgets. |
+| **Page QA Checklist** | [references/gate-6-scaffolding/batch-05-route-scaffolding/page-checklist.md](references/gate-6-scaffolding/batch-05-route-scaffolding/page-checklist.md) | Verifying pages against the binary PASS/FAIL QA acceptance checklist. |
 | **Stage 7 Sub-Pages** | [gate-7-sub-pages/runbook.md](references/gate-7-sub-pages/runbook.md) | Incrementally constructing sub-pages sequentially with per-page review and binary QA sign-off. |
 | **Stage 8 Additional Features** | [gate-8-additional-features/rulebook.md](references/gate-8-additional-features/rulebook.md) | Integrating modular site capabilities, NWW Analytics (visitor identity & telemetry SDK), and custom widgets. |
 | **NWW Analytics Reference** | [gate-8-additional-features/site/features/nww-analytics/implementation.md](references/gate-8-additional-features/site/features/nww-analytics/implementation.md) | Technical reference for NWW Visitor Identity & Telemetry, ES256 tokens, JWKS, and downloader contracts. |
