@@ -81,6 +81,30 @@ if (manifest.motionTier) {
   warnings.push('Manifest does not declare a motionTier (defaults to medium).');
 }
 
+// 3c. Verify Workspace MCP Server Config (site/.agents/mcp_config.json)
+const mcpConfigPath = path.join(siteDir, '.agents', 'mcp_config.json');
+if (fs.existsSync(mcpConfigPath)) {
+  try {
+    const rawMcp = fs.readFileSync(mcpConfigPath, 'utf-8');
+    const mcpConfig = JSON.parse(rawMcp);
+    if (!mcpConfig.mcpServers || typeof mcpConfig.mcpServers !== 'object') {
+      errors.push(`Invalid MCP config at ${mcpConfigPath}: missing top-level 'mcpServers' object.`);
+    } else {
+      const serverNames = Object.keys(mcpConfig.mcpServers);
+      // Verify zero exposed secret tokens or API keys
+      const secretPattern = /(api[_-]?key|secret|token|password|auth|bearer)[\s"':=]+["']?[a-zA-Z0-9_\-\.]{16,}["']?/i;
+      if (secretPattern.test(rawMcp)) {
+        errors.push(`Security violation in ${mcpConfigPath}: potential unmasked API key or secret token detected.`);
+      } else {
+        console.log(`✓ Workspace MCP Config verified: ${serverNames.length} server(s) configured (${serverNames.join(', ') || 'none'}), 0 secrets exposed.`);
+        checksPassed++;
+      }
+    }
+  } catch (e) {
+    errors.push(`Failed to parse MCP config at ${mcpConfigPath}: ${e.message}`);
+  }
+}
+
 // 4. Verify pages in manifest against page-specs/<slug>/page.md
 if (!Array.isArray(manifest.pages) || manifest.pages.length === 0) {
   errors.push('Manifest contains no pages.');

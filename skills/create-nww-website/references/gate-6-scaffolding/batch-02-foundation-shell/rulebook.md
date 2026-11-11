@@ -87,6 +87,10 @@ node skills/create-nww-website/scripts/motion-tier/index.js --tier <confirmed-ti
   - Install at most **1 to 2 Aceternity showpieces** (Hero or CTA only, lazy-loaded via `next/dynamic`).
   - If 3D physics / `three` is active (`ultra`), record explicit Gate approval in `site.manifest.json`.
 
+- **Configure Tier-Specific Workspace MCP Servers (`site/.agents/mcp_config.json`):**
+  Author `site/.agents/mcp_config.json` using native editor tools (`write_file`) with the approved MCP servers for the confirmed tier (inspect with `node skills/create-nww-website/scripts/motion-tier/index.js --tier <tier> --system <system> --mcp`).
+  > **Non-Blocking Invariant:** MCP servers are optional developer acceleration helpers; the website application codebase must build, lint, and run cleanly without them. Never run interactive `mcp init` scripts; author the config file directly with editor tools.
+
 ### Step 3: Implement Global Navigation & Footer Shell
 - Promote shared navigation header to `site/components/Nav.js` with responsive mobile drawer and backdrop blur.
 - Promote shared footer to `site/components/Footer.js` with semantic links, copyright, and brand badges.
@@ -110,6 +114,7 @@ Assemble root layout with:
 
 - [ ] `site/app/globals.css` populated with `@layer base` theme variables.
 - [ ] `site/lib/motion.js` configured matching confirmed motion tier.
+- [ ] `site/.agents/mcp_config.json` configured with tier-appropriate MCP servers.
 - [ ] `site/components/Nav.js` and `site/components/Footer.js` implemented.
 - [ ] `site/components/ResponsiveImage.js` and `site/components/seo/Schema.js` installed.
 - [ ] `site/app/layout.js` assembled with font providers, Pre-Launch Guard, and root shell.

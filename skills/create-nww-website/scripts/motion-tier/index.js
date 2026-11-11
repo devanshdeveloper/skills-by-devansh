@@ -123,6 +123,7 @@ function parseArgs(argv) {
     tier: 'medium',
     system: 'magicui',
     manifest: false,
+    mcp: false,
     help: false
   };
 
@@ -130,6 +131,7 @@ function parseArgs(argv) {
     const arg = argv[i];
     if (arg === '--help' || arg === '-h') options.help = true;
     else if (arg === '--manifest') options.manifest = true;
+    else if (arg === '--mcp') options.mcp = true;
     else if (arg.startsWith('--tier=')) options.tier = arg.split('=')[1].toLowerCase();
     else if (arg === '--tier' && argv[i + 1]) options.tier = argv[++i].toLowerCase();
     else if (arg.startsWith('--system=')) options.system = arg.split('=')[1].toLowerCase();
@@ -149,11 +151,13 @@ Options:
   --tier=<tier>        Motion tier: disabled | low | medium | high | max | ultra (default: medium)
   --system=<lib>       System layer for T2/T3: magicui | cult-ui | kokonutui (default: magicui)
   --manifest           Emit JSON schema snippet for site/site.manifest.json
+  --mcp                Emit .agents/mcp_config.json configuration for the chosen tier
   --help, -h           Show this help message
 
 Examples:
   node skills/create-nww-website/scripts/motion-tier/index.js --tier=disabled
   node skills/create-nww-website/scripts/motion-tier/index.js --tier=medium --system=magicui
+  node skills/create-nww-website/scripts/motion-tier/index.js --tier=medium --system=magicui --mcp
   node skills/create-nww-website/scripts/motion-tier/index.js --tier=high --manifest
 `);
 }
@@ -226,6 +230,24 @@ function generateManifestSnippet(tierKey, systemLayer) {
   const showpieces = isShowpiece ? (tier.recommendedShowpieces || []) : [];
   const systemComps = tier.systemAllowed ? (SYSTEM_COMPONENTS[systemLayer] || []) : (tier.recommendedComponents || []);
 
+  const mcpServers = [
+    {
+      id: 'shadcn',
+      command: 'npx',
+      args: ['shadcn@latest', 'mcp'],
+      transport: 'stdio'
+    }
+  ];
+
+  if (tier.systemAllowed && systemLayer === 'magicui') {
+    mcpServers.push({
+      id: 'magicuidesign-mcp',
+      command: 'npx',
+      args: ['-y', '@magicuidesign/mcp@latest'],
+      transport: 'stdio'
+    });
+  }
+
   return {
     tier: tierKey,
     foundation: 'shadcn/ui (Base UI default)',
@@ -233,10 +255,32 @@ function generateManifestSnippet(tierKey, systemLayer) {
     showpieces: showpieces,
     allowedComponents: [...systemComps, ...showpieces],
     dependencies: tier.packages,
+    mcpServers: mcpServers,
     gateApprovalNotes: tier.requiresGateApprovalFor
       ? `Heavy dependencies (${tier.requiresGateApprovalFor.join(', ')}) require explicit Gate sign-off.`
       : `${tier.code} ${tier.name} configuration compliant.`
   };
+}
+
+function generateMcpConfig(tierKey, systemLayer) {
+  const tier = TIERS[tierKey] || TIERS.medium;
+  const config = {
+    mcpServers: {
+      shadcn: {
+        command: 'npx',
+        args: ['shadcn@latest', 'mcp']
+      }
+    }
+  };
+
+  if (tier.systemAllowed && systemLayer === 'magicui') {
+    config.mcpServers['magicuidesign-mcp'] = {
+      command: 'npx',
+      args: ['-y', '@magicuidesign/mcp@latest']
+    };
+  }
+
+  return config;
 }
 
 function main() {
@@ -244,6 +288,12 @@ function main() {
 
   if (options.help) {
     printHelp();
+    process.exit(0);
+  }
+
+  if (options.mcp) {
+    const mcpConfig = generateMcpConfig(options.tier, options.system);
+    console.log(JSON.stringify(mcpConfig, null, 2));
     process.exit(0);
   }
 

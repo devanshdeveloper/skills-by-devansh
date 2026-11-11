@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.28] - 2026-11-11
+
+### Added
+- **Tier-Specific Workspace MCP Configuration (`site/.agents/mcp_config.json`)**:
+  - Implemented workspace-level Model Context Protocol (MCP) server configuration scoped to generated Next.js codebases.
+  - Standardized official `shadcn` MCP server as baseline query gateway across all tiers, reading custom registries from `components.json`.
+  - Added dedicated `@magicuidesign/mcp` configuration for Tier 2 and Tier 3 when Magic UI is selected.
+  - Enforced non-blocking helper invariant ensuring generated sites build and run cleanly without MCP servers present.
+  - Mandated native editor authoring to eliminate prohibited scripted `mcp init` codemods.
+- **Motion Tier CLI MCP Generator (`scripts/motion-tier/index.js`)**:
+  - Added `--mcp` flag to output deterministic `.agents/mcp_config.json` JSON strings per tier.
+  - Extended `--manifest` schema snippet generation to record `mcpServers` metadata in `motionStack`.
+- **Scaffolding Auditor MCP Verification (`verify-nextjs.mjs`)**:
+  - Added check 3c to validate workspace `.agents/mcp_config.json` schema and verify zero exposed API keys or unmasked secret tokens.
+
 ## [1.10.27] - 2026-11-11
 
 ### Added

@@ -10,6 +10,7 @@ This reference specifies the multi-tier UI and animation component stack for Nex
 - [5. Tailwind Keyframes & Token Placement](#5-tailwind-keyframes--token-placement)
 - [6. Section Conventions & Component Isolation](#6-section-conventions--component-isolation)
 - [7. Site Manifest Schema (`site.manifest.json`)](#7-site-manifest-schema-sitemanifestjson)
+- [8. Workspace MCP Server Architecture (`.agents/mcp_config.json`)](#8-workspace-mcp-server-architecture-agentsmcp_configjson)
 
 ---
 
@@ -238,6 +239,20 @@ Batch 05 records the motion tier, active component stack, and package dependenci
       "clsx@^2.1.1",
       "tailwind-merge@^2.5.4"
     ],
+    "mcpServers": [
+      {
+        "id": "shadcn",
+        "command": "npx",
+        "args": ["shadcn@latest", "mcp"],
+        "transport": "stdio"
+      },
+      {
+        "id": "magicuidesign-mcp",
+        "command": "npx",
+        "args": ["-y", "@magicuidesign/mcp@latest"],
+        "transport": "stdio"
+      }
+    ],
     "gateApprovalNotes": "Standard Tier 2 system stack. No heavy dependencies."
   },
   "routes": [
@@ -252,3 +267,80 @@ Batch 05 records the motion tier, active component stack, and package dependenci
 ```
 
 If any component beyond the approved tier or requiring heavy 3D dependencies (`three`) is installed, `"gateApprovalNotes"` must cite the human approval decision and rationale.
+
+---
+
+## 8. Workspace MCP Server Architecture (`.agents/mcp_config.json`)
+
+To enable future AI agents to query component registries directly rather than guessing code or APIs, Stage 6 Batch 02 configures Model Context Protocol (MCP) servers scoped to the generated codebase.
+
+### A. Non-Blocking Helper Invariant
+> **Strict Invariant:** MCP servers are **optional developer acceleration helpers**. The website application codebase (`site/`) must build, lint, compile, and execute 100% cleanly without any MCP server running or configured. Never couple site runtime dependencies to MCP tooling.
+
+### B. Workspace Configuration Location
+- **Path:** `site/.agents/mcp_config.json`
+- **Scope:** Workspace-only. Loaded automatically by Antigravity IDE and CLI when working in `site/`.
+- **Manual Authoring Invariant:** AI agents must **author this file using native editor tools (`write_file`)**. Running interactive CLI scripts (such as `shadcn mcp init`) is strictly forbidden by repository editing discipline.
+
+### C. Zero-Secrets & Credential Hygiene
+- All approved MCP servers connect to public registries over local `stdio` or remote HTTPS without requiring credentials.
+- **Never write, commit, or print API keys, tokens, or credentials.**
+- If an optional proprietary token is ever required in the future (e.g. `ACETERNITY_PRO_TOKEN`), it must be declared exclusively as an environment variable placeholder in `.env.example` (never committed with a live secret).
+
+### D. Tier-to-MCP Matrix
+
+Because the official `shadcn` MCP server automatically inspects `components.json` and queries all custom registry endpoints mapped within it, it acts as a unified gateway for multiple libraries:
+
+| Tier | Intake Value | Active MCP Servers | Transport | Notes |
+|:---:|:---|:---|:---:|:---|
+| **T0 (Static)** | `disabled` | `shadcn` | `stdio` | Official shadcn CLI registry query tool. |
+| **T1 (Subtle)** | `low` | `shadcn` | `stdio` | Queries Motion-Primitives and React Bits registries configured in `components.json`. |
+| **T2 (System)** | `medium` *(Default)* | `shadcn`<br>+ `magicuidesign-mcp` (if Magic UI)<br>+ `kibo-ui` (optional dashboard) | `stdio` | If Cult UI or Kokonut UI is chosen, queried directly through `shadcn` MCP via `components.json`. |
+| **T3 (Showpiece)** | `high` / `max` / `ultra` | T2 MCP Stack | `stdio` | Aceternity UI components are queried directly through `shadcn` MCP via `components.json`. |
+
+### E. Configuration Templates (`site/.agents/mcp_config.json`)
+
+#### 1. Baseline Configuration (T0 Static, T1 Subtle, Cult UI, Kokonut UI):
+```json
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    }
+  }
+}
+```
+
+#### 2. Magic UI System Configuration (T2 / T3 Default):
+```json
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    },
+    "magicuidesign-mcp": {
+      "command": "npx",
+      "args": ["-y", "@magicuidesign/mcp@latest"]
+    }
+  }
+}
+```
+
+#### 3. With Dashboard / Kibo UI Extension:
+```json
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    },
+    "kibo-ui": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://www.kibo-ui.com/api/mcp/mcp"]
+    }
+  }
+}
+```
+
