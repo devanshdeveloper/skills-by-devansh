@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.29] - 2026-11-11
+
+### Added
+- **21st.dev Component Marketplace & MCP Integration (`twenty-first`)**:
+  - Integrated 21st.dev component directory and marketplace into the scaffolding architecture and MCP layer.
+  - Added `twenty-first` MCP server configuration (`@21st-dev/magic@latest` over local stdio) querying 10,000+ community components across shadcn, Magic UI, and custom author registries.
+  - Enforced environment variable substitution for `API_KEY: "${API_KEY_21ST}"` in `site/.agents/mcp_config.json` with `.env.example` placeholder documentation, prohibiting hardcoded secrets.
+  - Added `--with-21st` and `--21st` flags to `motion-tier` CLI to optionally include 21st.dev in generated `mcp_config.json` and manifest schema snippets.
+  - Enhanced scaffolding auditor (`verify-nextjs.mjs`) to enforce strict placeholder expansion on all MCP server environment variables and headers.
+
 ## [1.10.28] - 2026-11-11
 
 ### Added

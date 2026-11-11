@@ -73,10 +73,16 @@ Allowed for targeted component enhancements without full kit overhead:
   - *Lazy-Loading Invariant:* Must always be loaded via `next/dynamic` with `{ ssr: false }`.
   - *Heavy Dependencies:* Any showpiece requiring `three` or WebGL requires an explicit Gate sign-off recorded in `site.manifest.json`.
 
-### E. Dropped / Forbidden Libraries
+### E. Component Directories & Marketplace Registries
+- **21st.dev (`twenty-first`):**
+  - *Role:* Comprehensive community marketplace & design directory indexing 10,000+ Tailwind & React components across shadcn, Magic UI, Aceternity, and custom community creators.
+  - *MCP Integration:* Available as a local stdio MCP server (`npx -y @21st-dev/magic@latest`) or hosted remote endpoint (`https://21st.dev/api/mcp`).
+  - *Environment Variable:* Uses `API_KEY: "${API_KEY_21ST}"` in `site/.agents/mcp_config.json`.
+  - *Access & Hygiene:* Free component searching and logo retrieval are available without upfront payment; high generation limits utilize a free personal key generated at `21st.dev/settings/api-keys`. Always document as a commented placeholder in `site/.env.example`; never commit or print live keys.
+
+### F. Dropped / Forbidden Libraries
 - **Skiper UI:** **DROPPED.** Free tier requires mandatory visible public attribution backlink; Pro tier requires proprietary paid license key.
 - **Origin UI:** **DROPPED.** Repository absorbed into Cal.com monorepo (`cosscom/coss`); legacy snapshot with copyleft AGPL-3.0 license risk.
-- **21st.dev:** **OMITTED.** Directory and MCP server requiring user account login and API keys (`API_KEY_21ST`); not an unattended open registry.
 
 ---
 
@@ -283,9 +289,10 @@ To enable future AI agents to query component registries directly rather than gu
 - **Manual Authoring Invariant:** AI agents must **author this file using native editor tools (`write_file`)**. Running interactive CLI scripts (such as `shadcn mcp init`) is strictly forbidden by repository editing discipline.
 
 ### C. Zero-Secrets & Credential Hygiene
-- All approved MCP servers connect to public registries over local `stdio` or remote HTTPS without requiring credentials.
+- All approved baseline MCP servers connect to public registries over local `stdio` or remote HTTPS without requiring credentials.
+- For marketplace MCP servers supporting personal API keys (such as `21st.dev`), pass the key strictly via environment variable substitution: `API_KEY: "${API_KEY_21ST}"`.
 - **Never write, commit, or print API keys, tokens, or credentials.**
-- If an optional proprietary token is ever required in the future (e.g. `ACETERNITY_PRO_TOKEN`), it must be declared exclusively as an environment variable placeholder in `.env.example` (never committed with a live secret).
+- If an optional proprietary or marketplace token is required (e.g. `API_KEY_21ST`, `ACETERNITY_PRO_TOKEN`), it must be declared exclusively as an environment variable placeholder in `site/.env.example` (never committed with a live secret).
 
 ### D. Tier-to-MCP Matrix
 
@@ -294,9 +301,9 @@ Because the official `shadcn` MCP server automatically inspects `components.json
 | Tier | Intake Value | Active MCP Servers | Transport | Notes |
 |:---:|:---|:---|:---:|:---|
 | **T0 (Static)** | `disabled` | `shadcn` | `stdio` | Official shadcn CLI registry query tool. |
-| **T1 (Subtle)** | `low` | `shadcn` | `stdio` | Queries Motion-Primitives and React Bits registries configured in `components.json`. |
-| **T2 (System)** | `medium` *(Default)* | `shadcn`<br>+ `magicuidesign-mcp` (if Magic UI)<br>+ `kibo-ui` (optional dashboard) | `stdio` | If Cult UI or Kokonut UI is chosen, queried directly through `shadcn` MCP via `components.json`. |
-| **T3 (Showpiece)** | `high` / `max` / `ultra` | T2 MCP Stack | `stdio` | Aceternity UI components are queried directly through `shadcn` MCP via `components.json`. |
+| **T1 (Subtle)** | `low` | `shadcn`<br>*(optional: `twenty-first`)* | `stdio` | Queries Motion-Primitives and React Bits registries configured in `components.json`. |
+| **T2 (System)** | `medium` *(Default)* | `shadcn`<br>+ `magicuidesign-mcp` (if Magic UI)<br>*(optional: `twenty-first`, `kibo-ui`)* | `stdio` | If Cult UI or Kokonut UI is chosen, queried directly through `shadcn` MCP via `components.json`. |
+| **T3 (Showpiece)** | `high` / `max` / `ultra` | T2 MCP Stack<br>*(optional: `twenty-first`)* | `stdio` | Aceternity UI components are queried directly through `shadcn` MCP via `components.json`. |
 
 ### E. Configuration Templates (`site/.agents/mcp_config.json`)
 
@@ -339,6 +346,29 @@ Because the official `shadcn` MCP server automatically inspects `components.json
     "kibo-ui": {
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://www.kibo-ui.com/api/mcp/mcp"]
+    }
+  }
+}
+```
+
+#### 4. With 21st.dev Component Marketplace Extension:
+```json
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    },
+    "magicuidesign-mcp": {
+      "command": "npx",
+      "args": ["-y", "@magicuidesign/mcp@latest"]
+    },
+    "twenty-first": {
+      "command": "npx",
+      "args": ["-y", "@21st-dev/magic@latest"],
+      "env": {
+        "API_KEY": "${API_KEY_21ST}"
+      }
     }
   }
 }

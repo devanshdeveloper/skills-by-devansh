@@ -114,8 +114,7 @@ const TIERS = {
 
 const DROPPED_LIBRARIES = {
   'skiper-ui': 'Requires mandatory visible public attribution on free tier; paid key on Pro tier.',
-  'origin-ui': 'Stale / merged into Cal.com monorepo with copyleft AGPL-3.0 license risk.',
-  '21st.dev': 'Directory and MCP portal requiring user account login and API key; not an open unattended registry.'
+  'origin-ui': 'Stale / merged into Cal.com monorepo with copyleft AGPL-3.0 license risk.'
 };
 
 function parseArgs(argv) {
@@ -124,6 +123,7 @@ function parseArgs(argv) {
     system: 'magicui',
     manifest: false,
     mcp: false,
+    with21st: false,
     help: false
   };
 
@@ -132,6 +132,7 @@ function parseArgs(argv) {
     if (arg === '--help' || arg === '-h') options.help = true;
     else if (arg === '--manifest') options.manifest = true;
     else if (arg === '--mcp') options.mcp = true;
+    else if (arg === '--with-21st' || arg === '--21st') options.with21st = true;
     else if (arg.startsWith('--tier=')) options.tier = arg.split('=')[1].toLowerCase();
     else if (arg === '--tier' && argv[i + 1]) options.tier = argv[++i].toLowerCase();
     else if (arg.startsWith('--system=')) options.system = arg.split('=')[1].toLowerCase();
@@ -152,12 +153,14 @@ Options:
   --system=<lib>       System layer for T2/T3: magicui | cult-ui | kokonutui (default: magicui)
   --manifest           Emit JSON schema snippet for site/site.manifest.json
   --mcp                Emit .agents/mcp_config.json configuration for the chosen tier
+  --with-21st, --21st  Include 21st.dev component marketplace MCP server
   --help, -h           Show this help message
 
 Examples:
   node skills/create-nww-website/scripts/motion-tier/index.js --tier=disabled
   node skills/create-nww-website/scripts/motion-tier/index.js --tier=medium --system=magicui
   node skills/create-nww-website/scripts/motion-tier/index.js --tier=medium --system=magicui --mcp
+  node skills/create-nww-website/scripts/motion-tier/index.js --tier=medium --system=magicui --mcp --with-21st
   node skills/create-nww-website/scripts/motion-tier/index.js --tier=high --manifest
 `);
 }
@@ -224,7 +227,7 @@ function generateCommands(tierKey, systemLayer) {
   return { tier, commands };
 }
 
-function generateManifestSnippet(tierKey, systemLayer) {
+function generateManifestSnippet(tierKey, systemLayer, with21st = false) {
   const tier = TIERS[tierKey] || TIERS.medium;
   const isShowpiece = tier.showpieceAllowed;
   const showpieces = isShowpiece ? (tier.recommendedShowpieces || []) : [];
@@ -248,6 +251,18 @@ function generateManifestSnippet(tierKey, systemLayer) {
     });
   }
 
+  if (with21st) {
+    mcpServers.push({
+      id: 'twenty-first',
+      command: 'npx',
+      args: ['-y', '@21st-dev/magic@latest'],
+      env: {
+        API_KEY: '${API_KEY_21ST}'
+      },
+      transport: 'stdio'
+    });
+  }
+
   return {
     tier: tierKey,
     foundation: 'shadcn/ui (Base UI default)',
@@ -262,7 +277,7 @@ function generateManifestSnippet(tierKey, systemLayer) {
   };
 }
 
-function generateMcpConfig(tierKey, systemLayer) {
+function generateMcpConfig(tierKey, systemLayer, with21st = false) {
   const tier = TIERS[tierKey] || TIERS.medium;
   const config = {
     mcpServers: {
@@ -280,6 +295,16 @@ function generateMcpConfig(tierKey, systemLayer) {
     };
   }
 
+  if (with21st) {
+    config.mcpServers['twenty-first'] = {
+      command: 'npx',
+      args: ['-y', '@21st-dev/magic@latest'],
+      env: {
+        API_KEY: '${API_KEY_21ST}'
+      }
+    };
+  }
+
   return config;
 }
 
@@ -292,13 +317,13 @@ function main() {
   }
 
   if (options.mcp) {
-    const mcpConfig = generateMcpConfig(options.tier, options.system);
+    const mcpConfig = generateMcpConfig(options.tier, options.system, options.with21st);
     console.log(JSON.stringify(mcpConfig, null, 2));
     process.exit(0);
   }
 
   if (options.manifest) {
-    const snippet = generateManifestSnippet(options.tier, options.system);
+    const snippet = generateManifestSnippet(options.tier, options.system, options.with21st);
     console.log(JSON.stringify({ motionTier: options.tier, motionStack: snippet }, null, 2));
     process.exit(0);
   }

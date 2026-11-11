@@ -91,11 +91,31 @@ if (fs.existsSync(mcpConfigPath)) {
       errors.push(`Invalid MCP config at ${mcpConfigPath}: missing top-level 'mcpServers' object.`);
     } else {
       const serverNames = Object.keys(mcpConfig.mcpServers);
-      // Verify zero exposed secret tokens or API keys
-      const secretPattern = /(api[_-]?key|secret|token|password|auth|bearer)[\s"':=]+["']?[a-zA-Z0-9_\-\.]{16,}["']?/i;
-      if (secretPattern.test(rawMcp)) {
-        errors.push(`Security violation in ${mcpConfigPath}: potential unmasked API key or secret token detected.`);
-      } else {
+      // Verify zero exposed secret tokens or API keys (must use ${ENV_VAR} substitution)
+      let hasHardcodedSecret = false;
+      for (const [srvName, srvDef] of Object.entries(mcpConfig.mcpServers)) {
+        if (srvDef && srvDef.env && typeof srvDef.env === 'object') {
+          for (const [envKey, envVal] of Object.entries(srvDef.env)) {
+            if (typeof envVal === 'string' && envVal.length > 0) {
+              if (!(envVal.startsWith('${') && envVal.endsWith('}'))) {
+                errors.push(`Security violation in ${mcpConfigPath}: server '${srvName}' has potential hardcoded secret in env.${envKey}. Use '\${${envKey}}' placeholder instead.`);
+                hasHardcodedSecret = true;
+              }
+            }
+          }
+        }
+        if (srvDef && srvDef.headers && typeof srvDef.headers === 'object') {
+          for (const [hKey, hVal] of Object.entries(srvDef.headers)) {
+            if (typeof hVal === 'string' && hVal.length > 0) {
+              if (!(hVal.startsWith('${') && hVal.endsWith('}'))) {
+                errors.push(`Security violation in ${mcpConfigPath}: server '${srvName}' has potential hardcoded secret in header '${hKey}'. Use '\${...}' placeholder instead.`);
+                hasHardcodedSecret = true;
+              }
+            }
+          }
+        }
+      }
+      if (!hasHardcodedSecret) {
         console.log(`✓ Workspace MCP Config verified: ${serverNames.length} server(s) configured (${serverNames.join(', ') || 'none'}), 0 secrets exposed.`);
         checksPassed++;
       }

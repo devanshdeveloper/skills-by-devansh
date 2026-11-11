@@ -88,7 +88,8 @@ node skills/create-nww-website/scripts/motion-tier/index.js --tier <confirmed-ti
   - If 3D physics / `three` is active (`ultra`), record explicit Gate approval in `site.manifest.json`.
 
 - **Configure Tier-Specific Workspace MCP Servers (`site/.agents/mcp_config.json`):**
-  Author `site/.agents/mcp_config.json` using native editor tools (`write_file`) with the approved MCP servers for the confirmed tier (inspect with `node skills/create-nww-website/scripts/motion-tier/index.js --tier <tier> --system <system> --mcp`).
+  Author `site/.agents/mcp_config.json` using native editor tools (`write_file`) with the approved MCP servers for the confirmed tier (inspect with `node skills/create-nww-website/scripts/motion-tier/index.js --tier <tier> --system <system> --mcp [--with-21st]`).
+  - **Zero Raw Secrets:** Never commit live API keys. When adding marketplace MCP servers like 21st.dev (`twenty-first`), use environment variable substitution (`API_KEY: "${API_KEY_21ST}"`) and document the variable as a commented placeholder in `site/.env.example`.
   > **Non-Blocking Invariant:** MCP servers are optional developer acceleration helpers; the website application codebase must build, lint, and run cleanly without them. Never run interactive `mcp init` scripts; author the config file directly with editor tools.
 
 ### Step 3: Implement Global Navigation & Footer Shell
