@@ -10,7 +10,7 @@ description: Takes a completed proof-of-concept (PoC) from scope freeze to an ex
 > Nothing goes to production, and nothing merges to `main` in `nextwebworks-website` or any live repository, without the relevant gate's explicit human approval.
 >
 > **Human Approval Barrier:**
-> An approval requires the exact verbatim phrase `APPROVE GATE N` typed by the human in chat. Colloquial phrases (such as "looks good", "go ahead", "approved", "proceed") are strictly rejected. Gates cannot be skipped, bypassed, or reordered.
+> An approval requires the exact verbatim phrase `APPROVE GATE N` typed by the human in chat. Colloquial phrases (such as "looks good", "go ahead", "approved", "proceed") are strictly rejected. Gates must be completed in strict sequence or formally exempted via `poc-state skip <gate> "<reason>"` when architecturally non-applicable (e.g. Gate 5 for embedded visuals).
 >
 > **Progressive Disclosure Invariant:**
 > The agent MUST read ONLY the active gate's rulebook. Reading future gate rulebooks eagerly is strictly forbidden to preserve context tokens and enforce gate containment.
@@ -130,6 +130,13 @@ Public landing pages and case studies are commercial assets, not internal engine
 - Never assume `git push` on a feature branch automatically deploys. Check `npx vercel ls`.
 - If git integration does not deploy the branch automatically, execute `npx vercel` (preview deployment, never `--prod`) to generate a fresh preview deployment.
 - Record and verify the exact active deployment URL in `state.json` and `evidence.md`. Never link to stale historical deployment hashes.
+
+### Rule 6: Product Architecture-Aware Gate Applicability (Gate 5 Exemption & Skip Protocol)
+Not all PoCs are standalone, publicly accessible web applications. Certain architectures—such as Microsoft Power BI Custom Visuals (`.pbiviz`), Figma/IDE plugins, native desktop/mobile apps, SDK/API libraries, background workers, or private enterprise tenant services requiring Entra ID/SSO authentication—do not support or require an unauthenticated public demo subdomain.
+- **Skip Command:** When a product architecture does not accommodate a public demo subdomain, or upon explicit human directive ("skip this", "no need in this product"), the agent MUST execute:
+  `node <path>/poc-state.mjs skip 5 "<rationale>"`
+- **Skip Recording:** The state machine marks Gate 5 status as `skipped`, logs the exact rationale in `state.json`, creates `poc/<project>/gate-5-demo-subdomain/evidence.md` documenting why the gate is non-applicable, and advances `currentGate` directly to Gate 6 (`walkthrough`).
+- **Landing Page CTA Adaptation:** On the public landing page in `nextwebworks-website`, when Gate 5 is skipped, the primary action remains "Request Pilot Consultation" / "Book Technical Briefing" (directing to the verified inquiry form). No broken or dead demo link is rendered.
 
 ---
 

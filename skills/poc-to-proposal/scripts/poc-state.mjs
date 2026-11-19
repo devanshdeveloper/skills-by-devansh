@@ -36,7 +36,8 @@ const VALID_STATUSES = [
   'in_progress',
   'awaiting_approval',
   'approved',
-  'rejected'
+  'rejected',
+  'skipped'
 ];
 
 const FORBIDDEN_FIELD_PATTERNS = [
@@ -61,6 +62,7 @@ Commands:
   set-status <gate> <status>      Set status for gate N (1-8)
   approve <gate> "<phrase>"       Approve gate N with exact phrase 'APPROVE GATE N'
   reject <gate> "<reason>"        Mark gate N rejected with human feedback reason
+  skip <gate> "<reason>"          Skip non-applicable gate N with architecture/scope rationale
   set-field <key> <value>         Update top-level or nested field in state.json
 
 Options:
@@ -69,7 +71,7 @@ Options:
   --help, -h                      Display this help message
 
 Status Values:
-  pending | in_progress | awaiting_approval | approved | rejected
+  pending | in_progress | awaiting_approval | approved | rejected | skipped
 
 Approval Rule:
   The approve command strictly requires:
@@ -380,6 +382,52 @@ function handleReject(gateArg, reasonArg, options) {
   console.log(`  Current gate remains at Gate ${gateNum} for in-place remediation.`);
 }
 
+function handleSkip(gateArg, reasonArg, options) {
+  const gateNum = parseInt(gateArg, 10);
+  if (isNaN(gateNum) || gateNum < 1 || gateNum > 8) {
+    console.error(`Error: Gate must be an integer between 1 and 8. Got: '${gateArg}'`);
+    process.exit(1);
+  }
+
+  if (!reasonArg || reasonArg.trim().length === 0) {
+    console.error('Error: Skip rationale required. Usage: poc-state skip <gate> "<reason>"');
+    process.exit(1);
+  }
+
+  const target = resolveStateFilePath(options);
+  const state = readState(target.stateFile);
+
+  if (state.currentGate !== gateNum) {
+    console.error(`✗ Skip Refused: Target gate (${gateNum}) does not match active currentGate (${state.currentGate}).`);
+    process.exit(1);
+  }
+
+  const gate = state.gates.find((g) => g.n === gateNum);
+  if (!gate) {
+    console.error(`Error: Gate ${gateNum} not found in state.`);
+    process.exit(1);
+  }
+
+  gate.status = 'skipped';
+  gate.notes = `Skipped: ${reasonArg.trim()} (at ${new Date().toISOString()})`;
+
+  if (gateNum < 8) {
+    state.currentGate = gateNum + 1;
+    const nextGate = state.gates.find((g) => g.n === gateNum + 1);
+    if (nextGate && nextGate.status === 'pending') {
+      nextGate.status = 'in_progress';
+    }
+    console.log(`✓ Gate ${gateNum} (${gate.name}) marked SKIPPED.`);
+    console.log(`  Rationale: "${reasonArg.trim()}"`);
+    console.log(`  Advanced active gate to Gate ${state.currentGate} (${GATE_NAMES[state.currentGate - 1]}).`);
+  } else {
+    console.log(`✓ Gate ${gateNum} (${gate.name}) marked SKIPPED.`);
+    console.log(`  PoC-to-Proposal pipeline 100% complete!`);
+  }
+
+  writeState(target.stateFile, state);
+}
+
 function handleSetField(keyArg, valueArg, options) {
   if (!keyArg || valueArg === undefined) {
     console.error('Error: Key and value required. Usage: poc-state set-field <key> <value>');
@@ -437,6 +485,9 @@ function main() {
       break;
     case 'reject':
       handleReject(args[1], args[2], options);
+      break;
+    case 'skip':
+      handleSkip(args[1], args[2], options);
       break;
     case 'set-field':
       handleSetField(args[1], args[2], options);

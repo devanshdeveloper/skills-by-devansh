@@ -98,3 +98,12 @@ Present `poc/<project>/gate-5-demo-subdomain/evidence.md` containing:
 - The user explicitly types `APPROVE GATE 5` in chat.
 - Branch `poc/<project>-enable-demo-cta` is merged to `main` in `nextwebworks-website`.
 - `node <path>/poc-state.mjs approve 5 "APPROVE GATE 5"` executes successfully, advancing `currentGate` to 6.
+
+---
+
+## 9. Architecture Exemption & Skip Handling
+If the PoC product is an embedded custom visual (e.g. Microsoft Power BI `.pbiviz`), IDE extension, native client, background worker, or enterprise service strictly authenticated via tenant SSO/Entra ID, a public standalone demo subdomain is not applicable:
+1. The user or agent triggers: `node <path>/poc-state.mjs skip 5 "<rationale>"`.
+2. Write `poc/<project>/gate-5-demo-subdomain/evidence.md` documenting the exemption justification.
+3. State machine advances `currentGate` directly to 6 (`walkthrough`).
+4. On the landing page, the primary conversion path remains "Request Pilot Consultation" / lead inquiry form. No non-functional demo button or stale subdomain placeholder is rendered.
