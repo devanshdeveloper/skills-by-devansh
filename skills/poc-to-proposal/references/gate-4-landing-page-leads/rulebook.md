@@ -50,32 +50,35 @@ Build a high-conversion showcase landing page for the PoC inside `nextwebworks-w
    - `pnpm --dir site check:structure` (verifies line ceilings, section comments, and min 5 body sections)
    - `pnpm --dir site lint` (verifies ESLint compliance)
    All commands must pass with 0 errors.
-6. **Changelog & Version Bump in `nextwebworks-website`:**
+7. **Changelog & Version Bump in `nextwebworks-website`:**
    Add a single concise changelog entry in `nextwebworks-website/CHANGELOG.md` and bump the patch version.
-7. **Commit & Push Preview Branch (No Merge to Main):**
+8. **Commit & Push Preview Branch (No Merge to Main):**
    Commit changes to branch `poc/<project>-landing` and push to GitHub origin to trigger a Vercel preview deployment.
    > [!IMPORTANT]
    > Do NOT merge to `main`. Merging to `main` without Gate 4 approval is strictly prohibited.
-8. **Record Preview URL & Lead Submission:**
-   Retrieve the Vercel preview deployment URL and store it:
-   `node <path>/poc-state.mjs set-field urls.landing "<vercel-preview-url>"`
+9. **Verify & Record Active Preview Deployment URL:**
+   Inspect deployment status using `npx vercel ls --cwd "<nwwWebsiteRepo>"`.
+   If git integration did not deploy the branch automatically, execute `npx vercel --cwd "<nwwWebsiteRepo>"` (preview deployment, never `--prod`) to build and deploy.
+   Verify the fresh deployment URL:
+   `node <path>/poc-state.mjs set-field urls.landing "<fresh-vercel-preview-url>"`
    Write `poc/<project>/gate-4-landing-page-leads/lead-wiring-record.md`.
-9. **Human Test Lead Verification:**
-   Instruct the user to visit the preview URL, submit a real test lead through the form, and verify receipt in their lead management channel or CMS inbox.
-10. **Compile Evidence & Pause:**
+10. **Human Test Lead Verification:**
+    Instruct the user to visit the fresh preview URL, submit a real test lead through the form, and verify receipt in their lead management channel or CMS inbox.
+11. **Compile Evidence & Pause:**
     Write `poc/<project>/gate-4-landing-page-leads/evidence.md`.
     Run `node <path>/poc-state.mjs set-status 4 awaiting_approval`. Present evidence and pause.
-11. **Merge on Approval:**
+12. **Merge on Approval:**
     Upon receiving `APPROVE GATE 4`, merge `poc/<project>-landing` into `main` and advance state.
 
 ---
 
-### Strict Anti-AI-Slop and Copywriting Invariants
-1. **Never generate spec sheet copy for human buyers:** The hero and core value sections must speak to client pain points and commercial outcomes. Technical mechanics belong in dedicated architecture or security sections.
-2. **Never break site theme consistency:** The page must seamlessly match the site header and footer. If the header is light, the page body must be light with full dark-mode support via `dark:` classes.
-3. **No generic gradient text or floating orbs:** Text must use clean solid typography (`text-slate-900 dark:text-white` or brand accent). No cyan-purple-emerald neon text gradients.
-4. **No numbered card grids with 1-sentence fluff:** Group capabilities by concrete functional domains with rich, authentic technical depth.
-5. **Always render a concrete product UI mockup:** The hero right column must depict a realistic representation of the tool inside its host environment (e.g. Power BI visual inside a report canvas), not abstract vectors or stock graphics.
+### Strict Anti-AI-Slop, Brand & Copywriting Invariants
+1. **Mandatory Host Repo Directives Compliance:** Before writing code in `nextwebworks-website`, read and follow its `AGENTS.md` and `.agents/rules/`. Enforce line ceilings (`page.js` $\le 80$, section $\le 250$), `// section: <id>` / `data-section="<id>"`, minimum 5 body sections, decoupled `content.js`, and banned clichés elimination (`copy-standards.md`).
+2. **Never generate spec sheet copy for human buyers:** The hero and core value sections must speak to client pain points and commercial outcomes (e.g. eliminating BI backlogs). Technical mechanics (AST parsing, 50-row cap, tokens) belong in dedicated architecture, security, and FAQ sections.
+3. **Never break site theme consistency:** The page must seamlessly match the site header and footer. If the header is light, the page body must be light with full dark-mode support via `dark:` classes (`bg-white dark:bg-[#0B0F19]`).
+4. **No generic gradient text or floating orbs:** Text must use clean solid typography (`text-slate-900 dark:text-white` or brand accent). No cyan-purple-emerald neon text gradients, floating pulsing badges, or numbered cards `[1] [2] [3]`.
+5. **Always render a concrete product UI mockup:** The hero right column must depict a realistic representation of the tool inside its host environment (e.g. macOS schematic window with red/yellow/green dots and connected workflow nodes), not abstract vectors or stock graphics.
+6. **Always verify fresh preview deployment:** Never link the user to an immutable historical deployment hash from a previous commit. Always confirm deployment readiness via `npx vercel ls` or deploy via `npx vercel`.
 
 ---
 

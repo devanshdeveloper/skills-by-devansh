@@ -95,39 +95,41 @@ flowchart TD
 
 ---
 
-## Mandatory Design & Copywriting Standards (Gates 4 & 7)
+## Codified Human Feedback & Deterministic Execution Rules
 
-To eliminate generic AI output and ensure seamless integration with the host agency brand, the following standards are strictly enforced during Gates 4 and 7:
+Every agent running this skill must execute these exact codified feedback rules deterministically on every run:
 
-### 1. Mandatory Host Repository Rule Compliance (AGENTS.md & .agents/rules)
-When generating or modifying code in `nextwebworks-website` (Gates 4 and 7), the agent MUST read and strictly adhere to that repository's `AGENTS.md` and `.agents/rules/`:
+### Rule 1: Mandatory Host Repository Rule Compliance (AGENTS.md & .agents/rules)
+When generating or modifying code in `nextwebworks-website` (Gates 4 and 7), the agent MUST read and strictly obey that repository's `AGENTS.md` and `.agents/rules/`:
 - **Line Ceilings:** Page Server Components (`page.js`) must be strictly $\le 80$ lines of code. Section components must be strictly $\le 250$ lines.
 - **Section Contract:** Every modular section component must open with `// section: <id>` on line 1 and render `data-section="<id>"` on its root JSX element.
 - **Minimum 5 Body Sections Rule:** Every public page route must compose at least 5 qualifying body sections **excluding** Hero, CTA banners, FAQ accordion, Contact Form, and Footer (`min-sections-per-page.md`).
-- **Banned Clichés Enforcement:** Under no circumstances may copy contain prohibited clichés from `copy-standards.md` (`unlock`, `elevate`, `seamless`, `leverage`, `cutting-edge`, `bespoke`, `supercharge`, `empower`, etc.).
+- **Banned Clichés Enforcement:** Under no circumstances may copy contain prohibited clichés from `copy-standards.md` (`unlock`, `elevate`, `seamless`, `leverage`, `cutting-edge`, `state-of-the-art`, `game-changer`, `revolutionize`, `bespoke`, `tailored solutions`, `supercharge`, `empower`, or "not just X but Y").
 - **Decoupled Content:** Decouple static copy and schema arrays into `content.js` or `site/content/`.
-- **Mandatory Automated Verification:** The agent MUST run `pnpm --dir site check:structure` and `pnpm --dir site lint` in `nextwebworks-website` and verify 0 errors before committing or pushing.
+- **Pre-Commit Automated Verification:** The agent MUST run `pnpm --dir site check:structure` and `pnpm --dir site lint` in `nextwebworks-website` and verify 0 errors before committing or pushing.
 
-### 2. Mandatory Pattern Audit & Reuse
-Before writing code in `nextwebworks-website`, the agent MUST inspect:
-- Site navigation, layout, and dual-theme tokens (`site/app/layout.js`, `site/app/globals.css`).
-- Existing flagship pages (`site/app/page.js`, `site/app/work/page.js`).
-- Reusable components (`FAQSection`, `FinalCTABanner`, `ContactFormSection`, `MotionFadeIn`, `MotionTilt`).
-- The page must inherit the exact container (`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`), dual-theme backgrounds (`bg-white dark:bg-[#0B0F19]`), borders, and button tokens.
-
-### 2. Client-Facing Value-First Copywriting (No "Spec Sheets")
-Public landing pages and case studies are commercial assets, not internal engineering documentation:
-- **Lead with Business Outcomes:** Heroes and headline value cards must address executive friction, speed, cost savings, and clarity (e.g. "Eliminate 3-Day Reporting Backlogs", "Ask Questions Directly in Power BI").
-- **No Spec-Sheet Jargon in Heroes:** Never pitch internal implementation mechanics (e.g. "streams token deltas", "AST parsing", "50-row bounds") as headline customer benefits.
-- **Relocate Technical Credentials:** Security guardrails, AST validation, and API specs belong strictly in dedicated "Enterprise Governance", "How It Works", or "Technical Specifications" sections to build institutional trust.
-
-### 3. Strict Zero-AI-Slop Prohibition
-- **FORBIDDEN:** Forced full-screen dark mode (`bg-slate-950`) when the website header is in light mode. Dual light/dark support is mandatory.
+### Rule 2: Anti-AI-Slop Visual Standards
+- **FORBIDDEN:** Forced full-screen dark mode (`bg-slate-950`) when the website header is in light mode. Dual light/dark support is mandatory (`bg-white dark:bg-[#0B0F19]`).
 - **FORBIDDEN:** Neon gradient text (`bg-gradient-to-r text-transparent bg-clip-text`). Use solid typography (`text-slate-900 dark:text-white` or brand accent `#2563EB`).
 - **FORBIDDEN:** Numbered card cliches (`[1]`, `[2]`, `[3]` in colored circles with single-sentence generic fluff).
 - **FORBIDDEN:** Generic filler headings ("Enterprise Architectural Pillars", "Cutting-Edge Innovation"). Use specific, high-substance descriptors.
 - **FORBIDDEN:** Floating pulsing green dots or radial background glow blurs.
 - **FORBIDDEN:** Abstract placeholder graphics. Always show realistic UI representations or mockups of the product in its host environment.
+
+### Rule 3: Client-Facing Value-First Copywriting (No "Spec Sheets")
+Public landing pages and case studies are commercial assets, not internal engineering documentation:
+- **Lead with Business Outcomes:** Heroes and headline value cards must address executive friction, speed, cost savings, and clarity (e.g. "Eliminate 3-Day Reporting Backlogs", "Ask Questions Directly in Power BI").
+- **No Spec-Sheet Jargon in Heroes:** Never pitch internal implementation mechanics (e.g. "streams token deltas", "AST parsing", "50-row bounds") as headline customer benefits.
+- **Relocate Technical Credentials:** Security guardrails, AST validation, and API specs belong strictly in dedicated "Enterprise Governance", "How It Works", or "Technical Specifications" sections to build institutional trust.
+
+### Rule 4: Hero Anatomy & Schematic Card (Image 2 Mirror)
+- **Left Column:** Eyebrow pill with subtle border and pulsing dot, dual-tone heading (black primary sentence + muted slate secondary sentence), client-facing outcome description, dual CTAs (primary blue button `#2563EB` + disabled secondary button with Gate 5 tooltip), and trust metadata checkmarks row (`✓ Direct DAX Evaluation`, `✓ 100% Read-Only Safety`, etc.).
+- **Right Column:** Realistic interactive tilted schematic window card (`MotionTilt`) with macOS red/yellow/green window dots (`#EF4444`, `#F59E0B`, `#10B981`), `*.spec` title, and multi-step connected workflow nodes.
+
+### Rule 5: Vercel Preview Deployment Verification
+- Never assume `git push` on a feature branch automatically deploys. Check `npx vercel ls`.
+- If git integration does not deploy the branch automatically, execute `npx vercel` (preview deployment, never `--prod`) to generate a fresh preview deployment.
+- Record and verify the exact active deployment URL in `state.json` and `evidence.md`. Never link to stale historical deployment hashes.
 
 ---
 

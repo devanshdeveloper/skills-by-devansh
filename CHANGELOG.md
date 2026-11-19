@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enforced banned clichés list from `copy-standards.md` (`empower`, `seamless`, `unlock`, `elevate`, `leverage`, `cutting-edge`, `bespoke`, etc.).
   - Mandated pre-commit automated verification execution (`pnpm --dir site check:structure`, `pnpm --dir site lint`).
   - Enforced strict Anti-AI-Slop and authentic pattern reuse invariants across Gates 4 and 7.
+  - Added Vercel preview deployment verification rule preventing stale historical deployment URLs.
 
 ## [1.10.31] - 2026-11-19
 
