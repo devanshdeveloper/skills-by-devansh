@@ -122,9 +122,9 @@ Public landing pages and case studies are commercial assets, not internal engine
 - **No Spec-Sheet Jargon in Heroes:** Never pitch internal implementation mechanics (e.g. "streams token deltas", "AST parsing", "50-row bounds") as headline customer benefits.
 - **Relocate Technical Credentials:** Security guardrails, AST validation, and API specs belong strictly in dedicated "Enterprise Governance", "How It Works", or "Technical Specifications" sections to build institutional trust.
 
-### Rule 4: Hero Anatomy & Schematic Card (Image 2 Mirror)
+### Rule 4: Hero Anatomy & Product UI Visual Showcase
 - **Left Column:** Eyebrow pill with subtle border and pulsing dot, dual-tone heading (black primary sentence + muted slate secondary sentence), client-facing outcome description, dual CTAs (primary blue button `#2563EB` + disabled secondary button with Gate 5 tooltip), and trust metadata checkmarks row (`✓ Direct DAX Evaluation`, `✓ 100% Read-Only Safety`, etc.).
-- **Right Column:** Realistic interactive tilted schematic window card (`MotionTilt`) with macOS red/yellow/green window dots (`#EF4444`, `#F59E0B`, `#10B981`), `*.spec` title, and multi-step connected workflow nodes.
+- **Right Column (Show, Don't Tell):** Never render a dry text-card flowchart (e.g. Step 01 $\rightarrow$ Step 02 $\rightarrow$ Step 03 text boxes). It MUST be an authentic, rich Product UI representation: an interactive application frame with host workspace chrome, live executive KPI tiles, conversational chat visual with executive prompt bubble, AST query validation chip, synthesized code preview, and in-chat comparative vector bar chart. Hovering glassmorphism trust badges emphasize enterprise credentials.
 
 ### Rule 5: Vercel Preview Deployment Verification
 - Never assume `git push` on a feature branch automatically deploys. Check `npx vercel ls`.
