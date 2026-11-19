@@ -99,7 +99,16 @@ flowchart TD
 
 To eliminate generic AI output and ensure seamless integration with the host agency brand, the following standards are strictly enforced during Gates 4 and 7:
 
-### 1. Mandatory Pattern Audit & Reuse
+### 1. Mandatory Host Repository Rule Compliance (AGENTS.md & .agents/rules)
+When generating or modifying code in `nextwebworks-website` (Gates 4 and 7), the agent MUST read and strictly adhere to that repository's `AGENTS.md` and `.agents/rules/`:
+- **Line Ceilings:** Page Server Components (`page.js`) must be strictly $\le 80$ lines of code. Section components must be strictly $\le 250$ lines.
+- **Section Contract:** Every modular section component must open with `// section: <id>` on line 1 and render `data-section="<id>"` on its root JSX element.
+- **Minimum 5 Body Sections Rule:** Every public page route must compose at least 5 qualifying body sections **excluding** Hero, CTA banners, FAQ accordion, Contact Form, and Footer (`min-sections-per-page.md`).
+- **Banned Clichés Enforcement:** Under no circumstances may copy contain prohibited clichés from `copy-standards.md` (`unlock`, `elevate`, `seamless`, `leverage`, `cutting-edge`, `bespoke`, `supercharge`, `empower`, etc.).
+- **Decoupled Content:** Decouple static copy and schema arrays into `content.js` or `site/content/`.
+- **Mandatory Automated Verification:** The agent MUST run `pnpm --dir site check:structure` and `pnpm --dir site lint` in `nextwebworks-website` and verify 0 errors before committing or pushing.
+
+### 2. Mandatory Pattern Audit & Reuse
 Before writing code in `nextwebworks-website`, the agent MUST inspect:
 - Site navigation, layout, and dual-theme tokens (`site/app/layout.js`, `site/app/globals.css`).
 - Existing flagship pages (`site/app/page.js`, `site/app/work/page.js`).

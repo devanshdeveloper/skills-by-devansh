@@ -16,11 +16,15 @@ Build a high-conversion showcase landing page for the PoC inside `nextwebworks-w
 1. **Locate and Store NWW Website Repository:**
    If `state.json` does not contain `nwwWebsiteRepo`, prompt the user once in chat for the absolute local directory path to `nextwebworks-website`. Save the path:
    `node <path>/poc-state.mjs set-field nwwWebsiteRepo "/path/to/nextwebworks-website"`
-2. **Audit Existing NextWebWorks Codebase & Pattern Extraction:**
-   Inside `nextwebworks-website/site`:
-   - Inspect existing flagship pages (`app/page.js`, `app/work/page.js`) and reusable components (`app/_components/FAQSection.js`, `app/_components/FinalCTABanner.js`, `app/_components/ContactFormSection.js`, `components/motion/*`).
-   - Extract exact layout grids, responsive paddings (`py-16 md:py-24`), container widths (`mx-auto max-w-7xl px-4 sm:px-6 lg:px-8`), dual-theme background classes (`bg-white dark:bg-[#0B0F19]`), borders (`border-slate-200 dark:border-[#1E293B]/60`), and button tokens (`#2563EB`).
-   - Inspect existing lead and contact-us flows (`app/actions/lead.js`, `app/contact/page.js`).
+2. **Audit Host Repository Directives (AGENTS.md & .agents/rules):**
+   Inside `nextwebworks-website`:
+   - Read `AGENTS.md` and `.agents/rules/` (`copy-standards.md`, `frontend-conventions.md`, `min-sections-per-page.md`, `unique-content-per-page.md`).
+   - **Line Ceilings:** Page Server Component (`page.js`) must be strictly $\le 80$ lines. Modular section components in `_components/` must be $\le 250$ lines.
+   - **Section Contract:** Every section component must open with `// section: <id>` on line 1 and render `data-section="<id>"`.
+   - **Minimum 5 Body Sections Rule:** Compose at least 5 qualifying body sections (excluding Nav, Hero, CTA, FAQ, ContactForm, Footer).
+   - **Decoupled Content:** Decouple static text and FAQ objects into `content.js`.
+   - **Banned Clichés Enforcement:** Under no circumstances may copy contain: `unlock`, `elevate`, `seamless`, `leverage`, `cutting-edge`, `bespoke`, `supercharge`, `empower`, or "not just X but Y".
+   - Inspect existing lead flows (`app/actions/lead.js`, `app/contact/page.js`).
    - Hard Rule: Tailwind CSS only. Do not add raw CSS files, isolated dark-mode lockouts, or inline styling hacks.
 3. **Branch Creation in `nextwebworks-website`:**
    Check out a dedicated feature branch:
@@ -30,15 +34,22 @@ Build a high-conversion showcase landing page for the PoC inside `nextwebworks-w
    - **Executive Outcome Framing:** The page must be written for client decision-makers (directors, VPs, agency owners). It must pitch business value, speed, reduced friction, and ROI.
    - **Strictly No "Spec Sheet" Copy in Heroes:** Never treat internal technical implementation details (e.g. "streams token deltas", "AST parsing", "50-row bounds") as headline benefits.
    - **Technical Credentials Placement:** Security guardrails, AST validation, and query protocols must be placed in dedicated "Security & Governance" or "How It Works" sections to build institutional trust.
-5. **Implement Landing Page Component & Reuse Established Patterns:**
-   In `nextwebworks-website/site/app/poc/<project>/page.js`:
-   - Mirror `WorkHeroSection` two-column deliberate anatomy: `lg:col-span-7` left column (mono eyebrow, solid heading, client-facing value description, CTAs, proof pillar badges) and `lg:col-span-5` right column (realistic product UI mockup in its host environment).
+5. **Implement Modular Landing Page & Enforce Host Repository Rules:**
+   In `nextwebworks-website/site/app/poc/<project>/`:
+   - Author thin Server Component `page.js` ($\le 80$ lines) importing modular section components from `_components/`.
+   - Compose $\ge 5$ qualifying body sections with `// section: <id>` and `data-section="<id>"`.
+   - Mirror `WorkHeroSection` two-column deliberate anatomy: `lg:col-span-7` left column (mono eyebrow, solid heading, client-facing value description, CTAs, checkmarks) and `lg:col-span-5` right column (realistic schematic card with macOS window dots).
    - Enforce dual-theme support matching the site chrome (`bg-white dark:bg-[#0B0F19]`). Never render forced pitch-black backgrounds (`bg-slate-950`).
    - Strictly prohibit neon text gradients (`bg-gradient-to-r text-transparent bg-clip-text`), numbered card cliches (`[1] [2] [3]`), generic buzzword titles ("Enterprise Architectural Pillars"), floating pulsing green dots, and blurred background radial glow orbs.
    - Reuse existing site components: `FAQSection` (with high-density substantive FAQs), `FinalCTABanner`, and motion wrappers (`MotionFadeIn`, `MotionTilt`).
    - Wire the inquiry/contact form to the existing leads Server Action (`submitLead`), matching `ContactFormSection` design tokens, passing:
      `source: "poc:<project>"`
    - **Demo CTA Guard:** The primary "Launch Demo" button must be implemented but rendered **DISABLED** (e.g. grayed out with a "Live Demo Launching Soon — Pending Gate 5 Verification" badge/tooltip) pending Gate 5 subdomain and SSL verification.
+6. **Execute Automated Verification in `nextwebworks-website`:**
+   Run and inspect verification scripts before committing:
+   - `pnpm --dir site check:structure` (verifies line ceilings, section comments, and min 5 body sections)
+   - `pnpm --dir site lint` (verifies ESLint compliance)
+   All commands must pass with 0 errors.
 6. **Changelog & Version Bump in `nextwebworks-website`:**
    Add a single concise changelog entry in `nextwebworks-website/CHANGELOG.md` and bump the patch version.
 7. **Commit & Push Preview Branch (No Merge to Main):**

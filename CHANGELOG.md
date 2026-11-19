@@ -9,10 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Proof-of-Concept to Proposal Skill (`poc-to-proposal`)**:
+  - Enforced strict Host Repository Directive Compliance (reading and adhering to external repo `AGENTS.md` and `.agents/rules/`).
+  - Mandated Next.js line ceilings (thin Server Component `page.js` $\le 80$ lines, section components $\le 250$ lines).
+  - Mandated section contracts (`// section: <id>` on line 1, `data-section="<id>"` on root JSX) and minimum 5 qualifying body sections.
+  - Enforced banned clichés list from `copy-standards.md` (`empower`, `seamless`, `unlock`, `elevate`, `leverage`, `cutting-edge`, `bespoke`, etc.).
+  - Mandated pre-commit automated verification execution (`pnpm --dir site check:structure`, `pnpm --dir site lint`).
   - Enforced strict Anti-AI-Slop and authentic pattern reuse invariants across Gates 4 and 7.
-  - Prohibited forced pitch-black backgrounds (`bg-slate-950`), neon gradient text (`bg-gradient-to-r text-transparent bg-clip-text`), numbered card cliches `[1] [2] [3]`, generic filler headings, and radial glow blobs.
-  - Mandated target site pattern audit & reuse (inheriting native dual-theme `bg-white dark:bg-[#0B0F19]`, standard containers, and authentic components).
-  - Enforced user-facing value-first copywriting standard forbidding internal engineering "spec sheet" copy in heroes and marketing sections.
 
 ## [1.10.31] - 2026-11-19
 
