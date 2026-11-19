@@ -17,6 +17,9 @@ description: Takes a completed proof-of-concept (PoC) from scope freeze to an ex
 >
 > **Single Task Scope:**
 > This skill governs only the transition of an existing PoC into an executive proposal package. Do not modify unrelated workspace features during this workflow.
+>
+> **Anti-AI-Slop & Authentic Pattern Reuse Invariant (Gates 4 & 7):**
+> All public web deliverables (landing pages and case studies) MUST mirror the target site's established design system, light/dark dual theme, and component patterns. Forced pitch-black backgrounds, neon gradient text, numbered card cliches, generic filler titles, and internal "technical spec sheet" copywriting are strictly forbidden. Copy must focus on client outcomes and executive value.
 
 ---
 
@@ -89,6 +92,33 @@ flowchart TD
 7. **Handle Human Response:**
    - If the user types **`APPROVE GATE N`**: Run `node <path>/poc-state.mjs approve <N> "APPROVE GATE N"` and proceed to Gate $N+1$.
    - If the user provides feedback or rejection: Run `node <path>/poc-state.mjs reject <N> "<reason>"`, update the gate's files in place, update `evidence.md`, reset status to `awaiting_approval`, and re-present. Never create duplicate deliverable files.
+
+---
+
+## Mandatory Design & Copywriting Standards (Gates 4 & 7)
+
+To eliminate generic AI output and ensure seamless integration with the host agency brand, the following standards are strictly enforced during Gates 4 and 7:
+
+### 1. Mandatory Pattern Audit & Reuse
+Before writing code in `nextwebworks-website`, the agent MUST inspect:
+- Site navigation, layout, and dual-theme tokens (`site/app/layout.js`, `site/app/globals.css`).
+- Existing flagship pages (`site/app/page.js`, `site/app/work/page.js`).
+- Reusable components (`FAQSection`, `FinalCTABanner`, `ContactFormSection`, `MotionFadeIn`, `MotionTilt`).
+- The page must inherit the exact container (`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`), dual-theme backgrounds (`bg-white dark:bg-[#0B0F19]`), borders, and button tokens.
+
+### 2. Client-Facing Value-First Copywriting (No "Spec Sheets")
+Public landing pages and case studies are commercial assets, not internal engineering documentation:
+- **Lead with Business Outcomes:** Heroes and headline value cards must address executive friction, speed, cost savings, and clarity (e.g. "Eliminate 3-Day Reporting Backlogs", "Ask Questions Directly in Power BI").
+- **No Spec-Sheet Jargon in Heroes:** Never pitch internal implementation mechanics (e.g. "streams token deltas", "AST parsing", "50-row bounds") as headline customer benefits.
+- **Relocate Technical Credentials:** Security guardrails, AST validation, and API specs belong strictly in dedicated "Enterprise Governance", "How It Works", or "Technical Specifications" sections to build institutional trust.
+
+### 3. Strict Zero-AI-Slop Prohibition
+- **FORBIDDEN:** Forced full-screen dark mode (`bg-slate-950`) when the website header is in light mode. Dual light/dark support is mandatory.
+- **FORBIDDEN:** Neon gradient text (`bg-gradient-to-r text-transparent bg-clip-text`). Use solid typography (`text-slate-900 dark:text-white` or brand accent `#2563EB`).
+- **FORBIDDEN:** Numbered card cliches (`[1]`, `[2]`, `[3]` in colored circles with single-sentence generic fluff).
+- **FORBIDDEN:** Generic filler headings ("Enterprise Architectural Pillars", "Cutting-Edge Innovation"). Use specific, high-substance descriptors.
+- **FORBIDDEN:** Floating pulsing green dots or radial background glow blurs.
+- **FORBIDDEN:** Abstract placeholder graphics. Always show realistic UI representations or mockups of the product in its host environment.
 
 ---
 

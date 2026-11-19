@@ -17,7 +17,15 @@ Publish a deep-dive, enterprise-grade case study for the PoC in `nextwebworks-we
    In `nextwebworks-website/site`:
    - Read the existing portfolio and case study models (`skills/create-nww-website/references/cms/portfolio.md` and `case-study.md`).
    - Read at least one published case study (`site/app/case-studies/[slug]/page.js` or `site/app/portfolio/[slug]/page.js`) to mirror layout patterns, typography scale, and layout composition.
-2. **Strict Architectural & Content Rules:**
+2. **Strict Architectural, Design & Content Rules:**
+   - **Client-Facing Business Framing (No Spec Sheets):** Case studies are read by prospective clients evaluating whether to hire the agency. The narrative must lead with the business problem, executive operational friction, and measurable outcomes. Technical architecture serves to demonstrate mastery and engineering rigor, but must not overshadow client value.
+   - **Strict Zero-AI-Slop Invariant:**
+     - Must inherit native dual-theme support (`bg-white dark:bg-[#0B0F19]`). Never render isolated forced dark mode (`bg-slate-950`).
+     - No neon text gradients (`bg-gradient-to-r text-transparent bg-clip-text`). Use solid typography (`text-slate-900 dark:text-white` or brand accent).
+     - No generic numbered cards `[1] [2] [3]`. Group technical solutions by functional domain.
+     - No generic filler titles ("Enterprise Architectural Pillars", "Cutting-Edge Innovation").
+     - No floating pulsing green dots or radial background glow blurs.
+     - Always showcase authentic product UI mockups or embedded walkthrough video, never abstract placeholder vectors.
    - **Minimum 5 Substantive Sections:** The case study must contain at least 5 rich semantic body sections (e.g. Executive Summary & Challenge, Solution Architecture, Key Capabilities & Bento Showcase, Verified Results & Impact Metrics, Tech Stack & Deliverables Breakdown), excluding standard header/footer bookends.
    - **Zero Repeated Content Invariant:** Only section types may repeat across pages. No exact section, card layout, or duplicate copywriting from other pages or PoCs may be reused. All copy must be 100% bespoke to this PoC.
    - **Tailwind CSS Only:** No custom raw CSS files or unstyled elements.

@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.32] - 2026-11-19
+
+### Changed
+- **Proof-of-Concept to Proposal Skill (`poc-to-proposal`)**:
+  - Enforced strict Anti-AI-Slop and authentic pattern reuse invariants across Gates 4 and 7.
+  - Prohibited forced pitch-black backgrounds (`bg-slate-950`), neon gradient text (`bg-gradient-to-r text-transparent bg-clip-text`), numbered card cliches `[1] [2] [3]`, generic filler headings, and radial glow blobs.
+  - Mandated target site pattern audit & reuse (inheriting native dual-theme `bg-white dark:bg-[#0B0F19]`, standard containers, and authentic components).
+  - Enforced user-facing value-first copywriting standard forbidding internal engineering "spec sheet" copy in heroes and marketing sections.
+
 ## [1.10.31] - 2026-11-19
 
 ### Added

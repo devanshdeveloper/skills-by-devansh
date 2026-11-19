@@ -15,8 +15,8 @@ Establish an immutable, validated scope baseline for the Proof-of-Concept (PoC).
 ## 3. Steps
 1. **Interactive Scope Discovery (/grill-me Pattern):**
    Conduct a structured intake interview in chat querying:
-   - **Problem Statement:** The core business pain point and target objective.
-   - **Target Persona:** Primary user persona interacting with the PoC.
+   - **Executive Problem Statement:** The core business pain point, operational friction, and commercial value of solving it (used downstream to write client-facing value propositions in Gates 4, 7, and 8).
+   - **Target Persona:** Primary decision-makers and end users interacting with the PoC.
    - **In-Scope Capabilities:** Verifiable features already implemented and functional in the PoC.
    - **Explicit Out-of-Scope:** Capabilities intentionally omitted or deferred to production.
    - **Success Criteria:** Measurable technical and functional validation criteria.
