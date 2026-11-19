@@ -4,7 +4,8 @@
     "asset-optimizer",
     "create-nextjs-website",
     "create-nww-website",
-    "nww"
+    "nww",
+    "poc-to-proposal"
   ],
   "internalSkills": [
     "publish"

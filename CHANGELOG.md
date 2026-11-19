@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.30] - 2026-11-19
+
+### Added
+- **Proof-of-Concept to Proposal Skill (`poc-to-proposal`)**:
+  - Implemented 8-stage human-gated checklist taking a PoC from scope freeze to an executive proposal PDF.
+  - Added deterministic state machine CLI helper (`poc-state.mjs`) tracking progress in `poc/<project>/state.json`.
+  - Added strict verbatim approval phrase validation (`APPROVE GATE N`) and sequential transition enforcement.
+  - Authored standardized modular gate rulebooks in `references/gate-N-*/rulebook.md` with identical 8-section schemas.
+  - Enforced dual-repo integration for landing page leads and NWW CMS case study with Vercel preview isolation.
+  - Registered skill in `skills.manifest.json` and documented in `README.md`.
+
 ## [1.10.29] - 2026-11-11
 
 ### Added

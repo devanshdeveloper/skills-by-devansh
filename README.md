@@ -13,6 +13,7 @@ A collection of agent skills compatible with the [skills.sh](https://skills.sh/)
 | **create-nextjs-website** | Scaffold modern Next.js web applications with App Router, TypeScript, and production-ready structure. Use when the user asks to create, scaffold, or initialize a new Next.js website or web application with App Router, TypeScript, and clean component architecture. | `skills/create-nextjs-website/SKILL.md` |
 | **create-nww-website** | Orchestrates end-to-end creation of Next.js websites with optional NWW CMS integration using a 9-stage human-gated workflow. Enforces single-mode markdown page specifications, Next.js project scaffolding, and manifest-driven incremental builds. Use when asked to create, scaffold, or develop an NWW website, run the website build pipeline, or start a new Next.js client project. | `skills/create-nww-website/SKILL.md` |
 | **nww** | Fast shortcut alias to start the NWW website pipeline. Use when the user types 'nww', 'start nww', or '/nww'. | `skills/nww/SKILL.md` |
+| **poc-to-proposal** | Takes a completed proof-of-concept (PoC) from scope freeze to an executive proposal PDF through an eight-stage human-approved checklist. Use when a PoC is built and needs structured testing, staging deployment, landing page lead integration, custom demo subdomain, video walkthrough, NWW case study, and client proposal generation. | `skills/poc-to-proposal/SKILL.md` |
 
 ## Installation
 
@@ -156,6 +157,35 @@ nww
 ```
 
 > The agent activates `create-nww-website` immediately. Type `nww` to begin the intake interview, or `nww` followed by your brief to fast-track Gate 0.
+
+---
+
+## Skill: `poc-to-proposal`
+
+Eight-stage human-approved checklist taking a PoC from scope freeze to proposal PDF.
+
+### Install
+
+```bash
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill poc-to-proposal
+```
+
+Or run without installing (one-shot):
+
+```bash
+DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@poc-to-proposal
+```
+
+### Starter Prompt
+
+````markdown
+Activate the poc-to-proposal skill for this project.
+
+Project Name: [e.g. ai-contract-auditor]
+PoC Location: [Current working directory]
+
+Initialize Gate 1 (Freeze Scope) and begin the intake interview.
+````
 
 ---
 
