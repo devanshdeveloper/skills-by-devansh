@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.31] - 2026-11-19
+
+### Added
+- **Sales Pipeline Skill (`sales-pipeline`)**:
+  - Implemented 7-stage human-gated sales pipeline for agency web services (custom web projects, paid pilots, retainers).
+  - Enforced strict verbatim approval text barrier (`APPROVED`), zero-send safety invariant, and anti-fabrication rules.
+  - Authored modular gate rulebooks in `references/gate-N-*/rulebook.md` with standardized goal, entry criteria, steps, outputs, approval question, and kill criterion schemas.
+  - Integrated Gate 4 technical delegation to the repository's `poc-to-proposal` skill without code duplication.
+  - Documented deterministic flat JSON state machine (`pipeline/<prospect>/state.json`) with zero CRM dependencies.
+  - Registered skill in `skills.manifest.json` and documented in `README.md`.
+
 ## [1.10.30] - 2026-11-19
 
 ### Added

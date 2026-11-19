@@ -14,6 +14,7 @@ A collection of agent skills compatible with the [skills.sh](https://skills.sh/)
 | **create-nww-website** | Orchestrates end-to-end creation of Next.js websites with optional NWW CMS integration using a 9-stage human-gated workflow. Enforces single-mode markdown page specifications, Next.js project scaffolding, and manifest-driven incremental builds. Use when asked to create, scaffold, or develop an NWW website, run the website build pipeline, or start a new Next.js client project. | `skills/create-nww-website/SKILL.md` |
 | **nww** | Fast shortcut alias to start the NWW website pipeline. Use when the user types 'nww', 'start nww', or '/nww'. | `skills/nww/SKILL.md` |
 | **poc-to-proposal** | Takes a completed proof-of-concept (PoC) from scope freeze to an executive proposal PDF through an eight-stage human-approved checklist. Use when a PoC is built and needs structured testing, staging deployment, landing page lead integration, custom demo subdomain, video walkthrough, NWW case study, and client proposal generation. | `skills/poc-to-proposal/SKILL.md` |
+| **sales-pipeline** | Executes an end-to-end, seven-stage human-gated sales pipeline for web agency services including custom web projects, paid pilot sprints, and ongoing technical retainers. Use when identifying target accounts, drafting cold outreach sequences, conducting discovery consultations, demonstrating live PoCs, running paid pilot trials, negotiating commercial conversions, or managing customer onboarding and success. | `skills/sales-pipeline/SKILL.md` |
 
 ## Installation
 
@@ -185,6 +186,36 @@ Project Name: [e.g. ai-contract-auditor]
 PoC Location: [Current working directory]
 
 Initialize Gate 1 (Freeze Scope) and begin the intake interview.
+````
+
+---
+
+## Skill: `sales-pipeline`
+
+Seven-stage human-gated sales pipeline for web agency services (custom web apps, paid pilot sprints, technical retainers).
+
+### Install
+
+```bash
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill sales-pipeline
+```
+
+Or run without installing (one-shot):
+
+```bash
+DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@sales-pipeline
+```
+
+### Starter Prompt
+
+````markdown
+Activate the sales-pipeline skill for a target prospect.
+
+Prospect / Company: [e.g. Acme Health]
+Service Offering: ["web-project" | "paid-pilot" | "retainer"]
+Target Website: [https://acmehealth.example.com]
+
+Initialize Gate 1 (Prospecting) and begin ICP qualification and signal research.
 ````
 
 ---
