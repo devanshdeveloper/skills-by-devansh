@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.35] - 2026-11-20
+
+### Changed
+- **Proof-of-Concept to Proposal Skill (`poc-to-proposal`)**:
+  - Updated Gate 6 Walkthrough Video rulebook with Audio & Voice Pipeline rules (A1–A2) and Brand Polish layer (A3–A5).
+  - Added Audio Rule (A1): Mandated generated narration from approved script, zero human-recorded audio leakage, silent screen recordings, and video clips muted at source (`muted data-volume="0"`).
+  - Added Voice Pipeline (A2): Enforced 8-step pipeline: (1) pronunciation map approval, (2) 3-voice candidate review, (3) scene generation in chosen voice, (4) duration check (60–120s), (5) video fitting without voice stretching, (6) FFmpeg `loudnorm` normalization to -16 LUFS / -1 dBTP peak, (7) licensed music only if supplied, and (8) human audio sign-off before final render.
+  - Added Brand Polish Layer (A3): Replaced raw plainness with authentic `nextwebworks.in` styling: inset recording frame on `#0B0F19` canvas with 16px radius and soft elevation shadow, burned-in bottom synced captions, smart camera zoom (max 1 per scene via `power2.inOut`), click emphasis ring pulse, 0.3–0.5s clean crossfades, and smooth text reveals on title/outro.
+  - Extended Pre-Presentation Scan (A4): Added checks for 0 recorded audio leakage, ffprobe audio streams audit, loudness numbers (-16 LUFS / -1 dBTP), caption coverage, and transition consistency.
+  - Extended Human Manual Checklist (A5): Added audio naturalness, pronunciation accuracy, room noise elimination, and visual polish balance checks.
+
 ## [1.10.34] - 2026-11-20
 
 ### Changed
