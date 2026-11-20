@@ -168,3 +168,4 @@ To maintain peak output quality and prevent model attention dilution across the 
 | **6** | **Walkthrough Video** | `poc/<project>/gate-6-walkthrough/` | [Gate 6 Rulebook](references/gate-6-walkthrough/rulebook.md) |
 | **7** | **Case Study** | `poc/<project>/gate-7-case-study/` | [Gate 7 Rulebook](references/gate-7-case-study/rulebook.md) |
 | **8** | **Proposal PDF** | `poc/<project>/gate-8-proposal-pdf/` | [Gate 8 Rulebook](references/gate-8-proposal-pdf/rulebook.md) |
+- Gate 6 Walkthrough Video uses HyperFrames (HTML-to-video, heygen-com/hyperframes) per [Gate 6 Rulebook](references/gate-6-walkthrough/rulebook.md).

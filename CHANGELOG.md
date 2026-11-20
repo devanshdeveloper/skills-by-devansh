@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.33] - 2026-11-20
+
+### Changed
+- **Proof-of-Concept to Proposal Skill (`poc-to-proposal`)**:
+  - Rewrote Gate 6 Walkthrough Video rulebook to specify HyperFrames (`heygen-com/hyperframes`) for 60–120s HTML-to-video motion walkthroughs, departing from Remotion.
+  - Enforced plain HTML compositions with `data-*` timeline attributes and seekable GSAP timelines (zero React/Vue components).
+  - Enforced external sibling workspace (`../<project>-walkthrough/`) isolation preventing `node_modules` and video binaries from entering the PoC repository.
+  - Embedded HyperFrames `SCRIPT.md` (voiceover) and `STORYBOARD.md` (shot list) planning formats with mandatory human pre-approval.
+  - Specified quality validation workflow (`hyperframes check`, `inspect` [verify before use], `preview`, and iterative `--quality draft` / `--quality high` rendering).
+  - Added one-line Gate 6 HyperFrames pointer in `skills/poc-to-proposal/SKILL.md`.
+
 ## [1.10.32] - 2026-11-19
 
 ### Changed
