@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.34] - 2026-11-20
+
+### Changed
+- **Proof-of-Concept to Proposal Skill (`poc-to-proposal`)**:
+  - Overhauled Gate 6 Walkthrough Video rulebook with strict plain-language and anti-slop rules (A1–A6).
+  - Added Audience Rule (A1): Mandated non-technical business client/end-user framing in Step 2 creative brief.
+  - Added Plain-Language Rules (A2): Enforced 4-beat narrative structure, second-person "you" perspective, non-developer manager filter, and strict forbidden-terms list (banning stack names, architecture, APIs, endpoints, code, JSON, SDK, models, latency numbers, and repo jargon).
+  - Added Screen-First Rule (A3): Mandated $\ge 70\%$ runtime showing real product UI, capped overlays at $\le 1$ short caption ($\le 8$ words) per scene, removed metric cards and lower-thirds from default flow, and constrained default cards to opening title ($\le 3$s) and closing CTA ($\ge 3$s).
+  - Added Anti-Slop Visual Rules (A4): Explicitly banned glassmorphism, glows/neon, emoji tiles, generic stat cards, and abstract shapes; enforced flat solid backgrounds and authentic `nextwebworks.in` brand tokens (Canvas `#0B0F19`, Surface `#0F172A`, Cobalt `#2563EB`).
+  - Added Pre-Presentation Scan (A5): Automated scan of `script.md`, `shot-list.md`, and composition HTML for forbidden terms, caption counts, real UI runtime percentage, and brand token compliance.
+  - Added non-technical clarity and anti-slop verification items to human checklist (A6).
+
 ## [1.10.33] - 2026-11-20
 
 ### Changed
