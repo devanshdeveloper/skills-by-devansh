@@ -31,7 +31,7 @@ Produce a concise, professional 60–120 second executive product walkthrough vi
    The user provides the raw video file path or hosted URL.
    The user explicitly confirms that total runtime falls strictly between **60 and 120 seconds**.
 6. **Remotion Constraint:**
-   Remotion is used ONLY if the user explicitly requests programmatic branded intro/outro title cards, animated motion overlays, or automated burn-in captions. Never introduce Remotion for standard uncut recordings.
+   Remotion is used ONLY if the user explicitly requests programmatic branded intro/outro title cards, animated motion overlays, or automated burn-in captions. Never introduce Remotion for standard uncut recordings. If Remotion rendering or asset processing is requested, delegate the compilation execution to an isolated subagent (`invoke_subagent`) to prevent FFmpeg and rendering log output from bloating the coordinator context.
 7. **Cloud Video Hosting:**
    - Do NOT commit video binaries to git.
    - If Cloudflare R2 credentials exist in the environment (`R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME`), the agent may execute an upload script to upload the asset.

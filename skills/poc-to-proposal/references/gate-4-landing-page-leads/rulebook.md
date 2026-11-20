@@ -35,6 +35,9 @@ Build a high-conversion showcase landing page for the PoC inside `nextwebworks-w
    - **Strictly No "Spec Sheet" Copy in Heroes:** Never treat internal technical implementation details (e.g. "streams token deltas", "AST parsing", "50-row bounds") as headline benefits.
    - **Technical Credentials Placement:** Security guardrails, AST validation, and query protocols must be placed in dedicated "Security & Governance" or "How It Works" sections to build institutional trust.
 5. **Implement Modular Landing Page & Enforce Host Repository Rules:**
+   > [!TIP]
+   > **Subagent Isolation for Scaffolding & Verification:**
+   > Scaffolding modular components and running build/structure checks generates heavy terminal logs. Delegate this step to an isolated subagent (`invoke_subagent`) so the coordinator context remains lean and preserves maximum attention bandwidth for review.
    In `nextwebworks-website/site/app/poc/<project>/`:
    - Author thin Server Component `page.js` ($\le 80$ lines) importing modular section components from `_components/`.
    - Compose $\ge 5$ qualifying body sections with `// section: <id>` and `data-section="<id>"`.

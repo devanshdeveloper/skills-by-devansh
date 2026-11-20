@@ -90,7 +90,9 @@ flowchart TD
 
 1. **Read State:** Verify `currentGate` in `poc/<project>/state.json`.
 2. **Read Active Rulebook Only:** Open strictly `references/gate-N-<gate-name>/rulebook.md`. Do not open future gates.
-3. **Execute Gate Work:** Produce all required deliverables directly inside `poc/<project>/gate-N-<gate-name>/`.
+3. **Execute Gate Work (via Isolated Subagent or Noise-Suppressed Execution):**
+   - For heavy implementation, file inspection, or build checks, delegate to an isolated subagent (`invoke_subagent`). The subagent executes in a fresh context, writes deliverables to disk, and returns a clean summary.
+   - For coordinator-level actions, enforce strict tool noise suppression (pipe outputs, narrow line reads) to protect working memory.
 4. **Compile Evidence:** Write `poc/<project>/gate-N-<gate-name>/evidence.md` summarizing verified items.
 5. **Set Status:** Execute `node <path>/poc-state.mjs set-status <N> awaiting_approval`.
 6. **Stop & Present:** Present the evidence summary, manual checklist, and context compaction reminder (`> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate N + 1.`) in chat, then **STOP CALLING TOOLS**.
@@ -142,6 +144,15 @@ Not all PoCs are standalone, publicly accessible web applications. Certain archi
   `node <path>/poc-state.mjs skip 5 "<rationale>"`
 - **Skip Recording:** The state machine marks Gate 5 status as `skipped`, logs the exact rationale in `state.json`, creates `poc/<project>/gate-5-demo-subdomain/evidence.md` documenting why the gate is non-applicable, and advances `currentGate` directly to Gate 6 (`walkthrough`).
 - **Landing Page CTA Adaptation:** On the public landing page in `nextwebworks-website`, when Gate 5 is skipped, the primary action remains "Request Pilot Consultation" / "Book Technical Briefing" (directing to the verified inquiry form). No broken or dead demo link is rendered.
+
+### Rule 7: Context Hygiene & Subagent Isolation Architecture (Zero-Degradation Invariant)
+To maintain peak output quality and prevent model attention dilution across the multi-gate lifecycle, the agent enforces three strict operational standards:
+1. **Proactive Subagent Execution per Gate:**
+   For heavy authoring, multi-file code generation, or testing gates (Gates 2, 4, 6, 7, and 8), the parent coordinator agent MUST delegate the core work to a dedicated subagent (`invoke_subagent`). The subagent begins with a 100% fresh, unpolluted context window, executes the gate tasks, writes files to disk, and returns ONLY the concise evidence summary to the parent thread.
+2. **Isolated Subagents for Heavy Tasks:**
+   Any task that involves reading multiple large files, running iterative build/lint checks, or generating complex React components must be offloaded to a subagent. The coordinator conversation NEVER absorbs intermediate terminal dumps or raw scratch logs.
+3. **Aggressive Tool Noise Suppression in Parent Thread:**
+   When the coordinator thread runs commands, it MUST suppress verbose terminal output (e.g. piping verbose stdout to null, filtering with `Select-Object -First 5`, or inspecting only exit codes). The coordinator thread MUST stay lean (< 25,000 tokens) so that every prompt response operates with razor-sharp attention.
 
 ---
 

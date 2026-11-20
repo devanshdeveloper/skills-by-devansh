@@ -73,7 +73,7 @@ Present `poc/<project>/gate-2-manual-test/evidence.md` containing:
 ## 7. Reject Handling
 1. If any screen fails testing or a new defect is uncovered, log the defect in `defects.md`.
 2. Run `node <path>/poc-state.mjs reject 2 "<defect summary>"`.
-3. Agent analyzes source code and applies remediation using native editor tools.
+3. Agent analyzes source code and applies remediation using native editor tools (delegate complex multi-file fixes to an isolated subagent to preserve coordinator context).
 4. Agent re-presents only the affected screen checklist in `manual-checklist.md`.
 5. Once fixed and validated by the human, update `evidence.md`, reset status to `awaiting_approval`, and re-present.
 

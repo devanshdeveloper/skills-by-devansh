@@ -47,6 +47,9 @@ Synthesize the entire technical and functional delivery of the PoC into an execu
    ```
    Present the structured data table to the user in chat and obtain explicit confirmation before proceeding to PDF compilation.
 3. **Step B — Render Proposal PDF (`proposal.pdf`):**
+   > [!TIP]
+   > **Subagent Isolation for PDF Rendering:**
+   > PDF generation engines often output voluminous compilation logs. Run the generator script inside an isolated subagent (`invoke_subagent`) to shield the coordinator context from log noise.
    - Check if the repository or workspace provides an active PDF generation skill.
    - If not found, ask the user for the local path to their existing JSON-to-PDF generator project (e.g. Typst, Puppeteer, WeasyPrint, or React-PDF generator).
    - If the user provides a generator path, execute its CLI command passing `proposal-data.json` as input and outputting `poc/<project>/gate-8-proposal-pdf/proposal.pdf`.

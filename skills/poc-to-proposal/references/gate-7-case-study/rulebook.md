@@ -36,6 +36,9 @@ Publish a deep-dive, enterprise-grade case study for the PoC in `nextwebworks-we
    Draft `poc/<project>/gate-7-case-study/case-study-content.md` detailing the 5+ sections, copy, metrics, and media links.
    Present to the user for explicit approval BEFORE writing Next.js code.
 4. **Implement Case Study in `nextwebworks-website`:**
+   > [!TIP]
+   > **Subagent Isolation for Case Study Implementation:**
+   > Delegating case study page authoring, component styling, and Vercel preview verification to an isolated subagent (`invoke_subagent`) keeps the coordinator context 100% clean and prevents attention dilution.
    - Check out branch: `git checkout -b poc/<project>-case-study`
    - Implement the page component under `site/app/case-studies/<project>/page.js` (or CMS seeder entry if CMS mode is enabled).
    - Embed the Gate 6 video player and link back to the Gate 5 demo subdomain and Gate 4 landing page.
