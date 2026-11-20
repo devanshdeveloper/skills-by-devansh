@@ -72,6 +72,7 @@ Present `poc/<project>/gate-7-case-study/evidence.md` containing:
 - Git commit hash on branch `poc/<project>-case-study`.
 - Vercel preview URL (`urls.caseStudy`).
 - Active state confirmation (`Gate 7 awaiting_approval`).
+- Context Compaction Tip: Present `> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate 8.`
 
 ---
 
@@ -99,3 +100,4 @@ Present `poc/<project>/gate-7-case-study/evidence.md` containing:
 - The user explicitly types `APPROVE GATE 7` in chat.
 - Branch `poc/<project>-case-study` is merged to `main` in `nextwebworks-website`.
 - `node <path>/poc-state.mjs approve 7 "APPROVE GATE 7"` executes successfully, advancing `currentGate` to 8.
+- Remind the user to trigger `/compact` before proceeding to Gate 8.

@@ -20,6 +20,11 @@ description: Executes an end-to-end, seven-stage human-gated sales pipeline for 
 >
 > **No CRM Dependency:**
 > The local `pipeline/<prospect>/` folder is the primary, zero-dependency source of truth. Optional CRM synchronization remains strictly OFF unless explicitly enabled.
+>
+> **Universal Context Compaction Rule (`/compact` on Each Gate Transaction):**
+> At every gate presentation, rejection pause, human sign-off, or stage transition across the seven-stage pipeline (Gates 1 through 7), the agent MUST instruct and remind the user to trigger `/compact`. This consolidates client notes, qualification matrices, and proposal terms into persistent state files (`state.json`, gate deliverables) and preserves context window headroom for the upcoming gate:
+> `> [!TIP]`
+> `> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate N + 1.`
 
 ---
 
@@ -76,6 +81,7 @@ Each prospect is tracked in `pipeline/<prospect>/state.json`. The agent inspects
    - Log an entry into `approvals` array with the timestamp and approval text.
    - Set current gate `status: "approved"` and set `approvedAt`.
    - Increment `currentGate` to $N + 1$ (if $N < 7$) and set Gate $N+1$ `status: "in_progress"`.
+   - Remind the user to trigger `/compact` to preserve context window availability.
    - When Gate 7 is approved, transition top-level `status` to `"converted"`.
 3. **Kill Transition:** If a gate's kill criterion is met or the human decides to drop the lead:
    - Set top-level `status: "stopped"`.
@@ -92,7 +98,7 @@ flowchart TD
     A["1. Read state.json & identify currentGate"] --> B["2. Read ONLY active gate rulebook"]
     B --> C["3. Execute gate steps & write deliverables to pipeline/<prospect>/gate-N/"]
     C --> D["4. Update state.json artifacts & gate notes"]
-    D --> E["5. Present deliverables & Approval Question in chat"]
+    D --> E["5. Present deliverables, Approval Question & /compact tip in chat"]
     E --> F["6. STOP & await user response"]
     F --> G{"User Response"}
     G -->|"APPROVED"| H["Log approval, advance currentGate, begin next gate"]

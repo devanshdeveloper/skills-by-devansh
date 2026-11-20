@@ -99,6 +99,7 @@ Present `poc/<project>/gate-4-landing-page-leads/evidence.md` containing:
 - Confirmation that Demo CTA is in disabled state.
 - Test lead submission confirmation (payload and inbox receipt).
 - Active state confirmation (`Gate 4 awaiting_approval`).
+- Context Compaction Tip: Present `> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate 5.`
 
 ---
 
@@ -126,3 +127,4 @@ Present `poc/<project>/gate-4-landing-page-leads/evidence.md` containing:
 - The user explicitly types `APPROVE GATE 4` in chat.
 - Agent merges branch `poc/<project>-landing` into `main` in `nextwebworks-website`.
 - `node <path>/poc-state.mjs approve 4 "APPROVE GATE 4"` executes successfully, advancing `currentGate` to 5.
+- Remind the user to trigger `/compact` before proceeding to Gate 5.

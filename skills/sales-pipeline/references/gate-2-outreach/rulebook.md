@@ -42,7 +42,7 @@ Prepare an authentic, highly targeted 3-touch cold outreach sequence for the app
 6. **Update State & Present:**
    - Register artifacts under `artifacts.gate2` in `state.json`.
    - Present the 3-touch drafts, hygiene check, and compliance notes to the user in chat.
-   - Present the Approval Question and stop.
+   - Present the Approval Question and Context Compaction tip (`> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate 3.`) and stop.
 
 ---
 
@@ -57,6 +57,9 @@ All deliverables are written strictly to `pipeline/<prospect>/gate-2/`:
 
 ## 5. Approval Question
 > "Do you approve the Gate 2 Domain Hygiene verification and 3-touch Outreach Sequence for `<prospect>`? (Reply with exact text **`APPROVED`** to confirm drafts for human sending and unlock Gate 3, or provide feedback to revise copy in place)."
+>
+> [!TIP]
+> **Context Compaction:** You can run `/compact` to compact conversation history and maintain context window headroom for Gate 3.
 
 ---
 

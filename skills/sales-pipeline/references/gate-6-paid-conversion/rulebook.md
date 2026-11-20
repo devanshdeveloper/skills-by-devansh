@@ -35,7 +35,7 @@ Convert the validated pilot trial into a binding commercial client engagement. C
 6. **Update State & Present:**
    - Register artifacts under `artifacts.gate6` in `state.json`.
    - Present contract options, MAP, proposal data, and invoice draft in chat.
-   - Present the Approval Question and stop.
+   - Present the Approval Question and Context Compaction tip (`> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate 7.`) and stop.
 
 ---
 
@@ -50,6 +50,9 @@ All deliverables are written strictly to `pipeline/<prospect>/gate-6/`:
 
 ## 5. Approval Question
 > "Do you approve the Gate 6 Contract Terms, Mutual Action Plan, and Invoice Draft for `<prospect>`? (Reply with exact text **`APPROVED`** to confirm agreement documents and unlock Gate 7 Customer Success, or provide feedback to revise commercial terms in place)."
+>
+> [!TIP]
+> **Context Compaction:** You can run `/compact` to compact conversation history and maintain context window headroom for Gate 7.
 
 ---
 

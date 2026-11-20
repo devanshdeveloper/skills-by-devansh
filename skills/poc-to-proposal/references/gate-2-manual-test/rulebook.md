@@ -56,6 +56,7 @@ Present `poc/<project>/gate-2-manual-test/evidence.md` containing:
 - Defect summary table showing all reported defects marked `CLOSED` with fix references.
 - Confirmation that no automated test frameworks or dependencies were introduced.
 - Active state confirmation (`Gate 2 awaiting_approval`).
+- Context Compaction Tip: Present `> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate 3.`
 
 ---
 
@@ -83,3 +84,4 @@ Present `poc/<project>/gate-2-manual-test/evidence.md` containing:
 - `defects.md` contains zero open (`OPEN` or `IN_PROGRESS`) defects.
 - The user explicitly types `APPROVE GATE 2` in chat.
 - `node <path>/poc-state.mjs approve 2 "APPROVE GATE 2"` executes successfully, advancing `currentGate` to 3.
+- Remind the user to trigger `/compact` before proceeding to Gate 3.

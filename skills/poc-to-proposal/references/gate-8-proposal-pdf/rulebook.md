@@ -79,6 +79,7 @@ Present `poc/<project>/gate-8-proposal-pdf/evidence.md` containing:
 - PDF generation engine used and compilation status.
 - Local path and file size of `proposal.pdf`.
 - Final state confirmation (`Gate 8 awaiting_approval`).
+- Context Compaction Tip: Present `> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and finalize the PoC archive.`
 
 ---
 
@@ -103,3 +104,4 @@ Present `poc/<project>/gate-8-proposal-pdf/evidence.md` containing:
 - `proposal.pdf` exists on disk, renders without layout errors, and is approved by user.
 - The user explicitly types `APPROVE GATE 8` in chat.
 - `node <path>/poc-state.mjs approve 8 "APPROVE GATE 8"` executes successfully, marking the pipeline 100% complete.
+- Remind the user to trigger `/compact` to summarize completed milestones and preserve context window headroom.

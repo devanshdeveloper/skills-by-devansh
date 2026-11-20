@@ -42,7 +42,7 @@ Execute a strictly bounded, paid pilot trial establishing real-world technical a
    Present the results report to the user in chat. Secure human approval of the findings before scheduling the Gate 6 paid conversion decision meeting.
 6. **Update State & Present:**
    - Register artifacts under `artifacts.gate5` in `state.json`.
-   - Present the Approval Question and stop.
+   - Present the Approval Question and Context Compaction tip (`> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate 6.`) and stop.
 
 ---
 
@@ -56,6 +56,9 @@ All deliverables are written strictly to `pipeline/<prospect>/gate-5/`:
 
 ## 5. Approval Question
 > "Do you approve the Gate 5 Pilot Results and performance scorecard for `<prospect>` to advance to Gate 6 Paid Conversion? (Reply with exact text **`APPROVED`** to advance, or provide feedback to revise in place)."
+>
+> [!TIP]
+> **Context Compaction:** You can run `/compact` to compact conversation history and maintain context window headroom for Gate 6.
 
 ---
 

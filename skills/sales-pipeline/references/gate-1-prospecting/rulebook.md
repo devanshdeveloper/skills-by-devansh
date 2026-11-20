@@ -36,7 +36,7 @@ Identify, research, and qualify high-probability agency prospect accounts aligne
 5. **Update State & Present:**
    - Update `state.json` registering created artifact paths under `artifacts.gate1`.
    - Present the scored shortlist and "why now" triggers to the user in chat.
-   - Present the Approval Question and stop.
+   - Present the Approval Question and Context Compaction tip (`> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate 2.`) and stop.
 
 ---
 
@@ -50,6 +50,9 @@ All deliverables are written strictly to `pipeline/<prospect>/gate-1/`:
 
 ## 5. Approval Question
 > "Do you approve the Gate 1 Prospect Shortlist and ICP qualification for `<prospect>` to proceed to Outreach? (Reply with exact text **`APPROVED`** to advance to Gate 2, or provide feedback to revise the shortlist in place)."
+>
+> [!TIP]
+> **Context Compaction:** You can run `/compact` to compact conversation history and maintain context window headroom for Gate 2.
 
 ---
 

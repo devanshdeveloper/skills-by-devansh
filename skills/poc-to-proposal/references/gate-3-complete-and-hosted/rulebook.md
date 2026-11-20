@@ -50,6 +50,7 @@ Present `poc/<project>/gate-3-complete-and-hosted/evidence.md` containing:
 - Sanitized list of environment variable names (zero secret values).
 - Database and storage connectivity confirmation.
 - Active state confirmation (`Gate 3 awaiting_approval`).
+- Context Compaction Tip: Present `> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate 4.`
 
 ---
 
@@ -76,3 +77,4 @@ Present `poc/<project>/gate-3-complete-and-hosted/evidence.md` containing:
 - User manually confirms the live deployment operates cleanly.
 - The user explicitly types `APPROVE GATE 3` in chat.
 - `node <path>/poc-state.mjs approve 3 "APPROVE GATE 3"` executes successfully, advancing `currentGate` to 4.
+- Remind the user to trigger `/compact` before proceeding to Gate 4.

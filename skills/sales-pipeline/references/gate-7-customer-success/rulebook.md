@@ -58,6 +58,9 @@ All deliverables are written strictly to `pipeline/<prospect>/gate-7/`:
 
 ## 5. Approval Question
 > "Do you approve the Gate 7 Client Onboarding Plan, 30/60/90-Day Health Schedule, and Retainer Handover for `<prospect>`? (Reply with exact text **`APPROVED`** to complete Gate 7 and mark this account as fully **CONVERTED**, or provide feedback to revise in place)."
+>
+> [!TIP]
+> **Context Compaction:** You can run `/compact` to compact conversation history and finalize the account transition into your active client roster.
 
 ---
 

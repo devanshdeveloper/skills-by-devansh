@@ -44,7 +44,7 @@ Prepare for, document, and analyze a high-conviction discovery consultation with
 6. **Update State & Present:**
    - Register artifacts under `artifacts.gate3` in `state.json`.
    - Present the one-page discovery brief and go/no-go qualification assessment in chat.
-   - Present the Approval Question and stop.
+   - Present the Approval Question and Context Compaction tip (`> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate 4.`) and stop.
 
 ---
 
@@ -59,6 +59,9 @@ All deliverables are written strictly to `pipeline/<prospect>/gate-3/`:
 
 ## 5. Approval Question
 > "Do you approve the Gate 3 Discovery Brief and go/no-go qualification for `<prospect>` to proceed to Live PoC Demonstration? (Reply with exact text **`APPROVED`** to advance to Gate 4, or provide feedback to revise findings in place)."
+>
+> [!TIP]
+> **Context Compaction:** You can run `/compact` to compact conversation history and maintain context window headroom for Gate 4.
 
 ---
 

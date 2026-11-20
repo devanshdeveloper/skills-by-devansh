@@ -49,6 +49,7 @@ Present `poc/<project>/gate-1-freeze-scope/evidence.md` containing:
 - Sequential demo flow summary (steps 1 through N).
 - Git status and confirmed tag command (`git tag -a poc-scope-frozen`).
 - Active state confirmation (`Gate 1 awaiting_approval`).
+- Context Compaction Tip: Present `> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate 2.`
 
 ---
 
@@ -74,3 +75,4 @@ Present `poc/<project>/gate-1-freeze-scope/evidence.md` containing:
 - The user explicitly types `APPROVE GATE 1` in chat.
 - The commit is tagged with annotated git tag `poc-scope-frozen`.
 - `node <path>/poc-state.mjs approve 1 "APPROVE GATE 1"` executes successfully, advancing `currentGate` to 2.
+- Remind the user to trigger `/compact` before proceeding to Gate 2.

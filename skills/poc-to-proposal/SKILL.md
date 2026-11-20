@@ -20,6 +20,11 @@ description: Takes a completed proof-of-concept (PoC) from scope freeze to an ex
 >
 > **Anti-AI-Slop & Authentic Pattern Reuse Invariant (Gates 4 & 7):**
 > All public web deliverables (landing pages and case studies) MUST mirror the target site's established design system, light/dark dual theme, and component patterns. Forced pitch-black backgrounds, neon gradient text, numbered card cliches, generic filler titles, and internal "technical spec sheet" copywriting are strictly forbidden. Copy must focus on client outcomes and executive value.
+>
+> **Universal Context Compaction Rule (`/compact` on Each Gate Transaction):**
+> At every gate presentation, evidence review, rejection, approval, or transition across the 8-stage pipeline (Gates 1 through 8), the agent MUST instruct and remind the user to run `/compact`. This compacts and summarizes conversation history into persistent state files (`state.json`, `evidence.md`), keeping context token-efficient, preventing context window exhaustion during multi-gate PoC cycles, and ensuring clean state handoffs between gates:
+> `> [!TIP]`
+> `> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate N + 1.`
 
 ---
 
@@ -88,10 +93,10 @@ flowchart TD
 3. **Execute Gate Work:** Produce all required deliverables directly inside `poc/<project>/gate-N-<gate-name>/`.
 4. **Compile Evidence:** Write `poc/<project>/gate-N-<gate-name>/evidence.md` summarizing verified items.
 5. **Set Status:** Execute `node <path>/poc-state.mjs set-status <N> awaiting_approval`.
-6. **Stop & Present:** Present the evidence summary and manual checklist in chat, then **STOP CALLING TOOLS**.
+6. **Stop & Present:** Present the evidence summary, manual checklist, and context compaction reminder (`> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate N + 1.`) in chat, then **STOP CALLING TOOLS**.
 7. **Handle Human Response:**
-   - If the user types **`APPROVE GATE N`**: Run `node <path>/poc-state.mjs approve <N> "APPROVE GATE N"` and proceed to Gate $N+1$.
-   - If the user provides feedback or rejection: Run `node <path>/poc-state.mjs reject <N> "<reason>"`, update the gate's files in place, update `evidence.md`, reset status to `awaiting_approval`, and re-present. Never create duplicate deliverable files.
+   - If the user types **`APPROVE GATE N`**: Run `node <path>/poc-state.mjs approve <N> "APPROVE GATE N"`, append the `/compact` tip, and proceed to Gate $N+1$.
+   - If the user provides feedback or rejection: Run `node <path>/poc-state.mjs reject <N> "<reason>"`, update the gate's files in place, update `evidence.md`, reset status to `awaiting_approval`, and re-present with the `/compact` tip. Never create duplicate deliverable files.
 
 ---
 

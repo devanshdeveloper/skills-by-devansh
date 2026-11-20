@@ -44,7 +44,7 @@ Demonstrate an operational, high-performance Proof-of-Concept (PoC) to the prosp
 7. **Update State & Present:**
    - Register artifacts under `artifacts.gate4` in `state.json`.
    - Record demonstration feedback and prospect reaction in `poc-bridge.md`.
-   - Present the Approval Question and stop.
+   - Present the Approval Question and Context Compaction tip (`> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate 5.`) and stop.
 
 ---
 
@@ -58,6 +58,9 @@ All deliverables are written strictly to `pipeline/<prospect>/gate-4/`:
 
 ## 5. Approval Question
 > "Do you approve the Gate 4 PoC Scope, Pre-Demo Checklist, and Demo Script for `<prospect>`? (Reply with exact text **`APPROVED`** to confirm the demonstration materials and unlock Gate 5 Pilot-Trial, or provide feedback to revise in place)."
+>
+> [!TIP]
+> **Context Compaction:** You can run `/compact` to compact conversation history and maintain context window headroom for Gate 5.
 
 ---
 

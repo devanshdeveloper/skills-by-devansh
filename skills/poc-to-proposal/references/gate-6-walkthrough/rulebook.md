@@ -63,6 +63,7 @@ Present `poc/<project>/gate-6-walkthrough/evidence.md` containing:
 - Hosted video playback URL (`urls.video`).
 - Confirmation that no video binary files are committed to git.
 - Active state confirmation (`Gate 6 awaiting_approval`).
+- Context Compaction Tip: Present `> [!TIP]\n> **Context Compaction:** You can run \`/compact\` to compact conversation history and maintain context window headroom for Gate 7.`
 
 ---
 
@@ -89,3 +90,4 @@ Present `poc/<project>/gate-6-walkthrough/evidence.md` containing:
 - Hosted video URL is accessible and streaming properly.
 - The user explicitly types `APPROVE GATE 6` in chat.
 - `node <path>/poc-state.mjs approve 6 "APPROVE GATE 6"` executes successfully, advancing `currentGate` to 7.
+- Remind the user to trigger `/compact` before proceeding to Gate 7.
