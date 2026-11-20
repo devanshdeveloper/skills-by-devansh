@@ -9,6 +9,7 @@ A collection of agent skills compatible with the [skills.sh](https://skills.sh/)
 
 | Skill | Description | Location |
 | :--- | :--- | :--- |
+| **apply-best-practices** | Detects repository technology stack and architectural concerns, discovers and security-vets official best-practice skills via find-skills and skills.sh, and applies vetted recommendations incrementally behind explicit per-skill human approval gates. Use when running /apply-best-practices. | `skills/apply-best-practices/SKILL.md` |
 | **asset-optimizer** | Optimizes images, videos, PDFs, and brand logos into lightweight, responsive WebP/MP4 assets with byte budget enforcement and manifest indexing. Use when optimizing media files or running /asset-optimizer. | `skills/asset-optimizer/SKILL.md` |
 | **create-nextjs-website** | Scaffold modern Next.js web applications with App Router, TypeScript, and production-ready structure. Use when the user asks to create, scaffold, or initialize a new Next.js website or web application with App Router, TypeScript, and clean component architecture. | `skills/create-nextjs-website/SKILL.md` |
 | **create-nww-website** | Orchestrates end-to-end creation of Next.js websites with optional NWW CMS integration using a 9-stage human-gated workflow. Enforces single-mode markdown page specifications, Next.js project scaffolding, and manifest-driven incremental builds. Use when asked to create, scaffold, or develop an NWW website, run the website build pipeline, or start a new Next.js client project. | `skills/create-nww-website/SKILL.md` |
@@ -18,7 +19,13 @@ A collection of agent skills compatible with the [skills.sh](https://skills.sh/)
 
 ## Installation
 
-Install all public skills from this repository in one command:
+Install all public skills from this repository as an Antigravity plugin:
+
+```bash
+agy plugin install https://github.com/devanshdeveloper/skills-by-devansh
+```
+
+Or install all skills via the `skills` CLI:
 
 ```bash
 DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh
@@ -45,6 +52,72 @@ DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh -y
 ### Skill Immutability: Do Not Edit Skill Files
 
 Skill files (`SKILL.md`, stage runbooks, companion scripts) are immutable runbooks designed for AI agents and developers. **Do not edit installed skill files directly.** If you need enhancements, custom workflows, or bugfixes, **request changes with a prompt** instead.
+
+---
+
+## Skill: `apply-best-practices`
+
+Detects repository technology stack and architectural concerns, discovers and security-vets official best-practice skills via `find-skills` and skills.sh, and applies vetted recommendations incrementally behind explicit per-skill human approval gates.
+
+### Install
+
+Install as an Antigravity plugin:
+
+```bash
+agy plugin install https://github.com/devanshdeveloper/skills-by-devansh
+```
+
+Or install via the `skills` CLI:
+
+```bash
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill apply-best-practices
+```
+
+Or run without installing (one-shot):
+
+```bash
+DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@apply-best-practices
+```
+
+### Usage & Slash Command
+
+In your chat with Antigravity (App, IDE, or CLI), trigger the skill manually:
+
+```text
+/apply-best-practices
+```
+
+#### Optional Arguments
+
+- `/apply-best-practices --dry-run`: Runs Gates 0 through 3 only, writing the candidate findings and security shortlist report without installing packages or modifying repository files.
+- `/apply-best-practices security`: Focuses candidate discovery and vetting on security, authentication, and secret hygiene.
+- `/apply-best-practices performance`: Focuses on runtime performance, bundle optimization, and database query efficiency.
+- `/apply-best-practices accessibility`: Focuses on a11y standards and semantic UI patterns.
+- `/apply-best-practices seo`: Focuses on SEO metadata, robots, and sitemap standards.
+
+### Gate Workflow
+
+Every stage requires explicit human approval before advancing:
+
+1. **Gate 0 (Preflight & Resume):** State detection, `find-skills` verification, clean tree confirmation, and dedicated branch `best-practices/<date>`.
+2. **Gate 1 (Detect Stack):** Identifies runtime, frameworks, styling, database, and monorepo workspaces (prompting for target package).
+3. **Gate 2 (Find Candidates):** Searches the `skills.sh` leaderboard and executes `npx skills find <query>`. Never invents packages.
+4. **Gate 3 (Vet & Shortlist):** Inspects instructions and scripts before installing; executes 6-point security scan (network, shell, secrets, out-of-tree writes, obfuscation, rule overrides); deduplicates; caps at 8 skills; outputs ranked shortlist with pinned refs.
+5. **Gate 4 to N (Apply One-by-One):** Pinned project-scoped installation; line-cited findings report citing file and line; human sign-off; safe non-destructive edits; lint/typecheck/build verification; atomic commit (`best-practices: apply <skill>@<pin>`).
+6. **Final Gate (Report & Close):** Executive Walkthrough, developer manual test checklist, optional rules distillation to `.agents/rules/best-practices.md`, target changelog entry, and version bump.
+
+### Rollback & Resume Instructions
+
+- **Resume an interrupted run:** Re-invoke `/apply-best-practices`. Gate 0 detects `best-practices/state.json` and resumes from the active gate and pending shortlist.
+- **Rollback a single skill:** Because each applied skill has an atomic commit, revert any individual skill cleanly without touching other changes:
+  ```bash
+  git revert <commit-hash>
+  ```
+- **Abort entire run:**
+  ```bash
+  git checkout main
+  git branch -D best-practices/<date>
+  ```
 
 ---
 

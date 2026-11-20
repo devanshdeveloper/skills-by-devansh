@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "publishableSkills": [
+    "apply-best-practices",
     "asset-optimizer",
     "create-nextjs-website",
     "create-nww-website",

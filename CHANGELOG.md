@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.11.0] - 2026-11-20
+
+### Added
+- **Apply Best Practices Skill (`apply-best-practices`)**:
+  - Implemented `/apply-best-practices` slash command and runbook architecture.
+  - Implemented 6-gate human-supervised lifecycle: Gate 0 Preflight & Resume, Gate 1 Detect Stack & Monorepo Workspace Selection, Gate 2 Find Candidates (`find-skills` & skills.sh leaderboard), Gate 3 Vet & Shortlist (6-point security scan, install/star metrics, deduplication, $\le 8$ cap, pinned refs), Gates 4..N Apply One-by-One (project-scoped pinned install, line-cited findings, approval barrier, atomic commits, verification), Gate 5 Report & Close (Walkthrough, optional rules distillation to `.agents/rules/best-practices.md`, target changelog bump).
+  - Added modular rulebooks adhering to the Gate Containment Invariant under `skills/apply-best-practices/references/gate-[0-6]-*/rulebook.md`.
+  - Added Rollback and Resume protocol (`references/gate-6-rollback-and-resume/rulebook.md`) documenting isolated per-skill reverts (`git revert <commit-hash>`) and deterministic state machine recovery from `best-practices/state.json`.
+- **Antigravity Plugin Packaging**:
+  - Packaged the repository as an Antigravity plugin with root `plugin.json` adhering to `https://antigravity.google/schemas/v1/plugin.json`.
+  - Exposed `/apply-best-practices` as a manual-invocation slash command with `disable_model_invocation: true` and `user_invocable: true`.
+  - Registered `apply-best-practices` in `skills.manifest.json` and updated `README.md`.
+
 ## [1.10.35] - 2026-11-20
 
 ### Changed
