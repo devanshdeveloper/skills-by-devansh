@@ -13,6 +13,7 @@ A collection of agent skills compatible with the [skills.sh](https://skills.sh/)
 | **asset-optimizer** | Optimizes images, videos, PDFs, and brand logos into lightweight, responsive WebP/MP4 assets with byte budget enforcement and manifest indexing. Use when optimizing media files or running /asset-optimizer. | `skills/asset-optimizer/SKILL.md` |
 | **create-nextjs-website** | Scaffold modern Next.js web applications with App Router, TypeScript, and production-ready structure. Use when the user asks to create, scaffold, or initialize a new Next.js website or web application with App Router, TypeScript, and clean component architecture. | `skills/create-nextjs-website/SKILL.md` |
 | **create-nww-website** | Orchestrates end-to-end creation of Next.js websites with optional NWW CMS integration using a 9-stage human-gated workflow. Enforces single-mode markdown page specifications, Next.js project scaffolding, and manifest-driven incremental builds. Use when asked to create, scaffold, or develop an NWW website, run the website build pipeline, or start a new Next.js client project. | `skills/create-nww-website/SKILL.md` |
+| **integrate-nww-cms** | Audits an existing Next.js website, maps content to NWW CMS models, scaffolds a typed data-access client, migrates pages one by one with fallback resilience, unifies SEO and structured data, and configures on-demand revalidation. Use when integrating NWW CMS into an existing Next.js site or running /integrate-nww-cms. | `skills/integrate-nww-cms/SKILL.md` |
 | **nww** | Fast shortcut alias to start the NWW website pipeline. Use when the user types 'nww', 'start nww', or '/nww'. | `skills/nww/SKILL.md` |
 | **poc-to-proposal** | Takes a completed proof-of-concept (PoC) from scope freeze to an executive proposal PDF through an eight-stage human-approved checklist. Use when a PoC is built and needs structured testing, staging deployment, landing page lead integration, custom demo subdomain, video walkthrough, NWW case study, and client proposal generation. | `skills/poc-to-proposal/SKILL.md` |
 | **sales-pipeline** | Executes an end-to-end, seven-stage human-gated sales pipeline for web agency services including custom web projects, paid pilot sprints, and ongoing technical retainers. Use when identifying target accounts, drafting cold outreach sequences, conducting discovery consultations, demonstrating live PoCs, running paid pilot trials, negotiating commercial conversions, or managing customer onboarding and success. | `skills/sales-pipeline/SKILL.md` |
@@ -171,6 +172,51 @@ Activate the create-nww-website skill. Here is our project brief to initialize S
 
 Please parse this into `client-context/answers/batch-[number]-[batch-name]/answers.md` and present the Gate 0 Intake Recap for confirmation.
 ````
+
+---
+
+## Skill: `integrate-nww-cms`
+
+Integrates the NWW headless CMS into an existing Next.js website (App Router, Pages Router, or hybrid) through a 6-gate, human-supervised, approval-driven migration workflow.
+
+### Install
+
+Install as an Antigravity plugin:
+
+```bash
+agy plugin install https://github.com/devanshdeveloper/skills-by-devansh
+```
+
+Or install via the `skills` CLI:
+
+```bash
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill integrate-nww-cms
+```
+
+Or run without installing (one-shot):
+
+```bash
+DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@integrate-nww-cms
+```
+
+### Usage & Slash Command
+
+In your chat with Antigravity inside an existing Next.js repository, trigger the skill:
+
+```text
+/integrate-nww-cms
+```
+
+### 6-Gate Architecture
+
+Every stage requires explicit human approval via `APPROVE GATE N` before advancing:
+
+1. **Gate 1 (Site Audit):** Read-only static analysis of Next.js version, router, styling, content sources, routes, and existing SEO. Outputs `.nww-cms/audit.json` and human audit report.
+2. **Gate 2 (Content-to-Model Mapping):** Maps pages, sections, and routes to NWW CMS models (`WebsitePageConfig`, `Blog`, `WebsitePortfolio`, `WebsiteService`, `Testimonial`, `WebsiteFAQ`, `WebsiteTool`, `WebsiteContactUs`, `WebsiteTag`). Enforces standing NWW decisions (no `path`, no `structuredDataType`, validated `jsonLd`). Outputs `.nww-cms/content-mapping.md`.
+3. **Gate 3 (Typed CMS Client Layer):** Scaffolds a typed data-access client (`lib/cms/` or `src/lib/cms/`) with zero external dependencies, tagged ISR caching, error redaction, and `.env.example` update with variable names only.
+4. **Gate 4 (Page-by-Page Migration):** Migrates content sources page-by-page under iterative approval. Preserves existing layout and Tailwind styles verbatim; enforces CMS fallbacks; strictly maintains image slots as placeholders until approved one file per page in `.nww-cms/images/<page-slug>.json`.
+5. **Gate 5 (SEO & Structured Data):** Dynamic metadata, OpenGraph, canonical URLs, validated Schema.org JSON-LD with safe `<` escaping, and CMS-driven sitemap generation.
+6. **Gate 6 (Revalidation & Handoff):** Configures on-demand ISR revalidation webhook (`/api/revalidate`), rollback runbook, and delivers an exhaustive manual test checklist.
 
 ---
 

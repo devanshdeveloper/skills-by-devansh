@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.0] - 2026-11-22
+
+### Added
+- **Integrate NWW CMS Skill (`integrate-nww-cms`)**:
+  - Implemented `/integrate-nww-cms` slash command and runbook architecture to integrate NWW CMS into existing Next.js codebases.
+  - Implemented 6-gate human-supervised lifecycle: Gate 1 Site Audit (read-only AST/stack scan), Gate 2 Content-to-Model Mapping (NWW models and schema gap identification), Gate 3 Typed CMS Client Layer (zero-dependency data access layer in `lib/cms/`), Gate 4 Page-by-Page Migration (iterative approval loops, component/style preservation, fallback resilience, image placeholder discipline), Gate 5 SEO & Structured Data (validated Schema.org JSON-LD and dynamic sitemap), Gate 6 Revalidation & Handoff (verified on-demand ISR webhooks, rollback runbook, and manual test checklist).
+  - Added modular rulebooks adhering to the Gate Containment Invariant under `skills/integrate-nww-cms/references/gate-[1-6]-*/rulebook.md`.
+  - Added authoritative NWW model references split into `references/models/core/` and `references/models/features/` adhering strictly to $\le 10$ files per directory.
+  - Added companion CLI utilities: `cms-state.mjs` (state machine), `site-audit.mjs` (static analyzer), `model-mapper.mjs` (model mapping engine), `client-scaffolder.mjs` (client generator), and `jsonld-validator.mjs` (Schema.org JSON-LD validator).
+  - Registered `integrate-nww-cms` in `skills.manifest.json`, `plugin.json`, and updated `README.md`.
+
 ## [1.11.0] - 2026-11-20
 
 ### Added
