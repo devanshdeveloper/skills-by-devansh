@@ -12,6 +12,7 @@
   "repository": "https://github.com/devanshdeveloper/skills-by-devansh",
   "suggestedPrompts": [
     "/anti-slop",
+    "/anti-slop browser",
     "/apply-best-practices",
     "/create-nww-website",
     "/integrate-nww-cms",
