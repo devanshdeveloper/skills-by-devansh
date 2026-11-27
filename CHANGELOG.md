@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.13.0] - 2026-11-27
+
+### Added
+- **Anti-Slop Skill (`anti-slop`)**:
+  - Implemented `/anti-slop` slash command and runbook architecture to scan website source code and strip AI-generated visual, copy, structural, and code leftovers via pure deletion without adding replacement content or styles.
+  - Implemented two-stage human-supervised lifecycle: Stage 1 Plan Mode (read-only AST/pattern scan, candidate removals report, and explicit human approval barrier) and Stage 2 Removal Execution Mode (pure non-destructive deletions, fallback to base styles, unused imports sweep, and single build verification pass).
+  - Added modular rulebooks adhering to directory caps under `skills/anti-slop/references/rules-maintenance.md` and `skills/anti-slop/references/patterns/` (`visual.md`, `copy.md`, `structure.md`, `code.md`).
+  - Implemented Rule Maintainer capability allowing repository owners to configure custom whitelists, local rules, and pattern overrides in `.agents/rules/anti-slop.md` or `anti-slop.rules.json`.
+  - Added modular zero-dependency Node.js scanner utility under `skills/anti-slop/scripts/slop-scan/` with Rules Registry engine (`registry.mjs`), fast streaming directory walker with eager pruning (`scanner.mjs`), CLI entry point (`index.mjs`), and domain rule modules under `rules/` (`visual.mjs`, `copy.mjs`, `structure.mjs`, `code.mjs`), keeping every file under $\sim 150$ lines.
+  - Registered `anti-slop` in `skills.manifest.json`, `plugin.json` (bumped to 1.13.0), and updated `README.md`.
+
 ## [1.12.0] - 2026-11-22
 
 ### Added

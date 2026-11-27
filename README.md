@@ -9,6 +9,7 @@ A collection of agent skills compatible with the [skills.sh](https://skills.sh/)
 
 | Skill | Description | Location |
 | :--- | :--- | :--- |
+| **anti-slop** | Scans website source files, compiles a human-approved plan, and strips AI-generated visual, copy, structural, and code leftovers via pure deletion without adding replacement content or styles. Use when running /anti-slop. | `skills/anti-slop/SKILL.md` |
 | **apply-best-practices** | Detects repository technology stack and architectural concerns, discovers and security-vets official best-practice skills via find-skills and skills.sh, and applies vetted recommendations incrementally behind explicit per-skill human approval gates. Use when running /apply-best-practices. | `skills/apply-best-practices/SKILL.md` |
 | **asset-optimizer** | Optimizes images, videos, PDFs, and brand logos into lightweight, responsive WebP/MP4 assets with byte budget enforcement and manifest indexing. Use when optimizing media files or running /asset-optimizer. | `skills/asset-optimizer/SKILL.md` |
 | **create-nextjs-website** | Scaffold modern Next.js web applications with App Router, TypeScript, and production-ready structure. Use when the user asks to create, scaffold, or initialize a new Next.js website or web application with App Router, TypeScript, and clean component architecture. | `skills/create-nextjs-website/SKILL.md` |
@@ -53,6 +54,59 @@ DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh -y
 ### Skill Immutability: Do Not Edit Skill Files
 
 Skill files (`SKILL.md`, stage runbooks, companion scripts) are immutable runbooks designed for AI agents and developers. **Do not edit installed skill files directly.** If you need enhancements, custom workflows, or bugfixes, **request changes with a prompt** instead.
+
+---
+
+## Skill: `anti-slop`
+
+Scans website source files, compiles a human-approved plan, and strips AI-generated visual, copy, structural, and code leftovers via pure deletion without adding replacement content or styles. Operates under an explicit human approval barrier: runs Plan Mode first, presents candidate removals, and requires sign-off before modifying any files.
+
+### Install
+
+Install as an Antigravity plugin:
+
+```bash
+agy plugin install https://github.com/devanshdeveloper/skills-by-devansh
+```
+
+Or install via the `skills` CLI:
+
+```bash
+DISABLE_TELEMETRY=1 npx skills add devanshdeveloper/skills-by-devansh --skill anti-slop
+```
+
+Or run without installing (one-shot):
+
+```bash
+DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@anti-slop
+```
+
+### Usage & Slash Command
+
+In your chat with Antigravity (App, IDE, or CLI), trigger the skill manually:
+
+```text
+/anti-slop
+```
+
+Or target a specific directory:
+
+```text
+/anti-slop site/src
+```
+
+### Two-Stage Workflow
+
+1. **Stage 1: Plan Mode (Read-Only):**
+   - Scans user-facing source files using the modular AST scanner (`skills/anti-slop/scripts/slop-scan/index.mjs`).
+   - Checks for custom project rules and whitelists in `.agents/rules/anti-slop.md` or `anti-slop.rules.json`.
+   - Compiles a structured Removal Plan grouping candidate slop into Visual, Copy, Structure, and Code categories.
+   - **Halts execution.** Zero files are modified until you explicitly approve the plan.
+2. **Stage 2: Removal Execution Mode (Post-Approval):**
+   - Applies pure deletions using IDE editor tools (`edit_file`).
+   - Removes visual gradients, glow blobs, glassmorphism, emoji icons, em-dash clusters, buzzwords, fake stats, and obvious comments.
+   - Falls back to clean base/inherited styling; never adds replacement copy or decorations.
+   - Sweeps orphaned imports and runs the project's build/lint once to confirm zero syntax breakage.
 
 ---
 
