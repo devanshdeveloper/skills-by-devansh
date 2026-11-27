@@ -6,6 +6,16 @@ import { copyRules } from './rules/copy.mjs';
 import { structureRules } from './rules/structure.mjs';
 import { codeRules } from './rules/code.mjs';
 
+// Protected NOT SLOP markers that suppress detection in legitimate placeholders
+const PROTECTED_MARKERS = [
+  'IMAGE PLACEHOLDER',
+  'CLIENT PLACEHOLDER',
+  '.example',
+  'FIG.',
+  'HERO VISUAL',
+  'next-route-announcer'
+];
+
 export class RuleRegistry {
   constructor() {
     this.rules = [
@@ -23,6 +33,7 @@ export class RuleRegistry {
   loadProjectConfig(targetRoot) {
     const candidateFiles = [
       path.join(targetRoot, '.agents', 'rules', 'anti-slop.md'),
+      path.join(targetRoot, '.agents', 'anti-slop-keep.md'),
       path.join(targetRoot, 'anti-slop.rules.json'),
       path.join(targetRoot, '.anti-slop.json')
     ];
@@ -53,26 +64,39 @@ export class RuleRegistry {
             }
           }
         } else if (confPath.endsWith('.md')) {
-          // Extract whitelist terms from markdown bullet list under a ## Whitelist header
           const text = fs.readFileSync(confPath, 'utf-8');
-          const wlMatch = text.match(/##\s*Whitelist[\s\S]*?(?=##|$)/i);
-          if (wlMatch) {
-            const items = wlMatch[0].match(/`([^`]+)`/g);
-            if (items) {
-              this.whitelist.push(...items.map(s => s.replace(/`/g, '').toLowerCase()));
+          // Support both ## Whitelist header or raw lines in anti-slop-keep.md
+          if (confPath.includes('anti-slop-keep.md')) {
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#'));
+            this.whitelist.push(...lines.map(l => l.toLowerCase()));
+          } else {
+            const wlMatch = text.match(/##\s*Whitelist[\s\S]*?(?=##|$)/i);
+            if (wlMatch) {
+              const items = wlMatch[0].match(/`([^`]+)`/g);
+              if (items) {
+                this.whitelist.push(...items.map(s => s.replace(/`/g, '').toLowerCase()));
+              }
             }
           }
         }
       } catch (err) {
-        // Silently skip corrupted local configs
+        // Silently skip unparseable local configs
       }
     }
   }
 
-  isWhitelisted(text) {
-    if (!text || this.whitelist.length === 0) return false;
-    const lower = text.toLowerCase();
-    return this.whitelist.some(w => lower.includes(w));
+  isProtectedOrWhitelisted(text) {
+    if (!text) return false;
+    // Check built-in protected NOT SLOP markers
+    for (const marker of PROTECTED_MARKERS) {
+      if (text.includes(marker)) return true;
+    }
+    // Check custom project whitelist
+    if (this.whitelist.length > 0) {
+      const lower = text.toLowerCase();
+      return this.whitelist.some(w => lower.includes(w));
+    }
+    return false;
   }
 
   // Evaluates a single file and returns structured findings
@@ -84,17 +108,16 @@ export class RuleRegistry {
 
     const lines = content.split('\n');
 
-    // 1. Line-by-line single-pass inspection for line-oriented rules
+    // 1. Line-by-line inspection
     lines.forEach((line, idx) => {
       const lineNum = idx + 1;
       const trimmed = line.trim();
       if (!trimmed) return;
 
       for (const rule of activeRules) {
-        // If rule has a custom match function
         if (typeof rule.match === 'function') {
           if (rule.match(line)) {
-            if (!this.isWhitelisted(line)) {
+            if (!this.isProtectedOrWhitelisted(line)) {
               findings.push({
                 file: filePath,
                 line: lineNum,
@@ -109,13 +132,12 @@ export class RuleRegistry {
           continue;
         }
 
-        // Standard regex pattern matching per line
         if (rule.pattern) {
           rule.pattern.lastIndex = 0;
           let match;
           while ((match = rule.pattern.exec(line)) !== null) {
             const matchedText = match[0].trim();
-            if (!this.isWhitelisted(matchedText)) {
+            if (!this.isProtectedOrWhitelisted(matchedText)) {
               findings.push({
                 file: filePath,
                 line: lineNum,
@@ -132,9 +154,14 @@ export class RuleRegistry {
       }
     });
 
-    // 2. Block/multiline inspection for structural and JSX block rules
+    // 2. Multiline block inspection for structural rules
     const multilineRules = activeRules.filter(
-      r => r.category === 'structure' || r.id === 'code-dead-jsx-block' || r.id === 'visual-glow-blob'
+      r => r.category === 'structure' ||
+           r.id === 'code-dead-jsx-block' ||
+           r.id === 'visual-glow-blob' ||
+           r.id === 'visual-two-tone-heading' ||
+           r.id === 'visual-mono-caps-eyebrow' ||
+           r.id === 'visual-dot-meter'
     );
 
     for (const rule of multilineRules) {
@@ -143,23 +170,19 @@ export class RuleRegistry {
       let match;
       while ((match = rule.pattern.exec(content)) !== null) {
         const matchedText = match[0].trim();
-        if (this.isWhitelisted(matchedText)) continue;
+        if (this.isProtectedOrWhitelisted(matchedText)) continue;
 
-        // Approximate line number from character offset
         const lineNum = content.slice(0, match.index).split('\n').length;
-        // Avoid duplicate findings if already captured by line scanner
-        const alreadyFlagged = findings.some(
-          f => f.file === filePath && f.line === lineNum && f.ruleId === rule.id
-        );
-
-        if (!alreadyFlagged) {
+        // Avoid adding duplicate finding if already reported on same line for same rule
+        const alreadyFound = findings.some(f => f.file === filePath && f.line === lineNum && f.ruleId === rule.id);
+        if (!alreadyFound) {
           findings.push({
             file: filePath,
             line: lineNum,
             ruleId: rule.id,
             category: rule.category,
             name: rule.name,
-            matchText: matchedText.slice(0, 120),
+            matchText: matchedText.slice(0, 100),
             action: rule.action
           });
         }

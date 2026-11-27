@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.14.0] - 2026-11-27
+
+### Changed
+- **Anti-Slop Skill (`anti-slop`) Upgrade**:
+  - Implemented two-mode operational architecture: Mode 1 Script Mode (default read-only AST/pattern scanner over app root) and Mode 2 Browser Inspection Mode (`/anti-slop browser [path]`) with connection verification checks (trivial target URL title ping on `/browser` or `agent-browser` CLI) and read-only DOM inspection.
+  - Enforced strict remove-only rule with approved narrow em-dash punctuation swap exception (replacing `—` with comma, period, or space; zero words added or rewritten).
+  - Extended pattern coverage across Ground Truth tells: mono-caps eyebrows with status dots, sequence numbers (`01 / SECTION`), card index counters (`01`-`06`, `P-01`..`P-04`), category tags (`CAMPAIGNS & ATTRIBUTION`), dot meters (`gap-1.5 rounded-full`), two-tone contrast headings (grey/white spans), trailing arrow glyphs (`↗`), circled arrow button pills, hairline framing rails (`border-x`), middle-dot stat strips, in-grid CTA tiles, and footer promo cells.
+  - Added full-word reference entries across `references/patterns/` (`visual.md`, `copy.md`, `structure.md`, `code.md`) and added `not-slop.md` (protected placeholder frames, captions, `.example` emails, authentic product identity, nav behavior, Next.js dev badge) and `needs-a-human.md` (stock-phrase headlines, identical grid architecture, repeated section header layouts).
+  - Removed false "100% clean" proclamation from `index.mjs` and enforced strict output contract (single scan line, Removed list with browser tags, numbered Needs a Human list, and Build result; zero conversational commentary).
+  - Extended `scanner.mjs` to scan content data files (`.json`, `.mdx`, `.md`, `.ts/.js` arrays) and shared layout components.
+
 ## [1.13.0] - 2026-11-27
 
 ### Added

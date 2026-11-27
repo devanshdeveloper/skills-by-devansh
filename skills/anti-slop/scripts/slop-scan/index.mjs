@@ -3,11 +3,14 @@ import path from 'node:path';
 import { RuleRegistry } from './registry.mjs';
 import { FileScanner } from './scanner.mjs';
 
-// Parses CLI flags: --target=<dir>, --json, --help
+const SKILL_VERSION = '1.14.0';
+
+// Parses CLI flags: --target=<dir>, --json, --mode=<script|browser>, --help
 function parseArgs() {
   const args = process.argv.slice(2);
   const options = {
     target: '.',
+    mode: 'script',
     json: false,
     help: false
   };
@@ -19,6 +22,10 @@ function parseArgs() {
       options.json = true;
     } else if (arg.startsWith('--target=')) {
       options.target = arg.slice(9);
+    } else if (arg.startsWith('--mode=')) {
+      options.mode = arg.slice(7);
+    } else if (arg === 'browser') {
+      options.mode = 'browser';
     } else if (!arg.startsWith('-')) {
       options.target = arg;
     }
@@ -29,19 +36,20 @@ function parseArgs() {
 
 function printHelp() {
   console.log(`
-slop-scan - Modular AST & Pattern Scanner for AI Slop Removal
+anti-slop scanner - Read-only AST & Pattern Scanner for AI Slop Detection
 
 USAGE:
   node skills/anti-slop/scripts/slop-scan/index.mjs [options] [target-path]
 
 OPTIONS:
-  --target=<path>     Target file or directory to scan (default: current directory)
+  --target=<path>     Target directory or file to scan (default: current directory)
+  --mode=<mode>       Execution mode: 'script' (default) or 'browser'
   --json              Output findings as structured JSON
   --help, -h          Show this help message
 
 EXAMPLES:
-  node skills/anti-slop/scripts/slop-scan/index.mjs --target=site/src
-  node skills/anti-slop/scripts/slop-scan/index.mjs --target=app --json
+  node skills/anti-slop/scripts/slop-scan/index.mjs site/src
+  node skills/anti-slop/scripts/slop-scan/index.mjs --target=site/src --json
 `);
 }
 
@@ -61,45 +69,30 @@ function main() {
   const results = scanner.scan(resolvedTarget);
 
   if (options.json) {
-    console.log(JSON.stringify(results, null, 2));
+    console.log(JSON.stringify({
+      version: SKILL_VERSION,
+      mode: options.mode,
+      targetRoot: results.targetRoot,
+      filesScanned: results.filesScanned,
+      totalFindings: results.totalFindings,
+      summaryByCategory: results.summaryByCategory,
+      findings: results.findings
+    }, null, 2));
     process.exit(0);
   }
 
-  // Formatted human-readable output for Plan Mode
-  console.log('\n============================================================');
-  console.log('              ANTI-SLOP SCANNER - REMOVAL PLAN              ');
-  console.log('============================================================\n');
-  console.log(`Target Path:   ${results.targetRoot}`);
-  console.log(`Files Scanned: ${results.filesScanned}`);
-  console.log(`Slop Findings: ${results.totalFindings}\n`);
-  console.log(`Category Breakdown:`);
-  console.log(`  - Visual Slop:    ${results.summaryByCategory.visual}`);
-  console.log(`  - Copy Slop:      ${results.summaryByCategory.copy}`);
-  console.log(`  - Structure Slop: ${results.summaryByCategory.structure}`);
-  console.log(`  - Code Slop:      ${results.summaryByCategory.code}`);
-  if (results.summaryByCategory.custom > 0) {
-    console.log(`  - Custom Rules:   ${results.summaryByCategory.custom}`);
-  }
-  console.log('\n------------------------------------------------------------');
-  console.log('CANDIDATE DELETIONS (Awaiting Explicit User Approval):');
-  console.log('------------------------------------------------------------');
+  // Strict output format: scan line followed by candidate detections
+  console.log(`Scan: mode=${options.mode}, version=${SKILL_VERSION}, roots=[${results.targetRoot}], files=${results.filesScanned}, hits=[visual: ${results.summaryByCategory.visual}, copy: ${results.summaryByCategory.copy}, structure: ${results.summaryByCategory.structure}, code: ${results.summaryByCategory.code}]`);
 
   if (results.findings.length === 0) {
-    console.log('\n✨ Zero AI slop patterns detected! Codebase is clean.');
+    console.log('No AI slop patterns detected across scanned roots.');
   } else {
+    console.log('\nCandidate Removals:');
     for (const item of results.findings) {
       const relFile = path.relative(process.cwd(), item.file).replace(/\\/g, '/');
-      console.log(`\n[${item.category.toUpperCase()}] ${item.name} (${item.ruleId})`);
-      console.log(`  Location: ${relFile}:${item.line}`);
-      console.log(`  Match:    "${item.matchText}"`);
-      console.log(`  Action:   ${item.action}`);
+      console.log(`- ${relFile}:${item.line} -> ${item.ruleId} ("${item.matchText}") [Action: ${item.action}]`);
     }
   }
-
-  console.log('\n============================================================');
-  console.log('STATUS: PLAN MODE (Zero files modified)');
-  console.log('Explicit human approval required before executing removals.');
-  console.log('============================================================\n');
 }
 
 main();

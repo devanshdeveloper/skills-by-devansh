@@ -1,4 +1,4 @@
-// Code hygiene rules: narrating comments, dead code, inline duplicate styles, empty wrappers
+// Code hygiene rules: narrating comments, dead code, inline duplicate styles, empty wrappers, orphaned imports
 export const codeRules = [
   {
     id: 'code-narrating-comments',
@@ -31,5 +31,13 @@ export const codeRules = [
     description: 'Unnecessary React fragment (<> ... </>) wrapping a single child element',
     pattern: /<>\s*(<[A-Za-z0-9_-]+[^>]*>[\s\S]*?<\/[A-Za-z0-9_-]+>)\s*<\/>/gi,
     action: 'Unwrap redundant fragment; retain child element directly'
+  },
+  {
+    id: 'code-orphaned-import',
+    category: 'code',
+    name: 'Orphaned Import Declaration',
+    description: 'Unused component or icon imports left orphaned after slop elements were deleted',
+    pattern: /^import\s+\{[^}]*\b(?:ArrowUpRight|MoveRight|Sparkles|Rocket|Zap)\b[^}]*\}\s+from\s+['"][^'"]+['"];?\s*$/gm,
+    action: 'Delete the unused orphaned import declaration'
   }
 ];

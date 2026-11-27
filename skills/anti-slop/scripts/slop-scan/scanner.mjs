@@ -20,19 +20,31 @@ const IGNORED_DIRS = new Set([
   '.agents'
 ]);
 
-// Source file extensions inspected
+// Source file extensions inspected (includes content data files: .json, .mdx, .md, .ts/.js content arrays)
 const SCANNED_EXTENSIONS = new Set([
   '.tsx',
   '.jsx',
   '.ts',
   '.js',
   '.mjs',
+  '.json',
   '.html',
   '.css',
   '.md',
   '.mdx',
   '.vue',
   '.svelte'
+]);
+
+// Non-content JSON files to ignore
+const IGNORED_JSON_FILES = new Set([
+  'package.json',
+  'package-lock.json',
+  'tsconfig.json',
+  'jsconfig.json',
+  'anti-slop.rules.json',
+  '.anti-slop.json',
+  'components.json'
 ]);
 
 export class FileScanner {
@@ -56,6 +68,9 @@ export class FileScanner {
       } else if (entry.isFile()) {
         const ext = path.extname(entry.name).toLowerCase();
         if (SCANNED_EXTENSIONS.has(ext)) {
+          if (ext === '.json' && IGNORED_JSON_FILES.has(entry.name.toLowerCase())) {
+            continue;
+          }
           fileList.push(fullPath);
         }
       }

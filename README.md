@@ -9,7 +9,7 @@ A collection of agent skills compatible with the [skills.sh](https://skills.sh/)
 
 | Skill | Description | Location |
 | :--- | :--- | :--- |
-| **anti-slop** | Scans website source files, compiles a human-approved plan, and strips AI-generated visual, copy, structural, and code leftovers via pure deletion without adding replacement content or styles. Use when running /anti-slop. | `skills/anti-slop/SKILL.md` |
+| **anti-slop** | Scans website source files, compiles candidate removals, and strips AI-generated visual, copy, structural, and code leftovers via pure deletion without adding replacement content or styles. Supports default Script Mode and Browser Inspection Mode. Use when running /anti-slop. | `skills/anti-slop/SKILL.md` |
 | **apply-best-practices** | Detects repository technology stack and architectural concerns, discovers and security-vets official best-practice skills via find-skills and skills.sh, and applies vetted recommendations incrementally behind explicit per-skill human approval gates. Use when running /apply-best-practices. | `skills/apply-best-practices/SKILL.md` |
 | **asset-optimizer** | Optimizes images, videos, PDFs, and brand logos into lightweight, responsive WebP/MP4 assets with byte budget enforcement and manifest indexing. Use when optimizing media files or running /asset-optimizer. | `skills/asset-optimizer/SKILL.md` |
 | **create-nextjs-website** | Scaffold modern Next.js web applications with App Router, TypeScript, and production-ready structure. Use when the user asks to create, scaffold, or initialize a new Next.js website or web application with App Router, TypeScript, and clean component architecture. | `skills/create-nextjs-website/SKILL.md` |
@@ -59,7 +59,7 @@ Skill files (`SKILL.md`, stage runbooks, companion scripts) are immutable runboo
 
 ## Skill: `anti-slop`
 
-Scans website source files, compiles a human-approved plan, and strips AI-generated visual, copy, structural, and code leftovers via pure deletion without adding replacement content or styles. Operates under an explicit human approval barrier: runs Plan Mode first, presents candidate removals, and requires sign-off before modifying any files.
+Scans website source files, compiles candidate removals, and strips AI-generated visual, copy, structural, and code leftovers via pure deletion without adding replacement content or styles. Features a default **Script Mode** and an explicit **Browser Inspection Mode** (`/anti-slop browser`).
 
 ### Install
 
@@ -81,32 +81,34 @@ Or run without installing (one-shot):
 DISABLE_TELEMETRY=1 npx skills use devanshdeveloper/skills-by-devansh@anti-slop
 ```
 
-### Usage & Slash Command
+### Usage & Slash Commands
 
-In your chat with Antigravity (App, IDE, or CLI), trigger the skill manually:
+In your chat with Antigravity (App, IDE, or CLI), trigger the skill:
 
 ```text
+# Default Script Mode (scans user-facing source)
 /anti-slop
-```
 
-Or target a specific directory:
-
-```text
+# Target a specific directory
 /anti-slop site/src
+
+# Browser Inspection Mode (verifies connection, inspects rendered DOM/CMS, maps back to source)
+/anti-slop browser site/src
 ```
 
-### Two-Stage Workflow
+### Two-Mode Architecture & Invariants
 
-1. **Stage 1: Plan Mode (Read-Only):**
-   - Scans user-facing source files using the modular AST scanner (`skills/anti-slop/scripts/slop-scan/index.mjs`).
-   - Checks for custom project rules and whitelists in `.agents/rules/anti-slop.md` or `anti-slop.rules.json`.
-   - Compiles a structured Removal Plan grouping candidate slop into Visual, Copy, Structure, and Code categories.
-   - **Halts execution.** Zero files are modified until you explicitly approve the plan.
-2. **Stage 2: Removal Execution Mode (Post-Approval):**
-   - Applies pure deletions using IDE editor tools (`edit_file`).
-   - Removes visual gradients, glow blobs, glassmorphism, emoji icons, em-dash clusters, buzzwords, fake stats, and obvious comments.
-   - Falls back to clean base/inherited styling; never adds replacement copy or decorations.
-   - Sweeps orphaned imports and runs the project's build/lint once to confirm zero syntax breakage.
+1. **Mode 1: Script Mode (Default):**
+   - Scans user-facing source and content files (`.tsx`, `.jsx`, `.ts`, `.js`, `.json`, `.mdx`, `.md`) using the read-only AST scanner (`skills/anti-slop/scripts/slop-scan/index.mjs`).
+   - Checks for custom project rules and whitelists in `.agents/rules/anti-slop.md` or `.agents/anti-slop-keep.md`.
+   - Strips visual blueprint slop (mono-caps eyebrows, numbered kickers, card sequence codes, dot meters, two-tone headings, trailing arrows, framing rails), copy tropes (solitary em-dashes swapped to punctuation, engineering stock phrases, manifesto taglines), structural redundancy (in-grid CTA tiles, footer promo cells, nav offering counters, duplicate summaries), and code hygiene bloat.
+   - Preserves all protected items (placeholder frames, `FIG. 01` captions, `CLIENT PLACEHOLDER` boxes, `.example` emails, authentic product identity, nav links).
+2. **Mode 2: Browser Inspection Mode (Explicit Only):**
+   - Runs Script Mode first.
+   - Verifies browser connection via `/browser` (Antigravity) or `agent-browser` (Codex) using a fast title ping; halts immediately if disconnected.
+   - Read-only DOM inspection to catch dynamic CMS content and runtime-only slop; maps back to source and deletes via IDE editor tools.
+3. **Strict Output Contract:**
+   - Emits a single scan line, Removed list (with browser tags if applicable), numbered Needs a Human list, and build result. Never writes "100% clean" and includes zero conversational commentary.
 
 ---
 
